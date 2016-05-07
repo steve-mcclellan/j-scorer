@@ -8,4 +8,9 @@ class SiteLayoutTest < ActionDispatch::IntegrationTest
     assert_select 'a[href=?]', help_path
     assert_select 'a[href=?]', about_path
   end
+
+  test 'signup page should show up' do
+    get signup_path
+    assert_select 'title', 'J! Scorer - Sign up'
+  end
 end
