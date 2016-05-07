@@ -53,6 +53,12 @@ group :test do
   gem 'mini_backtrace'
 end
 
+# Heroku will gripe if this isn't present
 gem 'rails_12factor', group: :production
+# Use better webserver than Rails default
+gem 'puma'
+# Without an initializer file, use default timeout of 15 seconds
+gem 'rack-timeout'
 
+# Use Bootstrap to make things look prettier
 gem 'bootstrap-sass', '~> 3.3.6'

@@ -91,9 +91,11 @@ GEM
     nokogiri (1.6.7.2)
       mini_portile2 (~> 2.0.0.rc2)
     pg (0.18.4)
+    puma (3.4.0)
     rack (1.6.4)
     rack-test (0.6.3)
       rack (>= 1.0)
+    rack-timeout (0.4.2)
     rails (4.2.6)
       actionmailer (= 4.2.6)
       actionpack (= 4.2.6)
@@ -173,6 +175,8 @@ DEPENDENCIES
   mini_backtrace
   minitest-reporters
   pg (~> 0.15)
+  puma
+  rack-timeout
   rails (= 4.2.6)
   rails_12factor
   sass-rails (~> 5.0)
