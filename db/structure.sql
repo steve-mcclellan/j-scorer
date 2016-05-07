@@ -82,14 +82,6 @@ ALTER TABLE ONLY users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regcl
 
 
 --
--- Name: users_email_key; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY users
-    ADD CONSTRAINT users_email_key UNIQUE (email);
-
-
---
 -- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
