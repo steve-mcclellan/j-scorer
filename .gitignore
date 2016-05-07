@@ -16,4 +16,4 @@
 /spring/*.pid
 
 # Ignore Rubocop configuration file
-.rubocop.yml
+/.rubocop.yml
