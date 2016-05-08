@@ -4,8 +4,11 @@ Rails.application.routes.draw do
   get 'help' => 'pages#help'
   get 'about' => 'pages#about'
   get 'signup' => 'users#new'
-  get 'stats' => 'users#show'
   post 'users' => 'users#create'
+  get 'stats' => 'users#show'
+  get 'login' => 'sessions#new'
+  post 'login' => 'sessions#create'
+  delete 'logout' => 'sessions#destroy'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

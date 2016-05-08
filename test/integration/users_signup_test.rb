@@ -21,6 +21,7 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
                                             password_confirmation: 'password' }
     end
     assert_template 'pages/home'
+    assert logged_in_here?
     assert_not flash.empty?
   end
 end

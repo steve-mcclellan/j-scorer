@@ -8,20 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   </head>
   <body>
-    <header class="navbar navbar-fixed-top navbar-inverse">
-      <div class="container">
-        <%= link_to 'J! Scorer', root_path, id: 'logo' %>
-        <nav>
-          <ul class="nav navbar-nav navbar-right">
-            <li><%= link_to 'Home', root_path %></li>
-            <li><%= link_to 'Help', help_path %></li>
-            <li><%= link_to 'About', about_path %></li>
-            <li><%= link_to 'Log in', '#' %></li>
-            <li><%= link_to 'Sign up', signup_path %></li>
-          </ul>
-        </nav>
-      </div>
-    </header>
+    <%= render 'layouts/header' %>
     <div class="container">
       <% flash.each do |message_type, message| %>
         <%= content_tag(:div, message, class: "alert alert-#{message_type}") %>

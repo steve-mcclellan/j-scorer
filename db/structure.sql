@@ -51,7 +51,8 @@ CREATE TABLE users (
     email character varying,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    password_digest character varying
+    password_digest character varying,
+    remember_digest character varying
 );
 
 
@@ -114,4 +115,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160507203334');
 INSERT INTO schema_migrations (version) VALUES ('20160507212032');
 
 INSERT INTO schema_migrations (version) VALUES ('20160507212809');
+
+INSERT INTO schema_migrations (version) VALUES ('20160508154744');
 
