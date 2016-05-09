@@ -52,7 +52,9 @@ CREATE TABLE users (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     password_digest character varying,
-    remember_digest character varying
+    remember_digest character varying,
+    reset_digest character varying,
+    reset_sent_at timestamp without time zone
 );
 
 
@@ -117,4 +119,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160507212032');
 INSERT INTO schema_migrations (version) VALUES ('20160507212809');
 
 INSERT INTO schema_migrations (version) VALUES ('20160508154744');
+
+INSERT INTO schema_migrations (version) VALUES ('20160509215159');
 

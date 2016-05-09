@@ -9,6 +9,7 @@
       <%= f.email_field :email, class: 'form-control' %>
 
       <%= f.label :password %>
+      <%= link_to '(forgot password)', forgot_path %>
       <%= f.password_field :password, class: 'form-control' %>
 
       <%= f.submit 'Log in', class: 'btn btn-primary' %>
