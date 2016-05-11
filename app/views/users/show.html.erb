@@ -1,1 +1,18 @@
-<p>Showing stats for <%= @user.email %></p>
+<% provide(:title, 'Stats') %>
+<h2>Games played by <%= @user.email %> (<%= @user.games.count %>):</h2>
+
+<ol class='games'>
+  <% @user.games.each do |game| %>
+    <li id="game-<%= game.id %>">
+      <span class='timestamp'>Played <%= time_ago_in_words(game.date_played) %> ago.</span>
+      <span class='show-date'>Game from <%= game.show_date %></span>
+      <span class='score'>
+        Score: <em>TBD</em>
+        <% if current_user?(game.user) %>
+          <%= link_to 'delete', axe_game_path(game.show_date),
+                      method: :delete, data: { confirm: 'You sure?' } %>
+        <% end %>
+      </span>
+    </li>
+  <% end %>
+</ol>

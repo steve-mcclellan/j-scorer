@@ -2,3 +2,25 @@
   <h1>J! Scorer</h1>
   <p>This page will include links to sign up/log in, create a new game, and view stats.</p>
 </div>
+
+<% if logged_in? %>
+  <div class='row'>
+    <aside class='col-md-4'>
+      <section class='user_info'>
+        <h2>Greetings, <%= current_user.email %>!</h2>
+        <span><%= link_to 'View stats', stats_path %></span>
+        <span><%= pluralize(current_user.games.count, 'game') %></span>
+      </section>
+      <section class='game_form'>
+        <%= form_for(@game, url: game_path) do |f| %>
+          <%= render 'shared/error_messages', object: f.object %>
+          <%= f.label :show_date %>
+          <%= f.date_field :show_date, value: Time.zone.today %>
+          <%= f.label :date_played, 'Played at' %>
+          <%= f.datetime_field :date_played, value: Time.zone.now %>
+          <%= f.submit 'Create', class: 'btn btn-primary' %>
+        <% end %>
+      </section>
+    </aside>
+  </div>
+<% end %>

@@ -34,6 +34,39 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
+-- Name: games; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE games (
+    id integer NOT NULL,
+    user_id integer,
+    show_date date,
+    date_played timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: games_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE games_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: games_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE games_id_seq OWNED BY games.id;
+
+
+--
 -- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -81,7 +114,22 @@ ALTER SEQUENCE users_id_seq OWNED BY users.id;
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY games ALTER COLUMN id SET DEFAULT nextval('games_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regclass);
+
+
+--
+-- Name: games_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY games
+    ADD CONSTRAINT games_pkey PRIMARY KEY (id);
 
 
 --
@@ -90,6 +138,27 @@ ALTER TABLE ONLY users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regcl
 
 ALTER TABLE ONLY users
     ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: index_games_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_games_on_user_id ON games USING btree (user_id);
+
+
+--
+-- Name: index_games_on_user_id_and_date_played; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_games_on_user_id_and_date_played ON games USING btree (user_id, date_played);
+
+
+--
+-- Name: index_games_on_user_id_and_show_date; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_games_on_user_id_and_show_date ON games USING btree (user_id, show_date);
 
 
 --
@@ -107,6 +176,14 @@ CREATE UNIQUE INDEX unique_schema_migrations ON schema_migrations USING btree (v
 
 
 --
+-- Name: fk_rails_de9e6ea7f7; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY games
+    ADD CONSTRAINT fk_rails_de9e6ea7f7 FOREIGN KEY (user_id) REFERENCES users(id);
+
+
+--
 -- PostgreSQL database dump complete
 --
 
@@ -121,4 +198,8 @@ INSERT INTO schema_migrations (version) VALUES ('20160507212809');
 INSERT INTO schema_migrations (version) VALUES ('20160508154744');
 
 INSERT INTO schema_migrations (version) VALUES ('20160509215159');
+
+INSERT INTO schema_migrations (version) VALUES ('20160510211659');
+
+INSERT INTO schema_migrations (version) VALUES ('20160510212934');
 

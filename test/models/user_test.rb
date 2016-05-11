@@ -2,8 +2,8 @@ require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
   def setup
-    @user = User.new(email: 'user@example.com', password: 'password',
-                     password_confirmation: 'password')
+    @user = User.new(email: 'user@example.com', password: 'foobar',
+                     password_confirmation: 'foobar')
   end
 
   test 'should be valid' do
@@ -68,5 +68,13 @@ class UserTest < ActiveSupport::TestCase
 
   test 'authenticated? should return false for a user with nil digest' do
     assert_not @user.authenticated?(:remember, '')
+  end
+
+  test 'associated games should be destroyed' do
+    @user.save
+    @user.games.create!(show_date: Date.new(2016, 1, 18), date_played: Time.zone.now)
+    assert_difference 'Game.count', -1 do
+      @user.destroy
+    end
   end
 end

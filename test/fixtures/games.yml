@@ -1,0 +1,26 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+debut:
+  user: dave
+  show_date: 1984-09-10
+  date_played: 2000-01-01 00:00:01
+
+two:
+  user: dave
+  show_date: 1984-09-11
+  date_played: 1984-09-11 19:30:00
+
+most_recent:
+  user: dave
+  show_date: 2005-05-25
+  date_played: <%= Time.zone.today %>
+
+victoria:
+  user: dave
+  show_date: 2005-09-19
+  date_played: 2005-09-19 19:30:00
+
+steve:
+  user: steve
+  show_date: 1964-03-30
+  date_played: <%= 3.years.ago %>
