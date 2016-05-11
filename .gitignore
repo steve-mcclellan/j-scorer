@@ -15,5 +15,8 @@
 # Ignore Spring files.
 /spring/*.pid
 
-# Ignore Rubocop configuration file
+# Ignore Rubocop configuration file.
 /.rubocop.yml
+
+# Ignore environment file for heroku local.
+/.env
