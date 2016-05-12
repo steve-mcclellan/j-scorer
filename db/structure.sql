@@ -34,6 +34,73 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
+-- Name: category_topics; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE category_topics (
+    id integer NOT NULL,
+    category_id integer,
+    category_type character varying,
+    topic_id integer,
+    placement integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: category_topics_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE category_topics_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: category_topics_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE category_topics_id_seq OWNED BY category_topics.id;
+
+
+--
+-- Name: finals; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE finals (
+    id integer NOT NULL,
+    game_id integer,
+    category_title character varying,
+    result integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: finals_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE finals_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: finals_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE finals_id_seq OWNED BY finals.id;
+
+
+--
 -- Name: games; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -67,12 +134,120 @@ ALTER SEQUENCE games_id_seq OWNED BY games.id;
 
 
 --
+-- Name: round_one_categories; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE round_one_categories (
+    id integer NOT NULL,
+    game_id integer,
+    board_position integer,
+    title character varying,
+    result1 integer,
+    result2 integer,
+    result3 integer,
+    result4 integer,
+    result5 integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: round_one_categories_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE round_one_categories_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: round_one_categories_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE round_one_categories_id_seq OWNED BY round_one_categories.id;
+
+
+--
+-- Name: round_two_categories; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE round_two_categories (
+    id integer NOT NULL,
+    game_id integer,
+    board_position integer,
+    title character varying,
+    result1 integer,
+    result2 integer,
+    result3 integer,
+    result4 integer,
+    result5 integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: round_two_categories_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE round_two_categories_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: round_two_categories_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE round_two_categories_id_seq OWNED BY round_two_categories.id;
+
+
+--
 -- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE schema_migrations (
     version character varying NOT NULL
 );
+
+
+--
+-- Name: topics; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE topics (
+    id integer NOT NULL,
+    user_id integer,
+    name character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: topics_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE topics_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: topics_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE topics_id_seq OWNED BY topics.id;
 
 
 --
@@ -114,6 +289,20 @@ ALTER SEQUENCE users_id_seq OWNED BY users.id;
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY category_topics ALTER COLUMN id SET DEFAULT nextval('category_topics_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY finals ALTER COLUMN id SET DEFAULT nextval('finals_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY games ALTER COLUMN id SET DEFAULT nextval('games_id_seq'::regclass);
 
 
@@ -121,7 +310,44 @@ ALTER TABLE ONLY games ALTER COLUMN id SET DEFAULT nextval('games_id_seq'::regcl
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY round_one_categories ALTER COLUMN id SET DEFAULT nextval('round_one_categories_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY round_two_categories ALTER COLUMN id SET DEFAULT nextval('round_two_categories_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY topics ALTER COLUMN id SET DEFAULT nextval('topics_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regclass);
+
+
+--
+-- Name: category_topics_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY category_topics
+    ADD CONSTRAINT category_topics_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: finals_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY finals
+    ADD CONSTRAINT finals_pkey PRIMARY KEY (id);
 
 
 --
@@ -133,11 +359,56 @@ ALTER TABLE ONLY games
 
 
 --
+-- Name: round_one_categories_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY round_one_categories
+    ADD CONSTRAINT round_one_categories_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: round_two_categories_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY round_two_categories
+    ADD CONSTRAINT round_two_categories_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: topics_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY topics
+    ADD CONSTRAINT topics_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY users
     ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: index_category_topics_on_category_type_and_category_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_category_topics_on_category_type_and_category_id ON category_topics USING btree (category_type, category_id);
+
+
+--
+-- Name: index_category_topics_on_topic_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_category_topics_on_topic_id ON category_topics USING btree (topic_id);
+
+
+--
+-- Name: index_finals_on_game_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_finals_on_game_id ON finals USING btree (game_id);
 
 
 --
@@ -162,6 +433,34 @@ CREATE UNIQUE INDEX index_games_on_user_id_and_show_date ON games USING btree (u
 
 
 --
+-- Name: index_round_one_categories_on_game_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_round_one_categories_on_game_id ON round_one_categories USING btree (game_id);
+
+
+--
+-- Name: index_round_two_categories_on_game_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_round_two_categories_on_game_id ON round_two_categories USING btree (game_id);
+
+
+--
+-- Name: index_topics_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_topics_on_user_id ON topics USING btree (user_id);
+
+
+--
+-- Name: index_topics_on_user_id_and_name; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_topics_on_user_id_and_name ON topics USING btree (user_id, name);
+
+
+--
 -- Name: index_users_on_email; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -176,11 +475,51 @@ CREATE UNIQUE INDEX unique_schema_migrations ON schema_migrations USING btree (v
 
 
 --
+-- Name: fk_rails_02b6bfe038; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY round_one_categories
+    ADD CONSTRAINT fk_rails_02b6bfe038 FOREIGN KEY (game_id) REFERENCES games(id);
+
+
+--
+-- Name: fk_rails_064f1dadb9; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY category_topics
+    ADD CONSTRAINT fk_rails_064f1dadb9 FOREIGN KEY (topic_id) REFERENCES topics(id);
+
+
+--
+-- Name: fk_rails_609256a735; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY round_two_categories
+    ADD CONSTRAINT fk_rails_609256a735 FOREIGN KEY (game_id) REFERENCES games(id);
+
+
+--
+-- Name: fk_rails_7b812cfb44; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY topics
+    ADD CONSTRAINT fk_rails_7b812cfb44 FOREIGN KEY (user_id) REFERENCES users(id);
+
+
+--
 -- Name: fk_rails_de9e6ea7f7; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY games
     ADD CONSTRAINT fk_rails_de9e6ea7f7 FOREIGN KEY (user_id) REFERENCES users(id);
+
+
+--
+-- Name: fk_rails_debebe87e0; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY finals
+    ADD CONSTRAINT fk_rails_debebe87e0 FOREIGN KEY (game_id) REFERENCES games(id);
 
 
 --
@@ -202,4 +541,18 @@ INSERT INTO schema_migrations (version) VALUES ('20160509215159');
 INSERT INTO schema_migrations (version) VALUES ('20160510211659');
 
 INSERT INTO schema_migrations (version) VALUES ('20160510212934');
+
+INSERT INTO schema_migrations (version) VALUES ('20160512183448');
+
+INSERT INTO schema_migrations (version) VALUES ('20160512191708');
+
+INSERT INTO schema_migrations (version) VALUES ('20160512192635');
+
+INSERT INTO schema_migrations (version) VALUES ('20160512193040');
+
+INSERT INTO schema_migrations (version) VALUES ('20160512193858');
+
+INSERT INTO schema_migrations (version) VALUES ('20160512194133');
+
+INSERT INTO schema_migrations (version) VALUES ('20160512195133');
 

@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  category_id:
+  category_type: Category
+  topic_id:
+  placement: 1
+
+two:
+  category_id:
+  category_type: Category
+  topic_id:
+  placement: 1
