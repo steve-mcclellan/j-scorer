@@ -1,5 +1,6 @@
 class User < ActiveRecord::Base
   has_many :games, dependent: :destroy
+  has_many :topics, dependent: :destroy
 
   attr_accessor :remember_token, :reset_token
   before_save { email.downcase! }
