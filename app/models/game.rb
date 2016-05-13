@@ -7,5 +7,5 @@ class Game < ActiveRecord::Base
   default_scope -> { order(date_played: :desc) }
 
   validates :user_id, presence: true
-  validates :show_date, presence: true
+  validates :show_date, presence: true, uniqueness: { scope: :user_id }
 end

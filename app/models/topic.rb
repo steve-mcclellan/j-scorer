@@ -17,4 +17,10 @@ class Topic < ActiveRecord::Base
            through:     :category_topics,
            source:      :category,
            source_type: 'Final'
+
+  validates :user_id, presence: true
+
+  validates :name,
+            presence: true,
+            uniqueness: { scope: :user_id, case_sensitive: false }
 end

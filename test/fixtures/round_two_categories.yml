@@ -1,9 +1,9 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  game_id: 
+  game: victoria
   board_position: 1
-  title: MyString
+  title: Art Technique
   result1: 1
   result2: 1
   result3: 1
@@ -11,9 +11,49 @@ one:
   result5: 1
 
 two:
-  game_id: 
-  board_position: 1
-  title: MyString
+  game: victoria
+  board_position: 2
+  title: Movie Numbers
+  result1: 1
+  result2: 1
+  result3: 1
+  result4: 1
+  result5: 1
+
+three:
+  game: victoria
+  board_position: 3
+  title: \"Y\"s Up!
+  result1: 1
+  result2: 1
+  result3: 1
+  result4: 1
+  result5: 1
+
+four:
+  game: victoria
+  board_position: 4
+  title: Time's Top 100
+  result1: 1
+  result2: 1
+  result3: 1
+  result4: 1
+  result5: 1
+
+five:
+  game: victoria
+  board_position: 5
+  title: Sonnets
+  result1: 1
+  result2: 1
+  result3: 1
+  result4: 1
+  result5: 1
+
+six:
+  game: victoria
+  board_position: 6
+  title: From the Portuguese
   result1: 1
   result2: 1
   result3: 1

@@ -1,13 +1,13 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  category_id:
-  category_type: Category
-  topic_id:
+  category_id: 1
+  category_type: RoundOneCategory
+  topic: one
   placement: 1
 
 two:
-  category_id:
-  category_type: Category
-  topic_id:
+  category_id: 5
+  category_type: RoundTwoCategory
+  topic: one
   placement: 1
