@@ -405,6 +405,13 @@ CREATE INDEX index_category_topics_on_topic_id ON category_topics USING btree (t
 
 
 --
+-- Name: index_category_topics_to_assure_uniqueness; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_category_topics_to_assure_uniqueness ON category_topics USING btree (topic_id, category_id, category_type);
+
+
+--
 -- Name: index_finals_on_game_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -555,4 +562,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160512193858');
 INSERT INTO schema_migrations (version) VALUES ('20160512194133');
 
 INSERT INTO schema_migrations (version) VALUES ('20160512195133');
+
+INSERT INTO schema_migrations (version) VALUES ('20160513120011');
 
