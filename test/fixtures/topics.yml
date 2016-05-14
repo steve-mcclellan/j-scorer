@@ -7,3 +7,7 @@ one:
 two:
   user: dave
   name: lowbrow
+
+topic_of_steve:
+  user: steve
+  name: highbrow

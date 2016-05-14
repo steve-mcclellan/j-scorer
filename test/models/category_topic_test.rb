@@ -2,10 +2,12 @@ require 'test_helper'
 
 class CategoryTopicTest < ActiveSupport::TestCase
   def setup
-    @cattop = CategoryTopic.new(category_id: 1,
-                                category_type: 'Final',
-                                topic_id: 1,
-                                placement: 1)
+    @cattop = CategoryTopic.create!(category: finals(:one),
+                                    topic: topics(:one),
+                                    placement: 1)
+    @cattop2 = CategoryTopic.new(category: finals(:one),
+                                 topic: topics(:two),
+                                 placement: 2)
   end
 
   test 'should be valid' do
@@ -36,11 +38,21 @@ class CategoryTopicTest < ActiveSupport::TestCase
     assert_not @cattop.valid?
   end
 
+  test 'category and topic should belong to same user' do
+    @cattop.topic = topics(:topic_of_steve)
+    assert_not @cattop.valid?
+  end
+
   test 'should be a unique combination of category and topic' do
-    # TODO
+    assert @cattop2.valid?
+    @cattop2.topic = topics(:one)
+    assert_not @cattop2.valid?
+    @cattop2.category_type = 'RoundTwoCategory'
+    assert @cattop2.valid?
   end
 
   test 'should have a unique placement within the category' do
-    # TODO
+    @cattop2.placement = 1
+    assert_not @cattop2.valid?
   end
 end
