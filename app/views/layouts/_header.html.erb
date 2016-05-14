@@ -1,25 +1,21 @@
-<header class="navbar navbar-fixed-top navbar-inverse">
-  <div class="container">
-    <%= link_to 'J! Scorer', root_path, id: 'logo' %>
-    <nav>
-      <ul class="nav navbar-nav navbar-right">
-        <% if logged_in? %>
-          <!-- TODO: delinkify greeting -->
-          <li><%= link_to "Hi, #{current_user.email}!", stats_path %></li>
-          <li><%= link_to 'Home', root_path %></li>
-          <li><%= link_to 'Help', help_path %></li>
-          <li><%= link_to 'About', about_path %></li>
-          <li><%= link_to 'Stats', stats_path %></li>
-          <li><%= link_to 'Log out', logout_path, method: 'delete' %>
-        <% else %>
-          <li><%= link_to 'Home', root_path %></li>
-          <li><%= link_to 'Help', help_path %></li>
-          <li><%= link_to 'About', about_path %></li>
-          <li><%= link_to 'Log in', login_path %></li>
-          <li><%= link_to 'Sign up', signup_path %></li>
-        <% end %>
-      </ul>
-    </nav>
-  </div>
+<header>
+  <%= link_to 'J! Scorer', root_path, id: 'logo' %>
+  <nav>
+    <ul class="navigation">
+      <% if logged_in? %>
+        <!-- TODO: delinkify greeting -->
+        <li><%= link_to 'Home', root_path %></li>
+        <li><%= link_to 'Help', help_path %></li>
+        <li><%= link_to 'About', about_path %></li>
+        <li><%= link_to 'Stats', stats_path %></li>
+        <li><%= link_to 'Log out', logout_path, method: 'delete' %>
+      <% else %>
+        <li><%= link_to 'Home', root_path %></li>
+        <li><%= link_to 'Help', help_path %></li>
+        <li><%= link_to 'About', about_path %></li>
+        <li><%= link_to 'Log in', login_path %></li>
+        <li><%= link_to 'Sign up', signup_path %></li>
+      <% end %>
+    </ul>
+  </nav>
 </header>
-

@@ -3,35 +3,77 @@
 
 /* mixins, variables, etc. */
 
-$background-color: #ccc;
-$j-blue: #129;
+$light-background-color: #ccc;
+$dark-background-color: #222;
+$j-blue:   #151e8c;
+$j-yellow: #cf9f3e;
+$j-shadow: #101014;
 
 /* universal */
 
+*{
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+}
+
 body {
-  padding-top: 60px;
+  background-color: #light-background-color;
+}
+
+main {
+  height: 93%;
 }
 
 /* typography */
 
 h1, h2 {
+  margin: 0;
   text-align: center;
 }
 
 /* header */
 
+header {
+  height: 7%;
+  background-color: $dark-background-color;
+  overflow: hidden;
+}
+
 #logo {
   float: left;
-  margin-right: 10px;
-  font-size: 1.7em;
-  color: white;
+  margin-right: 1vmin;
+  font-size: 4vmin;
+  color: $j-yellow;
   text-transform: capitalize;
-  letter-spacing: -1px;
-  padding-top: 9px;
+  letter-spacing: -0.1vmin;
+  padding-top: 1.0vmin;
   font-weight: bold;
   &:hover {
-    color: white;
+    color: $j-yellow;
     text-decoration: none;
+  }
+}
+
+ul.navigation {
+  list-style-type: none;
+  text-align: right;
+  font-size: 3vmin;
+  padding-top: 1.25vmin;
+  li {
+    display: inline;
+    a {
+      text-decoration: none;
+      padding-left: 4vmin;
+      color: $j-yellow;
+      &:hover {
+        text-decoration: none;
+        color: white;
+      }
+    }
   }
 }
 

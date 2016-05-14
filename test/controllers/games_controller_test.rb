@@ -1,8 +1,9 @@
 require 'test_helper'
 
 class GamesControllerTest < ActionController::TestCase
-  def setup
-    @game = games(:victoria)
+  test 'should get game page' do
+    get :show
+    assert_response :success
   end
 
   test 'should redirect create when not logged in' do
@@ -14,7 +15,7 @@ class GamesControllerTest < ActionController::TestCase
 
   test 'should redirect destroy when not logged in' do
     assert_no_difference 'Game.count' do
-      delete :destroy, show_date: @game
+      delete :destroy, show_date: games(:victoria)
     end
     assert_redirected_to login_url
   end
