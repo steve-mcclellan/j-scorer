@@ -1,7 +1,33 @@
-<h1>Showing game...</h1>
+<div id="game-container">
 
-<p>More text.</p>
-<p>A second line.</p>
-<p>A third line.</p>
-<p>A fourth line.</p>
-<p>A fifth line.</p>
+  <div id="board">
+    <% 1.upto(6) do |cat_num| %>
+      <div class="category" id="category<%= cat_num %>">
+
+        <div class="cat-title" id="cat-title-<%= cat_num %>">
+          <div>
+            <p>Category <%= cat_num %></p>
+          </div>
+        </div>
+
+        <div class="topic-area" id="topic-area-<%= cat_num %>">
+          <div>
+            <p>Topic area <%= cat_num %></p>
+          </div>
+        </div>
+
+        <% 1.upto(5) do |box_num| %>
+          <div class="clue-box" id="clue-box-<%= cat_num %>-<%= box_num %>">
+            <div>
+              <span>$<%= box_num * 400 %></span>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+
+  <div id="panel">
+    <p>This is the panel. It will include the score display and action buttons. It will not be lime green.</p>
+  </div>
+</div>
