@@ -13,8 +13,8 @@
         </div>
 
         <% 1.upto(5) do |box_num| %>
-          <div class="clue-box" id="clue-box-<%= cat_num %>-<%= box_num %>">
-            <span>$<%= box_num * 400 %></span>
+          <div class="clue-box" data-item-id="clue-box-<%= cat_num %>-<%= box_num %>">
+            <span>$<%= box_num * 10 %></span>
           </div>
         <% end %>
       </div>
@@ -22,6 +22,23 @@
   </div>
 
   <div id="panel">
-    <p>This is the panel. It will include the score display and action buttons. It will not be lime green.</p>
+    <div id="scoreboard">
+      Score
+      <div id="score">
+        $0
+      </div>
+    </div>
+
+    <div id="panel-buttons">
+      <%= link_to 'End Round', '#' %>
+      <%= link_to 'Previous Round', '#' %>
+      <%= link_to 'Save Game', '#' %>
+    </div>
+
+    <div id="panel-links">
+      <%= link_to 'Delete this game', '#' %>
+      <%= link_to 'Help', '#' %>
+      <%= link_to 'About', '#' %>
+    </div>
   </div>
 </div>

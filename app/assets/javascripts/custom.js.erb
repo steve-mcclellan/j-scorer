@@ -1,0 +1,12 @@
+<% person = 'steve' %>
+
+$(function() {
+
+  $( "#game-container .clue-box" ).on( "click", function( event ) {
+    var elem = $( this );
+    elem.html('');
+    console.log( "event object: " );
+    console.dir( event );
+  });
+
+});

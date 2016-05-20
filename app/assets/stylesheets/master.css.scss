@@ -3,14 +3,17 @@
 
 /* mixins, variables, etc. */
 
-$light-background-color: #ccc;
+$light-background-color:  #ccc;
 $medium-background-color: #777;
-$dark-background-color: #222;
-$gameboard-color: black;
+$dark-background-color:   #222;
 
-$j-blue:   #151e8c;
-$j-yellow: #cf9f3e;
-$j-shadow: #101014;
+$gameboard-color:  black;
+$disclaimer-color: #888;
+
+$j-blue:       #151e8c;
+$j-light-blue: #353eac;
+$j-yellow:     #cf9f3e;
+$j-shadow:     #101014;
 
 /* universal */
 
@@ -56,6 +59,7 @@ header {
 
 #logo {
   float: left;
+  margin-left: 2vmin;
   margin-right: 1vmin;
   font-size: 4vmin;
   color: $j-yellow;
@@ -78,7 +82,7 @@ ul.navigation {
     display: inline;
     a {
       text-decoration: none;
-      padding-left: 4vmin;
+      margin-right: 4vmin;
       color: $j-yellow;
       &:hover {
         text-decoration: none;
@@ -97,7 +101,7 @@ footer {
   justify-content: center;
   align-items: center;
   background-color: $dark-background-color;
-  color: #888;
+  color: $disclaimer-color;
   font-size: 1.35vmin;
 }
 
@@ -191,12 +195,45 @@ input {
         font-weight: bold;
         color: $j-yellow;
         border: 0.3vw solid $gameboard-color;
+        &:hover {
+          background-color: $j-light-blue;
+        }
       }
     }
   }
 
   #panel {
     flex: 3;
-    background-color: limegreen;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    background-color: $light-background-color;
+
+    #scoreboard {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-size: 2vw;
+
+      #score {
+        font-size: 3.5vw;
+      }
+    }
+
+    #panel-buttons {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #panel-links {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
   }
 }
