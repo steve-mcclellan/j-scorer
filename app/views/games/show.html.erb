@@ -5,22 +5,16 @@
       <div class="category" id="category<%= cat_num %>">
 
         <div class="cat-title" id="cat-title-<%= cat_num %>">
-          <div>
-            <p>Category <%= cat_num %></p>
-          </div>
+          <p>Category <%= cat_num %></p>
         </div>
 
         <div class="topic-area" id="topic-area-<%= cat_num %>">
-          <div>
-            <p>Topic area <%= cat_num %></p>
-          </div>
+          <p>Topic area <%= cat_num %></p>
         </div>
 
         <% 1.upto(5) do |box_num| %>
           <div class="clue-box" id="clue-box-<%= cat_num %>-<%= box_num %>">
-            <div>
-              <span>$<%= box_num * 400 %></span>
-            </div>
+            <span>$<%= box_num * 400 %></span>
           </div>
         <% end %>
       </div>
