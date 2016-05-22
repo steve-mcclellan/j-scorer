@@ -6,26 +6,40 @@ $(function() {
   var $scoreboard = $( "#game-container #score" );
   $scoreboard.html( "$" + score );
 
+  var $clue = $( "#game-container #clue-over-board" );
+
   $( "#game-container .clue-box" ).on( "click", function( event ) {
     var $elem = $( this );
     var boxValue = $elem.data( "boxvalue" );
     var rowValue = $elem.data( "rowvalue" );
 
     $elem.css( "background-color", jBlue );
+    $clue.show( "scale", 200 );
+    $clue.css( "display", "flex" );
     // console.log( "event object: " );
     // console.log( $elem.data( "value" ));
     // console.dir( event );
 
     if ( boxValue ) {
+      $clue.html( "<h1>Value added!</h1>" );
       $elem.html( '' );
       score += boxValue;
       $elem.data( "boxvalue", 0 );
     } else {
+      $clue.html( "<h1>Value deducted.</h1>");
       $elem.html( "$" + rowValue );
       score -= rowValue;
       $elem.data( "boxvalue", rowValue);
     }
     $scoreboard.html( "$" + score );
+  });
+
+  $( $clue ).on( "click", function( event ) {
+    $( this ).hide( "scale", 200 );
+//    $( this ).hide( "scale",
+//                    { origin: [0.75 * $( this ).height(),
+//                               0.25 * $( this ).height()] },
+//                    750 );
   });
 
 });

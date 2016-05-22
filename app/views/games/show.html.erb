@@ -2,29 +2,36 @@
 
 <div id="game-container">
 
-  <div id="board">
-    <% 1.upto(6) do |cat_num| %>
-      <div class="category" id="category<%= cat_num %>">
+  <div id="board-area">
 
-        <div class="cat-title" id="cat-title-<%= cat_num %>">
-          <p>Category <%= cat_num %></p>
-        </div>
+    <div id="board">
+      <% 1.upto(6) do |cat_num| %>
+        <div class="category" id="category<%= cat_num %>">
 
-        <div class="topic-area" id="topic-area-<%= cat_num %>">
-          <p>Topic area <%= cat_num %></p>
-        </div>
-
-        <% 1.upto(5) do |box_num| %>
-          <% clue_value = box_num * top_row_value %>
-          <div class="clue-box"
-               data-boxid="clue-box-<%= cat_num %>-<%= box_num %>"
-               data-rowvalue=<%= clue_value %>
-               data-boxvalue=<%= clue_value %>>
-            <span>$<%= clue_value %></span>
+          <div class="cat-title" id="cat-title-<%= cat_num %>">
+            <p>Category <%= cat_num %></p>
           </div>
-        <% end %>
-      </div>
-    <% end %>
+
+          <div class="topic-area" id="topic-area-<%= cat_num %>">
+            <p>Topic area <%= cat_num %></p>
+          </div>
+
+          <% 1.upto(5) do |box_num| %>
+            <% clue_value = box_num * top_row_value %>
+            <div class="clue-box"
+                 data-boxid="clue-box-<%= cat_num %>-<%= box_num %>"
+                 data-rowvalue=<%= clue_value %>
+                 data-boxvalue=<%= clue_value %>>
+              <span>$<%= clue_value %></span>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+
+    <div id="clue-over-board">
+      <h1>Hi! I'm a clue!</h1>
+    </div>
   </div>
 
   <div id="panel">
