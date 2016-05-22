@@ -1,12 +1,31 @@
-<% person = 'steve' %>
+var jBlue   = "#151e8c";  // Also defined in master.css.scss
+// var jYellow = "#cf9f3e";  // Ditto
 
 $(function() {
+  var score = 0;
+  var $scoreboard = $( "#game-container #score" );
+  $scoreboard.html( "$" + score );
 
   $( "#game-container .clue-box" ).on( "click", function( event ) {
-    var elem = $( this );
-    elem.html('');
-    console.log( "event object: " );
-    console.dir( event );
+    var $elem = $( this );
+    var boxValue = $elem.data( "boxvalue" );
+    var rowValue = $elem.data( "rowvalue" );
+
+    $elem.css( "background-color", jBlue );
+    // console.log( "event object: " );
+    // console.log( $elem.data( "value" ));
+    // console.dir( event );
+
+    if ( boxValue ) {
+      $elem.html( '' );
+      score += boxValue;
+      $elem.data( "boxvalue", 0 );
+    } else {
+      $elem.html( "$" + rowValue );
+      score -= rowValue;
+      $elem.data( "boxvalue", rowValue);
+    }
+    $scoreboard.html( "$" + score );
   });
 
 });

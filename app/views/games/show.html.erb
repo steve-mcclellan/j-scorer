@@ -1,3 +1,5 @@
+<% top_row_value = 200 %>
+
 <div id="game-container">
 
   <div id="board">
@@ -13,8 +15,12 @@
         </div>
 
         <% 1.upto(5) do |box_num| %>
-          <div class="clue-box" data-item-id="clue-box-<%= cat_num %>-<%= box_num %>">
-            <span>$<%= box_num * 10 %></span>
+          <% clue_value = box_num * top_row_value %>
+          <div class="clue-box"
+               data-boxid="clue-box-<%= cat_num %>-<%= box_num %>"
+               data-rowvalue=<%= clue_value %>
+               data-boxvalue=<%= clue_value %>>
+            <span>$<%= clue_value %></span>
           </div>
         <% end %>
       </div>
@@ -25,7 +31,7 @@
     <div id="scoreboard">
       Score
       <div id="score">
-        $0
+        $...
       </div>
     </div>
 

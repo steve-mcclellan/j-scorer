@@ -8,11 +8,11 @@ $medium-background-color: #777;
 $dark-background-color:   #222;
 
 $gameboard-color:  black;
-$disclaimer-color: #888;
+$disclaimer-color: #777;
 
-$j-blue:       #151e8c;
+$j-blue:       #151e8c;  /* Also defined in master.js.erb */
 $j-light-blue: #353eac;
-$j-yellow:     #cf9f3e;
+$j-yellow:     #cf9f3e;  /* Ditto */
 $j-shadow:     #101014;
 
 /* universal */
@@ -194,6 +194,7 @@ input {
         font-size: 3vw;
         font-weight: bold;
         color: $j-yellow;
+        text-shadow: 0.2vw 0.2vw $j-shadow;
         border: 0.3vw solid $gameboard-color;
         &:hover {
           background-color: $j-light-blue;
