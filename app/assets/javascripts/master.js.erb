@@ -59,4 +59,16 @@ $(function() {
     //                 750 );
   });
 
+  $( "#game-container .cat-title" ).on( "click", function() {
+    $( this ).find( "p" ).focus();
+  });
+
+  $( "#game-container .cat-title p" ).on( "focus", function() {
+    $( this ).toggleClass( "default-cat", false );
+  });
+
+  $( "#game-container .cat-title p" ).on( "blur", function() {
+    $( this ).toggleClass( "default-cat", true );
+  });
+
 });
