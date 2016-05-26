@@ -8,13 +8,17 @@
       <% 1.upto(6) do |cat_num| %>
         <div class="category" id="category<%= cat_num %>">
 
-          <div class="cat-title" id="cat-title-<%= cat_num %>">
+          <!-- <div class="cat-title" id="cat-title-<%= cat_num %>">
             <p>Category <%= cat_num %></p>
-          </div>
+          </div> -->
 
-          <div class="topic-area" id="topic-area-<%= cat_num %>">
-            <p>Topic area <%= cat_num %></p>
-          </div>
+          <input class="cat-title" id="cat-title-<%= cat_num %>"
+                 value="Category <%= cat_num %>">
+
+          <!-- <div class="topic-area" id="topic-area-<%= cat_num %>"> -->
+          <input class="topic-area" id="topic-area-<%= cat_num %>"
+                 value="Topic area <%= cat_num %>" />
+          <!-- </div> --!>
 
           <% 1.upto(5) do |box_num| %>
             <% clue_value = box_num * top_row_value %>
