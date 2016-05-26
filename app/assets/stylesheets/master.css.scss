@@ -176,18 +176,19 @@ input {
           font-size: 1.5vw;
           font-weight: bold;
           border: 0.3vw solid $gameboard-color;
+
+          .default-cat {
+            color: #888;
+          }
         }
 
         .topic-area {
-          height: 100%;
-          width: 100%;
           flex: 1;
-          display: flex;
-          justify-content: center;
-          align-items: center;
           background-color: white;
           color: black;
+          text-align: center;
           border: 0.3vw solid $gameboard-color;
+          margin: 0;
         }
 
         .clue-box {
