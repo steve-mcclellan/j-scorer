@@ -171,30 +171,21 @@ input {
           display: flex;
           justify-content: center;
           align-items: center;
+          text-align: center;
           color: white;
           text-transform: uppercase;
-          font-size: 1.5vw;
+          font-size: 1.44vw;
+          line-height: 110%;
           font-weight: bold;
+          text-shadow: 0.1vw 0.1vw $j-shadow;
           border: 0.3vw solid $gameboard-color;
 
           .default-cat {
-            color: #888;
+            color: #777;
+            text-shadow: none;
           }
         }
 
-/*
-        .cat-title {
-          flex: 2;
-          text-align: center;
-          background-color: $j-blue;
-          color: white;
-          text-transform: uppercase;
-          font-size: 1.5vw;
-          font-weight: bold;
-          border: 0.3vw solid $gameboard-color;
-          margin: 0;
-        }
-*/
         .topic-area {
           flex: 1;
           background-color: white;

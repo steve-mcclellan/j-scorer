@@ -1,6 +1,24 @@
 var jBlue   = "#151e8c";  // Also defined in master.css.scss
 // var jYellow = "#cf9f3e";  // Ditto
 
+// from accepted answer to stackoverflow.com/questions/4233265/
+function placeCaretAtEnd(el) {
+  if (typeof window.getSelection != "undefined" &&
+      typeof document.createRange != "undefined") {
+    var range = document.createRange();
+    range.selectNodeContents(el);
+    range.collapse(false);
+    var sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+  } else if (typeof document.body.createTextRange != "undefined") {
+    var textRange = document.body.createTextRange();
+    textRange.moveToElementText(el);
+    textRange.collapse(false);
+    textRange.select();
+  }
+}
+
 $(function() {
   var score = 0;
   var $scoreboard = $( "#game-container #score" );
@@ -64,11 +82,26 @@ $(function() {
   });
 
   $( "#game-container .cat-title p" ).on( "focus", function() {
-    $( this ).toggleClass( "default-cat", false );
+    var $elem = $( this );
+    // console.log( $elem.html().trim() );
+    // console.log( $elem.data( "defaultvalue" ) );
+    if ( $elem.html().trim() === $elem.data( "defaultvalue" ) ) {
+      $elem.html( "" );
+    }
+    $elem.toggleClass( "default-cat", false );
+    // TODO: This is bad when clicking a title that already had focus:
+    // placeCaretAtEnd( $elem.get(0) );
   });
 
   $( "#game-container .cat-title p" ).on( "blur", function() {
-    $( this ).toggleClass( "default-cat", true );
+    var $elem = $( this );
+    console.log ( '"' + $elem.html().trim() + '"' );
+    console.log ( '"' + $elem.html().replace(/&nbsp;/gi, "").trim() + '"' );
+    if ( $elem.html().replace( /&nbsp;/gi, "" )
+        .replace( /<br>/gi, "" ).trim() === "" ) {
+      $elem.toggleClass( "default-cat", true );
+      $elem.html( $elem.data( "defaultvalue" ) );
+    }
   });
 
 });
