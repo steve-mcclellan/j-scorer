@@ -180,6 +180,10 @@ input {
           text-shadow: 0.1vw 0.1vw $j-shadow;
           border: 0.3vw solid $gameboard-color;
 
+          .click-resistant {
+            pointer-events: none;
+          }
+
           .default-cat {
             color: #777;
             text-shadow: none;
@@ -207,9 +211,11 @@ input {
           color: $j-yellow;
           text-shadow: 0.2vw 0.2vw $j-shadow;
           border: 0.3vw solid $gameboard-color;
-          &:hover {
-            background-color: $j-light-blue;
-          }
+          cursor: default;
+        }
+
+        .active-clue-box:hover {
+          background-color: $j-light-blue;
         }
       }
     }
@@ -226,6 +232,28 @@ input {
       background-color: $j-blue;
       color: white;
       border: 0.3vw solid $gameboard-color;
+
+      #correctness-buttons {
+        height: 100%;
+        width: 65%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+      }
+
+      #dd-nr-cancel {
+        height: 100%;
+        width: 35%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+
+        input {
+          width: auto;
+        }
+      }
     }
   }
 

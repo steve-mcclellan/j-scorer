@@ -1,4 +1,4 @@
-var jBlue   = "#151e8c";  // Also defined in master.css.scss
+// var jBlue   = "#151e8c";  // Also defined in master.css.scss
 // var jYellow = "#cf9f3e";  // Ditto
 
 // from accepted answer to stackoverflow.com/questions/4233265/
@@ -19,6 +19,25 @@ function placeCaretAtEnd(el) {
   }
 }
 
+// from accepted answer to stackoverflow.com/questions/12243898/
+jQuery.fn.selectText = function(){
+  var doc = document;
+  var element = this[0];
+  console.log(this, element);
+  if (doc.body.createTextRange) {
+    var range = document.body.createTextRange();
+    range.moveToElementText(element);
+    range.select();
+  } else if (window.getSelection) {
+    var selection = window.getSelection();
+    var range = document.createRange();
+    range.selectNodeContents(element);
+    selection.removeAllRanges();
+    selection.addRange(range);
+  }
+};
+
+
 $(function() {
   var score = 0;
   var $scoreboard = $( "#game-container #score" );
@@ -27,41 +46,43 @@ $(function() {
   var $clue = $( "#game-container #clue-over-board" );
   var clueVanishX;  // Coordinates to which the clue action div should
   var clueVanishY;  // disappear (back into the box whence it came).
+  var vanishPoint;  // An array containing the above two values.
 
   $( "#game-container .clue-box" ).on( "click", function( event ) {
     var $elem = $( this );
-    var boxValue = $elem.data( "boxvalue" );
     var rowValue = $elem.data( "rowvalue" );
 
-    $elem.css( "background-color", jBlue );
-    clueVanishX = event.offsetX + event.toElement.offsetLeft;
-    clueVanishY = event.offsetY + event.toElement.offsetTop;
+    // $elem.css( "background-color", jBlue );
+    clueVanishX = event.offsetX + event.target.offsetLeft;
+    clueVanishY = event.offsetY + event.target.offsetTop;
+    vanishPoint = [ clueVanishY, clueVanishX ];
 
-    $clue.show( "scale", { origin: [clueVanishY, clueVanishX] }, 200,
-        function() {
-          $elem.html( boxValue ? "" : "$" + rowValue );
-        });
+    $clue.show( "scale", { origin: vanishPoint }, 200//,
+        // function() {
+          // $elem.html( boxValue ? "" : "$" + rowValue );
+          // }
+        );
     $clue.css( "display", "flex" );
 
     // console.log( "display event object: " );
-    // console.log( $elem.data( "value" ));
     // console.dir( event );
+    // console.log( $elem.data( "value" ));
     // var dispX = event.offsetX + event.toElement.offsetLeft;
     // var dispY = event.offsetY + event.toElement.offsetTop;
     // console.log( "Display: ( " + dispX + ", " + dispY + ")" );
 
-    if ( boxValue ) {
-      $clue.html( "<h1>Value added!</h1>" );
+    // if ( boxValue ) {
+      // $clue.html( "<h1>Value added!</h1>" );
       // $elem.html( '' );
-      score += boxValue;
-      $elem.data( "boxvalue", 0 );
-    } else {
-      $clue.html( "<h1>Value deducted.</h1>");
+      // score += boxValue;
+      // $elem.data( "boxvalue", 0 );
+    // } else {
+      // $clue.html( "<h1>Value deducted.</h1>");
       // $elem.html( "$" + rowValue );
-      score -= rowValue;
-      $elem.data( "boxvalue", rowValue);
-    }
-    $scoreboard.html( "$" + score );
+      // score -= rowValue;
+      // $elem.data( "boxvalue", rowValue);
+    // }
+    // $scoreboard.html( "$" + score );
   });
 
   $clue.on( "click", function( event ) {
@@ -70,15 +91,27 @@ $(function() {
     // console.log( "Hide: ( " + event.offsetX + ", " + event.offsetY + ")" );
 
     // $( this ).hide( "scale", 200 );
-    $clue.hide( "scale", { origin: [clueVanishY, clueVanishX] }, 200 );
+    // $clue.hide( "scale", { origin: vanishPoint }, 200 );
     // $( this ).hide( "scale",
     //                 { origin: [0.75 * $( this ).height(),
     //                            0.25 * $( this ).height()] },
     //                 750 );
   });
 
-  $( "#game-container .cat-title" ).on( "click", function() {
+  // Cancel link within clue overlay:
+  $( "#game-container #dd-nr-cancel a" ).on( "click", function() {
+    $clue.hide( "scale", { origin: vanishPoint }, 200 );
+  });
+
+  // Here to bottom: category title and topic entry.
+  $( "#game-container .cat-title" ).on( "click", function( event ) {
+    // From accepted answer to stackoverflow.com/questions/9183381:
+    // "If the e.target is the same element as this, you've not clicked
+    // on a descendant."
+    // console.dir( event );
+    // if ( event.target === this ) {
     $( this ).find( "p" ).focus();
+    // }
   });
 
   $( "#game-container .cat-title p" ).on( "focus", function() {
@@ -88,20 +121,23 @@ $(function() {
     if ( $elem.html().trim() === $elem.data( "defaultvalue" ) ) {
       $elem.html( "" );
     }
-    $elem.toggleClass( "default-cat", false );
-    // TODO: This is bad when clicking a title that already had focus:
-    // placeCaretAtEnd( $elem.get(0) );
+    if ( $elem.hasClass( "click-resistant" ) ) {
+      // placeCaretAtEnd( $elem.get(0) );
+      $elem.selectText();
+    }
+    $elem.toggleClass( "default-cat click-resistant", false );
   });
 
   $( "#game-container .cat-title p" ).on( "blur", function() {
     var $elem = $( this );
-    console.log ( '"' + $elem.html().trim() + '"' );
-    console.log ( '"' + $elem.html().replace(/&nbsp;/gi, "").trim() + '"' );
+    // console.log ( '"' + $elem.html().trim() + '"' );
+    // console.log ( '"' + $elem.html().replace(/&nbsp;/gi, "").trim() + '"' );
     if ( $elem.html().replace( /&nbsp;/gi, "" )
         .replace( /<br>/gi, "" ).trim() === "" ) {
       $elem.toggleClass( "default-cat", true );
       $elem.html( $elem.data( "defaultvalue" ) );
     }
+    $elem.toggleClass( "click-resistant", true);
   });
 
 });
