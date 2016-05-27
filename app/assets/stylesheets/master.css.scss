@@ -227,31 +227,86 @@ input {
       height: 100%;
       width: 100%;
       display: none;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       background-color: $j-blue;
-      color: white;
       border: 0.3vw solid $gameboard-color;
 
-      #correctness-buttons {
-        height: 100%;
-        width: 65%;
+      #clue-heading {
+        height: 10%;
+        width: 100%;
         display: flex;
-        flex-direction: column;
-        justify-content: space-around;
+        justify-content: center;
         align-items: center;
+        color: white;
+        font-size: 6vh;
       }
 
-      #dd-nr-cancel {
-        height: 100%;
-        width: 35%;
+      #clue-body{
+        height: 90%;
+        width: 100%;
         display: flex;
-        flex-direction: column;
-        justify-content: space-around;
+        justify-content: center;
         align-items: center;
 
-        input {
-          width: auto;
+        #correctness-buttons {
+          height: 90%;
+          width: 65%;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+
+          button {
+            height: 25%;
+            width: 80%;
+            font-size: 10vh;
+            margin: 3vh 0;
+          }
+        }
+
+        #dd-nr-cancel {
+          height: 90%;
+          width: 35%;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+
+          div {
+            height: 25%;
+            width: 80%;
+            margin: 3vh 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
+
+          label {
+            color: white;
+            font-size: 10vh;
+            font-weight: normal;
+            margin: 0;
+          }
+
+          input {
+            width: 7vh;
+            height: 7vh;
+            margin: 0;
+          }
+
+          button {
+            height: 100%;
+            width: 100%;
+            font-size: 10vh;
+          }
+
+          a {
+            font-size: 5vh;
+            color: white;
+            text-decoration: none;
+          }
         }
       }
     }

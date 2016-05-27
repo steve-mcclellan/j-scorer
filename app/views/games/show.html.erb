@@ -42,16 +42,29 @@
     </div>
 
     <div id="clue-over-board">
-      <div id="correctness-buttons">
-        <button type="button">Right</button>
-        <button type="button">Pass</button>
-        <button type="button">Wrong</button>
+      <div id="clue-heading">
+        <span>{Category} - {Value}</span>
       </div>
 
-      <div id="dd-nr-cancel">
-        <label>DD <input type="checkbox" value="DD" /></label>
-        <button type="button">NR</button>
-        <a href="#">Cancel</a>
+      <div id="clue-body">
+        <div id="correctness-buttons">
+          <button type="button">Right</button>
+          <button type="button">Pass</button>
+          <button type="button">Wrong</button>
+        </div>
+
+        <div id="dd-nr-cancel">
+          <div id="dd-checkbox-container">
+            <label for="dd-checkbox">DD&nbsp;</label>
+            <input type="checkbox" id="dd-checkbox" value="DD" />
+          </div>
+          <div id="nr-button">
+            <button type="button">NR</button>
+          </div>
+          <div id="cancel-link">
+            <a href="#">Cancel</a>
+          </div>
+        </div>
       </div>
     </div>
   </div>
