@@ -48,9 +48,27 @@ $(function() {
   var clueVanishY;  // disappear (back into the box whence it came).
   var vanishPoint;  // An array containing the above two values.
 
+  var $currentClue;
+  var clueValue;
+  var valueToPlayer;
+
   $( "#game-container .clue-box" ).on( "click", function( event ) {
     var $elem = $( this );
-    var rowValue = $elem.data( "rowvalue" );
+    $currentClue = $elem
+    clueValue = $elem.data( "rowvalue" );
+    var multiplier;
+    switch ( $currentClue.data( "boxstate" ) ) {
+      case "active":
+        multiplier = 0;
+        break;
+      case "right":
+        multiplier = 1;
+        break;
+      case "wrong":
+        multiplier = -1;
+        break;
+    }
+    valueToPlayer = clueValue * multiplier;
 
     // $elem.css( "background-color", jBlue );
     clueVanishX = event.offsetX + event.target.offsetLeft;
@@ -98,10 +116,20 @@ $(function() {
     //                 750 );
   });
 
+  $( "#game-container #button-right" ).on( "click", function() {
+    score += (clueValue - valueToPlayer);
+    $scoreboard.html( "$" + score );
+    $currentClue.html( "&#10004;" );
+    $currentClue.toggleClass( "active-clue-box", false );
+    $currentClue.data( "boxstate", "right" );
+    $clue.hide( "scale", { origin: vanishPoint }, 200 );
+  });
+
   // Cancel link within clue overlay:
   $( "#game-container #dd-nr-cancel a" ).on( "click", function() {
     $clue.hide( "scale", { origin: vanishPoint }, 200 );
   });
+
 
   // Here to bottom: category title and topic entry.
   $( "#game-container .cat-title" ).on( "click", function( event ) {
