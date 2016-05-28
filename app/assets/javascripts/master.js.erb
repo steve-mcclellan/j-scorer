@@ -135,6 +135,13 @@ $(function() {
     $currentClue.data( "boxstate", "wrong" );
   });
 
+  $( "#game-container #nr-button" ).on( "click", function() {
+    score = scoreWithoutClue;
+    resolveClue();
+    $currentClue.html( "" );
+    $currentClue.data( "boxstate", "nr" );
+  });
+
   $( "#game-container #dd-nr-cancel a" ).on( "click", function() {
     $clue.hide( "scale", { origin: vanishPoint }, 200 );
   });
