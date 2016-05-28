@@ -41,7 +41,7 @@ jQuery.fn.selectText = function(){
 $(function() {
   var score = 0;
   var $scoreboard = $( "#game-container #score" );
-  $scoreboard.html( "$" + score );
+  updateScoreboard();
 
   var $clue = $( "#game-container #clue-over-board" );
   var clueVanishX;  // Coordinates to which the clue action div should
@@ -51,6 +51,19 @@ $(function() {
   var $currentClue;
   var clueValue;
   var valueToPlayer;
+
+  function updateScoreboard() {
+    scoreString = Math.abs( score ).toLocaleString( 'en-US' );
+    if ( score < 0 ) {
+      $scoreboard.html( "-$" + scoreString );
+      $scoreboard.toggleClass( "score-positive", false );
+      $scoreboard.toggleClass( "score-negative", true );
+    } else {
+      $scoreboard.html( "$" + scoreString );
+      $scoreboard.toggleClass( "score-negative", false );
+      $scoreboard.toggleClass( "score-positive", true );
+    }
+  }
 
   $( "#game-container .clue-box" ).on( "click", function( event ) {
     var $elem = $( this );
@@ -118,7 +131,7 @@ $(function() {
 
   $( "#game-container #button-right" ).on( "click", function() {
     score += (clueValue - valueToPlayer);
-    $scoreboard.html( "$" + score );
+    updateScoreboard();
     $currentClue.html( "&#10004;" );
     $currentClue.toggleClass( "active-clue-box", false );
     $currentClue.data( "boxstate", "right" );

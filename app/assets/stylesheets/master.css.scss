@@ -330,6 +330,14 @@ input {
       #score {
         font-size: 3.5vw;
       }
+
+      .score-positive {
+        color: black;
+      }
+
+      .score-negative {
+        color: red;
+      }
     }
 
     #panel-buttons {
