@@ -74,14 +74,10 @@ $(function() {
     $clue.hide( "scale", { origin: vanishPoint }, 200 );
   }
 
-  function deactivateBox() {
-    $currentClue.toggleClass( "active-clue-box", false );
-  }
-
   function resolveClue() {
     hideOverlay();
     updateScoreboard();
-    deactivateBox();
+    $currentClue.toggleClass( "active-clue-box", false );
   }
 
   var score = 0;
@@ -142,7 +138,16 @@ $(function() {
     $currentClue.data( "boxstate", "nr" );
   });
 
-  $( "#game-container #dd-nr-cancel a" ).on( "click", function() {
+  $( "#game-container #reset-link" ).on( "click", function() {
+    hideOverlay();
+    score = scoreWithoutClue;
+    updateScoreboard();
+    $currentClue.html( "$" + clueValue );
+    $currentClue.toggleClass( "active-clue-box", true );
+    $currentClue.data( "boxstate", "active" );
+  });
+
+  $( "#game-container #cancel-link" ).on( "click", function() {
     $clue.hide( "scale", { origin: vanishPoint }, 200 );
   });
 

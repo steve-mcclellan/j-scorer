@@ -311,10 +311,24 @@ input {
           }
 
           a {
-            font-size: 5vh;
             color: white;
             text-decoration: none;
             cursor: pointer;
+          }
+
+          #reset-cancel {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+
+            #reset-link {
+              font-size: 3vh;
+            }
+
+            #cancel-link {
+              font-size: 5vh;
+            }
           }
         }
       }
