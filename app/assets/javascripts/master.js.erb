@@ -68,6 +68,9 @@ $(function() {
     }
     $( "#overlay-cat" ).html( catName );
     $( "#overlay-value" ).html( "$" + clueValue);
+
+    $( "#game-container #dd-checkbox" ).prop( "checked",
+        $currentClue.data( "isdd" ) );
   }
 
   function hideOverlay() {
@@ -78,7 +81,18 @@ $(function() {
     hideOverlay();
     updateScoreboard();
     $currentClue.toggleClass( "active-clue-box", false );
+    setDD( ddCheckboxState() );
   }
+
+  function setDD( bool ) {
+    $currentClue.toggleClass( "dd-box", bool );
+    $currentClue.data( "isdd", bool );
+  }
+
+  function ddCheckboxState() {
+    return $( "#game-container #dd-checkbox" ).prop( "checked" );
+  }
+
 
   var score = 0;
   var $scoreboard = $( "#game-container #score" );
@@ -113,28 +127,29 @@ $(function() {
   $( "#game-container #button-right" ).on( "click", function() {
     score = scoreWithoutClue + clueValue;
     resolveClue();
-    $currentClue.html( "&#x2713;" );  // Check mark
+    $currentClue.html( "<span>&#x2713;</span>" );  // Check mark
     $currentClue.data( "boxstate", "right" );
   });
 
   $( "#game-container #button-pass" ).on( "click", function() {
     score = scoreWithoutClue;
     resolveClue();
-    $currentClue.html( "&#x2022;" ); // Bullet point
+    $currentClue.html( "<span>&#x2022;</span>" ); // Bullet point
     $currentClue.data( "boxstate", "pass" );
   });
 
   $( "#game-container #button-wrong" ).on( "click", function() {
     score = scoreWithoutClue - clueValue;
     resolveClue();
-    $currentClue.html( "&#x2718;" );  // X symbol
+    $currentClue.html( "<span>&#x2718;</span>" );  // X symbol
     $currentClue.data( "boxstate", "wrong" );
   });
 
   $( "#game-container #nr-button" ).on( "click", function() {
     score = scoreWithoutClue;
+    $( "#game-container #dd-checkbox" ).prop( "checked", false);
     resolveClue();
-    $currentClue.html( "" );
+    $currentClue.html( "<span></span>" );
     $currentClue.data( "boxstate", "nr" );
   });
 
@@ -142,13 +157,14 @@ $(function() {
     hideOverlay();
     score = scoreWithoutClue;
     updateScoreboard();
-    $currentClue.html( "$" + clueValue );
+    setDD( false );
+    $currentClue.html( "<span>$" + clueValue + "</span>");
     $currentClue.toggleClass( "active-clue-box", true );
     $currentClue.data( "boxstate", "active" );
   });
 
   $( "#game-container #cancel-link" ).on( "click", function() {
-    $clue.hide( "scale", { origin: vanishPoint }, 200 );
+    hideOverlay();
   });
 
 

@@ -218,6 +218,10 @@ input {
         .active-clue-box:hover {
           background-color: $j-light-blue;
         }
+
+        .dd-box span {
+          border: 2px solid limegreen;
+        }
       }
     }
 
