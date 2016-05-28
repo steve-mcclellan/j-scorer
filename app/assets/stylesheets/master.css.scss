@@ -179,6 +179,7 @@ input {
           font-weight: bold;
           text-shadow: 0.1vw 0.1vw $j-shadow;
           border: 0.3vw solid $gameboard-color;
+          overflow: hidden;
 
           .click-resistant {
             pointer-events: none;
@@ -241,6 +242,13 @@ input {
         align-items: center;
         color: white;
         font-size: 6vh;
+
+        #overlay-cat {
+          text-transform: uppercase;
+        }
+
+        #overlay-value {
+        }
       }
 
       #clue-body{
@@ -306,6 +314,7 @@ input {
             font-size: 5vh;
             color: white;
             text-decoration: none;
+            cursor: pointer;
           }
         }
       }

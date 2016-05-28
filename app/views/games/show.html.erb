@@ -30,7 +30,7 @@
           <% 1.upto(5) do |box_num| %>
             <% clue_value = box_num * top_row_value %>
             <div class="clue-box active-clue-box"
-                 data-boxid="clue-box-<%= cat_num %>-<%= box_num %>"
+                 data-column=<%= cat_num %>
                  data-rowvalue=<%= clue_value %>
                  data-isDD="false"
                  data-boxstate="active">
@@ -43,7 +43,9 @@
 
     <div id="clue-over-board">
       <div id="clue-heading">
-        <span>{Category} - {Value}</span>
+        <span id="overlay-cat">{Category}</span>
+        &nbsp;-&nbsp;
+        <span id="overlay-value">{Value}</span>
       </div>
 
       <div id="clue-body">
@@ -62,7 +64,7 @@
             <button type="button">NR</button>
           </div>
           <div id="cancel-link">
-            <a href="#">Cancel</a>
+            <a>Cancel</a>
           </div>
         </div>
       </div>
