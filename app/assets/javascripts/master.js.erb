@@ -1,6 +1,3 @@
-// var jBlue   = "#151e8c";  // Also defined in master.css.scss
-// var jYellow = "#cf9f3e";  // Ditto
-
 // from accepted answer to stackoverflow.com/questions/4233265/
 function placeCaretAtEnd(el) {
   if (typeof window.getSelection != "undefined" &&
@@ -36,6 +33,18 @@ jQuery.fn.selectText = function(){
     selection.addRange(range);
   }
 };
+
+function setCookie( name, value ) {
+  Cookies.set( name, value, { expires: 7305, path: '', secure: true } );
+}
+
+function getCookie( name ) {
+  return Cookies.getJSON( name );
+}
+
+function destroyCookie( name ) {
+  Cookies.remove( name, { path: '', secure: true } );
+}
 
 
 $(function() {
@@ -104,6 +113,14 @@ $(function() {
   var $currentClue;
   var clueValue;
   var scoreWithoutClue;
+
+  // setCookie( 'test-cookie', { hello: 'world!' });
+  // console.log( getCookie('test-cookie'));
+  // $("#test-area").html(Cookies.get('test-cookie'));
+
+  // Cookies.set('testname', { foo: 'bar' });
+  // console.log(Cookies.get('testname'));
+  // console.log(Cookies.getJSON('testname'));
 
   $( "#game-container .clue-box" ).on( "click", function( event ) {
     $currentClue = $( this );
