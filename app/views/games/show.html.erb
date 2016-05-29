@@ -74,15 +74,18 @@
     </div>
 
     <div id="panel-buttons">
-      <%= link_to 'End Round', '#' %>
-      <%= link_to 'Previous Round', '#' %>
+      <div id="round-links">
+        <div><a id="round-one-link">Round One</a></div>
+        <div><a id="round-two-link">Round Two</a></div>
+        <div><a id="final-round-link">Final Round</a></div>
+      </div>
       <%= link_to 'Save Game', '#' %>
     </div>
 
     <div id="panel-links">
-      <%= link_to 'Delete this game', '#' %>
-      <%= link_to 'Help', '#' %>
-      <%= link_to 'About', '#' %>
+      <a id="delete-game-link">Delete this game</a>
+      <%= link_to 'Help', help_path %>
+      <%= link_to 'About', about_path %>
     </div>
   </div>
 </div>

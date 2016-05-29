@@ -35,6 +35,10 @@ main {
   height: 88%;
 }
 
+a {
+  cursor: pointer;
+}
+
 /* typography */
 
 h1, h2 {
@@ -318,7 +322,6 @@ input {
           a {
             color: white;
             text-decoration: none;
-            cursor: pointer;
           }
 
           #reset-cancel {
@@ -369,10 +372,18 @@ input {
     }
 
     #panel-buttons {
+      width: 100%;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
+
+      #round-links {
+        width: 100%;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+      }
     }
 
     #panel-links {
