@@ -126,10 +126,12 @@ $(function() {
     clueValue = topRowValue * $currentClue.data( "row" );
   }
 
-  function resolveClue() {
+  function resolveClue( html, boxstate, boxActive, statusOverride ) {
     hideOverlay();
     updateScoreboard();
-    $currentClue.toggleClass( "active-clue-box", false );
+    $currentClue.html( "<span>" + html + "</span>" );
+    $currentClue.data( "boxstate", boxstate );
+    $currentClue.toggleClass( "active-clue-box", boxActive );
     setDD( ddCheckboxState() );
   }
 
@@ -172,7 +174,7 @@ $(function() {
 
   function populateBoard() {
     var unadjustedScore = score;
-    var currentRound = currentGame["activeRound"];
+    currentRound = currentGame["activeRound"];
 
     if ( currentRound === "round1" || currentRound === "round2" ) {
       setTopRowValue( currentRound );
@@ -238,6 +240,7 @@ $(function() {
     currentGame = NEW_GAME_COOKIE;
     setCookie( "game", currentGame );
   }
+  var currentRound;
 
   var $clue = $( "#game-container #clue-over-board" );
   var vanishPoint;  // Where overlay comes from/goes to.
@@ -257,6 +260,12 @@ $(function() {
 
   var $overlayCat = $( "#game-container #overlay-cat" );
   var $overlayValue = $( "#game-container #overlay-value" );
+
+  var $roundOneLink = $( "#game-container #round-one-link" );
+  var $roundTwoLink = $( "#game-container #round-two-link" );
+  var $finalRoundLink = $( "#game-container #final-round-link" );
+
+  var $deleteGameLink = $( "#game-container #delete-game-link" );
 
   // console.log(getCookie('testname'));
   // console.log(Cookies.getJSON('testname'));
@@ -290,51 +299,62 @@ $(function() {
 
   $buttonRight.on( "click", function() {
     score = scoreWithoutClue + clueValue;
-    resolveClue();
-    $currentClue.html( "<span>&#x2713;</span>" );  // Check mark
-    $currentClue.data( "boxstate", "right" );
+    resolveClue( "&#x2713;", "right", false );
+    // $currentClue.html( "<span>&#x2713;</span>" );  // Check mark
+    // $currentClue.data( "boxstate", "right" );
   });
 
   $buttonPass.on( "click", function() {
     score = scoreWithoutClue;
-    resolveClue();
-    $currentClue.html( "<span>&#x2022;</span>" );  // Bullet point
-    $currentClue.data( "boxstate", "pass" );
+    resolveClue( "&#x2022;", "pass", false );
+    // $currentClue.html( "<span>&#x2022;</span>" );  // Bullet point
+    // $currentClue.data( "boxstate", "pass" );
   });
 
   $buttonWrong.on( "click", function() {
     if ( ddCheckboxState() ) {
       score = scoreWithoutClue;
-      $currentClue.html( "<span>&#x2022;</span>" );  // Bullet point
-      $currentClue.data( "boxstate", "pass" );
+      // $currentClue.html( "<span>&#x2022;</span>" );  // Bullet point
+      // $currentClue.data( "boxstate", "pass" );
+      resolveClue( "&#x2022;", "pass", false, 5 );
     } else {
       score = scoreWithoutClue - clueValue;
-      $currentClue.html( "<span>&#x2718;</span>" );  // X symbol
-      $currentClue.data( "boxstate", "wrong" );
+      // $currentClue.html( "<span>&#x2718;</span>" );  // X symbol
+      // $currentClue.data( "boxstate", "wrong" );
+      resolveClue( "&#x2718;", "wrong", false );
     }
-    resolveClue();
+    // resolveClue();
   });
 
   $buttonNR.on( "click", function() {
     score = scoreWithoutClue;
-    $ddCheckbox.prop( "checked", false);
-    resolveClue();
-    $currentClue.html( "<span></span>" );
-    $currentClue.data( "boxstate", "nr" );
+    $ddCheckbox.prop( "checked", false );
+    resolveClue( "", "nr", false );
+    // $currentClue.html( "<span></span>" );
+    // $currentClue.data( "boxstate", "nr" );
   });
 
   $resetLink.on( "click", function() {
-    hideOverlay();
+    // hideOverlay();
     score = scoreWithoutClue;
-    updateScoreboard();
+    // updateScoreboard();
     setDD( false );
-    $currentClue.html( "<span>$" + clueValue + "</span>");
-    $currentClue.toggleClass( "active-clue-box", true );
-    $currentClue.data( "boxstate", "active" );
+    // $currentClue.html( "<span>$" + clueValue + "</span>");
+    // $currentClue.toggleClass( "active-clue-box", true );
+    // $currentClue.data( "boxstate", "active" );
+    resolveClue( "$" + clueValue, "active", true );
   });
 
   $cancelLink.on( "click", function() {
     hideOverlay();
+  });
+
+  $deleteGameLink.on( "click", function() {
+    currentGame = NEW_GAME_COOKIE;
+    setCookie( "game", currentGame );
+    score = 0;
+    updateScoreboard();
+    populateBoard();
   });
 
 
@@ -367,7 +387,6 @@ $(function() {
     $elem.toggleClass( "click-resistant", true);
   });
 
-  // TESTING:
   getScoreFromCookie();
   populateBoard();
 
