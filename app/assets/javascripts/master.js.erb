@@ -126,13 +126,19 @@ $(function() {
     clueValue = topRowValue * $currentClue.data( "row" );
   }
 
-  function resolveClue( html, boxstate, boxActive, statusOverride ) {
+  function resolveClue( html, boxstate, boxActive, statusCode, addDD ) {
     hideOverlay();
     updateScoreboard();
     $currentClue.html( "<span>" + html + "</span>" );
     $currentClue.data( "boxstate", boxstate );
     $currentClue.toggleClass( "active-clue-box", boxActive );
     setDD( ddCheckboxState() );
+    if ( addDD && ddCheckboxState() ) { statusCode += 4; }
+    var col = $currentClue.data( "column" );
+    var row = $currentClue.data( "row" );
+    currentGame[currentRound][col][row] = statusCode;
+    currentGame["modified"] = true;
+    setCookie( "game", currentGame );
   }
 
   function setDD( bool ) {
@@ -299,14 +305,14 @@ $(function() {
 
   $buttonRight.on( "click", function() {
     score = scoreWithoutClue + clueValue;
-    resolveClue( "&#x2713;", "right", false );
+    resolveClue( "&#x2713;", "right", false, 3, true );
     // $currentClue.html( "<span>&#x2713;</span>" );  // Check mark
     // $currentClue.data( "boxstate", "right" );
   });
 
   $buttonPass.on( "click", function() {
     score = scoreWithoutClue;
-    resolveClue( "&#x2022;", "pass", false );
+    resolveClue( "&#x2022;", "pass", false, 2, true );
     // $currentClue.html( "<span>&#x2022;</span>" );  // Bullet point
     // $currentClue.data( "boxstate", "pass" );
   });
@@ -316,12 +322,12 @@ $(function() {
       score = scoreWithoutClue;
       // $currentClue.html( "<span>&#x2022;</span>" );  // Bullet point
       // $currentClue.data( "boxstate", "pass" );
-      resolveClue( "&#x2022;", "pass", false, 5 );
+      resolveClue( "&#x2022;", "pass", false, 5, false );
     } else {
       score = scoreWithoutClue - clueValue;
       // $currentClue.html( "<span>&#x2718;</span>" );  // X symbol
       // $currentClue.data( "boxstate", "wrong" );
-      resolveClue( "&#x2718;", "wrong", false );
+      resolveClue( "&#x2718;", "wrong", false, 1, false );
     }
     // resolveClue();
   });
@@ -329,7 +335,7 @@ $(function() {
   $buttonNR.on( "click", function() {
     score = scoreWithoutClue;
     $ddCheckbox.prop( "checked", false );
-    resolveClue( "", "nr", false );
+    resolveClue( "", "nr", false, 4, false );
     // $currentClue.html( "<span></span>" );
     // $currentClue.data( "boxstate", "nr" );
   });
@@ -337,17 +343,34 @@ $(function() {
   $resetLink.on( "click", function() {
     // hideOverlay();
     score = scoreWithoutClue;
+    $ddCheckbox.prop( "checked", false );
     // updateScoreboard();
-    setDD( false );
     // $currentClue.html( "<span>$" + clueValue + "</span>");
     // $currentClue.toggleClass( "active-clue-box", true );
     // $currentClue.data( "boxstate", "active" );
-    resolveClue( "$" + clueValue, "active", true );
+    resolveClue( "$" + clueValue, "active", true, 0, false );
   });
 
   $cancelLink.on( "click", function() {
     hideOverlay();
   });
+
+  $roundOneLink.on( "click", function() {
+    currentRound = "round1";
+    updateRound();
+  });
+
+  $roundTwoLink.on( "click", function() {
+    currentRound = "round2";
+    updateRound();
+  });
+
+  function updateRound() {
+    currentGame["activeRound"] = currentRound;
+    setCookie( "game", currentGame );
+    getScoreFromCookie();
+    populateBoard();
+  }
 
   $deleteGameLink.on( "click", function() {
     currentGame = NEW_GAME_COOKIE;
