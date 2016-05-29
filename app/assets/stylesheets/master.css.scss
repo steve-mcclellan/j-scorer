@@ -10,10 +10,11 @@ $dark-background-color:   #222;
 $gameboard-color:  black;
 $disclaimer-color: #777;
 
-$j-blue:       #151e8c;  /* Also defined in master.js.erb */
+$j-blue:       #151e8c;
 $j-light-blue: #353eac;
-$j-yellow:     #cf9f3e;  /* Ditto */
+$j-yellow:     #cf9f3e;
 $j-shadow:     #101014;
+$dd-border:    #674f1f;
 
 /* universal */
 
@@ -219,8 +220,8 @@ input {
           background-color: $j-light-blue;
         }
 
-        .dd-box span {
-          border: 2px solid limegreen;
+        .dd-box {
+          border: 0.3vw solid $dd-border;
         }
       }
     }
