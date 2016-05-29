@@ -1,12 +1,10 @@
-<% top_row_value = 200 %>
-
 <div id="game-container">
 
   <div id="board-area">
 
     <div id="board">
       <% 1.upto(6) do |cat_num| %>
-        <div class="category" id="category<%= cat_num %>">
+        <div class="category" id="category-<%= cat_num %>">
 
           <div class="cat-title" id="cat-title-<%= cat_num %>">
             <p contenteditable="true"
@@ -14,27 +12,22 @@
                tabindex="<%= cat_num %>"
                data-defaultvalue="Category <%= cat_num %>"
                spellcheck="false">
-              Category <%= cat_num %>
+               . <!-- Category <%= cat_num %> -->
             </p>
           </div>
-          <!--
-          <div class="topic-area" id="topic-area-<%= cat_num %>">
-            <p>Topic area <%= cat_num %></p>
-          </div>
-          -->
 
           <input class="topic-area" id="topic-area-<%= cat_num %>"
-                                    placeholder="Topic area <%= cat_num %>"
+                                    placeholder="Topic(s)"
                                     tabindex="<%= cat_num + 6 %>" />
 
           <% 1.upto(5) do |box_num| %>
-            <% clue_value = box_num * top_row_value %>
             <div class="clue-box active-clue-box"
+                 id="clue-box-<%= cat_num %>-<%= box_num %>"
                  data-column=<%= cat_num %>
-                 data-rowvalue=<%= clue_value %>
+                 data-row=<%= box_num %>
                  data-isdd=false
                  data-boxstate="active">
-              <span>$<%= clue_value %></span>
+              <span>.</span>
             </div>
           <% end %>
         </div>
@@ -60,7 +53,7 @@
             <label for="dd-checkbox">DD&nbsp;</label>
             <input type="checkbox" id="dd-checkbox" value="DD" />
           </div>
-          <div id="nr-button">
+          <div id="button-nr">
             <button type="button">NR</button>
           </div>
           <div id="reset-cancel">
