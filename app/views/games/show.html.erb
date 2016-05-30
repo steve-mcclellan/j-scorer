@@ -9,8 +9,9 @@
           <div class="cat-title" id="cat-title-<%= cat_num %>">
             <p contenteditable="true"
                class="default-cat click-resistant"
-               tabindex="<%= cat_num %>"
+               tabindex=<%= cat_num %>
                data-defaultvalue="Category <%= cat_num %>"
+               data-column=<%= cat_num %>
                spellcheck="false">
                . <!-- Category <%= cat_num %> -->
             </p>
@@ -18,7 +19,8 @@
 
           <input class="topic-area" id="topic-area-<%= cat_num %>"
                                     placeholder="Topic(s)"
-                                    tabindex="<%= cat_num + 6 %>" />
+                                    tabindex=<%= cat_num + 6 %>
+                                    data-column=<%= cat_num %> />
 
           <% 1.upto(5) do |box_num| %>
             <div class="clue-box active-clue-box"

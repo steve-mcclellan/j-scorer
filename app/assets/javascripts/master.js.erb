@@ -400,14 +400,19 @@ $(function() {
 
   $( "#game-container .cat-title p" ).on( "blur", function() {
     var $elem = $( this );
+    var content;
     if ( $elem.html().replace( /&nbsp;/gi, "" )
         .replace( /<br>/gi, "" ).trim() === "" ) {
       $elem.toggleClass( "default-cat", true );
       $elem.html( $elem.data( "defaultvalue" ) );
+      content = "";
     } else {
       $elem.toggleClass( "default-cat", false) ;
+      content = $elem.html();
     }
     $elem.toggleClass( "click-resistant", true);
+    currentGame[currentRound][$elem.data( "column" )][0][0] = content;
+    setCookie( "game", currentGame );
   });
 
   getScoreFromCookie();
