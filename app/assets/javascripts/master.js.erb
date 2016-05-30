@@ -415,6 +415,12 @@ $(function() {
     setCookie( "game", currentGame );
   });
 
+  $( "#game-container .topic-area" ).on ("blur", function() {
+    var $elem = $( this );
+    currentGame[currentRound][$elem.data( "column")][0][1] = $elem.val();
+    setCookie( "game", currentGame );
+  });
+
   getScoreFromCookie();
   populateBoard();
 
