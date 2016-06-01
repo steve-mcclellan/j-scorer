@@ -77,7 +77,9 @@ CREATE TABLE finals (
     category_title character varying,
     result integer,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    contestants_right integer,
+    contestants_wrong integer
 );
 
 
@@ -110,7 +112,8 @@ CREATE TABLE games (
     show_date date,
     date_played timestamp without time zone,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    play_type character varying
 );
 
 
@@ -367,6 +370,13 @@ CREATE INDEX index_finals_on_game_id ON finals USING btree (game_id);
 
 
 --
+-- Name: index_games_on_play_type; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_games_on_play_type ON games USING btree (play_type);
+
+
+--
 -- Name: index_games_on_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -486,4 +496,8 @@ INSERT INTO schema_migrations (version) VALUES ('20160513120011');
 INSERT INTO schema_migrations (version) VALUES ('20160601141915');
 
 INSERT INTO schema_migrations (version) VALUES ('20160601144446');
+
+INSERT INTO schema_migrations (version) VALUES ('20160601170600');
+
+INSERT INTO schema_migrations (version) VALUES ('20160601170801');
 
