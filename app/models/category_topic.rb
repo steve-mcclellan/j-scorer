@@ -9,10 +9,10 @@ class CategoryTopic < ActiveRecord::Base
   validates :category_id, presence: true
   validates :category_type, presence: true
 
-  validates :placement,
-            presence: true,
-            numericality: { greater_than: 0 },
-            uniqueness: { scope: [:category_id, :category_type] }
+  # validates :placement,
+            # presence: true,
+            # numericality: { greater_than: 0 },
+            # uniqueness: { scope: [:category_id, :category_type] }
 
   validate :category_and_topic_must_belong_to_same_user
 

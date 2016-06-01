@@ -4,10 +4,8 @@ one:
   category_id: 1
   category_type: RoundOneCategory
   topic: one
-  placement: 1
 
 two:
   category_id: 5
   category_type: RoundTwoCategory
   topic: one
-  placement: 1
