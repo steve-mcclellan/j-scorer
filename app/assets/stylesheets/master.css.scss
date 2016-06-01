@@ -351,6 +351,14 @@ input {
     align-items: center;
     background-color: $light-background-color;
 
+    .disabled {
+      color: #999;
+      cursor: default;
+      &:hover {
+        text-decoration: none;
+      }
+    }
+
     #scoreboard {
       display: flex;
       flex-direction: column;
@@ -371,19 +379,11 @@ input {
       }
     }
 
-    #panel-buttons {
+    #round-links {
       width: 100%;
       display: flex;
-      flex-direction: column;
-      justify-content: center;
+      justify-content: space-around;
       align-items: center;
-
-      #round-links {
-        width: 100%;
-        display: flex;
-        justify-content: space-around;
-        align-items: center;
-      }
     }
 
     #panel-links {
