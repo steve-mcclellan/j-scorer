@@ -75,6 +75,11 @@ const NEW_GAME_COOKIE = {
 
 $(function() {
 
+  function updateCookie( changed = true ) {
+    if ( changed ) { currentGame["modified"] = true; }
+    setCookie( "game", currentGame);
+  }
+
   function updateScoreboard() {
     scoreString = Math.abs( score ).toLocaleString( "en-US" );
     if ( score < 0 ) {
@@ -130,15 +135,15 @@ $(function() {
     hideOverlay();
     updateScoreboard();
     $currentClue.html( "<span>" + html + "</span>" );
+    var col = $currentClue.data( "column" );
+    var row = $currentClue.data( "row" );
+    currentClueState = currentGame[currentRound][col][row];
     $currentClue.data( "boxstate", boxstate );
     $currentClue.toggleClass( "active-clue-box", boxActive );
     setDD( ddCheckboxState() );
     if ( addDD && ddCheckboxState() ) { statusCode += 4; }
-    var col = $currentClue.data( "column" );
-    var row = $currentClue.data( "row" );
     currentGame[currentRound][col][row] = statusCode;
-    currentGame["modified"] = true;
-    setCookie( "game", currentGame );
+    updateCookie( currentClueState !== statusCode );
   }
 
   function setDD( bool ) {
@@ -187,9 +192,12 @@ $(function() {
       var roundObject = currentGame[currentRound];
 
       for ( var col = 1; col <= 6; col++ ) {
+        var catTitleText = roundObject[col][0][0];
         var $catTitleP = $( "#cat-title-" + col + " p" );
-        $catTitleP.html( roundObject[col][0][0] );
-        $catTitleP.blur();  // Applies appropriate formatting.
+        $catTitleP.html( catTitleText );
+        // Applies appropriate formatting.
+        oldValue = catTitleText;
+        $catTitleP.blur();
 
         $( "#topic-area-" + col ).val( roundObject[col][0][1] );
 
@@ -236,6 +244,13 @@ $(function() {
     }  // TODO: else for Final being current round goes here.
   }
 
+  function updateRound() {
+    currentGame["activeRound"] = currentRound;
+    setCookie( "game", currentGame );
+    getScoreFromCookie();
+    populateBoard();
+  }
+
 
   var score = 0;
   var $scoreboard = $( "#game-container #score" );
@@ -253,6 +268,7 @@ $(function() {
 
   var topRowValue;
   var $currentClue;
+  var currentClueState;
   var clueValue;
   var scoreWithoutClue;
 
@@ -272,17 +288,6 @@ $(function() {
   var $finalRoundLink = $( "#game-container #final-round-link" );
 
   var $deleteGameLink = $( "#game-container #delete-game-link" );
-
-  // console.log(getCookie('testname'));
-  // console.log(Cookies.getJSON('testname'));
-
-  // setCookie( 'testname2', '470' );
-  // console.log(getCookie('testname2'));
-  // console.log(Cookies.getJSON('testname2'));
-
-  // console.log(getCookie());
-  // destroyCookie('testname');
-  // console.log(getCookie());
 
   $( "#game-container .clue-box" ).on( "click", function( event ) {
     $currentClue = $( this );
@@ -306,48 +311,32 @@ $(function() {
   $buttonRight.on( "click", function() {
     score = scoreWithoutClue + clueValue;
     resolveClue( "&#x2713;", "right", false, 3, true );
-    // $currentClue.html( "<span>&#x2713;</span>" );  // Check mark
-    // $currentClue.data( "boxstate", "right" );
   });
 
   $buttonPass.on( "click", function() {
     score = scoreWithoutClue;
     resolveClue( "&#x2022;", "pass", false, 2, true );
-    // $currentClue.html( "<span>&#x2022;</span>" );  // Bullet point
-    // $currentClue.data( "boxstate", "pass" );
   });
 
   $buttonWrong.on( "click", function() {
     if ( ddCheckboxState() ) {
       score = scoreWithoutClue;
-      // $currentClue.html( "<span>&#x2022;</span>" );  // Bullet point
-      // $currentClue.data( "boxstate", "pass" );
       resolveClue( "&#x2022;", "pass", false, 5, false );
     } else {
       score = scoreWithoutClue - clueValue;
-      // $currentClue.html( "<span>&#x2718;</span>" );  // X symbol
-      // $currentClue.data( "boxstate", "wrong" );
       resolveClue( "&#x2718;", "wrong", false, 1, false );
     }
-    // resolveClue();
   });
 
   $buttonNR.on( "click", function() {
     score = scoreWithoutClue;
     $ddCheckbox.prop( "checked", false );
     resolveClue( "", "nr", false, 4, false );
-    // $currentClue.html( "<span></span>" );
-    // $currentClue.data( "boxstate", "nr" );
   });
 
   $resetLink.on( "click", function() {
-    // hideOverlay();
     score = scoreWithoutClue;
     $ddCheckbox.prop( "checked", false );
-    // updateScoreboard();
-    // $currentClue.html( "<span>$" + clueValue + "</span>");
-    // $currentClue.toggleClass( "active-clue-box", true );
-    // $currentClue.data( "boxstate", "active" );
     resolveClue( "$" + clueValue, "active", true, 0, false );
   });
 
@@ -365,13 +354,6 @@ $(function() {
     updateRound();
   });
 
-  function updateRound() {
-    currentGame["activeRound"] = currentRound;
-    setCookie( "game", currentGame );
-    getScoreFromCookie();
-    populateBoard();
-  }
-
   $deleteGameLink.on( "click", function() {
     currentGame = NEW_GAME_COOKIE;
     setCookie( "game", currentGame );
@@ -382,6 +364,8 @@ $(function() {
 
 
   // Here to bottom: category title and topic entry.
+  var oldValue;
+
   $( "#game-container .cat-title" ).on( "click", function( event ) {
     $( this ).find( "p" ).focus();
   });
@@ -391,6 +375,7 @@ $(function() {
     if ( $elem.html().trim() === $elem.data( "defaultvalue" ) ) {
       $elem.html( "" );
     }
+    oldValue = $elem.html();
     if ( $elem.hasClass( "click-resistant" ) ) {
       // placeCaretAtEnd( $elem.get(0) );
       $elem.selectText();
@@ -412,12 +397,18 @@ $(function() {
     }
     $elem.toggleClass( "click-resistant", true);
     currentGame[currentRound][$elem.data( "column" )][0][0] = content;
+    if ( content !== oldValue ) { currentGame["modified"] = true; }
     setCookie( "game", currentGame );
+  });
+
+  $( "#game-container .topic-area" ).on( "focus", function() {
+    oldValue = $( this ).val();
   });
 
   $( "#game-container .topic-area" ).on ("blur", function() {
     var $elem = $( this );
-    currentGame[currentRound][$elem.data( "column")][0][1] = $elem.val();
+    currentGame[currentRound][$elem.data( "column" )][0][1] = $elem.val();
+    currentGame["modified"] = ( $elem.val() !== oldValue );
     setCookie( "game", currentGame );
   });
 
