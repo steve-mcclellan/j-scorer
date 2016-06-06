@@ -2,10 +2,10 @@ require 'test_helper'
 
 class CategoryTopicTest < ActiveSupport::TestCase
   def setup
-    @cattop = CategoryTopic.create!(category: finals(:one),
-                                    topic: topics(:one))
-    @cattop2 = CategoryTopic.new(category: finals(:one),
-                                 topic: topics(:two))
+    @cattop = CategoryTopic.create!(category: finals(:fone),
+                                    topic: topics(:highbrow))
+    @cattop2 = CategoryTopic.new(category: finals(:fone),
+                                 topic: topics(:lowbrow))
   end
 
   test 'should be valid' do
@@ -34,7 +34,7 @@ class CategoryTopicTest < ActiveSupport::TestCase
 
   test 'should be a unique combination of category and topic' do
     assert @cattop2.valid?
-    @cattop2.topic = topics(:one)
+    @cattop2.topic = topics(:highbrow)
     assert_not @cattop2.valid?
     @cattop2.category_type = 'RoundTwoCategory'
     assert @cattop2.valid?

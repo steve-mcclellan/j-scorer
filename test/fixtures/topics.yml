@@ -1,13 +1,15 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  user: dave
-  name: highbrow
+<% topic_name_list = %w(Highbrow Literature Trash Lowbrow Music General People France Animals Other InQuotes Art Movies Poetry PlaceBios Titles) %>
 
-two:
+<% topic_name_list.each do |topic_name| %>
+
+<%= topic_name.downcase %>:
   user: dave
-  name: lowbrow
+  name: <%= topic_name %>
+
+<% end %>
 
 topic_of_steve:
   user: steve
-  name: highbrow
+  name: Highbrow
