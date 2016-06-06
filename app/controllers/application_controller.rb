@@ -7,11 +7,9 @@ class ApplicationController < ActionController::Base
   before_action :check_domain
 
   def check_domain
-    # if Rails.env.production? && request.host.casecmp('j-scorer.com') != 0
     if Rails.env.production? && request.host.casecmp(ENV['PROPER_DOMAIN']) != 0
-      url = "https://#{ENV['PROPER_DOMAIN']}#{request.fullpath}", status: 301
-      redirect_to url
-      # redirect_to 'https://j-scorer.com' + request.fullpath, status: 301
+      proper_url = "https://#{ENV['PROPER_DOMAIN']}#{request.fullpath}"
+      redirect_to proper_url, status: 301
     end
   end
 

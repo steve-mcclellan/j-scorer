@@ -75,7 +75,9 @@ const NEW_GAME_COOKIE = {
 
 $(function() {
 
-  function updateCookie( changed = true ) {
+  function updateCookie( changed ) {
+    if ( changed === undefined ) { changed = true; }
+
     if ( changed ) { currentGame["modified"] = true; }
     setCookie( "game", currentGame);
   }
