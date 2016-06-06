@@ -3,17 +3,19 @@ class Topic < ActiveRecord::Base
 
   has_many :category_topics, dependent: :destroy
 
-  # has_many :round_one_categories,
-           # through:     :category_topics,
-           # source:      :category,
-           # source_type: 'RoundOneCategory'
-
-  # has_many :round_two_categories,
-           # through:     :category_topics,
-           # source:      :category,
-           # source_type: 'RoundTwoCategory'
-
   has_many :sixths,
+           through:     :category_topics,
+           source:      :category,
+           source_type: 'Sixth'
+
+  has_many :round_one_categories,
+           -> { where type: 'RoundOneCategory' },
+           through:     :category_topics,
+           source:      :category,
+           source_type: 'Sixth'
+
+  has_many :round_two_categories,
+           -> { where type: 'RoundTwoCategory' },
            through:     :category_topics,
            source:      :category,
            source_type: 'Sixth'
