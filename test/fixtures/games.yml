@@ -13,7 +13,7 @@ two:
 most_recent:
   user: dave
   show_date: 2005-05-25
-  date_played: <%= Time.zone.today %>
+  date_played: <%= 7.days.from_now %>
 
 victoria:
   user: dave
