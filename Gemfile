@@ -53,6 +53,8 @@ group :test do
   gem 'minitest-reporters'
   # Filter dependency info from backtraces
   gem 'mini_backtrace'
+  # Make Travis CI happy
+  gem 'rake'
 end
 
 # Heroku will gripe if this isn't present
