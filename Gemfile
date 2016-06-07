@@ -55,6 +55,7 @@ group :test do
   gem 'mini_backtrace'
   # Make Travis CI happy
   gem 'rake'
+  gem 'rubocop'
 end
 
 # Heroku will gripe if this isn't present
