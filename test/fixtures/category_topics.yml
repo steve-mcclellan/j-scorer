@@ -1,13 +1,89 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  category_id: 1
-  category_type: RoundOneCategory
-  topic: one
-  placement: 1
+  category: jone
+  topic: highbrow
 
 two:
-  category_id: 5
-  category_type: RoundTwoCategory
-  topic: one
-  placement: 1
+  category: jone
+  topic: literature
+
+three:
+  category: jone
+  topic: trash
+
+four:
+  category: jtwo
+  topic: lowbrow
+
+five:
+  category: jtwo
+  topic: music
+
+six:
+  category: jthree
+  topic: general
+
+seven:
+  category: jfour
+  topic: people
+
+eight:
+  category: jfour
+  topic: france
+
+nine:
+  category: jfive
+  topic: animals
+
+ten:
+  category: jfive
+  topic: other
+
+eleven:
+  category: jsix
+  topic: inquotes
+
+twelve:
+  category: djone
+  topic: highbrow
+
+thirteen:
+  category: djone
+  topic: art
+
+fourteen:
+  category: djtwo
+  topic: lowbrow
+
+fifteen:
+  category: djtwo
+  topic: movies
+
+sixteen:
+  category: djthree
+  topic: inquotes
+
+seventeen:
+  category: djfour
+  topic: people
+
+eighteen:
+  category: djfive
+  topic: highbrow
+
+nineteen:
+  category: djfive
+  topic: poetry
+
+twenty:
+  category: djsix
+  topic: placebios
+
+twentyone:
+  category: fone
+  topic: people
+
+twentytwo:
+  category: fone
+  topic: titles

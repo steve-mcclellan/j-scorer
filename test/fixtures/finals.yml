@@ -1,6 +1,8 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
+fone:
   game: victoria
   category_title: Ranks & Titles
   result: 1
+  first_topic: People
+  last_topic: Titles
