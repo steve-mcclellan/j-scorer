@@ -95,7 +95,7 @@ $(function() {
     }
   }
 
-  function showOverlay() {
+  function showOverlay( event ) {
     vanishPoint = [ event.offsetY + event.target.offsetTop,
                     event.offsetX + event.target.offsetLeft ];
 
@@ -294,7 +294,7 @@ $(function() {
   $( "#game-container .clue-box" ).on( "click", function( event ) {
     $currentClue = $( this );
     setClueValue();
-    showOverlay();
+    showOverlay( event );
 
     var multiplier;
     switch ( $currentClue.data( "boxstate" ) ) {
@@ -368,7 +368,7 @@ $(function() {
   // Here to bottom: category title and topic entry.
   var oldValue;
 
-  $( "#game-container .cat-title" ).on( "click", function( event ) {
+  $( "#game-container .cat-title" ).on( "click", function() {
     $( this ).find( "p" ).focus();
   });
 
