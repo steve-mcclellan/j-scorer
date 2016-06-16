@@ -252,7 +252,15 @@ $(function() {
     currentGame["activeRound"] = currentRound;
     setCookie( "game", currentGame );
     getScoreFromCookie();
-    populateBoard();
+    if ( currentRound === "final" ) {
+      $fj.show( "scale", 200, function() {
+        $board.css( 'visibility', 'hidden' );
+      });
+    } else {
+      $fj.hide( "scale", 200 );
+      $board.css( 'visibility', 'visible');
+      populateBoard();
+    }
   }
 
 
@@ -267,8 +275,12 @@ $(function() {
   }
   var currentRound;
 
+  var $board = $( "#game-container #board" );
+
   var $clue = $( "#game-container #clue-over-board" );
   var vanishPoint;  // Where overlay comes from/goes to.
+
+  var $fj = $( "#game-container #final-over-board" );
 
   var topRowValue;
   var $currentClue;
@@ -358,6 +370,11 @@ $(function() {
     updateRound();
   });
 
+  $finalRoundLink.on( "click", function() {
+    currentRound = "final";
+    updateRound();
+  });
+
   $deleteGameLink.on( "click", function() {
     currentGame = NEW_GAME_COOKIE;
     setCookie( "game", currentGame );
@@ -408,7 +425,11 @@ $(function() {
         content = $elem.html();
       }
       $elem.toggleClass( "click-resistant", true);
-      currentGame[currentRound][$elem.data( "column" )][0][0] = content;
+      if ( currentRound === "final" ) {
+        currentGame[fj][0][0] = content;
+      } else {
+        currentGame[currentRound][$elem.data( "column" )][0][0] = content;
+      }
       if ( content !== oldValue ) { currentGame["modified"] = true; }
       setCookie( "game", currentGame );
     }
@@ -423,7 +444,11 @@ $(function() {
   $( "#game-container .topic-area, #final-topic-area" ).on ("blur",
     function() {
       var $elem = $( this );
-      currentGame[currentRound][$elem.data( "column" )][0][1] = $elem.val();
+      if ( currentRound === "final" ) {
+        currentGame[fj][0][1] = content;
+      } else {
+        currentGame[currentRound][$elem.data( "column" )][0][1] = $elem.val();
+      }
       currentGame["modified"] = ( $elem.val() !== oldValue );
       setCookie( "game", currentGame );
     }
