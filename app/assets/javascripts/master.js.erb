@@ -266,6 +266,7 @@ $(function() {
       $fj.show( "scale", 200, function() {
         $board.css( 'visibility', 'hidden' );
       });
+      $fj.css( 'display', 'flex' );
     } else {
       $fj.hide( "scale", 200 );
       $board.css( 'visibility', 'visible');
@@ -418,7 +419,7 @@ $(function() {
     setCookie( "game", currentGame );
     score = 0;
     updateScoreboard();
-    populateBoard();
+    updateRound();
   });
 
 

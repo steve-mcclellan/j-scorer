@@ -155,8 +155,6 @@ input {
     background-color: $j-blue;
 
     #board {
-      /* TODO: Set visibility properly via JS. */
-      visibility: hidden;
       z-index: 0;
       height: 100%;
       width: 100%;
@@ -350,7 +348,7 @@ input {
       z-index: 2;
       height: 100%;
       width: 100%;
-      display: flex;
+      display: none;
       flex-direction: column;
       justify-content: center;
       align-items: center;
