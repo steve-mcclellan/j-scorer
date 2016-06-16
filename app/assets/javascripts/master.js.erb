@@ -243,9 +243,19 @@ $(function() {
           }
         }
       }
+    } else {  // Final is current round.
+      var catTitleText = currentGame["fj"][0][0];
+      var $catTitleP = $( "#final-cat-title p" )
+      $catTitleP.html( catTitleText );
+      oldValue = catTitleText;
+      $catTitleP.blur();
+
+      $( "#final-topic-area" ).val( currentGame["fj"][0][1] );
+      $contestantsRight.val( currentGame["fj"][2][0] );
+      $contestantsWrong.val( currentGame["fj"][2][1] );
+    }
     score = unadjustedScore;
     updateScoreboard();
-    }  // TODO: else for Final being current round goes here.
   }
 
   function updateRound() {
@@ -259,8 +269,8 @@ $(function() {
     } else {
       $fj.hide( "scale", 200 );
       $board.css( 'visibility', 'visible');
-      populateBoard();
     }
+    populateBoard();
   }
 
 
