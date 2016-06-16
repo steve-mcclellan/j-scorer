@@ -426,7 +426,7 @@ $(function() {
       }
       $elem.toggleClass( "click-resistant", true);
       if ( currentRound === "final" ) {
-        currentGame[fj][0][0] = content;
+        currentGame["fj"][0][0] = content;
       } else {
         currentGame[currentRound][$elem.data( "column" )][0][0] = content;
       }
@@ -445,7 +445,7 @@ $(function() {
     function() {
       var $elem = $( this );
       if ( currentRound === "final" ) {
-        currentGame[fj][0][1] = content;
+        currentGame["fj"][0][1] = content;
       } else {
         currentGame[currentRound][$elem.data( "column" )][0][1] = $elem.val();
       }
