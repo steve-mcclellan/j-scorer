@@ -260,7 +260,7 @@ input {
         }
       }
 
-      #clue-body{
+      #clue-body {
         height: 90%;
         width: 100%;
         display: flex;
@@ -337,6 +337,111 @@ input {
             #cancel-link {
               font-size: 5vh;
             }
+          }
+        }
+      }
+    }
+
+    #final-over-board {
+      position: absolute;
+      top: 0;
+      z-index: 2;
+      height: 100%;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background-color: $j-blue;
+      border: 0.3vw solid $gameboard-color;
+
+      #final-cat-title {
+        height: 20%;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        color: white;
+        text-transform: uppercase;
+        font-size: 1.44vw;
+        line-height: 110%;
+        font-weight: bold;
+        text-shadow: 0.1vw 0.1vw $j-shadow;
+        border: 0.3vw solid $gameboard-color;
+        overflow: hidden;
+
+        .click-resistant {
+          pointer-events: none;
+        }
+
+        .default-cat {
+          color: #777;
+          text-shadow: none;
+        }
+      }
+
+      #final-topic-area {
+        height: 10%;
+        width: 100%;
+        background-color: white;
+        color: black;
+        text-align: center;
+        border: 0.3vw solid $gameboard-color;
+        margin: 0;
+      }
+
+      #final-clue-body {
+        height: 70%;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border: 0.3vw solid $gameboard-color;
+
+        #final-correctness-buttons {
+          height: 50%;
+          width: 80%;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+
+          button {
+            height: 60%;
+            width: 40%;
+            font-size: 10vh;
+            margin: 3vh 0;
+          }
+        }
+
+        #final-contestant-results {
+          height: 50%;
+          width: 80%;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-around;
+          align-items: center;
+
+          div {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
+
+          label {
+            color: white;
+            font-size: 7vh;
+            font-weight: normal;
+            margin: 0;
+          }
+
+          input {
+            width: 7vh;
+            height: 7vh;
+            font-size: 5vh;
+            text-align: center;
+            margin: 0;
           }
         }
       }
