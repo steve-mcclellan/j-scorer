@@ -97,6 +97,20 @@ $(function() {
     }
   }
 
+  function updateFinalSymbol() {
+    switch ( currentGame["fj"][1] ) {
+      case 0:
+        $finalSymbol.html("");
+        break;
+      case 1:
+        $finalSymbol.html( "&nbsp;&#x2718;" );
+        break;
+      case 3:
+        $finalSymbol.html( "&nbsp;&#x2713;" );
+        break;
+    }
+  }
+
   function showOverlay( event ) {
     vanishPoint = [ event.offsetY + event.target.offsetTop,
                     event.offsetX + event.target.offsetLeft ];
@@ -253,9 +267,12 @@ $(function() {
       $( "#final-topic-area" ).val( currentGame["fj"][0][1] );
       $contestantsRight.val( currentGame["fj"][2][0] );
       $contestantsWrong.val( currentGame["fj"][2][1] );
+
+      $fj.show();
     }
     score = unadjustedScore;
     updateScoreboard();
+    updateFinalSymbol();
   }
 
   function updateRound() {
@@ -278,6 +295,7 @@ $(function() {
   var score = 0;
   var $scoreboard = $( "#game-container #score" );
   updateScoreboard();
+  var $finalSymbol = $( "#game-container #final-symbol" );
 
   var currentGame = getCookie( "game" );
   if ( !currentGame ) {
@@ -379,6 +397,7 @@ $(function() {
     if ( currentGame["fj"][1] !== 3 ) {
       currentGame["fj"][1] = 3;
       updateCookie();
+      updateFinalSymbol();
     }
   });
 
@@ -386,6 +405,7 @@ $(function() {
     if ( currentGame["fj"][1] !== 1 ) {
       currentGame["fj"][1] = 1;
       updateCookie();
+      updateFinalSymbol();
     }
   });
 
