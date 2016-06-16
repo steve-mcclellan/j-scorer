@@ -281,6 +281,10 @@ $(function() {
   var vanishPoint;  // Where overlay comes from/goes to.
 
   var $fj = $( "#game-container #final-over-board" );
+  var $buttonFJRight = $( "#game-container #button-final-right" );
+  var $buttonFJWrong = $( "#game-container #button-final-wrong" );
+  var $contestantsRight = $( "#game-container #final-right-number" );
+  var $contestantsWrong = $( "#game-container #final-wrong-number" );
 
   var topRowValue;
   var $currentClue;
@@ -358,6 +362,30 @@ $(function() {
 
   $cancelLink.on( "click", function() {
     hideOverlay();
+  });
+
+  $buttonFJRight.on( "click", function() {
+    if ( currentGame["fj"][1] !== 3 ) {
+      currentGame["fj"][1] = 3;
+      updateCookie();
+    }
+  });
+
+  $buttonFJWrong.on( "click", function() {
+    if ( currentGame["fj"][1] !== 1 ) {
+      currentGame["fj"][1] = 1;
+      updateCookie();
+    }
+  });
+
+  $contentantsRight.on( "change", function() {
+    currentGame["fj"][2][0] = $( this ).val();
+    updateCookie();
+  });
+
+  $contestantsWrong.on( "change", function() {
+    currentGame["fj"][2][1] = $( this ).val();
+    updateCookie();
   });
 
   $roundOneLink.on( "click", function() {
