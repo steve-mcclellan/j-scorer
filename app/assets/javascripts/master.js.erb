@@ -445,7 +445,7 @@ $(function() {
     function() {
       var $elem = $( this );
       if ( currentRound === "final" ) {
-        currentGame["fj"][0][1] = content;
+        currentGame["fj"][0][1] = $elem.val();
       } else {
         currentGame[currentRound][$elem.data( "column" )][0][1] = $elem.val();
       }
