@@ -9,7 +9,7 @@
           <div class="cat-title" id="cat-title-<%= cat_num %>">
             <p contenteditable="true"
                class="default-cat click-resistant"
-               tabindex=<%= cat_num %>
+               tabindex=1
                data-defaultvalue="Category <%= cat_num %>"
                data-column=<%= cat_num %>
                spellcheck="false">
@@ -19,7 +19,7 @@
 
           <input class="topic-area" id="topic-area-<%= cat_num %>"
                                     placeholder="Topic(s)"
-                                    tabindex=<%= cat_num + 6 %>
+                                    tabindex=2
                                     data-column=<%= cat_num %> />
 
           <% 1.upto(5) do |box_num| %>
@@ -65,30 +65,72 @@
         </div>
       </div>
     </div>
+
+    <div id="final-over-board">
+      <div id="final-cat-title">
+        <p contenteditable="true"
+           class="default-cat click-resistant"
+           tabindex=1
+           data-defaultvalue="Final Category"
+           spellcheck="false">
+        .
+        </p>
+      </div>
+
+      <input id="final-topic-area" placeholder="Topic(s)" tabindex=2 />
+
+      <div id="final-clue-body">
+        <div id="final-correctness-buttons">
+          <button type="button"
+                  id="button-final-right"
+                  tabindex=3>
+            Right
+          </button>
+          <button type="button"
+                  id="button-final-wrong"
+                  tabindex=3>
+            Wrong
+          </button>
+        </div>
+
+        <div id="final-contestant-results">
+          <div id="final-correct-contestants">
+            <label for="final-right-number">Contestants right:&nbsp;</label>
+            <input type="number" id="final-right-number" value=0 tabindex=4 />
+          </div>
+
+          <div id="final-incorrect-contestants">
+            <label for="final-wrong-number">Contestants wrong:&nbsp;</label>
+            <input type="number" id="final-wrong-number" value=0 tabindex=4 />
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div id="panel">
     <div id="scoreboard">
       Score
-      <div id="score">
-        $...
+      <div>
+        <span id="score">$...</span>
+        <span id="final-symbol"></span>
       </div>
     </div>
 
     <div id="round-links">
-      <div><a id="round-one-link">Round One</a></div>
-      <div><a id="round-two-link">Round Two</a></div>
-      <div><a id="final-round-link" class="disabled">Final Round</a></div>
+      <div><a id="round-one-link" tabindex=100>Round One</a></div>
+      <div><a id="round-two-link" tabindex=100>Round Two</a></div>
+      <div><a id="final-round-link" tabindex=100>Final Round</a></div>
     </div>
 
     <div id="save-area">
-      <a id="save-game-link" class="disabled">Save Game</a>
+      <a id="save-game-link" tabindex=200 class="disabled">Save Game</a>
     </div>
 
     <div id="panel-links">
-      <a id="delete-game-link">Delete this game</a>
-      <%= link_to 'Help', help_path %>
-      <%= link_to 'About', about_path %>
+      <a id="delete-game-link" tabindex=300>Delete this game</a>
+      <%= link_to 'Help', help_path, tabindex: 300 %>
+      <%= link_to 'About', about_path, tabindex: 300 %>
     </div>
   </div>
 </div>
