@@ -74,6 +74,10 @@ const NEW_GAME_COOKIE = {
   fj: [ [ "", "" ], 0, [ 0, 0 ] ]
 };
 
+function newCookie() {
+  return JSON.parse( JSON.stringify( NEW_GAME_COOKIE ));
+}
+
 
 $(function() {
 
@@ -276,7 +280,7 @@ $(function() {
   }
 
   function updateRound() {
-    currentGame["activeRound"] = currentRound;
+    currentRound = currentGame["activeRound"];
     setCookie( "game", currentGame );
     getScoreFromCookie();
     if ( currentRound === "final" ) {
@@ -299,7 +303,7 @@ $(function() {
 
   var currentGame = getCookie( "game" );
   if ( !currentGame ) {
-    currentGame = NEW_GAME_COOKIE;
+    currentGame = newCookie();
     setCookie( "game", currentGame );
   }
   var currentRound;
@@ -420,25 +424,22 @@ $(function() {
   });
 
   $roundOneLink.on( "click", function() {
-    currentRound = "round1";
+    currentGame["activeRound"] = "round1";
     updateRound();
   });
 
   $roundTwoLink.on( "click", function() {
-    currentRound = "round2";
+    currentGame["activeRound"] = "round2";
     updateRound();
   });
 
   $finalRoundLink.on( "click", function() {
-    currentRound = "final";
+    currentGame["activeRound"] = "final";
     updateRound();
   });
 
   $deleteGameLink.on( "click", function() {
-    currentGame = NEW_GAME_COOKIE;
-    setCookie( "game", currentGame );
-    score = 0;
-    updateScoreboard();
+    currentGame = newCookie();
     updateRound();
   });
 
