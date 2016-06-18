@@ -1,18 +1,46 @@
 <% provide(:title, 'Stats') %>
 <h2>Games played by <%= @user.email %> (<%= @user.games.count %>):</h2>
 
-<ol class='games'>
-  <% @user.games.each do |game| %>
-    <li id="game-<%= game.id %>">
-      <span class='timestamp'>Played <%= time_ago_in_words(game.date_played) %> ago.</span>
-      <span class='show-date'>Game from <%= game.show_date %></span>
-      <span class='score'>
-        Score: <em>TBD</em>
+<table id="gameTable" class="tablesorter">
+  <thead>
+    <tr>
+      <th>Played</th>
+      <th>Show date</th>
+      <th>Score</th>
+      <th colspan=2>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @user.games.each do |game| %>
+      <tr>
+        <!-- <td><%= game.date_played.strftime("%F") %></td> -->
+        <td><%= game.date_played.to_s(:db) %></td>
+        <td><%= game.show_date %></td>
+        <td>$12,345</td>
         <% if current_user?(game.user) %>
-          <%= link_to 'delete', axe_game_path(game.show_date),
-                      method: :delete, data: { confirm: 'You sure?' } %>
+          <td><%= link_to 'edit', game_path(date: game.show_date) %></td>
+          <td><%= link_to 'delete',
+                          axe_game_path(game.show_date),
+                          method: :delete,
+                          data: { confirm: 'Are you sure?' } %></td>
+        <% else %>
+          <td colspan=2></td>
         <% end %>
-      </span>
-    </li>
-  <% end %>
-</ol>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<script>
+  $( function() {
+    // Make table sortable. Initialize default sort to
+    // [ leftmost column, descending ]. Prevent meaningless attempts
+    // to sort by "Actions" column (currently in position 3).
+    $( "#gameTable" ).tablesorter({
+      sortList: [[0,1]],
+      headers: {
+        3: { sorter: false }
+      }
+    });
+  });
+</script>

@@ -11,6 +11,7 @@
  * file per style scope.
  *
  *= require jquery-ui
+ *= require tablesorter_blue
  *= require_tree .
  *= require_self
  */
