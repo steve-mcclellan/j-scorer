@@ -6,9 +6,13 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-steve = User.create!(email: 'steve@example.com', password: 'foobar', password_confirmation: 'foobar')
+steve = User.create!(email: 'steve@example.com',
+                     password: 'foobar',
+                     password_confirmation: 'foobar')
 
-User.create!(email: 'david@example.com', password: 'barfoo', password_confirmation: 'barfoo')
+User.create!(email: 'david@example.com',
+             password: 'barfoo',
+             password_confirmation: 'barfoo')
 
 25.times do |n|
   show_date = n.days.ago
