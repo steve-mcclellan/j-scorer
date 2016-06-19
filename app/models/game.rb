@@ -3,6 +3,8 @@ class Game < ActiveRecord::Base
   has_many :sixths, dependent: :destroy
   has_one :final, dependent: :destroy
 
+  accepts_nested_attributes_for :sixths, :final
+
   delegate :round_one_categories, :round_two_categories, to: :sixths
 
   default_scope -> { order(date_played: :desc) }

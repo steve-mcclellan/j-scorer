@@ -13,8 +13,9 @@ Rails.application.routes.draw do
   post 'forgot' => 'password_resets#create'
   get 'reset/:id' => 'password_resets#edit', as: :reset
   patch 'reset/:id' => 'password_resets#update'
-  get 'game' => 'games#show'
-  post 'game' => 'games#create'
+  get 'game' => 'games#new'
+  post 'game' => 'games#create', as: :games
+  get 'game/:show_date' => 'games#edit', as: :edit_game
   delete 'game/:show_date' => 'games#destroy', as: :axe_game
 
   # The priority is based upon order of creation: first created -> highest priority.

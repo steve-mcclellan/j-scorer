@@ -18,7 +18,7 @@
         <td><%= game.show_date %></td>
         <td>$12,345</td>
         <% if current_user?(game.user) %>
-          <td><%= link_to 'edit', game_path(date: game.show_date) %></td>
+          <td><%= link_to 'edit', edit_game_path(game.show_date) %></td>
           <td><%= link_to 'delete',
                           axe_game_path(game.show_date),
                           method: :delete,

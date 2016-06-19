@@ -1,8 +1,9 @@
 class GamesController < ApplicationController
-  before_action :logged_in_user, only: [:create, :destroy]
-  before_action :correct_user,   only: :destroy
+  before_action :logged_in_user,  only: [:create, :edit, :destroy]
+  before_action :correct_user,    only: [:edit, :destroy]
+  before_action :initialize_game, only: :new
 
-  def show
+  def new
   end
 
   def create
@@ -13,6 +14,9 @@ class GamesController < ApplicationController
     else
       render 'pages/home'
     end
+  end
+
+  def edit
   end
 
   def destroy
@@ -30,5 +34,14 @@ class GamesController < ApplicationController
   def correct_user
     @game = current_user.games.find_by(show_date: params[:show_date])
     redirect_to root_url if @game.nil?
+  end
+
+  def initialize_game
+    @game = Game.new
+    1.upto(6) do |i|
+      @game.round_one_categories.build(board_position: i)
+      @game.round_two_categories.build(board_position: i)
+    end
+    @game.build_final
   end
 end
