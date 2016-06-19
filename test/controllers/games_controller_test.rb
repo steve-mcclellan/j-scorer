@@ -2,7 +2,7 @@ require 'test_helper'
 
 class GamesControllerTest < ActionController::TestCase
   test 'should get game page' do
-    get :show
+    get :new
     assert_response :success
   end
 
