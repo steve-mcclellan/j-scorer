@@ -1,3 +1,22 @@
+<%= form_for(@game) do |f| %>
+  Show date: <%= f.date_field :show_date %>
+  Date played: <%= f.datetime_field :date_played %>
+  Play type: <%= f.text_field :play_type %>
+
+  <%= f.fields_for :sixths do |builder| %>
+    <%= render 'sixth_fields', f: builder %>
+  <% end %>
+
+  <%= f.fields_for :final do |builder| %>
+    <%= render 'final_fields', f: builder %>
+  <% end %>
+
+  <%= f.submit %>
+<% end %>
+
+
+
+<!-- OLD ATTEMPT BEFORE LEARNING PROPER USE
 <% cats = @game.sixths.to_a.sort_by { |cat| [cat.type, cat.board_position] } %>
 
 <%= form_for(@game) do |f| %>
@@ -25,3 +44,4 @@
 
   <%= f.submit "Save Game", class: "btn btn-link" %>
 <% end %>
+-->

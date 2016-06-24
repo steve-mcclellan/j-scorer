@@ -74,11 +74,11 @@ CREATE TABLE finals (
     id integer NOT NULL,
     game_id integer,
     category_title character varying,
-    result integer,
+    result integer DEFAULT 0,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    contestants_right integer,
-    contestants_wrong integer,
+    contestants_right integer DEFAULT 0,
+    contestants_wrong integer DEFAULT 0,
     first_topic character varying,
     last_topic character varying
 );
@@ -114,7 +114,7 @@ CREATE TABLE games (
     date_played timestamp without time zone,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    play_type character varying
+    play_type character varying DEFAULT 'regular'::character varying
 );
 
 
@@ -156,11 +156,11 @@ CREATE TABLE sixths (
     type character varying,
     board_position integer,
     title character varying,
-    result1 integer,
-    result2 integer,
-    result3 integer,
-    result4 integer,
-    result5 integer,
+    result1 integer DEFAULT 0,
+    result2 integer DEFAULT 0,
+    result3 integer DEFAULT 0,
+    result4 integer DEFAULT 0,
+    result5 integer DEFAULT 0,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     first_topic character varying,
@@ -509,4 +509,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160601194120');
 INSERT INTO schema_migrations (version) VALUES ('20160601194627');
 
 INSERT INTO schema_migrations (version) VALUES ('20160601194754');
+
+INSERT INTO schema_migrations (version) VALUES ('20160623193817');
 

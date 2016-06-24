@@ -13,7 +13,7 @@
         <span><%= pluralize(current_user.games.count, 'game') %></span>
       </section>
       <section class='game_form'>
-        <%= form_for(@game, url: game_path) do |f| %>
+        <%= form_for(@game) do |f| %>
           <%= render 'shared/error_messages', object: f.object %>
           <%= f.label :show_date %>
           <%= f.date_field :show_date, value: Time.zone.today %>

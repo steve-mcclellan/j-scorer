@@ -11,7 +11,7 @@ class GamesInterfaceTest < ActionDispatch::IntegrationTest
     assert_template 'pages/home'
     # Invalid submission
     assert_no_difference 'Game.count' do
-      post game_path, game: { show_date: '', date_played: '' }
+      post games_path, game: { show_date: '', date_played: '' }
     end
     # TODO: Redo this whole test.
     # assert_select 'div#error_explanation'
@@ -19,7 +19,7 @@ class GamesInterfaceTest < ActionDispatch::IntegrationTest
     show_date = Date.new(1983, 7, 18)
     date_played = Time.zone.now
     assert_difference 'Game.count', 1 do
-      post game_path, game: { show_date: show_date, date_played: date_played }
+      post games_path, game: { show_date: show_date, date_played: date_played }
     end
     assert_redirected_to stats_url
     follow_redirect!
@@ -28,7 +28,7 @@ class GamesInterfaceTest < ActionDispatch::IntegrationTest
     assert_select 'a', text: 'delete'
     first_game = @user.games.first
     assert_difference 'Game.count', -1 do
-      delete axe_game_path(first_game.show_date)
+      delete game_path(first_game.show_date)
     end
   end
 end
