@@ -40,7 +40,10 @@ function setCookie( name, value ) {
 }
 
 function getCookie( name ) {
-  return Cookies.getJSON( name );
+  // TODO: Find out why
+  // return Cookies.getJSON( name );
+  // stopped working properly when the database was hooked up.
+  return Cookies.getJSON()[name];
 }
 
 function destroyCookie( name ) {
@@ -178,7 +181,6 @@ $(function() {
   }
 
   function setCookieFromForm() {
-    alert('Setting cookie from form...');
     var gameDataArray = $( "#game-container form" ).serializeArray();
 
     // Convert array to object.
@@ -186,7 +188,6 @@ $(function() {
     for (var k = 0; k < gameDataArray.length; k++) {
       d[gameDataArray[k].name] = gameDataArray[k].value;
     }
-    console.dir(d);
 
     currentGame["modified"] = false;
     currentGame["showDate"] = d["game[show_date]"];
@@ -198,16 +199,22 @@ $(function() {
       currentGame["round1"][i+1][0][1] = "Topic number " + String(i);
       currentGame["round2"][i+1][0][0] = d[gsa + (i+6) + "][title]"];
       currentGame["round2"][i+1][0][1] = "DJ Topic " + String(i);
+
       for (var j = 1; j <= 5; j++) {
-        currentGame["round1"][i+1][j] = parseInt(d[gsa + i + "][result" + j + "]"]);
-        currentGame["round2"][i+1][j] = parseInt(d[gsa + (i+6) + "][result" + j + "]"]);
+        currentGame["round1"][i+1][j] =
+          parseInt(d[gsa + i + "][result" + j + "]"]);
+        currentGame["round2"][i+1][j] =
+          parseInt(d[gsa + (i+6) + "][result" + j + "]"]);
       }
     }
-    currentGame["fj"][0][0] = d["game[final_attributes][category_title]"];
+    const gfa = "game[final_attributes][";
+    currentGame["fj"][0][0] = d[gfa + "category_title]"];
     currentGame["fj"][0][1] = "Final Topics!";
-    currentGame["fj"][1] = parseInt(d["game[final_attributes][result]"]);
-    currentGame["fj"][2][0] = parseInt(d["game[final_attributes][contestants_right]"]);
-    currentGame["fj"][2][1] = parseInt(d["game[final_attributes][contestants_wrong]"]);
+    currentGame["fj"][1] = parseInt(d[gfa + "result]"]);
+
+    currentGame["fj"][2][0] = parseInt(d[gfa + "contestants_right]"]);
+    currentGame["fj"][2][1] = parseInt(d[gfa + "contestants_wrong]"]);
+
     setCookie( "game", currentGame);
   }
 
@@ -332,14 +339,9 @@ $(function() {
 
   var score = 0;
   var $scoreboard = $( "#game-container #score" );
-  updateScoreboard();
   var $finalSymbol = $( "#game-container #final-symbol" );
 
   var currentGame = getCookie( "game" );
-  if ( !currentGame ) {
-    currentGame = newCookie();
-    setCookie( "game", currentGame );
-  }
   var currentRound;
 
   var $board = $( "#game-container #board" );
@@ -548,9 +550,15 @@ $(function() {
     }
   );
 
+  if ( !currentGame ) {
+    currentGame = newCookie();
+    setCookie( "game", currentGame );
+  }
+
   if ( $( ".data-passer" ).data( "whichpage" ) === 'Edit' ) {
     setCookieFromForm();
   }
+
   getScoreFromCookie();
   populateBoard();
 
