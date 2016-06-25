@@ -13,8 +13,7 @@
   <tbody>
     <% @user.games.each do |game| %>
       <tr>
-        <!-- <td><%= game.date_played.strftime("%F") %></td> -->
-        <td><%= game.date_played.to_s(:db) %></td>
+        <td><%= game.date_played.in_time_zone.to_s %></td>
         <td><%= game.show_date %></td>
         <td>$12,345</td>
         <% if current_user?(game.user) %>

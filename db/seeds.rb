@@ -15,9 +15,11 @@ User.create!(email: 'david@example.com',
              password_confirmation: 'barfoo')
 
 25.times do |n|
-  show_date = n.days.ago
-  date_played = n.days.ago
-  steve.games.create!(show_date: show_date, date_played: date_played)
+  show_date = (n + 30).days.ago
+  date_played = (n + 30).days.ago
+  steve.games.create!(show_date: show_date,
+                      date_played: date_played,
+                      play_type: "irregular")
 end
 
 utoc = steve.games.create!(show_date: Date.new(2005, 5, 25),
