@@ -18,6 +18,7 @@ Rails.application.routes.draw do
   delete 'game/:show_date' => 'games#destroy'
   get 'game' => 'games#new', as: :games
   post 'game' => 'games#create'
+  get 'json/:show_date' => 'games#json', as: :json
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

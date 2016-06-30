@@ -35,7 +35,7 @@ jQuery.fn.selectText = function(){
 };
 
 function setCookie( name, value ) {
-  Cookies.set( name, value, { expires: 7305, path: '',
+  Cookies.set( name, value, { expires: 7305, path: '/game',
                               secure: <%= Rails.env.production? %> } );
 }
 
@@ -47,7 +47,7 @@ function getCookie( name ) {
 }
 
 function destroyCookie( name ) {
-  Cookies.remove( name, { path: '', secure: <%= Rails.env.production? %> } );
+  Cookies.remove( name, { path: '/game', secure: <%= Rails.env.production? %> } );
 }
 
 // const NEW_GAME_COOKIE = {
@@ -305,7 +305,6 @@ $(function() {
   function populateBoard() {
     var unadjustedScore = score;
     currentRound = currentGameData["activeRound"];
-    console.log( "currentRound = " + currentRound );
 
     if ( currentRound === "round_one_categories" ||
          currentRound === "round_two_categories" ) {
@@ -629,12 +628,17 @@ $(function() {
   }
 
   if ( $( ".data-passer" ).data( "whichpage" ) === 'Edit' ) {
-    // setCookieFromForm();
-    // TODO: Grab cookie from game JSON.
-    alert( "Game editing not yet implemented." );
+    var dateOfShow = $(".data-passer").data( "showdate" );
+    $.get( "/json/" + dateOfShow ).success( function( data ) {
+      currentGame = data;
+      destroyCookie( "game" );
+      setCookie( "game", currentGame );
+      getScoreFromCookie();
+      populateBoard();
+    });
+  } else {
+    getScoreFromCookie();
+    populateBoard();
   }
-
-  getScoreFromCookie();
-  populateBoard();
 
 });
