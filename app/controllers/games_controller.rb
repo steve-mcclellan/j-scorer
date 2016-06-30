@@ -20,6 +20,8 @@ class GamesController < ApplicationController
   end
 
   def edit
+    game = Game.find_by(show_date: params[:show_date])
+    render json: game
   end
 
   def update

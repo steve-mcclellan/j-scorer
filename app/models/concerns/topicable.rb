@@ -21,4 +21,9 @@ module Topicable
     # - cat.topics = topic_list
     # - Make sure return value is truthy.
   end
+
+  def topic_string
+    # TODO: Put first and last topics in proper position.
+    topics.map(&:name).join(", ")
+  end
 end

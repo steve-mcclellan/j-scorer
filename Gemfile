@@ -71,3 +71,7 @@ gem 'bootstrap-sass', '~> 3.3.6'
 # Allow for dynamic default values, like setting show_date and date_played
 # to the date/time the game is created.
 gem 'default_value_for', '~> 3.0.0'
+
+# Allow for convenient(-ish) customization of the data displayed
+# by "render :json".
+gem 'active_model_serializers', '~> 0.10.0'
