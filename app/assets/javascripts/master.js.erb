@@ -386,14 +386,18 @@ $(function() {
     if ( currentRound === "final" ) {
       $fj.show( "scale", 200, function() {
         $board.css( 'visibility', 'hidden' );
-        $( "#final-cat-title" ).trigger( "click" );
+        setTimeout( function() {
+          $( "#final-cat-title" ).trigger( "click" );
+        }, 0);
       });
       $fj.css( 'display', 'flex' );
 
     } else {
       $fj.hide( "scale", 200 );
       $board.css( 'visibility', 'visible');
-      $( "#cat-title-1" ).trigger( "click" );
+      setTimeout( function() {
+        $( "#cat-title-1" ).trigger( "click" );
+      }, 0);
     }
   }
 
