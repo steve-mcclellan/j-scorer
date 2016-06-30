@@ -24,6 +24,6 @@ module Topicable
 
   def topic_string
     # TODO: Put first and last topics in proper position.
-    topics.map(&:name).join(", ")
+    topics.map(&:name).join(', ')
   end
 end
