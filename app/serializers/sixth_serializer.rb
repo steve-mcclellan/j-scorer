@@ -1,3 +1,9 @@
 class SixthSerializer < ActiveModel::Serializer
-  attributes :id
+  attributes :title,
+             :topic_string,
+             :result1,
+             :result2,
+             :result3,
+             :result4,
+             :result5
 end

@@ -50,45 +50,96 @@ function destroyCookie( name ) {
   Cookies.remove( name, { path: '', secure: <%= Rails.env.production? %> } );
 }
 
+// const NEW_GAME_COOKIE = {
+//   modified: false,
+//   showDate: "",
+//   activeRound: "round1",
+//   round1: [
+//     0,
+//     // [ [ title, topics ], result codes top to bottom ]
+//     [ [ "", "" ], 0, 0, 0, 0, 0 ],
+//     [ [ "", "" ], 0, 0, 0, 0, 0 ],
+//     [ [ "", "" ], 0, 0, 0, 0, 0 ],
+//     [ [ "", "" ], 0, 0, 0, 0, 0 ],
+//     [ [ "", "" ], 0, 0, 0, 0, 0 ],
+//     [ [ "", "" ], 0, 0, 0, 0, 0 ]
+//   ],
+//   round2: [
+//     0,
+//     [ [ "", "" ], 0, 0, 0, 0, 0 ],
+//     [ [ "", "" ], 0, 0, 0, 0, 0 ],
+//     [ [ "", "" ], 0, 0, 0, 0, 0 ],
+//     [ [ "", "" ], 0, 0, 0, 0, 0 ],
+//     [ [ "", "" ], 0, 0, 0, 0, 0 ],
+//     [ [ "", "" ], 0, 0, 0, 0, 0 ]
+//   ],
+//   // [ [ category_title, topics ], result code, contestants: [ right, wrong ] ]
+//   fj: [ [ "", "" ], 0, [ 0, 0 ] ]
+// };
+
+const NEW_CATEGORY = {
+  "title":"",
+  "topics_string":"",
+  "result1":0,
+  "result2":0,
+  "result3":0,
+  "result4":0,
+  "result5":0
+};
+
+function newCategory() {
+  return JSON.parse( JSON.stringify( NEW_CATEGORY ) );
+}
+
 const NEW_GAME_COOKIE = {
-  modified: false,
-  showDate: "",
-  activeRound: "round1",
-  round1: [
-    0,
-    // [ [ title, topics ], result codes top to bottom ]
-    [ [ "", "" ], 0, 0, 0, 0, 0 ],
-    [ [ "", "" ], 0, 0, 0, 0, 0 ],
-    [ [ "", "" ], 0, 0, 0, 0, 0 ],
-    [ [ "", "" ], 0, 0, 0, 0, 0 ],
-    [ [ "", "" ], 0, 0, 0, 0, 0 ],
-    [ [ "", "" ], 0, 0, 0, 0, 0 ]
-  ],
-  round2: [
-    0,
-    [ [ "", "" ], 0, 0, 0, 0, 0 ],
-    [ [ "", "" ], 0, 0, 0, 0, 0 ],
-    [ [ "", "" ], 0, 0, 0, 0, 0 ],
-    [ [ "", "" ], 0, 0, 0, 0, 0 ],
-    [ [ "", "" ], 0, 0, 0, 0, 0 ],
-    [ [ "", "" ], 0, 0, 0, 0, 0 ]
-  ],
-  // [ [ category_title, topics ], result code, contestants: [ right, wrong ] ]
-  fj: [ [ "", "" ], 0, [ 0, 0 ] ]
+  "show_date":"",
+  "date_played":"",
+  "play_type":"",
+  "round_one_categories":[
+    newCategory(),
+    newCategory(),
+    newCategory(),
+    newCategory(),
+    newCategory(),
+    newCategory()],
+  "round_two_categories":[
+    newCategory(),
+    newCategory(),
+    newCategory(),
+    newCategory(),
+    newCategory(),
+    newCategory()],
+  "final": {
+    "category_title":"",
+    "topics_string":"",
+    "result":0,
+    "contestants_right":0,
+    "contestants_wrong":0
+  }
 };
 
 function newCookie() {
-  return JSON.parse( JSON.stringify( NEW_GAME_COOKIE ));
+  return JSON.parse( JSON.stringify( NEW_GAME_COOKIE ) );
+}
+
+const NEW_DATA_COOKIE = {
+  "modified":false,
+  "activeRound":"round_one_categories"
+};
+
+function newDataCookie() {
+  return JSON.parse( JSON.stringify( NEW_DATA_COOKIE ) );
 }
 
 
 $(function() {
 
-  function updateCookie( changed ) {
+  function updateCookies( changed ) {
     if ( changed === undefined ) { changed = true; }
 
-    if ( changed ) { currentGame["modified"] = true; }
+    if ( changed ) { currentGameData["modified"] = true; }
     setCookie( "game", currentGame);
+    setCookie( "gameData", currentGameData);
   }
 
   function updateScoreboard() {
@@ -105,7 +156,7 @@ $(function() {
   }
 
   function updateFinalSymbol() {
-    switch ( currentGame["fj"][1] ) {
+    switch ( currentGame["final"]["result"] ) {
       case 0:
         $finalSymbol.html("");
         break;
@@ -114,6 +165,9 @@ $(function() {
         break;
       case 3:
         $finalSymbol.html( "&nbsp;&#x2713;" );
+        break;
+      default:
+        $finalSymbol.html( "&nbsp;?" );
         break;
     }
   }
@@ -127,7 +181,8 @@ $(function() {
 
     var titleClass = "#cat-title-" + $currentClue.data( "column" ) + " p";
     var catName = $( titleClass ).html().replace( /<div>/gi, " " )
-                                        .replace( /<\/div>/gi, "" ).trim();
+                                        .replace( /<\/div>/gi, "" )
+                                        .trim();
     if ( catName.length > 20 ) {
       catName = catName.slice( 0, 15 ) + "...";
     }
@@ -142,12 +197,13 @@ $(function() {
   }
 
   function setTopRowValue( round ) {
-    if ( round === 1 || round === "round1" ) {
+    if ( round === 1 || round === "round_one_categories" ) {
       topRowValue = 200;
-    } else if ( round === 2 || round === "round2" ) {
+    } else if ( round === 2 || round === "round_two_categories" ) {
       topRowValue = 400;
     } else {
-      console.log( "Error: could not set top row value for round " + round );
+      console.log( "Error: could not set top row value for round '" +
+          round + "'" );
       topRowValue = 0;
     }
   }
@@ -162,13 +218,13 @@ $(function() {
     $currentClue.html( "<span>" + html + "</span>" );
     var col = $currentClue.data( "column" );
     var row = $currentClue.data( "row" );
-    currentClueState = currentGame[currentRound][col][row];
+    currentClueState = currentGame[currentRound][col - 1]["result" + row]
     $currentClue.data( "boxstate", boxstate );
     $currentClue.toggleClass( "active-clue-box", boxActive );
     setDD( ddCheckboxState() );
     if ( addDD && ddCheckboxState() ) { statusCode += 4; }
-    currentGame[currentRound][col][row] = statusCode;
-    updateCookie( currentClueState !== statusCode );
+    currentGame[currentRound][col - 1]["result" + row] = statusCode;
+    updateCookies( currentClueState !== statusCode );
   }
 
   function setDD( bool ) {
@@ -180,57 +236,57 @@ $(function() {
     return $ddCheckbox.prop( "checked" );
   }
 
-  function setCookieFromForm() {
-    var gameDataArray = $( "#game-container form" ).serializeArray();
-
-    // Convert array to object.
-    var d = {};
-    for (var k = 0; k < gameDataArray.length; k++) {
-      d[gameDataArray[k].name] = gameDataArray[k].value;
-    }
-
-    currentGame["modified"] = false;
-    currentGame["showDate"] = d["game[show_date]"];
-    currentGame["activeRound"] = "round1";
-
-    const gsa = "game[sixths_attributes][";
-    for (var i = 0; i < 6; i++) {
-      currentGame["round1"][i+1][0][0] = d[gsa + i + "][title]"];
-      currentGame["round1"][i+1][0][1] = "Topic number " + String(i);
-      currentGame["round2"][i+1][0][0] = d[gsa + (i+6) + "][title]"];
-      currentGame["round2"][i+1][0][1] = "DJ Topic " + String(i);
-
-      for (var j = 1; j <= 5; j++) {
-        currentGame["round1"][i+1][j] =
-          parseInt(d[gsa + i + "][result" + j + "]"]);
-        currentGame["round2"][i+1][j] =
-          parseInt(d[gsa + (i+6) + "][result" + j + "]"]);
-      }
-    }
-    const gfa = "game[final_attributes][";
-    currentGame["fj"][0][0] = d[gfa + "category_title]"];
-    currentGame["fj"][0][1] = "Final Topics!";
-    currentGame["fj"][1] = parseInt(d[gfa + "result]"]);
-
-    currentGame["fj"][2][0] = parseInt(d[gfa + "contestants_right]"]);
-    currentGame["fj"][2][1] = parseInt(d[gfa + "contestants_wrong]"]);
-
-    setCookie( "game", currentGame);
-  }
+//   function setCookieFromForm() {
+//     var gameDataArray = $( "#game-container form" ).serializeArray();
+//
+//     // Convert array to object.
+//     var d = {};
+//     for (var k = 0; k < gameDataArray.length; k++) {
+//       d[gameDataArray[k].name] = gameDataArray[k].value;
+//     }
+//
+//     currentGame["modified"] = false;
+//     currentGame["showDate"] = d["game[show_date]"];
+//     currentGame["activeRound"] = "round1";
+//
+//     const gsa = "game[sixths_attributes][";
+//     for (var i = 0; i < 6; i++) {
+//       currentGame["round1"][i+1][0][0] = d[gsa + i + "][title]"];
+//       currentGame["round1"][i+1][0][1] = "Topic number " + String(i);
+//       currentGame["round2"][i+1][0][0] = d[gsa + (i+6) + "][title]"];
+//       currentGame["round2"][i+1][0][1] = "DJ Topic " + String(i);
+//
+//       for (var j = 1; j <= 5; j++) {
+//         currentGame["round1"][i+1][j] =
+//           parseInt(d[gsa + i + "][result" + j + "]"]);
+//         currentGame["round2"][i+1][j] =
+//           parseInt(d[gsa + (i+6) + "][result" + j + "]"]);
+//       }
+//     }
+//     const gfa = "game[final_attributes][";
+//     currentGame["fj"][0][0] = d[gfa + "category_title]"];
+//     currentGame["fj"][0][1] = "Final Topics!";
+//     currentGame["fj"][1] = parseInt(d[gfa + "result]"]);
+//
+//     currentGame["fj"][2][0] = parseInt(d[gfa + "contestants_right]"]);
+//     currentGame["fj"][2][1] = parseInt(d[gfa + "contestants_wrong]"]);
+//
+//     setCookie( "game", currentGame);
+//   }
 
   function getScoreFromCookie() {
     score = 0;
-    var rounds = [ "round1", "round2" ];
+    var rounds = [ "round_one_categories", "round_two_categories" ];
     for ( var i = 0; i < 2; i++ ) {
-      var roundObject = currentGame[rounds[i]];
+      var roundArray = currentGame[rounds[i]];
       setTopRowValue( i + 1 );
 
-      for ( var col = 1; col <= 6; col++ ) {
+      for ( var cat = 0; cat < 6; cat++ ) {
         for ( var row = 1; row <= 5; row++ ) {
           // $currentClue = $( "#clue-box-" + col + "-" + row );
           // setClueValue();
           clueValue = topRowValue * row;
-          switch ( roundObject[col][row] ) {
+          switch ( roundArray[cat]["result" + row] ) {
             case 1:  // regular clue wrong - DDs don't deduct.
               score -= clueValue;
               break;
@@ -248,31 +304,33 @@ $(function() {
 
   function populateBoard() {
     var unadjustedScore = score;
-    currentRound = currentGame["activeRound"];
+    currentRound = currentGameData["activeRound"];
+    console.log( "currentRound = " + currentRound );
 
-    if ( currentRound === "round1" || currentRound === "round2" ) {
+    if ( currentRound === "round_one_categories" ||
+         currentRound === "round_two_categories" ) {
       setTopRowValue( currentRound );
-      var roundObject = currentGame[currentRound];
+      var roundArray = currentGame[currentRound];
 
       for ( var col = 1; col <= 6; col++ ) {
-        var catTitleText = roundObject[col][0][0];
+        var catTitleText = roundArray[col - 1]["title"];
         var $catTitleP = $( "#cat-title-" + col + " p" );
         $catTitleP.html( catTitleText );
         // Applies appropriate formatting.
         oldValue = catTitleText;
         $catTitleP.blur();
 
-        $( "#topic-area-" + col ).val( roundObject[col][0][1] );
+        $( "#topic-area-" + col ).val( roundArray[col - 1]["topics_string"] );
 
         for ( var row = 1; row <= 5; row++ ) {
           $currentClue = $( "#clue-box-" + col + "-" + row );
           setClueValue();
 
-          var boxStatus = roundObject[col][row];
+          var boxStatus = roundArray[col - 1]["result" + row];
           scoreWithoutClue = unadjustedScore;
 
           if ( boxStatus < 0 || boxStatus > 7 ) {
-            alert( "Error reading from cookie - invalid box status" );
+            alert( "Error reading game - invalid box status" );
             score = -99999;
             $scoreboard.html( "error" );
             return false;
@@ -303,15 +361,15 @@ $(function() {
         }
       }
     } else {  // Final is current round.
-      var catTitleText = currentGame["fj"][0][0];
+      var catTitleText = currentGame["final"]["category_title"];
       var $catTitleP = $( "#final-cat-title p" )
       $catTitleP.html( catTitleText );
       oldValue = catTitleText;
       $catTitleP.blur();
 
-      $( "#final-topic-area" ).val( currentGame["fj"][0][1] );
-      $contestantsRight.val( currentGame["fj"][2][0] );
-      $contestantsWrong.val( currentGame["fj"][2][1] );
+      $( "#final-topic-area" ).val( currentGame["final"]["topics_string"] );
+      $contestantsRight.val( currentGame["final"]["contestants_right"] );
+      $contestantsWrong.val( currentGame["final"]["contestants_wrong"] );
 
       $fj.show();
     }
@@ -321,8 +379,9 @@ $(function() {
   }
 
   function updateRound() {
-    currentRound = currentGame["activeRound"];
+    currentRound = currentGameData["activeRound"];
     setCookie( "game", currentGame );
+    setCookie( "gameData", currentGameData );
     getScoreFromCookie();
     populateBoard();
     if ( currentRound === "final" ) {
@@ -437,48 +496,49 @@ $(function() {
   });
 
   $buttonFJRight.on( "click", function() {
-    if ( currentGame["fj"][1] !== 3 ) {
-      currentGame["fj"][1] = 3;
-      updateCookie();
+    if ( currentGame["final"]["result"] !== 3 ) {
+      currentGame["final"]["result"] = 3;
+      updateCookies();
       updateFinalSymbol();
     }
   });
 
   $buttonFJWrong.on( "click", function() {
-    if ( currentGame["fj"][1] !== 1 ) {
-      currentGame["fj"][1] = 1;
-      updateCookie();
+    if ( currentGame["final"]["result"] !== 1 ) {
+      currentGame["final"]["result"] = 1;
+      updateCookies();
       updateFinalSymbol();
     }
   });
 
   $contestantsRight.on( "change", function() {
-    currentGame["fj"][2][0] = $( this ).val();
-    updateCookie();
+    currentGame["final"]["contestants_right"] = $( this ).val();
+    updateCookies();
   });
 
   $contestantsWrong.on( "change", function() {
-    currentGame["fj"][2][1] = $( this ).val();
-    updateCookie();
+    currentGame["final"]["contestants_wrong"] = $( this ).val();
+    updateCookies();
   });
 
   $roundOneLink.on( "click", function() {
-    currentGame["activeRound"] = "round1";
+    currentGameData["activeRound"] = "round_one_categories";
     updateRound();
   });
 
   $roundTwoLink.on( "click", function() {
-    currentGame["activeRound"] = "round2";
+    currentGameData["activeRound"] = "round_two_categories";
     updateRound();
   });
 
   $finalRoundLink.on( "click", function() {
-    currentGame["activeRound"] = "final";
+    currentGameData["activeRound"] = "final";
     updateRound();
   });
 
   $deleteGameLink.on( "click", function() {
     currentGame = newCookie();
+    currentGameData = newDataCookie();
     updateRound();
   });
 
@@ -494,43 +554,45 @@ $(function() {
 
   $( "#game-container .cat-title p, #final-cat-title p" ).on( "focus",
     function() {
-      var $elem = $( this );
-      if ( $elem.html().trim() === $elem.data( "defaultvalue" ) ) {
-        $elem.html( "" );
+      var $e = $( this );
+      if ( $e.html().trim() === $e.data( "defaultvalue" ) ) {
+        $e.html( "" );
       }
-      oldValue = $elem.html();
-      // $elem has class "click-resistant" if it is just gaining focus.
+      oldValue = $e.html();
+      // $e has class "click-resistant" if it is just gaining focus.
       // It does not if it is clicked while already having focus.
-      if ( $elem.hasClass( "click-resistant" ) ) {
+      if ( $e.hasClass( "click-resistant" ) ) {
         // TODO: Choose which of these is more desirable behavior.
-        // placeCaretAtEnd( $elem.get(0) );
-        $elem.selectText();
+        // placeCaretAtEnd( $e.get(0) );
+        $e.selectText();
       }
-      $elem.toggleClass( "default-cat click-resistant", false );
+      $e.toggleClass( "default-cat click-resistant", false );
     }
   );
 
   $( "#game-container .cat-title p, #final-cat-title p" ).on( "blur",
     function() {
-      var $elem = $( this );
+      var $e = $( this );
       var content;
-      if ( $elem.html().replace( /&nbsp;/gi, "" )
+      if ( $e.html().replace( /&nbsp;/gi, "" )
           .replace( /<br>/gi, "" ).trim() === "" ) {
-        $elem.toggleClass( "default-cat", true );
-        $elem.html( $elem.data( "defaultvalue" ) );
+        $e.toggleClass( "default-cat", true );
+        $e.html( $e.data( "defaultvalue" ) );
         content = "";
       } else {
-        $elem.toggleClass( "default-cat", false) ;
-        content = $elem.html();
+        $e.toggleClass( "default-cat", false) ;
+        content = $e.html();
       }
-      $elem.toggleClass( "click-resistant", true);
-      if ( currentRound === "final" ) {
-        currentGame["fj"][0][0] = content;
+      $e.toggleClass( "click-resistant", true);
+      if ( $e.hasClass( "final-cat" ) ) {
+        currentGame["final"]["category_title"] = content;
       } else {
-        currentGame[currentRound][$elem.data( "column" )][0][0] = content;
+        var cat = parseInt( $e.data( "column" ), 10) - 1;
+        currentGame[currentRound][cat]["title"] = content;
       }
-      if ( content !== oldValue ) { currentGame["modified"] = true; }
+      if ( content !== oldValue ) { currentGameData["modified"] = true; }
       setCookie( "game", currentGame );
+      setCookie( "gameData", currentGameData );
     }
   );
 
@@ -542,16 +604,24 @@ $(function() {
 
   $( "#game-container .topic-area, #final-topic-area" ).on ("blur",
     function() {
-      var $elem = $( this );
+      var $e = $( this );
       if ( currentRound === "final" ) {
-        currentGame["fj"][0][1] = $elem.val();
+        currentGame["final"]["topics_string"] = $e.val();
       } else {
-        currentGame[currentRound][$elem.data( "column" )][0][1] = $elem.val();
+        currentGame[currentRound][$e.data( "column" ) - 1]["topics_string"] =
+          $e.val();
       }
-      currentGame["modified"] = ( $elem.val() !== oldValue );
+      currentGameData["modified"] = ( $e.val() !== oldValue );
       setCookie( "game", currentGame );
+      setCookie( "gameData", currentGameData );
     }
   );
+
+  currentGameData = {
+    "modified":false,
+    "activeRound":"round_one_categories"
+  };
+  setCookie( "gameData", currentGameData );
 
   if ( !currentGame ) {
     currentGame = newCookie();
@@ -559,7 +629,9 @@ $(function() {
   }
 
   if ( $( ".data-passer" ).data( "whichpage" ) === 'Edit' ) {
-    setCookieFromForm();
+    // setCookieFromForm();
+    // TODO: Grab cookie from game JSON.
+    alert( "Game editing not yet implemented." );
   }
 
   getScoreFromCookie();
