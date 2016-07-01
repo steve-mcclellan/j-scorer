@@ -15,8 +15,8 @@ User.create!(email: 'david@example.com',
              password_confirmation: 'barfoo')
 
 25.times do |n|
-  show_date = (n + 30).days.ago
-  date_played = (n + 30).days.ago
+  show_date = n.days.ago
+  date_played = n.days.ago
   steve.games.create!(show_date: show_date,
                       date_played: date_played,
                       play_type: "irregular")
@@ -53,6 +53,7 @@ dj_cats = [
 ]
 
 j_cats.each_with_index do | cat, index |
+  topics_string = cat[6].map(&:name).join(', ')
   sixth = utoc.round_one_categories.create!(board_position: index + 1,
                                             title: cat[0],
                                             result1: cat[1],
@@ -60,12 +61,12 @@ j_cats.each_with_index do | cat, index |
                                             result3: cat[3],
                                             result4: cat[4],
                                             result5: cat[5],
-                                            first_topic: cat[6].first.name,
-                                            last_topic:  cat[6].last.name)
+                                            topics_string: topics_string)
   sixth.topics = cat[6]
   sixth.save
 end
 dj_cats.each_with_index do | cat, index |
+  topics_string = cat[6].map(&:name).join(', ')
   sixth = utoc.round_two_categories.create!(board_position: index + 1,
                                             title: cat[0],
                                             result1: cat[1],
@@ -73,8 +74,7 @@ dj_cats.each_with_index do | cat, index |
                                             result3: cat[3],
                                             result4: cat[4],
                                             result5: cat[5],
-                                            first_topic: cat[6].first.name,
-                                            last_topic:  cat[6].last.name)
+                                            topics_string: topics_string)
   sixth.topics = cat[6]
   sixth.save
 end
@@ -83,7 +83,6 @@ final = utoc.create_final!(category_title: '20th CENTURY AMERICANS',
                            result: 1,
                            contestants_right: 1,
                            contestants_wrong: 2,
-                           first_topic: @history.name,
-                           last_topic: @people.name)
+                           topics_string: "History, People")
 final.topics = [@history, @people]
 final.save

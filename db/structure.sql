@@ -79,8 +79,7 @@ CREATE TABLE finals (
     updated_at timestamp without time zone NOT NULL,
     contestants_right integer DEFAULT 0,
     contestants_wrong integer DEFAULT 0,
-    first_topic character varying,
-    last_topic character varying
+    topics_string character varying
 );
 
 
@@ -163,8 +162,7 @@ CREATE TABLE sixths (
     result5 integer DEFAULT 0,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    first_topic character varying,
-    last_topic character varying
+    topics_string character varying
 );
 
 
@@ -511,4 +509,8 @@ INSERT INTO schema_migrations (version) VALUES ('20160601194627');
 INSERT INTO schema_migrations (version) VALUES ('20160601194754');
 
 INSERT INTO schema_migrations (version) VALUES ('20160623193817');
+
+INSERT INTO schema_migrations (version) VALUES ('20160701212322');
+
+INSERT INTO schema_migrations (version) VALUES ('20160701212342');
 

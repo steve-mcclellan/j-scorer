@@ -1,5 +1,6 @@
 class FinalSerializer < ActiveModel::Serializer
-  attributes :category_title,
+  attributes :id,
+             :category_title,
              :topics_string,
              :result,
              :contestants_right,

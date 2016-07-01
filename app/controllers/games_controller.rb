@@ -20,6 +20,7 @@ class GamesController < ApplicationController
   end
 
   def edit
+    # render json: @game
   end
 
   def update

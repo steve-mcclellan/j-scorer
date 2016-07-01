@@ -15,6 +15,8 @@ function destroyCookie( name ) {
 }
 
 const NEW_CATEGORY = {
+  "id":null,
+  "board_position":null,
   "title":"",
   "topics_string":"",
   "result1":0,
@@ -24,29 +26,33 @@ const NEW_CATEGORY = {
   "result5":0
 };
 
-function newCategory() {
-  return JSON.parse( JSON.stringify( NEW_CATEGORY ) );
+function newCategory( position ) {
+  var cat = JSON.parse( JSON.stringify( NEW_CATEGORY ) );
+  cat["board_position"] = position;
+  return cat;
 }
 
 const NEW_GAME_COOKIE = {
+  "id":null,
   "show_date":"",
   "date_played":"",
   "play_type":"",
   "round_one_categories":[
-    newCategory(),
-    newCategory(),
-    newCategory(),
-    newCategory(),
-    newCategory(),
-    newCategory()],
+    newCategory( 1 ),
+    newCategory( 2 ),
+    newCategory( 3 ),
+    newCategory( 4 ),
+    newCategory( 5 ),
+    newCategory( 6 )],
   "round_two_categories":[
-    newCategory(),
-    newCategory(),
-    newCategory(),
-    newCategory(),
-    newCategory(),
-    newCategory()],
+    newCategory( 1 ),
+    newCategory( 2 ),
+    newCategory( 3 ),
+    newCategory( 4 ),
+    newCategory( 5 ),
+    newCategory( 6 )],
   "final": {
+    "id":null,
     "category_title":"",
     "topics_string":"",
     "result":0,
@@ -553,10 +559,7 @@ $( ".games-new, .games-edit" ).ready( function() {
       populateBoard();
     });
   } else {
-    console.log( "currentGame: " );
-    console.dir( currentGame );
     if ( !currentGame ) {
-      alert( "No current game" );
       currentGame = newCookie();
       setCookie( "game", currentGame );
     }

@@ -30,4 +30,10 @@ class Topic < ActiveRecord::Base
   validates :name,
             presence: true,
             uniqueness: { scope: :user_id, case_sensitive: false }
+
+  def self.by_user_and_name(user, name)
+    user.topics
+        .where('lower(name) = ?', name.downcase)
+        .first_or_create!(name: name)
+  end
 end
