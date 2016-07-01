@@ -1,6 +1,6 @@
 class GamesController < ApplicationController
-  before_action :logged_in_user,  only: [:create, :edit, :destroy]
-  before_action :correct_user,    only: [:edit, :destroy]
+  before_action :logged_in_user, except: [:new]
+  before_action :correct_user, only: [:edit, :update, :destroy]
 
   def new
     @game = Game.new
@@ -20,11 +20,10 @@ class GamesController < ApplicationController
   end
 
   def edit
-    @game = Game.find_by(show_date: params[:show_date])
   end
 
   def update
-    @game = Game.find_by(show_date: params[:show_date])
+    @game = current_user.games.find_by(show_date: params[:show_date])
     if @game.update(game_params)
       redirect_to stats_url
     else
@@ -39,7 +38,7 @@ class GamesController < ApplicationController
   end
 
   def json
-    game = Game.find_by(show_date: params[:show_date])
+    game = current_user.games.find_by(show_date: params[:show_date])
     render json: game
   end
 
