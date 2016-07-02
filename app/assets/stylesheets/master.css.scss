@@ -43,6 +43,16 @@ a {
   display: none;
 }
 
+.row.row-compact {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.col-xs-12.col-compact {
+  padding-left: 0;
+  padding-right: 0;
+}
+
 /* typography */
 
 h1, h2 {
