@@ -591,6 +591,10 @@ $( ".games-new, .games-edit" ).ready( function() {
     populateBoard();
   }
 
-  $('#datetimepicker1').datetimepicker();
-  $('#datetimepicker2').datetimepicker();
+  $('#datetimepicker1').datetimepicker({
+    format: 'YYYY-MM-DD'
+  });
+  $('#datetimepicker2').datetimepicker({
+    format: 'YYYY-MM-DD h:mma'
+  });
 });
