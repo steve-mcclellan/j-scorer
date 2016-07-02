@@ -12,6 +12,7 @@
  *
  *= require jquery-ui
  *= require tablesorter_blue
+ *= require bootstrap-datetimepicker
  *= require_tree .
  *= require_self
  */
