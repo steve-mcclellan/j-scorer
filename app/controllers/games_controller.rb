@@ -9,28 +9,28 @@ class GamesController < ApplicationController
     @game.build_final
   end
 
-  def create
-    @game = current_user.games.build(game_params)
-    if @game.save
-      flash[:success] = 'Game created!'
-      redirect_to stats_url
-    else
-      redirect_to root_url
-    end
-  end
+  # def create
+  #   @game = current_user.games.build(game_params)
+  #   if @game.save
+  #     flash[:success] = 'Game created!'
+  #     redirect_to stats_url
+  #   else
+  #     redirect_to root_url
+  #   end
+  # end
 
   def edit
     # render json: @game
   end
 
-  def update
-    @game = current_user.games.find_by(show_date: params[:show_date])
-    if @game.update(game_params)
-      redirect_to stats_url
-    else
-      redirect_to root_url
-    end
-  end
+  # def update
+  #   @game = current_user.games.find_by(show_date: params[:show_date])
+  #   if @game.update(game_params)
+  #     redirect_to stats_url
+  #   else
+  #     redirect_to root_url
+  #   end
+  # end
 
   def destroy
     @game.destroy
@@ -41,6 +41,11 @@ class GamesController < ApplicationController
   def json
     game = current_user.games.find_by(show_date: params[:show_date])
     render json: game
+  end
+
+  def save
+    # Horrible code for development purposes:
+    render json: params.inspect
   end
 
   private
@@ -56,6 +61,7 @@ class GamesController < ApplicationController
           .permit(:show_date,
                   :date_played,
                   :play_type,
+                  :id,
                   { sixths_attributes: [:type,
                                         :board_position,
                                         :title,
@@ -64,15 +70,13 @@ class GamesController < ApplicationController
                                         :result3,
                                         :result4,
                                         :result5,
-                                        :first_topic,
-                                        :last_topic,
+                                        :topics_string,
                                         :id] },
                   { final_attributes: [:category_title,
                                        :result,
                                        :contestants_right,
                                        :contestants_wrong,
-                                       :first_topic,
-                                       :last_topic,
+                                       :topics_string,
                                        :id] })
   end
   # rubocop:enable all

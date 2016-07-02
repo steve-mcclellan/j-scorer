@@ -17,4 +17,6 @@
 //= require jquery-readyselector
 //= require js.cookie
 //= require bootstrap
+//= require moment
+//= require bootstrap-datetimepicker
 //= require_tree .

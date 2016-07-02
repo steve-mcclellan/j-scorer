@@ -358,6 +358,7 @@ $( ".games-new, .games-edit" ).ready( function() {
   var $roundTwoLink = $( "#round-two-link" );
   var $finalRoundLink = $( "#final-round-link" );
 
+  var $saveLink = $( "#save-link" );
   var $deleteGameLink = $( "#delete-game-link" );
 
 
@@ -468,76 +469,99 @@ $( ".games-new, .games-edit" ).ready( function() {
   // Category title and topic entry
   var oldValue;
 
-  $( ".cat-title, #final-cat-title" ).on( "click",
-    function() {
-      $( this ).find( "p" ).focus();
-    }
-  );
+  $( ".cat-title, #final-cat-title" ).on( "click", function() {
+    $( this ).find( "p" ).focus();
+  });
 
-  $( ".cat-title p, #final-cat-title p" ).on( "focus",
-    function() {
-      var $e = $( this );
-      if ( $e.html().trim() === $e.data( "defaultvalue" ) ) {
-        $e.html( "" );
-      }
-      oldValue = $e.html();
-      // $e has class "click-resistant" if it is just gaining focus.
-      // It does not if it is clicked while already having focus.
-      if ( $e.hasClass( "click-resistant" ) ) {
-        // TODO: Choose which of these is more desirable behavior.
-        // placeCaretAtEnd( $e.get(0) );
-        $e.selectText();
-      }
-      $e.toggleClass( "default-cat click-resistant", false );
+  $( ".cat-title p, #final-cat-title p" ).on( "focus", function() {
+    var $e = $( this );
+    if ( $e.html().trim() === $e.data( "defaultvalue" ) ) {
+      $e.html( "" );
     }
-  );
+    oldValue = $e.html();
+    // $e has class "click-resistant" if it is just gaining focus.
+    // It does not if it is clicked while already having focus.
+    if ( $e.hasClass( "click-resistant" ) ) {
+      // TODO: Choose which of these is more desirable behavior.
+      // placeCaretAtEnd( $e.get(0) );
+      $e.selectText();
+    }
+    $e.toggleClass( "default-cat click-resistant", false );
+  });
 
-  $( ".cat-title p, #final-cat-title p" ).on( "blur",
-    function() {
-      var $e = $( this );
-      var content;
-      if ( $e.html().replace( /&nbsp;/gi, "" )
-          .replace( /<br>/gi, "" ).trim() === "" ) {
-        $e.toggleClass( "default-cat", true );
-        $e.html( $e.data( "defaultvalue" ) );
-        content = "";
-      } else {
-        $e.toggleClass( "default-cat", false) ;
-        content = $e.html();
-      }
-      $e.toggleClass( "click-resistant", true);
-      if ( $e.hasClass( "final-cat" ) ) {
-        currentGame["final"]["category_title"] = content;
-      } else {
-        var cat = parseInt( $e.data( "column" ), 10) - 1;
-        currentGame[currentRound][cat]["title"] = content;
-      }
-      if ( content !== oldValue ) { currentGameData["modified"] = true; }
-      setCookie( "game", currentGame );
-      setCookie( "gameData", currentGameData );
+  $( ".cat-title p, #final-cat-title p" ).on( "blur", function() {
+    var $e = $( this );
+    var content;
+    if ( $e.html().replace( /&nbsp;/gi, "" )
+        .replace( /<br>/gi, "" ).trim() === "" ) {
+      $e.toggleClass( "default-cat", true );
+      $e.html( $e.data( "defaultvalue" ) );
+      content = "";
+    } else {
+      $e.toggleClass( "default-cat", false) ;
+      content = $e.html();
     }
-  );
+    $e.toggleClass( "click-resistant", true);
+    if ( $e.hasClass( "final-cat" ) ) {
+      currentGame["final"]["category_title"] = content;
+    } else {
+      var cat = parseInt( $e.data( "column" ), 10) - 1;
+      currentGame[currentRound][cat]["title"] = content;
+    }
+    if ( content !== oldValue ) { currentGameData["modified"] = true; }
+    setCookie( "game", currentGame );
+    setCookie( "gameData", currentGameData );
+  });
 
-  $( ".topic-area, #final-topic-area" ).on( "focus",
-    function() {
-      oldValue = $( this ).val();
-    }
-  );
+  $( ".topic-area, #final-topic-area" ).on( "focus", function() {
+    oldValue = $( this ).val();
+  });
 
-  $( ".topic-area, #final-topic-area" ).on ("blur",
-    function() {
-      var $e = $( this );
-      if ( currentRound === "final" ) {
-        currentGame["final"]["topics_string"] = $e.val();
-      } else {
-        currentGame[currentRound][$e.data( "column" ) - 1]["topics_string"] =
-          $e.val();
-      }
-      currentGameData["modified"] = ( $e.val() !== oldValue );
-      setCookie( "game", currentGame );
-      setCookie( "gameData", currentGameData );
+  $( ".topic-area, #final-topic-area" ).on ( "blur", function() {
+    var $e = $( this );
+    if ( currentRound === "final" ) {
+      currentGame["final"]["topics_string"] = $e.val();
+    } else {
+      currentGame[currentRound][$e.data( "column" ) - 1]["topics_string"] =
+        $e.val();
     }
-  );
+    currentGameData["modified"] = ( $e.val() !== oldValue );
+    setCookie( "game", currentGame );
+    setCookie( "gameData", currentGameData );
+  });
+
+  function attributize() {
+    var result = JSON.parse( JSON.stringify ( currentGame ) );
+    result["sixths_attributes"] = [];
+    var category;
+    for( var i = 0; i < 6; i++ ) {
+      category = result["round_one_categories"][i];
+      category["type"] = "RoundOneCategory";
+      result["sixths_attributes"].push(category);
+    }
+    for( i = 0; i < 6; i++ ) {
+      category = result["round_two_categories"][i];
+      category["type"] = "RoundTwoCategory";
+      result["sixths_attributes"].push(category);
+    }
+    result["final_attributes"] = result["final"];
+    delete result.round_one_categories;
+    delete result.round_two_categories;
+    delete result["final"];
+    console.dir( result );
+    return result;
+  }
+
+  $saveLink.on( "click", function() {
+    // console.dir( attributize() );
+    $.ajax({
+      type: "POST",
+      url: "/save",
+      data: {"game":attributize()},
+      success: function(data) { console.log( data ); },
+      dataType: "text"
+    });
+  });
 
 
   // Stuff to be done on page load:
