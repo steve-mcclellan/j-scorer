@@ -17,8 +17,8 @@ class GamesInterfaceTest < ActionDispatch::IntegrationTest
     # TODO: Redo this whole test.
     # assert_select 'div#error_explanation'
     # Valid submission
-    show_date = Date.new(1983, 7, 18)
-    date_played = Time.zone.now
+    # show_date = Date.new(1983, 7, 18)
+    # date_played = Time.zone.now
     # TODO: See previous TODOs.
     # assert_difference 'Game.count', 1 do
     #   post games_path, game: { show_date: show_date, date_played: date_played }
