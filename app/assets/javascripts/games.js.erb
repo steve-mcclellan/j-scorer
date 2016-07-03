@@ -360,6 +360,33 @@ $( ".games-new, .games-edit" ).ready( function() {
                      .date( moment.utc().add( offset, "seconds" ) );
   }
 
+  function updateShowDate() {
+    console.log( "Show date was " + currentGame["show_date"] );
+    var modified = ( currentGame["show_date"] !== $showDateValue.val() );
+    currentGame["show_date"] = $showDateValue.val();
+    updateCookies( modified );
+    console.log( "Show date is now " + getCookie('game')["show_date"] );
+    console.log( "Modified? " + modified );
+  }
+
+  function updateDatePlayed() {
+    console.log( "Date played was " + currentGame["date_played"] );
+    var modified = ( currentGame["date_played"] !== $datePlayedValue.val() );
+    currentGame["date_played"] = $datePlayedValue.val();
+    updateCookies( modified );
+    console.log( "Date played is now " + getCookie('game')["date_played"] );
+    console.log( "Modified? " + modified );
+  }
+
+  function updatePlayType() {
+    console.log( "Play type was " + currentGame["play_type"] );
+    var modified = ( currentGame["play_type"] !== $playTypeSelect.val() );
+    currentGame["play_type"] = $playTypeSelect.val();
+    updateCookies( modified );
+    console.log( "Play type is now " + getCookie('game')["play_type"] );
+    console.log( "Modified? " + modified);
+  }
+
 
   var score = 0;
   var currentGame = getCookie( "game" );
@@ -404,48 +431,9 @@ $( ".games-new, .games-edit" ).ready( function() {
   var $showDateValue = $( "#show-date-picker input" );
   var $datePlayedPicker = $( "#played-picker" );
   var $datePlayedValue = $( "#played-picker input" );
+  var $playTypeSelect = $( "#play-type-select" );
   var $saveLink = $( "#save-link" );
   var $deleteGameLink = $( "#delete-game-link" );
-
-
-  // Stuff to be done on page load:
-  currentGameData = {
-    "modified":false,
-    "activeRound":"round_one_categories"
-  };
-  setCookie( "gameData", currentGameData );
-
-  // TODO: Clean this up.
-  if ( $( ".data-passer" ).data( "whichpage" ) === "Edit" ) {
-    var dateOfShow = $(".data-passer").data( "showdate" );
-    $.get( "/json/" + dateOfShow ).success( function( data ) {
-      currentGame = data;
-      // TODO: See if cookie destruction is necessary.
-      destroyCookie( "game" );
-      setCookie( "game", currentGame );
-      getScoreFromCookie();
-      populateBoard();
-    });
-  } else {
-    if ( !currentGame ) {
-      currentGame = newCookie();
-      setCookie( "game", currentGame );
-    }
-    getScoreFromCookie();
-    populateBoard();
-  }
-
-  $showDatePicker.datetimepicker({
-    format: "YYYY-MM-DD"
-  });
-  $showDatePicker.data("DateTimePicker").timeZone(undefined);
-  showDateToCurrent();
-
-  $datePlayedPicker.datetimepicker({
-    format: "YYYY-MM-DD h:mma"
-  });
-  $datePlayedPicker.data("DateTimePicker").timeZone(undefined);
-  datePlayedToCurrent();
 
 
   $( ".clue-box" ).on( "click", function( event ) {
@@ -547,18 +535,21 @@ $( ".games-new, .games-edit" ).ready( function() {
 
   $deleteGameLink.on( "click", function() {
     currentGame = newCookie();
+    currentGame["play_type"] = $playTypeSelect.val();
     currentGameData = newDataCookie();
     updateRound();
   });
 
   $showDatePicker.on( "dp.change", function( e ) {
-    console.log( $showDateValue.val() );
     updateShowDate();
   });
 
   $datePlayedPicker.on( "dp.change", function( e ) {
-    console.log( $datePlayedValue.val() );
     updateDatePlayed();
+  });
+
+  $playTypeSelect.on( "change", function() {
+    updatePlayType();
   });
 
   $saveLink.on( "click", function() {
@@ -567,7 +558,7 @@ $( ".games-new, .games-edit" ).ready( function() {
     $.ajax({
       type: "POST",
       url: "/save",
-      data: {"game":attributize()},
+      data: { "game":attributize() },
       success: function(data) { console.log( data ); },
       dataType: "text"
     });
@@ -637,5 +628,46 @@ $( ".games-new, .games-edit" ).ready( function() {
     setCookie( "game", currentGame );
     setCookie( "gameData", currentGameData );
   });
+
+
+  // Stuff to be done on page load:
+  currentGameData = {
+    "modified":false,
+    "activeRound":"round_one_categories"
+  };
+  setCookie( "gameData", currentGameData );
+
+  // TODO: Clean this up.
+  if ( $( ".data-passer" ).data( "whichpage" ) === "Edit" ) {
+    var dateOfShow = $(".data-passer").data( "showdate" );
+    $.get( "/json/" + dateOfShow ).success( function( data ) {
+      currentGame = data;
+      // TODO: See if cookie destruction is necessary.
+      destroyCookie( "game" );
+      setCookie( "game", currentGame );
+      getScoreFromCookie();
+      populateBoard();
+    });
+  } else {
+    if ( !currentGame ) {
+      currentGame = newCookie();
+      currentGame["play_type"] = $playTypeSelect.val();
+      setCookie( "game", currentGame );
+    }
+    getScoreFromCookie();
+    populateBoard();
+  }
+
+  $showDatePicker.datetimepicker({
+    format: "YYYY-MM-DD"
+  });
+  $showDatePicker.data("DateTimePicker").timeZone(undefined);
+  showDateToCurrent();
+
+  $datePlayedPicker.datetimepicker({
+    format: "YYYY-MM-DD h:mma"
+  });
+  $datePlayedPicker.data("DateTimePicker").timeZone(undefined);
+  datePlayedToCurrent();
 
 });

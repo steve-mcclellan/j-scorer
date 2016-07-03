@@ -44,8 +44,14 @@ class GamesController < ApplicationController
   end
 
   def save
-    # Horrible code for development purposes:
-    render json: params.inspect
+    game = current_user.games.find_or_create_by(
+      show_date: params[:game][:show_date]
+    )
+    if game.update(game_params)
+      render json: params.inspect
+    else
+      render text: 'Oops. Something went wrong.'
+    end
   end
 
   private
