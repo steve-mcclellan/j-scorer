@@ -69,6 +69,7 @@ gem 'rack-timeout'
 gem 'bootstrap-sass', '~> 3.3.6'
 # And a date-time-picker for convienient, er, date and time picking...
 gem 'momentjs-rails', '>= 2.9.0'
+gem 'moment_timezone-rails'
 gem 'bootstrap3-datetimepicker-rails', '~> 4.17.37'
 
 # Allow for dynamic default values, like setting show_date and date_played

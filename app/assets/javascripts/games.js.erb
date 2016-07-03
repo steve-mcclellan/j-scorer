@@ -591,10 +591,13 @@ $( ".games-new, .games-edit" ).ready( function() {
     populateBoard();
   }
 
+  moment.tz.setDefault('America/Los_Angeles');
+  var currentMoment = moment();
   $('#datetimepicker1').datetimepicker({
     format: 'YYYY-MM-DD'
   });
   $('#datetimepicker2').datetimepicker({
-    format: 'YYYY-MM-DD h:mma'
+    defaultDate: currentMoment,
+    format: 'YYYY-MM-DD, h:mma z'
   });
 });

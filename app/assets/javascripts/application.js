@@ -18,5 +18,6 @@
 //= require js.cookie
 //= require bootstrap
 //= require moment
+//= require moment-timezone-with-data
 //= require bootstrap-datetimepicker
 //= require_tree .
