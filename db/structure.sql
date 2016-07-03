@@ -371,13 +371,6 @@ CREATE INDEX index_finals_on_game_id ON finals USING btree (game_id);
 
 
 --
--- Name: index_games_on_play_type; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_games_on_play_type ON games USING btree (play_type);
-
-
---
 -- Name: index_games_on_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -389,6 +382,13 @@ CREATE INDEX index_games_on_user_id ON games USING btree (user_id);
 --
 
 CREATE INDEX index_games_on_user_id_and_date_played ON games USING btree (user_id, date_played);
+
+
+--
+-- Name: index_games_on_user_id_and_play_type; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_games_on_user_id_and_play_type ON games USING btree (user_id, play_type);
 
 
 --
@@ -513,4 +513,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160623193817');
 INSERT INTO schema_migrations (version) VALUES ('20160701212322');
 
 INSERT INTO schema_migrations (version) VALUES ('20160701212342');
+
+INSERT INTO schema_migrations (version) VALUES ('20160703132507');
 
