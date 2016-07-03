@@ -74,6 +74,7 @@ function newDataCookie() {
   return JSON.parse( JSON.stringify( NEW_DATA_COOKIE ) );
 }
 
+
 $( ".games-new, .games-edit" ).ready( function() {
 
   function updateCookies( changed ) {
@@ -318,6 +319,47 @@ $( ".games-new, .games-edit" ).ready( function() {
     }
   }
 
+  function attributize() {
+    var result = JSON.parse( JSON.stringify ( currentGame ) );
+    result["sixths_attributes"] = [];
+    var category;
+    for( var i = 0; i < 6; i++ ) {
+      category = result["round_one_categories"][i];
+      category["type"] = "RoundOneCategory";
+      result["sixths_attributes"].push(category);
+    }
+    for( i = 0; i < 6; i++ ) {
+      category = result["round_two_categories"][i];
+      category["type"] = "RoundTwoCategory";
+      result["sixths_attributes"].push(category);
+    }
+    result["final_attributes"] = result["final"];
+    delete result.round_one_categories;
+    delete result.round_two_categories;
+    delete result["final"];
+    console.dir( result );
+    return result;
+  }
+
+  // utc_offset gives the difference in seconds between UTC and the app's
+  // default time zone (Pacific): 25200 or 28800, depending on the season.
+  var offset = <%= Time.zone.now.utc_offset %>;
+
+  function showDateToCurrent() {
+    // As of this writing, J!'s earliest daily airing is at 9:30am Central.
+    // If it is more than half an hour before this time (i.e., before 7:00am
+    // Pacific), guess that the user is playing the previous day's game.
+    $showDatePicker.data( "DateTimePicker" )
+                   .date( moment.utc().add( offset, "seconds" )
+                                      .subtract( 7, "hours" ) );
+    // TODO: Set this to the previous Friday if it's a weekend.
+  }
+
+  function datePlayedToCurrent() {
+    $datePlayedPicker.data( "DateTimePicker" )
+                     .date( moment.utc().add( offset, "seconds" ) );
+  }
+
 
   var score = 0;
   var currentGame = getCookie( "game" );
@@ -358,8 +400,52 @@ $( ".games-new, .games-edit" ).ready( function() {
   var $roundTwoLink = $( "#round-two-link" );
   var $finalRoundLink = $( "#final-round-link" );
 
+  var $showDatePicker = $( "#show-date-picker" );
+  var $showDateValue = $( "#show-date-picker input" );
+  var $datePlayedPicker = $( "#played-picker" );
+  var $datePlayedValue = $( "#played-picker input" );
   var $saveLink = $( "#save-link" );
   var $deleteGameLink = $( "#delete-game-link" );
+
+
+  // Stuff to be done on page load:
+  currentGameData = {
+    "modified":false,
+    "activeRound":"round_one_categories"
+  };
+  setCookie( "gameData", currentGameData );
+
+  // TODO: Clean this up.
+  if ( $( ".data-passer" ).data( "whichpage" ) === "Edit" ) {
+    var dateOfShow = $(".data-passer").data( "showdate" );
+    $.get( "/json/" + dateOfShow ).success( function( data ) {
+      currentGame = data;
+      // TODO: See if cookie destruction is necessary.
+      destroyCookie( "game" );
+      setCookie( "game", currentGame );
+      getScoreFromCookie();
+      populateBoard();
+    });
+  } else {
+    if ( !currentGame ) {
+      currentGame = newCookie();
+      setCookie( "game", currentGame );
+    }
+    getScoreFromCookie();
+    populateBoard();
+  }
+
+  $showDatePicker.datetimepicker({
+    format: "YYYY-MM-DD"
+  });
+  $showDatePicker.data("DateTimePicker").timeZone(undefined);
+  showDateToCurrent();
+
+  $datePlayedPicker.datetimepicker({
+    format: "YYYY-MM-DD h:mma"
+  });
+  $datePlayedPicker.data("DateTimePicker").timeZone(undefined);
+  datePlayedToCurrent();
 
 
   $( ".clue-box" ).on( "click", function( event ) {
@@ -465,6 +551,28 @@ $( ".games-new, .games-edit" ).ready( function() {
     updateRound();
   });
 
+  $showDatePicker.on( "dp.change", function( e ) {
+    console.log( $showDateValue.val() );
+    updateShowDate();
+  });
+
+  $datePlayedPicker.on( "dp.change", function( e ) {
+    console.log( $datePlayedValue.val() );
+    updateDatePlayed();
+  });
+
+  $saveLink.on( "click", function() {
+    // console.dir( attributize() );
+    // datePlayedToCurrent();
+    $.ajax({
+      type: "POST",
+      url: "/save",
+      data: {"game":attributize()},
+      success: function(data) { console.log( data ); },
+      dataType: "text"
+    });
+  });
+
 
   // Category title and topic entry
   var oldValue;
@@ -530,83 +638,4 @@ $( ".games-new, .games-edit" ).ready( function() {
     setCookie( "gameData", currentGameData );
   });
 
-  function attributize() {
-    var result = JSON.parse( JSON.stringify ( currentGame ) );
-    result["sixths_attributes"] = [];
-    var category;
-    for( var i = 0; i < 6; i++ ) {
-      category = result["round_one_categories"][i];
-      category["type"] = "RoundOneCategory";
-      result["sixths_attributes"].push(category);
-    }
-    for( i = 0; i < 6; i++ ) {
-      category = result["round_two_categories"][i];
-      category["type"] = "RoundTwoCategory";
-      result["sixths_attributes"].push(category);
-    }
-    result["final_attributes"] = result["final"];
-    delete result.round_one_categories;
-    delete result.round_two_categories;
-    delete result["final"];
-    console.dir( result );
-    return result;
-  }
-
-  $saveLink.on( "click", function() {
-    // console.dir( attributize() );
-    datePlayedToCurrent();
-    $.ajax({
-      type: "POST",
-      url: "/save",
-      data: {"game":attributize()},
-      success: function(data) { console.log( data ); },
-      dataType: "text"
-    });
-  });
-
-
-  // Stuff to be done on page load:
-  currentGameData = {
-    "modified":false,
-    "activeRound":"round_one_categories"
-  };
-  setCookie( "gameData", currentGameData );
-
-  // TODO: Clean this up.
-  if ( $( ".data-passer" ).data( "whichpage" ) === 'Edit' ) {
-    var dateOfShow = $(".data-passer").data( "showdate" );
-    $.get( "/json/" + dateOfShow ).success( function( data ) {
-      currentGame = data;
-      // TODO: See if cookie destruction is necessary.
-      destroyCookie( "game" );
-      setCookie( "game", currentGame );
-      getScoreFromCookie();
-      populateBoard();
-    });
-  } else {
-    if ( !currentGame ) {
-      currentGame = newCookie();
-      setCookie( "game", currentGame );
-    }
-    getScoreFromCookie();
-    populateBoard();
-  }
-
-  var offset = <%= Time.zone.now.utc_offset %>;
-  $('#datetimepicker1').datetimepicker({
-    format: 'YYYY-MM-DD'
-  });
-  $('#datetimepicker2').datetimepicker({
-    format: 'YYYY-MM-DD h:mm:ssa'
-  });
-
-  $('#datetimepicker1').data("DateTimePicker").timeZone(undefined);
-  $("#datetimepicker1").data("DateTimePicker").date(moment());
-  $('#datetimepicker2').data("DateTimePicker").timeZone(undefined);
-  datePlayedToCurrent();
-
-  function datePlayedToCurrent() {
-    $("#datetimepicker2").data("DateTimePicker")
-                         .date(moment.utc().add(offset, 'seconds'));
-  }
 });
