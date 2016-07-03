@@ -127,6 +127,7 @@
       <!-- TODO: Add three fields: show_date, date_played, play_type;
                  add button to save via Ajax request. -->
         <% current_time = Time.zone.now.strftime('%FT%T%:z') %>
+        <% offset = Time.zone.now.utc_offset %>
         Show date:
         <div>
           <div class="row row-compact">
@@ -166,7 +167,7 @@
           <option value="regular">Regular</option>
           <option value="irregular">Irregular</option>
         </select>
-        <a id="save-link" tabindex=200><%= current_time %></a>
+        <a id="save-link" tabindex=200><%= current_time %> - offset <%= offset %></a>
 
     </div>
 

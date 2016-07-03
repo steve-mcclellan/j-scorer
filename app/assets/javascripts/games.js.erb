@@ -592,7 +592,7 @@ $( ".games-new, .games-edit" ).ready( function() {
     populateBoard();
   }
 
-  var currentTime = new Date();
+  var offset = <%= Time.zone.now.utc_offset %>;
   $('#datetimepicker1').datetimepicker({
     format: 'YYYY-MM-DD'
   });
@@ -606,6 +606,7 @@ $( ".games-new, .games-edit" ).ready( function() {
   datePlayedToCurrent();
 
   function datePlayedToCurrent() {
-    $("#datetimepicker2").data("DateTimePicker").date(moment());
+    $("#datetimepicker2").data("DateTimePicker")
+                         .date(moment.utc().add(offset, 'seconds'));
   }
 });
