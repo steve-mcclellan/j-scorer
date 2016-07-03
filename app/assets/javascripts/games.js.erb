@@ -554,6 +554,7 @@ $( ".games-new, .games-edit" ).ready( function() {
 
   $saveLink.on( "click", function() {
     // console.dir( attributize() );
+    datePlayedToCurrent();
     $.ajax({
       type: "POST",
       url: "/save",
@@ -591,12 +592,20 @@ $( ".games-new, .games-edit" ).ready( function() {
     populateBoard();
   }
 
-  var currentMoment = moment();
+  var currentTime = new Date();
   $('#datetimepicker1').datetimepicker({
     format: 'YYYY-MM-DD'
   });
   $('#datetimepicker2').datetimepicker({
-    defaultDate: currentMoment,
-    format: 'YYYY-MM-DD, h:mma'
+    format: 'YYYY-MM-DD h:mm:ssa'
   });
+
+  $('#datetimepicker1').data("DateTimePicker").timeZone(undefined);
+  $("#datetimepicker1").data("DateTimePicker").date(moment());
+  $('#datetimepicker2').data("DateTimePicker").timeZone(undefined);
+  datePlayedToCurrent();
+
+  function datePlayedToCurrent() {
+    $("#datetimepicker2").data("DateTimePicker").date(moment());
+  }
 });

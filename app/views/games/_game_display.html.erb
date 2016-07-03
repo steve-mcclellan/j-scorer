@@ -126,13 +126,16 @@
     <div id="save-area">
       <!-- TODO: Add three fields: show_date, date_played, play_type;
                  add button to save via Ajax request. -->
+        <% current_time = Time.zone.now.strftime('%FT%T%:z') %>
         Show date:
         <div>
           <div class="row row-compact">
             <div class='col-xs-12 col-compact'>
               <div class="form-group">
                 <div class='input-group date' id='datetimepicker1'>
-                  <input type='text' class="form-control" />
+                  <input type='text'
+                         class="form-control"
+                         spellcheck="false" />
                   <span class="input-group-addon">
                     <span class="glyphicon glyphicon-calendar"></span>
                   </span>
@@ -147,7 +150,9 @@
             <div class='col-xs-12 col-compact'>
               <div class="form-group">
                 <div class='input-group date' id='datetimepicker2'>
-                  <input type='text' class="form-control" />
+                  <input type='text'
+                         class="form-control"
+                         spellcheck="false" />
                   <span class="input-group-addon">
                     <span class="glyphicon glyphicon-calendar"></span>
                   </span>
@@ -161,7 +166,7 @@
           <option value="regular">Regular</option>
           <option value="irregular">Irregular</option>
         </select>
-        <a id="save-link" tabindex=200><%= Time.zone.now %></a>
+        <a id="save-link" tabindex=200><%= current_time %></a>
 
     </div>
 
