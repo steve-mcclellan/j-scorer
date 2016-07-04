@@ -44,17 +44,23 @@ class GamesController < ApplicationController
   end
 
   def save
-    game = current_user.games.find_or_create_by(
+    game = current_user.games.find_or_create_by!(
       show_date: params[:game][:show_date]
     )
+    puts game.inspect
+    # game.create_categories! if game.sixths.empty?
     if game.update(game_params)
-      render json: params.inspect
+      render json: { ids: category_ids(game) }
     else
-      render text: 'Oops. Something went wrong.'
+      render text: 'Oops. Something went wrong.', status: 500
     end
   end
 
   private
+
+  def category_ids(game)
+    game.sixths.map(&:id) + [game.final.id]
+  end
 
   def correct_user
     @game = current_user.games.find_by(show_date: params[:show_date])
@@ -67,7 +73,6 @@ class GamesController < ApplicationController
           .permit(:show_date,
                   :date_played,
                   :play_type,
-                  :id,
                   { sixths_attributes: [:type,
                                         :board_position,
                                         :title,

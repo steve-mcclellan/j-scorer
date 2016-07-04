@@ -337,7 +337,7 @@ $( ".games-new, .games-edit" ).ready( function() {
     delete result.round_one_categories;
     delete result.round_two_categories;
     delete result["final"];
-    console.dir( result );
+    // console.dir( result );
     return result;
   }
 
@@ -535,7 +535,10 @@ $( ".games-new, .games-edit" ).ready( function() {
 
   $deleteGameLink.on( "click", function() {
     currentGame = newCookie();
-    currentGame["play_type"] = $playTypeSelect.val();
+    updateShowDate();
+    updateDatePlayed();
+    updatePlayType();
+    // currentGame["play_type"] = $playTypeSelect.val();
     currentGameData = newDataCookie();
     updateRound();
   });
@@ -559,10 +562,28 @@ $( ".games-new, .games-edit" ).ready( function() {
       type: "POST",
       url: "/save",
       data: { "game":attributize() },
-      success: function(data) { console.log( data ); },
+      success: function( data ) { updateCategoryIds( data ); },
       dataType: "text"
     });
   });
+
+  function updateCategoryIds( data ) {
+    var idArray = JSON.parse( data )["ids"];
+    for( var i = 0; i < 6; i++ ) {
+      currentId = idArray.shift();
+      currentGame["round_one_categories"][i]["id"] = currentId;
+    }
+    for( var i = 0; i < 6; i++ ) {
+      currentId = idArray.shift();
+      currentGame["round_two_categories"][i]["id"] = currentId;
+    }
+    currentGame["final"]["id"] = idArray.shift();
+    setCookie( "game", currentGame );
+
+    currentGameData["modified"] = false;
+    setCookie( "gameData", currentGameData );
+    console.log( "Success!" );
+  }
 
 
   // Category title and topic entry
