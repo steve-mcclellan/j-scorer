@@ -31,4 +31,9 @@ class Game < ActiveRecord::Base
   #   1.upto(6) { |i| round_two_categories.create!(board_position: i) }
   #   create_final!
   # end
+
+  def adjusted_game_score
+    (round_one_score * CURRENT_TOP_ROW_VALUES[0]) +
+      (round_two_score * CURRENT_TOP_ROW_VALUES[1])
+  end
 end

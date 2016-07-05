@@ -1,4 +1,5 @@
 <% provide(:title, 'Stats') %>
+
 <div id="stats-area">
   <h2>Games played by <%= @user.email %> (<%= @user.games.count %>):</h2>
 
@@ -16,7 +17,7 @@
         <tr>
           <td><%= game.date_played.in_time_zone.to_s %></td>
           <td><%= game.show_date %></td>
-          <td>$12,345</td>
+          <td>$<%= game.adjusted_game_score %></td>
           <% if current_user?(game.user) %>
             <td><%= link_to 'edit', game_path(game) %></td>
             <td><%= link_to 'delete',
