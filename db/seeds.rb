@@ -17,14 +17,17 @@ User.create!(email: 'david@example.com',
 25.times do |n|
   show_date = n.days.ago
   date_played = n.days.ago
-  steve.games.create!(show_date: show_date,
-                      date_played: date_played,
-                      play_type: "irregular")
+  game = steve.games.create!(show_date: show_date,
+                             date_played: date_played,
+                             play_type: "regular")
+  1.upto(6) { |i| game.round_one_categories.create!(board_position: i) }
+  1.upto(6) { |i| game.round_two_categories.create!(board_position: i) }
+  game.create_final!
 end
 
 utoc = steve.games.create!(show_date: Date.new(2005, 5, 25),
                            date_played: DateTime.new(2016, 6, 1, 14, 0, 0, '-04:00'),
-                           play_type: "UToC")
+                           play_type: "utoc")
 
 topic_list = %w(Animals Science Lowbrow PopMusic Words General Language Music
                 PlaceBios Europe History Asia Sports Highbrow Poetry People
