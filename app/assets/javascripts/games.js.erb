@@ -535,8 +535,10 @@ $( ".games-new, .games-edit" ).ready( function() {
 
   $deleteGameLink.on( "click", function() {
     currentGame = newCookie();
-    updateShowDate();
-    updateDatePlayed();
+    showDateToCurrent();
+    datePlayedToCurrent();
+    // Set the play-type dropdown to its first option.
+    $playTypeSelect.prop( "selectedIndex", 0);
     updatePlayType();
     // currentGame["play_type"] = $playTypeSelect.val();
     currentGameData = newDataCookie();
@@ -652,6 +654,16 @@ $( ".games-new, .games-edit" ).ready( function() {
 
 
   // Stuff to be done on page load:
+  $showDatePicker.datetimepicker({
+    format: "YYYY-MM-DD"
+  });
+  $showDatePicker.data("DateTimePicker").timeZone(undefined);
+
+  $datePlayedPicker.datetimepicker({
+    format: "YYYY-MM-DD h:mma"
+  });
+  $datePlayedPicker.data("DateTimePicker").timeZone(undefined);
+
   currentGameData = {
     "modified":false,
     "activeRound":"round_one_categories"
@@ -660,35 +672,43 @@ $( ".games-new, .games-edit" ).ready( function() {
 
   // TODO: Clean this up.
   if ( $( ".data-passer" ).data( "whichpage" ) === "Edit" ) {
-    var dateOfShow = $(".data-passer").data( "showdate" );
-    $.get( "/json/" + dateOfShow ).success( function( data ) {
-      currentGame = data;
-      // TODO: See if cookie destruction is necessary.
-      destroyCookie( "game" );
-      setCookie( "game", currentGame );
-      getScoreFromCookie();
-      populateBoard();
-    });
+    var showDate = $(".data-passer").data( "showdate" );
+    getShowFromDatabase( showDate );
   } else {
-    if ( !currentGame ) {
+    if ( currentGame ) {
+      setPickersFromCookie();
+    } else {
       currentGame = newCookie();
       currentGame["play_type"] = $playTypeSelect.val();
       setCookie( "game", currentGame );
+      showDateToCurrent();
+      datePlayedToCurrent();
     }
     getScoreFromCookie();
     populateBoard();
   }
 
-  $showDatePicker.datetimepicker({
-    format: "YYYY-MM-DD"
-  });
-  $showDatePicker.data("DateTimePicker").timeZone(undefined);
-  showDateToCurrent();
+  function setPickersFromCookie() {
+    $showDatePicker.data( "DateTimePicker" )
+                   .date( currentGame.show_date );
+    $datePlayedPicker.data( "DateTimePicker" )
+                     .date( currentGame.date_played );
+    $playTypeSelect.val( currentGame.play_type );
+  }
 
-  $datePlayedPicker.datetimepicker({
-    format: "YYYY-MM-DD h:mma"
-  });
-  $datePlayedPicker.data("DateTimePicker").timeZone(undefined);
-  datePlayedToCurrent();
-
+  function getShowFromDatabase( showDate ) {
+    $.get( "/json/" + showDate ).success( function( data ) {
+      currentGame = data;
+      // Change date_played from database format to display format so it's
+      // not erroneously flagged as changed.
+      currentGame.date_played = moment( currentGame.date_played )
+                                      .format( "YYYY-MM-DD h:mma" );
+      // TODO: See if cookie destruction is necessary.
+      destroyCookie( "game" );
+      setCookie( "game", currentGame );
+      getScoreFromCookie();
+      setPickersFromCookie();
+      populateBoard();
+    });
+  }
 });

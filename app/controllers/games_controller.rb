@@ -47,7 +47,7 @@ class GamesController < ApplicationController
     game = current_user.games.find_or_create_by!(
       show_date: params[:game][:show_date]
     )
-    puts game.inspect
+    # puts game.inspect
     # game.create_categories! if game.sixths.empty?
     if game.update(game_params)
       render json: { ids: category_ids(game) }
