@@ -390,6 +390,10 @@ $( ".games-new, .games-edit" ).ready( function() {
 
   var score = 0;
   var currentGame = getCookie( "game" );
+  var currentGameData = {
+    "modified":false,
+    "activeRound":"round_one_categories"
+  };
 
   var currentRound;
   var topRowValue;
@@ -664,10 +668,6 @@ $( ".games-new, .games-edit" ).ready( function() {
   });
   $datePlayedPicker.data("DateTimePicker").timeZone(undefined);
 
-  currentGameData = {
-    "modified":false,
-    "activeRound":"round_one_categories"
-  };
   setCookie( "gameData", currentGameData );
 
   // TODO: Clean this up.

@@ -167,7 +167,7 @@
           <option value="teachers">Teachers Tournament</option>
           <option value="college">College Championship</option>
           <option value="toc">Tournament of Champions</option>
-          <option value="celebrity">Celebrity Jeopardy!</option>
+          <option value="celebrity">Celebrity</option>
           <option value="kids">Kids Week / Back to School Week</option>
           <option value="teen">Teen Tournament</option>
           <option value="decades">Battle of the Decades</option>
@@ -183,16 +183,20 @@
           <option value="tenth">Tenth-Anniversary Tournament</option>
           <option value="super">Super Jeopardy!</option>
           <option value="irregular">(irregular play)</option>
-          <option value="sports">Sports Jeopardy!</option>
           <option value="rock">Rock &amp; Roll Jeopardy!</option>
+          <option value="sports">Sports Jeopardy!</option>
           <option value="other">other</option>
         </select>
-        <a id="save-link" tabindex=200>Save Game</a>
+        <% if current_user %>
+          <a id="save-link" tabindex=200>Save Game</a>
+        <% else %>
+          <%= link_to 'Sign in', login_path %> to save game
+        <% end %>
 
     </div>
 
     <div id="panel-links">
-      <a id="delete-game-link" tabindex=300>Delete this game</a>
+      <a id="delete-game-link" tabindex=300>New game</a>
       <%= link_to 'Help', help_path, tabindex: 300 %>
       <%= link_to 'About', about_path, tabindex: 300 %>
     </div>
