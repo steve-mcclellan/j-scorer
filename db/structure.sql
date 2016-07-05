@@ -113,7 +113,10 @@ CREATE TABLE games (
     date_played timestamp without time zone,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    play_type character varying DEFAULT 'regular'::character varying
+    play_type character varying DEFAULT 'regular'::character varying,
+    round_one_score integer,
+    round_two_score integer,
+    final_result integer
 );
 
 
@@ -515,4 +518,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160701212322');
 INSERT INTO schema_migrations (version) VALUES ('20160701212342');
 
 INSERT INTO schema_migrations (version) VALUES ('20160703132507');
+
+INSERT INTO schema_migrations (version) VALUES ('20160705211103');
 

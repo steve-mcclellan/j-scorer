@@ -19,7 +19,10 @@ User.create!(email: 'david@example.com',
   date_played = n.days.ago
   game = steve.games.create!(show_date: show_date,
                              date_played: date_played,
-                             play_type: "regular")
+                             play_type: "regular",
+                             round_one_score: -1,
+                             round_two_score: 0,
+                             final_result: 0)
   1.upto(6) { |i| game.round_one_categories.create!(board_position: i) }
   1.upto(6) { |i| game.round_two_categories.create!(board_position: i) }
   game.create_final!
@@ -27,7 +30,10 @@ end
 
 utoc = steve.games.create!(show_date: Date.new(2005, 5, 25),
                            date_played: DateTime.new(2016, 6, 1, 14, 0, 0, '-04:00'),
-                           play_type: "utoc")
+                           play_type: "utoc",
+                           round_one_score: 22,
+                           round_two_score: 16,
+                           final_result: 1)
 
 topic_list = %w(Animals Science Lowbrow PopMusic Words General Language Music
                 PlaceBios Europe History Asia Sports Highbrow Poetry People

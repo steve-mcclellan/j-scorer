@@ -38,6 +38,9 @@ const NEW_GAME_COOKIE = {
   "show_date":"",
   "date_played":"",
   "play_type":"",
+  "round_one_score":0,
+  "round_two_score":0,
+  "final_result":0,
   "round_one_categories":[
     newCategory( 1 ),
     newCategory( 2 ),
@@ -82,11 +85,15 @@ $( ".games-new, .games-edit" ).ready( function() {
     if ( changed === undefined ) { changed = true; }
 
     if ( changed ) { currentGameData["modified"] = true; }
-    setCookie( "game", currentGame);
-    setCookie( "gameData", currentGameData);
+    setCookie( "game", currentGame );
+    setCookie( "gameData", currentGameData );
   }
 
   function updateScoreboard() {
+    currentGame.round_one_score = scores[0];
+    currentGame.round_two_score = scores[1];
+    setCookie( "game", currentGame );
+
     var totalScore = ( scores[0] * topRowValues[0] ) +
                      ( scores[1] * topRowValues[1] );
     var scoreString = Math.abs( totalScore ).toLocaleString( "en-US" );
@@ -102,6 +109,8 @@ $( ".games-new, .games-edit" ).ready( function() {
   }
 
   function updateFinalSymbol() {
+    currentGame.final_result = currentGame["final"]["result"];
+    setCookie( "game", currentGame );
     switch ( currentGame["final"]["result"] ) {
       case 0:
         $finalSymbol.html("");
