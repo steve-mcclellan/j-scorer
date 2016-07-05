@@ -1,3 +1,5 @@
+var topRowValues = [200, 400];
+
 function setCookie( name, value ) {
   Cookies.set( name, value, { expires: 7305, path: '/game',
                               secure: <%= Rails.env.production? %> } );
@@ -85,8 +87,10 @@ $( ".games-new, .games-edit" ).ready( function() {
   }
 
   function updateScoreboard() {
-    scoreString = Math.abs( score ).toLocaleString( "en-US" );
-    if ( score < 0 ) {
+    var totalScore = ( scores[0] * topRowValues[0] ) +
+                     ( scores[1] * topRowValues[1] );
+    var scoreString = Math.abs( totalScore ).toLocaleString( "en-US" );
+    if ( totalScore < 0 ) {
       $scoreboard.html( "-$" + scoreString );
       $scoreboard.toggleClass( "score-positive", false );
       $scoreboard.toggleClass( "score-negative", true );
@@ -140,9 +144,9 @@ $( ".games-new, .games-edit" ).ready( function() {
 
   function setTopRowValue( round ) {
     if ( round === 1 || round === "round_one_categories" ) {
-      topRowValue = 200;
+      topRowValue = topRowValues[0];
     } else if ( round === 2 || round === "round_two_categories" ) {
-      topRowValue = 400;
+      topRowValue = topRowValues[1];
     } else {
       console.log( "Error: could not set top row value for round '" +
           round + "'" );
@@ -178,8 +182,8 @@ $( ".games-new, .games-edit" ).ready( function() {
     return $ddCheckbox.prop( "checked" );
   }
 
-  function getScoreFromCookie() {
-    score = 0;
+  function getScoresFromCookie() {
+    scores = [0, 0];
     var rounds = [ "round_one_categories", "round_two_categories" ];
     for ( var i = 0; i < 2; i++ ) {
       var roundArray = currentGame[rounds[i]];
@@ -187,16 +191,14 @@ $( ".games-new, .games-edit" ).ready( function() {
 
       for ( var cat = 0; cat < 6; cat++ ) {
         for ( var row = 1; row <= 5; row++ ) {
-          // $currentClue = $( "#clue-box-" + col + "-" + row );
-          // setClueValue();
-          clueValue = topRowValue * row;
+          // clueValue = topRowValue * row;
           switch ( roundArray[cat]["result" + row] ) {
             case 1:  // regular clue wrong - DDs don't deduct.
-              score -= clueValue;
+              scores[i] -= row;
               break;
             case 3:  // right
             case 7:  // DDright
-              score += clueValue;
+              scores[i] += row;
               break;
             // None of the others changes the score.
           }
@@ -206,17 +208,27 @@ $( ".games-new, .games-edit" ).ready( function() {
     updateScoreboard();
   }
 
-  function populateBoard() {
-    var unadjustedScore = score;
-    currentRound = currentGameData["activeRound"];
+  function setCurrentRoundIndex() {
+    if ( currentRound === "round_one_categories" ) {
+      currentRoundIndex = 0;
+    } else if ( currentRound === "round_two_categories" ) {
+      currentRoundIndex = 1;
+    } else {
+      currentRoundIndex = 2;
+    }
+  }
 
+  function populateBoard() {
+    var unadjustedScores = [scores[0], scores[1]];
+    currentRound = currentGameData["activeRound"];
+    setCurrentRoundIndex();
     if ( currentRound === "final" ) {
       populateFinal();
     } else {
-      populateMainGameBoard( unadjustedScore );
+      populateMainGameBoard( unadjustedScores );
     }
 
-    score = unadjustedScore;
+    scores = [unadjustedScores[0], unadjustedScores[1]];
     updateScoreboard();
     updateFinalSymbol();
   }
@@ -235,7 +247,7 @@ $( ".games-new, .games-edit" ).ready( function() {
     $fj.show();
   }
 
-  function populateMainGameBoard( unadjustedScore ) {
+  function populateMainGameBoard( unadjustedScores ) {
     setTopRowValue( currentRound );
     var roundArray = currentGame[currentRound];
 
@@ -254,11 +266,11 @@ $( ".games-new, .games-edit" ).ready( function() {
         setClueValue();
 
         var boxStatus = roundArray[col - 1]["result" + row];
-        scoreWithoutClue = unadjustedScore;
+        scoresWithoutClue = [unadjustedScores[0], unadjustedScores[1]];
 
         if ( boxStatus < 0 || boxStatus > 7 ) {
           alert( "Error reading game - invalid box status" );
-          score = -99999;
+          scores = [-333, -333];
           $scoreboard.html( "error" );
           return false;
         }
@@ -295,9 +307,10 @@ $( ".games-new, .games-edit" ).ready( function() {
 
   function updateRound() {
     currentRound = currentGameData["activeRound"];
+    setCurrentRoundIndex();
     setCookie( "game", currentGame );
     setCookie( "gameData", currentGameData );
-    getScoreFromCookie();
+    getScoresFromCookie();
     populateBoard();
 
     if ( currentRound === "final" ) {
@@ -341,22 +354,22 @@ $( ".games-new, .games-edit" ).ready( function() {
   }
 
   // utc_offset gives the difference in seconds between UTC and the app's
-  // default time zone (Pacific): 25200 or 28800, depending on the season.
-  var offset = <%= Time.zone.now.utc_offset %>;
+  // default time zone (Pacific): -25200 or -28800, depending on the season.
+  var currentOffset = <%= Time.zone.now.utc_offset %>;
 
   function showDateToCurrent() {
     // As of this writing, J!'s earliest daily airing is at 9:30am Central.
     // If it is more than half an hour before this time (i.e., before 7:00am
     // Pacific), guess that the user is playing the previous day's game.
     $showDatePicker.data( "DateTimePicker" )
-                   .date( moment.utc().add( offset, "seconds" )
+                   .date( moment.utc().add( currentOffset, "seconds" )
                                       .subtract( 7, "hours" ) );
     // TODO: Set this to the previous Friday if it's a weekend.
   }
 
   function datePlayedToCurrent() {
     $datePlayedPicker.data( "DateTimePicker" )
-                     .date( moment.utc().add( offset, "seconds" ) );
+                     .date( moment.utc().add( currentOffset, "seconds" ) );
   }
 
   function updateShowDate() {
@@ -387,7 +400,10 @@ $( ".games-new, .games-edit" ).ready( function() {
   }
 
 
-  var score = 0;
+  // "scores" is of the form [roundOneScore, roundTwoScore], where each clue
+  // is worth 1 to 5 points. Multiplying by the round's topRowValue will yield
+  // the round's actual contribution to the Coryat score.
+  var scores = [0, 0];
   var currentGame = getCookie( "game" );
   var currentGameData = {
     "modified":false,
@@ -395,11 +411,12 @@ $( ".games-new, .games-edit" ).ready( function() {
   };
 
   var currentRound;
+  var currentRoundIndex;
   var topRowValue;
   var $currentClue;
   var currentClueState;
   var clueValue;
-  var scoreWithoutClue;
+  var scoresWithoutClue;
 
   var $clue = $( "#clue-over-board" );
   var vanishPoint;  // Where overlay comes from/goes to.
@@ -441,6 +458,7 @@ $( ".games-new, .games-edit" ).ready( function() {
 
   $( ".clue-box" ).on( "click", function( event ) {
     $currentClue = $( this );
+    var row = $currentClue.data( "row" );
     setClueValue();
     showOverlay( event );
 
@@ -455,37 +473,40 @@ $( ".games-new, .games-edit" ).ready( function() {
       default:
         multiplier = 0;
     }
-    scoreWithoutClue = score - ( clueValue * multiplier );
+    scoresWithoutClue = [scores[0], scores[1]];
+    scoresWithoutClue[currentRoundIndex] -= ( row * multiplier );
   });
 
   $buttonRight.on( "click", function() {
-    score = scoreWithoutClue + clueValue;
+    scores = [scoresWithoutClue[0], scoresWithoutClue[1]];
+    scores[currentRoundIndex] += $currentClue.data( "row" );
     resolveClue( "&#x2713;", "right", false, 3, true );
   });
 
   $buttonPass.on( "click", function() {
-    score = scoreWithoutClue;
+    scores = [scoresWithoutClue[0], scoresWithoutClue[1]];
     resolveClue( "&#x2022;", "pass", false, 2, true );
   });
 
   $buttonWrong.on( "click", function() {
     if ( ddCheckboxState() ) {
-      score = scoreWithoutClue;
+      scores = [scoresWithoutClue[0], scoresWithoutClue[1]];
       resolveClue( "&#x2022;", "pass", false, 5, false );
     } else {
-      score = scoreWithoutClue - clueValue;
+      scores = [scoresWithoutClue[0], scoresWithoutClue[1]];
+      scores[currentRoundIndex] -= $currentClue.data( "row" );
       resolveClue( "&#x2718;", "wrong", false, 1, false );
     }
   });
 
   $buttonNR.on( "click", function() {
-    score = scoreWithoutClue;
+    scores = [scoresWithoutClue[0], scoresWithoutClue[1]];
     $ddCheckbox.prop( "checked", false );
     resolveClue( "", "nr", false, 4, false );
   });
 
   $resetLink.on( "click", function() {
-    score = scoreWithoutClue;
+    scores = [scoresWithoutClue[0], scoresWithoutClue[1]];
     $ddCheckbox.prop( "checked", false );
     resolveClue( "$" + clueValue, "active", true, 0, false );
   });
@@ -543,7 +564,6 @@ $( ".games-new, .games-edit" ).ready( function() {
     // Set the play-type dropdown to its first option.
     $playTypeSelect.prop( "selectedIndex", 0);
     updatePlayType();
-    // currentGame["play_type"] = $playTypeSelect.val();
     currentGameData = newDataCookie();
     updateRound();
   });
@@ -561,8 +581,6 @@ $( ".games-new, .games-edit" ).ready( function() {
   });
 
   $saveLink.on( "click", function() {
-    // console.dir( attributize() );
-    // datePlayedToCurrent();
     $.ajax({
       type: "POST",
       url: "/save",
@@ -683,7 +701,7 @@ $( ".games-new, .games-edit" ).ready( function() {
       showDateToCurrent();
       datePlayedToCurrent();
     }
-    getScoreFromCookie();
+    getScoresFromCookie();
     populateBoard();
   }
 
@@ -708,7 +726,7 @@ $( ".games-new, .games-edit" ).ready( function() {
       // TODO: See if cookie destruction is necessary.
       destroyCookie( "game" );
       setCookie( "game", currentGame );
-      getScoreFromCookie();
+      getScoresFromCookie();
       setPickersFromCookie();
       populateBoard();
     });
