@@ -361,30 +361,30 @@ $( ".games-new, .games-edit" ).ready( function() {
   }
 
   function updateShowDate() {
-    console.log( "Show date was " + currentGame["show_date"] );
+    // console.log( "Show date was " + currentGame["show_date"] );
     var modified = ( currentGame["show_date"] !== $showDateValue.val() );
     currentGame["show_date"] = $showDateValue.val();
     updateCookies( modified );
-    console.log( "Show date is now " + getCookie('game')["show_date"] );
-    console.log( "Modified? " + modified );
+    // console.log( "Show date is now " + getCookie('game')["show_date"] );
+    // console.log( "Modified? " + modified );
   }
 
   function updateDatePlayed() {
-    console.log( "Date played was " + currentGame["date_played"] );
+    // console.log( "Date played was " + currentGame["date_played"] );
     var modified = ( currentGame["date_played"] !== $datePlayedValue.val() );
     currentGame["date_played"] = $datePlayedValue.val();
     updateCookies( modified );
-    console.log( "Date played is now " + getCookie('game')["date_played"] );
-    console.log( "Modified? " + modified );
+    // console.log( "Date played is now " + getCookie('game')["date_played"] );
+    // console.log( "Modified? " + modified );
   }
 
   function updatePlayType() {
-    console.log( "Play type was " + currentGame["play_type"] );
+    // console.log( "Play type was " + currentGame["play_type"] );
     var modified = ( currentGame["play_type"] !== $playTypeSelect.val() );
     currentGame["play_type"] = $playTypeSelect.val();
     updateCookies( modified );
-    console.log( "Play type is now " + getCookie('game')["play_type"] );
-    console.log( "Modified? " + modified);
+    // console.log( "Play type is now " + getCookie('game')["play_type"] );
+    // console.log( "Modified? " + modified);
   }
 
 
@@ -699,9 +699,12 @@ $( ".games-new, .games-edit" ).ready( function() {
   function getShowFromDatabase( showDate ) {
     $.get( "/json/" + showDate ).success( function( data ) {
       currentGame = data;
+      // Grabs the number of hours of offset from the time string in the data.
+      var datePlayedOffset = ( currentGame.date_played.slice(-4, -3) );
       // Change date_played from database format to display format so it's
       // not erroneously flagged as changed.
-      currentGame.date_played = moment( currentGame.date_played )
+      currentGame.date_played = moment.utc( currentGame.date_played )
+                                      .subtract( datePlayedOffset, "hours" )
                                       .format( "YYYY-MM-DD h:mma" );
       // TODO: See if cookie destruction is necessary.
       destroyCookie( "game" );
