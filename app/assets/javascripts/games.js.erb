@@ -740,20 +740,22 @@ $( ".games-new, .games-edit" ).ready( function() {
     oldValue = $( this ).val();
   });
 
-  $( ".topic-area, #final-topic-area" ).on ( "blur", function() {
+  $( ".topic-area" ).on( "blur", function() {
     var $e = $( this );
-    if ( currentRound === "final" ) {
-      currentGame["final"]["topics_string"] = $e.val();
-    } else {
-      currentGame[currentRound][$e.data( "column" ) - 1]["topics_string"] =
-        $e.val();
-    }
+    var arrayPosition = $e.data( "column" ) - 1;
+    currentGame[currentRound][arrayPosition]["topics_string"] = $e.val();
     updateCookies( $e.val() !== oldValue );
     // The above line should do the same thing as the three below, plus
     // enabling the save link if the value is changed.
     // currentGameData["modified"] = ( $e.val() !== oldValue );
     // setCookie( "game", currentGame );
     // setCookie( "gameData", currentGameData );
+  });
+
+  $( "#final-topic-area" ).on( "blur", function() {
+    var newValue = $( this ).val();
+    currentGame["final"]["topics_string"] = newValue;
+    updateCookies( newValue !== oldValue );
   });
 
 
