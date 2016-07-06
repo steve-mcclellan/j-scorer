@@ -82,9 +82,13 @@ function newDataCookie() {
 $( ".games-new, .games-edit" ).ready( function() {
 
   function updateCookies( changed ) {
+    if ( !currentGameData ) { currentGameData = newDataCookie(); }
     if ( changed === undefined ) { changed = true; }
 
-    if ( changed ) { currentGameData["modified"] = true; }
+    if ( changed ) {
+      currentGameData["modified"] = true;
+      enableSaveLink();
+    }
     setCookie( "game", currentGame );
     setCookie( "gameData", currentGameData );
   }
@@ -173,7 +177,7 @@ $( ".games-new, .games-edit" ).ready( function() {
     $currentClue.html( "<span>" + html + "</span>" );
     var col = $currentClue.data( "column" );
     var row = $currentClue.data( "row" );
-    currentClueState = currentGame[currentRound][col - 1]["result" + row]
+    var currentClueState = currentGame[currentRound][col - 1]["result" + row]
     $currentClue.data( "boxstate", boxstate );
     $currentClue.toggleClass( "active-clue-box", boxActive );
     setDD( ddCheckboxState() );
@@ -408,22 +412,62 @@ $( ".games-new, .games-edit" ).ready( function() {
     // console.log( "Modified? " + modified);
   }
 
+  function initializeNewGame() {
+    console.log( "Initializing new game..." );
+    currentGame = newCookie();
+    currentGameData = newDataCookie();
+    // Initialize currentGameData before updating the date fields. That way,
+    // those updates will change "modified" to true, enabling the user to save
+    // a new game before entering any data, should they so desire.
+    updateCookies();
+    showDateToCurrent();
+    datePlayedToCurrent();
+    // Set the play-type dropdown to its first option.
+    $playTypeSelect.prop( "selectedIndex", 0);
+    updatePlayType();
+    updateRound();
+  }
+
+  function populateSaveAreaFromCookie() {
+    $showDatePicker.data( "DateTimePicker" )
+                   .date( currentGame.show_date );
+    $datePlayedPicker.data( "DateTimePicker" )
+                     .date( currentGame.date_played );
+    $playTypeSelect.val( currentGame.play_type );
+    if ( !currentGameData.modified ) { disableSaveLink( "Game loaded!" ); }
+  }
+
+  function getShowFromDatabase( showDate ) {
+    $.get( "/json/" + showDate ).success( function( data ) {
+      currentGame = data;
+      // Grab the number of hours of offset from the time string in the data.
+      var datePlayedOffset = ( currentGame.date_played.slice(-4, -3) );
+      // Put date_played in display format instead of database format, so it's
+      // not erroneously flagged as changed.
+      currentGame.date_played = moment.utc( currentGame.date_played )
+                                      .subtract( datePlayedOffset, "hours" )
+                                      .format( "YYYY-MM-DD h:mma" );
+      // TODO: See if cookie destruction is necessary.
+      destroyCookie( "game" );
+      setCookie( "game", currentGame );
+      currentGameData = newDataCookie();
+      setCookie( "gameData", currentGameData );
+      populateSaveAreaFromCookie();
+    });
+  }
+
 
   // "scores" is of the form [roundOneScore, roundTwoScore], where each clue
   // is worth 1 to 5 points. Multiplying by the round's topRowValue will yield
   // the round's actual contribution to the Coryat score.
   var scores = [0, 0];
   var currentGame = getCookie( "game" );
-  var currentGameData = {
-    "modified":false,
-    "activeRound":"round_one_categories"
-  };
+  var currentGameData = getCookie( "gameData" );
 
   var currentRound;
   var currentRoundIndex;
   var topRowValue;
   var $currentClue;
-  var currentClueState;
   var clueValue;
   var scoresWithoutClue;
 
@@ -567,14 +611,7 @@ $( ".games-new, .games-edit" ).ready( function() {
   });
 
   $deleteGameLink.on( "click", function() {
-    currentGame = newCookie();
-    showDateToCurrent();
-    datePlayedToCurrent();
-    // Set the play-type dropdown to its first option.
-    $playTypeSelect.prop( "selectedIndex", 0);
-    updatePlayType();
-    currentGameData = newDataCookie();
-    updateRound();
+    initializeNewGame();
   });
 
   $showDatePicker.on( "dp.change", function( e ) {
@@ -590,14 +627,49 @@ $( ".games-new, .games-edit" ).ready( function() {
   });
 
   $saveLink.on( "click", function() {
-    $.ajax({
-      type: "POST",
-      url: "/save",
-      data: { "game":attributize() },
-      success: function( data ) { updateCategoryIds( data ); },
-      dataType: "text"
-    });
+    var disabled = $saveLink.data( "disabled" );
+    // TODO: Will this always be interpreted as a Boolean?
+    //       If so, pretty up the code.
+    console.log( "Save link disabled? " + typeof disabled + ": " + disabled );
+    // Make the Ajax request iff the save link is not disabled.
+    // The code is ugly because the string "false" is truthy.
+    if ( !disabled || disabled.toLowerCase === "false" ) {
+      $.ajax({
+        type: "POST",
+        url: "/save",
+        data: { "game":attributize() },
+        success: function( data ) { afterSaveHandler( data ); },
+        dataType: "text"
+      });
+    }
   });
+
+  $showDatePicker.datetimepicker({
+    format: "YYYY-MM-DD"
+  });
+  $showDatePicker.data("DateTimePicker").timeZone(undefined);
+
+  $datePlayedPicker.datetimepicker({
+    format: "YYYY-MM-DD h:mma"
+  });
+  $datePlayedPicker.data("DateTimePicker").timeZone(undefined);
+
+  function disableSaveLink( message ) {
+    $saveLink.data( "disabled", true ).addClass( "disabled" ).text( message );
+  }
+
+  function enableSaveLink() {
+    $saveLink.data( "disabled", false ).removeClass( "disabled" )
+                                       .text( "Save game" );
+  }
+
+  function afterSaveHandler( data ) {
+    updateCategoryIds( data );
+
+    currentGameData["modified"] = false;
+    setCookie( "gameData", currentGameData );
+    disableSaveLink( "Saved!" );
+  }
 
   function updateCategoryIds( data ) {
     var idArray = JSON.parse( data )["ids"];
@@ -611,10 +683,6 @@ $( ".games-new, .games-edit" ).ready( function() {
     }
     currentGame["final"]["id"] = idArray.shift();
     setCookie( "game", currentGame );
-
-    currentGameData["modified"] = false;
-    setCookie( "gameData", currentGameData );
-    console.log( "Success!" );
   }
 
 
@@ -660,9 +728,12 @@ $( ".games-new, .games-edit" ).ready( function() {
       var cat = parseInt( $e.data( "column" ), 10) - 1;
       currentGame[currentRound][cat]["title"] = content;
     }
-    if ( content !== oldValue ) { currentGameData["modified"] = true; }
-    setCookie( "game", currentGame );
-    setCookie( "gameData", currentGameData );
+    updateCookies( content !== oldValue );
+    // The above line should do the same thing as the three below, plus
+    // enabling the save link if the value is changed.
+    // if ( content !== oldValue ) { currentGameData["modified"] = true; }
+    // setCookie( "game", currentGame );
+    // setCookie( "gameData", currentGameData );
   });
 
   $( ".topic-area, #final-topic-area" ).on( "focus", function() {
@@ -677,67 +748,41 @@ $( ".games-new, .games-edit" ).ready( function() {
       currentGame[currentRound][$e.data( "column" ) - 1]["topics_string"] =
         $e.val();
     }
-    currentGameData["modified"] = ( $e.val() !== oldValue );
-    setCookie( "game", currentGame );
-    setCookie( "gameData", currentGameData );
+    updateCookies( $e.val() !== oldValue );
+    // The above line should do the same thing as the three below, plus
+    // enabling the save link if the value is changed.
+    // currentGameData["modified"] = ( $e.val() !== oldValue );
+    // setCookie( "game", currentGame );
+    // setCookie( "gameData", currentGameData );
   });
 
 
   // Stuff to be done on page load:
-  $showDatePicker.datetimepicker({
-    format: "YYYY-MM-DD"
-  });
-  $showDatePicker.data("DateTimePicker").timeZone(undefined);
 
-  $datePlayedPicker.datetimepicker({
-    format: "YYYY-MM-DD h:mma"
-  });
-  $datePlayedPicker.data("DateTimePicker").timeZone(undefined);
-
-  setCookie( "gameData", currentGameData );
-
-  // TODO: Clean this up.
+  // Populate the game:
+  // 1. Load from database, if applicable, overwriting the cookie.
+  // 2. Otherwise, load from the cookie, if applicable.
+  // 3. If neither of the above applies, initialize a new game.
   if ( $( ".data-passer" ).data( "whichpage" ) === "Edit" ) {
-    var showDate = $(".data-passer").data( "showdate" );
-    getShowFromDatabase( showDate );
+    getShowFromDatabase( $( ".data-passer" ).data( "showdate" ) );
+  } else if ( currentGame ) {
+    populateSaveAreaFromCookie();
   } else {
-    if ( currentGame ) {
-      setPickersFromCookie();
-    } else {
-      currentGame = newCookie();
-      currentGame["play_type"] = $playTypeSelect.val();
-      setCookie( "game", currentGame );
-      showDateToCurrent();
-      datePlayedToCurrent();
-    }
-    getScoresFromCookie();
-    populateBoard();
+    initializeNewGame();
   }
 
-  function setPickersFromCookie() {
-    $showDatePicker.data( "DateTimePicker" )
-                   .date( currentGame.show_date );
-    $datePlayedPicker.data( "DateTimePicker" )
-                     .date( currentGame.date_played );
-    $playTypeSelect.val( currentGame.play_type );
+  // This shouldn't be necessary - currentGameData should be initialized by
+  // updateCookies(), which gets called when the show-date field is set,
+  // either to the current date, or the date from the cookie or database.
+  if ( !currentGameData) {
+    alert( "Whoops! Tell the webmaster he needs to uncomment the lines " +
+           "he thought were unnecessary." );
+    // console.log("No currentGameData");
+    // currentGameData = newDataCookie();
+    // setCookie( "gameData", currentGameData );
   }
 
-  function getShowFromDatabase( showDate ) {
-    $.get( "/json/" + showDate ).success( function( data ) {
-      currentGame = data;
-      // Grabs the number of hours of offset from the time string in the data.
-      var datePlayedOffset = ( currentGame.date_played.slice(-4, -3) );
-      // Change date_played from database format to display format so it's
-      // not erroneously flagged as changed.
-      currentGame.date_played = moment.utc( currentGame.date_played )
-                                      .subtract( datePlayedOffset, "hours" )
-                                      .format( "YYYY-MM-DD h:mma" );
-      // TODO: See if cookie destruction is necessary.
-      destroyCookie( "game" );
-      setCookie( "game", currentGame );
-      getScoresFromCookie();
-      setPickersFromCookie();
-      populateBoard();
-    });
-  }
+  getScoresFromCookie();
+  populateBoard();
+
 });

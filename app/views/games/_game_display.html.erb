@@ -188,7 +188,7 @@
           <option value="other">other</option>
         </select>
         <% if current_user %>
-          <a id="save-link" tabindex=200>Save Game</a>
+          <a id="save-link" tabindex=200 data-disabled="false">Save game</a>
         <% else %>
           <%= link_to 'Sign in', login_path %> to save game
         <% end %>
