@@ -18,6 +18,9 @@
     },
     "SECRET_KEY_BASE": {
       "required": true
+    },
+    "SUPPORT_ADDRESS": {
+      "required": true
     }
   },
   "formation": {
