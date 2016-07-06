@@ -5,7 +5,8 @@ class Sixth < ActiveRecord::Base
   validates :board_position,
             presence: true,
             inclusion: { in: [1, 2, 3, 4, 5, 6] },
-            uniqueness: { scope: [:game_id, :type] }
+            uniqueness: { scope: [:game_id, :type],
+                          message: 'already exists' }
 
   default_scope { order(type: :asc, board_position: :asc) }
 

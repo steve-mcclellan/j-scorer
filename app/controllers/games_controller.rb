@@ -52,7 +52,7 @@ class GamesController < ApplicationController
     if game.update(game_params)
       render json: { ids: category_ids(game) }
     else
-      render text: 'Oops. Something went wrong.', status: 500
+      render json: { errors: game.errors }
     end
   end
 

@@ -638,7 +638,7 @@ $( ".games-new, .games-edit" ).ready( function() {
         type: "POST",
         url: "/save",
         data: { "game":attributize() },
-        success: function( data ) { afterSaveHandler( data ); },
+        success: function( data ) { afterSaveHandler( JSON.parse( data ) ); },
         dataType: "text"
       });
     }
@@ -663,16 +663,44 @@ $( ".games-new, .games-edit" ).ready( function() {
                                        .text( "Save game" );
   }
 
-  function afterSaveHandler( data ) {
-    updateCategoryIds( data );
+  function afterSaveHandler( jsonData ) {
+    if ( jsonData.errors ) {
+      saveErrorHandler( jsonData.errors );
+      return;
+    }
+    updateCategoryIds( jsonData );
 
     currentGameData["modified"] = false;
     setCookie( "gameData", currentGameData );
     disableSaveLink( "Saved!" );
   }
 
-  function updateCategoryIds( data ) {
-    var idArray = JSON.parse( data )["ids"];
+  function saveErrorHandler( errors ) {
+    if ( !errors["sixths.board_position"] &&
+         errors["sixths.board_position"][0] === "already exists" ) {
+      alert( 'Cannot save. A different game with show date "' +
+             currentGame.show_date +
+             '" already exists. If you want to modify or delete that game, ' +
+             'you can do so via the Stats link above. To save this game, ' +
+             'please enter a unique show date.' );
+    } else {
+      console.log( "Unexpected error:" );
+      console.dir( errors );
+      console.log( 'Please note the name of the array (to the left of "' +
+                   'Array[x]"), and the contents of any "quoted strings" ' +
+                   'that are shown when you click on it. ' +
+                   '("length" and "__proto__" can be ignored.) ' +
+                   'Please email <%= ENV['SUPPORT_ADDRESS'] %> with this ' +
+                   'information. Thanks!' );
+      alert( "An unexpected error has occurred; the game cannot be " +
+             "saved. If you know how, please visit the JavaScript console in " +
+             "your browser, and follow the instructions there to report the " +
+             "problem." );
+    }
+  }
+
+  function updateCategoryIds( jsonData ) {
+    var idArray = jsonData["ids"];
     for( var i = 0; i < 6; i++ ) {
       currentId = idArray.shift();
       currentGame["round_one_categories"][i]["id"] = currentId;
