@@ -11,8 +11,8 @@ class GameTest < ActiveSupport::TestCase
     assert @game.valid?
   end
 
-  test 'user id should be present' do
-    @game.user_id = nil
+  test 'user should be present' do
+    @game.user = nil
     assert_not @game.valid?
   end
 

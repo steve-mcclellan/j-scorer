@@ -4,6 +4,7 @@ class FinalTest < ActiveSupport::TestCase
   def setup
     @final = Final.create!(game: games(:debut),
                            category_title: 'Word Origins',
+                           topics_string: '',
                            result: 1)
   end
 
@@ -19,6 +20,7 @@ class FinalTest < ActiveSupport::TestCase
   test 'game_id should be unique' do
     final2 = Final.new(game: games(:two),
                        category_title: 'Trinidadian Amateur Ichthyologists',
+                       topics_string: '',
                        result: 1)
     assert final2.valid?
     final2.game = games(:debut)

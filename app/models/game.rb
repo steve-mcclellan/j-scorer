@@ -1,5 +1,5 @@
 class Game < ActiveRecord::Base
-  belongs_to :user, touch: true
+  belongs_to :user, inverse_of: :games, touch: true
   has_many :sixths, inverse_of: :game, dependent: :destroy
   has_one :final, inverse_of: :game, dependent: :destroy
 
@@ -9,7 +9,7 @@ class Game < ActiveRecord::Base
 
   default_scope { order(date_played: :desc) }
 
-  validates :user_id, presence: true
+  validates :user, presence: true
   validates :show_date, presence: true, uniqueness: { scope: :user_id }
 
   default_values show_date:   -> { Time.zone.today },
@@ -17,13 +17,6 @@ class Game < ActiveRecord::Base
 
   def to_param
     show_date.to_s.parameterize
-  end
-
-  def topics_array
-    topics_string.strip                 # Remove leading/trailing whitespace.
-                 .squeeze(' ')          # Compress any consecutive spaces.
-                 .gsub(/\s?,\s?/, ',')  # Remove any whitespace around commas.
-                 .split(',')            # Convert to array of strings.
   end
 
   # def create_categories!
