@@ -204,7 +204,6 @@ $( ".games-new, .games-edit" ).ready( function() {
 
       for ( var cat = 0; cat < 6; cat++ ) {
         for ( var row = 1; row <= 5; row++ ) {
-          // clueValue = topRowValue * row;
           switch ( roundArray[cat]["result" + row] ) {
             case 1:  // regular clue wrong - DDs don't deduct.
               scores[i] -= row;
@@ -362,7 +361,6 @@ $( ".games-new, .games-edit" ).ready( function() {
     delete result.round_one_categories;
     delete result.round_two_categories;
     delete result["final"];
-    // console.dir( result );
     return result;
   }
 
@@ -386,39 +384,29 @@ $( ".games-new, .games-edit" ).ready( function() {
   }
 
   function updateShowDate() {
-    // console.log( "Show date was " + currentGame["show_date"] );
     var modified = ( currentGame["show_date"] !== $showDateValue.val() );
     currentGame["show_date"] = $showDateValue.val();
     updateCookies( modified );
-    // console.log( "Show date is now " + getCookie('game')["show_date"] );
-    // console.log( "Modified? " + modified );
   }
 
   function updateDatePlayed() {
-    // console.log( "Date played was " + currentGame["date_played"] );
     var modified = ( currentGame["date_played"] !== $datePlayedValue.val() );
     currentGame["date_played"] = $datePlayedValue.val();
     updateCookies( modified );
-    // console.log( "Date played is now " + getCookie('game')["date_played"] );
-    // console.log( "Modified? " + modified );
   }
 
   function updatePlayType() {
-    // console.log( "Play type was " + currentGame["play_type"] );
     var modified = ( currentGame["play_type"] !== $playTypeSelect.val() );
     currentGame["play_type"] = $playTypeSelect.val();
     updateCookies( modified );
-    // console.log( "Play type is now " + getCookie('game')["play_type"] );
-    // console.log( "Modified? " + modified);
   }
 
   function initializeNewGame() {
-    console.log( "Initializing new game..." );
     currentGame = newCookie();
     currentGameData = newDataCookie();
     // Initialize currentGameData before updating the date fields. That way,
-    // those updates will change "modified" to true, enabling the user to save
-    // a new game before entering any data, should they so desire.
+    // those updates will change ["modified"] to true, enabling the user to
+    // save a new game before entering any data, should they so desire.
     updateCookies();
     showDateToCurrent();
     datePlayedToCurrent();
@@ -447,8 +435,6 @@ $( ".games-new, .games-edit" ).ready( function() {
       currentGame.date_played = moment.utc( currentGame.date_played )
                                       .subtract( datePlayedOffset, "hours" )
                                       .format( "YYYY-MM-DD h:mma" );
-      // TODO: See if cookie destruction is necessary.
-      destroyCookie( "game" );
       setCookie( "game", currentGame );
       currentGameData = newDataCookie();
       setCookie( "gameData", currentGameData );
@@ -627,13 +613,8 @@ $( ".games-new, .games-edit" ).ready( function() {
   });
 
   $saveLink.on( "click", function() {
-    var disabled = $saveLink.data( "disabled" );
-    // TODO: Will this always be interpreted as a Boolean?
-    //       If so, pretty up the code.
-    console.log( "Save link disabled? " + typeof disabled + ": " + disabled );
     // Make the Ajax request iff the save link is not disabled.
-    // The code is ugly because the string "false" is truthy.
-    if ( !disabled || disabled.toLowerCase === "false" ) {
+    if ( !$saveLink.data( "disabled" ) ) {
       $.ajax({
         type: "POST",
         url: "/save",
@@ -663,12 +644,12 @@ $( ".games-new, .games-edit" ).ready( function() {
                                        .text( "Save game" );
   }
 
-  function afterSaveHandler( jsonData ) {
-    if ( jsonData.errors ) {
-      saveErrorHandler( jsonData.errors );
+  function afterSaveHandler( dataObj ) {
+    if ( dataObj.errors ) {
+      saveErrorHandler( dataObj.errors );
       return;
     }
-    updateCategoryIds( jsonData );
+    updateCategoryIds( dataObj );
 
     currentGameData["modified"] = false;
     setCookie( "gameData", currentGameData );
@@ -676,7 +657,7 @@ $( ".games-new, .games-edit" ).ready( function() {
   }
 
   function saveErrorHandler( errors ) {
-    if ( !errors["sixths.board_position"] &&
+    if ( errors["sixths.board_position"] &&
          errors["sixths.board_position"][0] === "already exists" ) {
       alert( 'Cannot save. A different game with show date "' +
              currentGame.show_date +
@@ -699,8 +680,8 @@ $( ".games-new, .games-edit" ).ready( function() {
     }
   }
 
-  function updateCategoryIds( jsonData ) {
-    var idArray = jsonData["ids"];
+  function updateCategoryIds( dataObj ) {
+    var idArray = dataObj["ids"];
     for( var i = 0; i < 6; i++ ) {
       currentId = idArray.shift();
       currentGame["round_one_categories"][i]["id"] = currentId;
@@ -757,11 +738,6 @@ $( ".games-new, .games-edit" ).ready( function() {
       currentGame[currentRound][cat]["title"] = content;
     }
     updateCookies( content !== oldValue );
-    // The above line should do the same thing as the three below, plus
-    // enabling the save link if the value is changed.
-    // if ( content !== oldValue ) { currentGameData["modified"] = true; }
-    // setCookie( "game", currentGame );
-    // setCookie( "gameData", currentGameData );
   });
 
   $( ".topic-area, #final-topic-area" ).on( "focus", function() {
@@ -773,11 +749,6 @@ $( ".games-new, .games-edit" ).ready( function() {
     var arrayPosition = $e.data( "column" ) - 1;
     currentGame[currentRound][arrayPosition]["topics_string"] = $e.val();
     updateCookies( $e.val() !== oldValue );
-    // The above line should do the same thing as the three below, plus
-    // enabling the save link if the value is changed.
-    // currentGameData["modified"] = ( $e.val() !== oldValue );
-    // setCookie( "game", currentGame );
-    // setCookie( "gameData", currentGameData );
   });
 
   $( "#final-topic-area" ).on( "blur", function() {
@@ -799,17 +770,6 @@ $( ".games-new, .games-edit" ).ready( function() {
     populateSaveAreaFromCookie();
   } else {
     initializeNewGame();
-  }
-
-  // This shouldn't be necessary - currentGameData should be initialized by
-  // updateCookies(), which gets called when the show-date field is set,
-  // either to the current date, or the date from the cookie or database.
-  if ( !currentGameData) {
-    alert( "Whoops! Tell the webmaster he needs to uncomment the lines " +
-           "he thought were unnecessary." );
-    // console.log("No currentGameData");
-    // currentGameData = newDataCookie();
-    // setCookie( "gameData", currentGameData );
   }
 
   getScoresFromCookie();
