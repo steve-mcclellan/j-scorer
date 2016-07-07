@@ -4,23 +4,39 @@ debut:
   user: dave
   show_date: 1984-09-10
   date_played: 2000-01-01 00:00:01
+  round_one_score: 0
+  round_two_score: 0
+  final_result: 0
 
 two:
   user: dave
   show_date: 1984-09-11
   date_played: 1984-09-11 19:30:00
+  round_one_score: 0
+  round_two_score: 0
+  final_result: 0
 
 most_recent:
   user: dave
   show_date: 2005-05-25
   date_played: <%= 7.days.from_now %>
+  round_one_score: 0
+  round_two_score: 0
+  final_result: 0
 
 victoria:
   user: dave
   show_date: 2005-09-19
   date_played: 2005-09-19 19:30:00
+  # TODO: Update these with the correct values.
+  round_one_score: 0
+  round_two_score: 0
+  final_result: 0
 
 steve:
   user: steve
   show_date: 1964-03-30
   date_played: <%= 3.years.ago %>
+  round_one_score: 0
+  round_two_score: 0
+  final_result: 0

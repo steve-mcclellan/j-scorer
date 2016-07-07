@@ -10,9 +10,13 @@
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= require js.cookie
 //= require jquery
 //= require jquery_ujs
 //= require jquery-ui
+//= require jquery.tablesorter.min
+//= require jquery-readyselector
+//= require js.cookie
 //= require bootstrap
+//= require moment
+//= require bootstrap-datetimepicker
 //= require_tree .

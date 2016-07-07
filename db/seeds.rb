@@ -17,12 +17,23 @@ User.create!(email: 'david@example.com',
 25.times do |n|
   show_date = n.days.ago
   date_played = n.days.ago
-  steve.games.create!(show_date: show_date, date_played: date_played)
+  game = steve.games.create!(show_date: show_date,
+                             date_played: date_played,
+                             play_type: "regular",
+                             round_one_score: -1,
+                             round_two_score: 0,
+                             final_result: 0)
+  1.upto(6) { |i| game.round_one_categories.create!(board_position: i) }
+  1.upto(6) { |i| game.round_two_categories.create!(board_position: i) }
+  game.create_final!
 end
 
 utoc = steve.games.create!(show_date: Date.new(2005, 5, 25),
                            date_played: DateTime.new(2016, 6, 1, 14, 0, 0, '-04:00'),
-                           play_type: "UToC")
+                           play_type: "utoc",
+                           round_one_score: 22,
+                           round_two_score: 16,
+                           final_result: 1)
 
 topic_list = %w(Animals Science Lowbrow PopMusic Words General Language Music
                 PlaceBios Europe History Asia Sports Highbrow Poetry People
@@ -51,6 +62,7 @@ dj_cats = [
 ]
 
 j_cats.each_with_index do | cat, index |
+  topics_string = cat[6].map(&:name).join(', ')
   sixth = utoc.round_one_categories.create!(board_position: index + 1,
                                             title: cat[0],
                                             result1: cat[1],
@@ -58,12 +70,12 @@ j_cats.each_with_index do | cat, index |
                                             result3: cat[3],
                                             result4: cat[4],
                                             result5: cat[5],
-                                            first_topic: cat[6].first.name,
-                                            last_topic:  cat[6].last.name)
+                                            topics_string: topics_string)
   sixth.topics = cat[6]
   sixth.save
 end
 dj_cats.each_with_index do | cat, index |
+  topics_string = cat[6].map(&:name).join(', ')
   sixth = utoc.round_two_categories.create!(board_position: index + 1,
                                             title: cat[0],
                                             result1: cat[1],
@@ -71,8 +83,7 @@ dj_cats.each_with_index do | cat, index |
                                             result3: cat[3],
                                             result4: cat[4],
                                             result5: cat[5],
-                                            first_topic: cat[6].first.name,
-                                            last_topic:  cat[6].last.name)
+                                            topics_string: topics_string)
   sixth.topics = cat[6]
   sixth.save
 end
@@ -81,7 +92,6 @@ final = utoc.create_final!(category_title: '20th CENTURY AMERICANS',
                            result: 1,
                            contestants_right: 1,
                            contestants_wrong: 2,
-                           first_topic: @history.name,
-                           last_topic: @people.name)
+                           topics_string: "History, People")
 final.topics = [@history, @people]
 final.save

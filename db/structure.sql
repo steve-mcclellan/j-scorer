@@ -74,13 +74,12 @@ CREATE TABLE finals (
     id integer NOT NULL,
     game_id integer,
     category_title character varying,
-    result integer,
+    result integer DEFAULT 0,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    contestants_right integer,
-    contestants_wrong integer,
-    first_topic character varying,
-    last_topic character varying
+    contestants_right integer DEFAULT 0,
+    contestants_wrong integer DEFAULT 0,
+    topics_string character varying
 );
 
 
@@ -114,7 +113,10 @@ CREATE TABLE games (
     date_played timestamp without time zone,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    play_type character varying
+    play_type character varying DEFAULT 'regular'::character varying,
+    round_one_score integer,
+    round_two_score integer,
+    final_result integer
 );
 
 
@@ -156,15 +158,14 @@ CREATE TABLE sixths (
     type character varying,
     board_position integer,
     title character varying,
-    result1 integer,
-    result2 integer,
-    result3 integer,
-    result4 integer,
-    result5 integer,
+    result1 integer DEFAULT 0,
+    result2 integer DEFAULT 0,
+    result3 integer DEFAULT 0,
+    result4 integer DEFAULT 0,
+    result5 integer DEFAULT 0,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    first_topic character varying,
-    last_topic character varying
+    topics_string character varying
 );
 
 
@@ -373,13 +374,6 @@ CREATE INDEX index_finals_on_game_id ON finals USING btree (game_id);
 
 
 --
--- Name: index_games_on_play_type; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_games_on_play_type ON games USING btree (play_type);
-
-
---
 -- Name: index_games_on_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -391,6 +385,13 @@ CREATE INDEX index_games_on_user_id ON games USING btree (user_id);
 --
 
 CREATE INDEX index_games_on_user_id_and_date_played ON games USING btree (user_id, date_played);
+
+
+--
+-- Name: index_games_on_user_id_and_play_type; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_games_on_user_id_and_play_type ON games USING btree (user_id, play_type);
 
 
 --
@@ -509,4 +510,14 @@ INSERT INTO schema_migrations (version) VALUES ('20160601194120');
 INSERT INTO schema_migrations (version) VALUES ('20160601194627');
 
 INSERT INTO schema_migrations (version) VALUES ('20160601194754');
+
+INSERT INTO schema_migrations (version) VALUES ('20160623193817');
+
+INSERT INTO schema_migrations (version) VALUES ('20160701212322');
+
+INSERT INTO schema_migrations (version) VALUES ('20160701212342');
+
+INSERT INTO schema_migrations (version) VALUES ('20160703132507');
+
+INSERT INTO schema_migrations (version) VALUES ('20160705211103');
 

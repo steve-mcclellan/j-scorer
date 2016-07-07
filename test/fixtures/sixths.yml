@@ -8,8 +8,7 @@ jone:
   result3: 6
   result4: 2
   result5: 2
-  first_topic: Highbrow
-  last_topic: Trash
+  topics_string: Highbrow, Literature, Trash
 
 jtwo:
   game: victoria
@@ -21,8 +20,7 @@ jtwo:
   result3: 3
   result4: 2
   result5: 2
-  first_topic: Lowbrow
-  last_topic: Music
+  topics_string: Lowbrow, Music
 
 jthree:
   game: victoria
@@ -34,8 +32,7 @@ jthree:
   result3: 2
   result4: 2
   result5: 1
-  first_topic: General
-  last_topic: General
+  topics_string: General
 
 jfour:
   game: victoria
@@ -47,8 +44,7 @@ jfour:
   result3: 2
   result4: 2
   result5: 2
-  first_topic: People
-  last_topic: France
+  topics_string: People, France
 
 jfive:
   game: victoria
@@ -60,8 +56,7 @@ jfive:
   result3: 2
   result4: 2
   result5: 2
-  first_topic: Animals
-  last_topic: Other
+  topics_string: Animals, Other
 
 jsix:
   game: victoria
@@ -73,8 +68,7 @@ jsix:
   result3: 3
   result4: 3
   result5: 2
-  first_topic: InQuotes
-  last_topic: InQuotes
+  topics_string: InQuotes
 
 djone:
   game: victoria
@@ -86,8 +80,7 @@ djone:
   result3: 2
   result4: 2
   result5: 2
-  first_topic: Highbrow
-  last_topic: Art
+  topics_string: Highbrow, Art
 
 djtwo:
   game: victoria
@@ -99,8 +92,7 @@ djtwo:
   result3: 2
   result4: 2
   result5: 2
-  first_topic: Lowbrow
-  last_topic: Movies
+  topics_string: Lowbrow, Movies
 
 djthree:
   game: victoria
@@ -112,8 +104,7 @@ djthree:
   result3: 3
   result4: 3
   result5: 3
-  first_topic: InQuotes
-  last_topic: InQuotes
+  topics_string: InQuotes
 
 djfour:
   game: victoria
@@ -125,8 +116,7 @@ djfour:
   result3: 6
   result4: 3
   result5: 3
-  first_topic: People
-  last_topic: People
+  topics_string: People
 
 djfive:
   game: victoria
@@ -138,8 +128,7 @@ djfive:
   result3: 2
   result4: 2
   result5: 2
-  first_topic: Highbrow
-  last_topic: Poetry
+  topics_string: Highbrow, Poetry
 
 djsix:
   game: victoria
@@ -151,5 +140,4 @@ djsix:
   result3: 2
   result4: 3
   result5: 2
-  first_topic: PlaceBios
-  last_topic: PlaceBios
+  topics_string: PlaceBios

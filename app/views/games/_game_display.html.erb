@@ -69,7 +69,7 @@
     <div id="final-over-board">
       <div id="final-cat-title">
         <p contenteditable="true"
-           class="default-cat click-resistant"
+           class="final-cat default-cat click-resistant"
            tabindex=1
            data-defaultvalue="Final Category"
            spellcheck="false">
@@ -124,11 +124,79 @@
     </div>
 
     <div id="save-area">
-      <a id="save-game-link" tabindex=200 class="disabled">Save Game</a>
+      <!-- TODO: Add three fields: show_date, date_played, play_type;
+                 add button to save via Ajax request. -->
+        Show date:
+        <div>
+          <div class="row row-compact">
+            <div class='col-xs-12 col-compact'>
+              <div class="form-group">
+                <div class='input-group date' id='show-date-picker'>
+                  <input type='text'
+                         class="form-control"
+                         spellcheck="false" />
+                  <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        Played at: &nbsp; (Time zone: Pacific)
+        <div>
+          <div class="row row-compact">
+            <div class='col-xs-12 col-compact'>
+              <div class="form-group">
+                <div class='input-group date' id='played-picker'>
+                  <input type='text'
+                         class="form-control"
+                         spellcheck="false" />
+                  <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        Play type:
+        <select id="play-type-select">
+          <option value="regular">regular play</option>
+          <option value="power">Power Players Week</option>
+          <option value="teachers">Teachers Tournament</option>
+          <option value="college">College Championship</option>
+          <option value="toc">Tournament of Champions</option>
+          <option value="celebrity">Celebrity</option>
+          <option value="kids">Kids Week / Back to School Week</option>
+          <option value="teen">Teen Tournament</option>
+          <option value="decades">Battle of the Decades</option>
+          <option value="ibm">The IBM Challenge</option>
+          <option value="mdci">Million Dollar Celebrity Invitational</option>
+          <option value="kids-reunion">Kids Week Reunion</option>
+          <option value="utoc">Ultimate Tournament of Champions</option>
+          <option value="mdm">Million Dollar Masters</option>
+          <option value="intl">International / Olympic</option>
+          <option value="armed">Armed Forces Week</option>
+          <option value="teen-reunion">Teen Reunion Tournament</option>
+          <option value="senior">Seniors Tournament</option>
+          <option value="tenth">Tenth-Anniversary Tournament</option>
+          <option value="super">Super Jeopardy!</option>
+          <option value="irregular">(irregular play)</option>
+          <option value="rock">Rock &amp; Roll Jeopardy!</option>
+          <option value="sports">Sports Jeopardy!</option>
+          <option value="other">other</option>
+        </select>
+        <% if current_user %>
+          <a id="save-link" tabindex=200 data-disabled="false">Save game</a>
+        <% else %>
+          <%= link_to 'Sign in', login_path %> to save game
+        <% end %>
+
     </div>
 
     <div id="panel-links">
-      <a id="delete-game-link" tabindex=300>Delete this game</a>
+      <a id="delete-game-link" tabindex=300>New game</a>
       <%= link_to 'Help', help_path, tabindex: 300 %>
       <%= link_to 'About', about_path, tabindex: 300 %>
     </div>

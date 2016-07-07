@@ -1,11 +1,14 @@
 class Sixth < ActiveRecord::Base
-  belongs_to :game, touch: true
+  belongs_to :game, inverse_of: :sixths, touch: true
 
-  validates :game_id, presence: true
+  validates :game, presence: true
   validates :board_position,
             presence: true,
             inclusion: { in: [1, 2, 3, 4, 5, 6] },
-            uniqueness: { scope: [:game_id, :type] }
+            uniqueness: { scope: [:game_id, :type],
+                          message: 'already exists' }
+
+  default_scope { order(type: :asc, board_position: :asc) }
 
   include Topicable
 

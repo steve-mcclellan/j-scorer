@@ -4,5 +4,6 @@ fone:
   game: victoria
   category_title: Ranks & Titles
   result: 1
-  first_topic: People
-  last_topic: Titles
+  contestants_right: 2
+  contestants_wrong: 1
+  topics_string: People, Titles
