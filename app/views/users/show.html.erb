@@ -1,37 +1,80 @@
 <% provide(:title, 'Stats') %>
 
 <div id="stats-area">
-  <h2>Games played by <%= @user.email %> (<%= @user.games.count %>):</h2>
+  <ul>
+    <li><a href="#games">By game</a></li>
+    <li><a href="#topics">By topic</a></li>
+  </ul>
 
-  <table id="gameTable" class="tablesorter">
-    <thead>
-      <tr>
-        <th>Played</th>
-        <th>Show date</th>
-        <th>Score</th>
-        <th colspan=2>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @user.games.each do |game| %>
+  <div id="games">
+    <h2>Games played by <%= @user.email %> (<%= @user.games.count %>):</h2>
+
+    <table id="gameTable" class="tablesorter">
+      <thead>
         <tr>
-          <td><%= game.date_played.in_time_zone.to_s %></td>
-          <td><%= game.show_date %></td>
-          <td>$<%= game.adjusted_game_score %></td>
-          <% if current_user?(game.user) %>
-            <td><%= link_to 'edit', game_path(game) %></td>
-            <td><%= link_to 'delete',
-                            game_path(game),
-                            method: :delete,
-                            data: { confirm: 'Are you sure?' } %></td>
-          <% else %>
-            <td colspan=2></td>
-          <% end %>
+          <th>Played</th>
+          <th>Show date</th>
+          <th>Score</th>
+          <th colspan=2>Actions</th>
         </tr>
-      <% end %>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        <% @user.games.each do |game| %>
+          <tr>
+            <td><%= game.date_played.in_time_zone.to_s %></td>
+            <td><%= game.show_date %></td>
+            <td>$<%= game.adjusted_game_score %></td>
+            <% if current_user?(game.user) %>
+              <td><%= link_to 'edit', game_path(game) %></td>
+              <td><%= link_to 'delete',
+                              game_path(game),
+                              method: :delete,
+                              data: { confirm: 'Are you sure?' } %></td>
+            <% else %>
+              <td colspan=2></td>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <div id="topics">
+    <table id="topicTable" class="tablesorter">
+      <thead>
+        <tr>
+          <th>Topic</th>
+          <th>Round one occurrences</th>
+          <th>Round two occurrences</th>
+          <th>Final occurrences</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @user.topics.each do |topic| %>
+          <tr>
+            <td><%= topic.name %></td>
+            <td><%= topic.round_one_categories.count %></td>
+            <td><%= topic.round_two_categories.count %></td>
+            <td><%= topic.finals.count %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
 </div>
+
+<script>
+  $( function() {
+    $( "#stats-area" ).tabs({
+      beforeLoad: function( event, ui ) {
+        ui.jqXHR.fail( function() {
+          ui.panel.html(
+            "Couldn't load this tab. Please try again later." );
+        });
+      }
+    });
+  });
+</script>
 
 <script>
   $( function() {
@@ -43,6 +86,14 @@
       headers: {
         3: { sorter: false }
       }
+    });
+  });
+</script>
+
+<script>
+  $( function() {
+    $( "#topicTable" ).tablesorter({
+      sortList: [[0,0]]
     });
   });
 </script>
