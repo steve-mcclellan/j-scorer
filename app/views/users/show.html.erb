@@ -44,18 +44,55 @@
       <thead>
         <tr>
           <th>Topic</th>
-          <th>Round one occurrences</th>
-          <th>Round two occurrences</th>
-          <th>Final occurrences</th>
+          <th>Times Used</th>
+          <th>R1Right</th>
+          <th>R1Wrong</th>
+          <th>R1Pass</th>
+          <th>R2Right</th>
+          <th>R2Wrong</th>
+          <th>R2Pass</th>
+          <th>Total Score</th>
+          <th>Possible Score</th>
+          <th>Efficiency</th>
+          <th>Finals Right</th>
+          <th>Finals Wrong</th>
+          <th>Final Success Rate</th>
         </tr>
       </thead>
       <tbody>
         <% @user.topics.each do |topic| %>
+          <% round_one = topic.round_one_stats %>
+          <% round_two = topic.round_two_stats %>
           <tr>
             <td><%= topic.name %></td>
-            <td><%= topic.round_one_categories.count %></td>
-            <td><%= topic.round_two_categories.count %></td>
-            <td><%= topic.finals.count %></td>
+            <td><%= topic.sixths.count + topic.finals.count %></td>
+            <td><%= round_one[:right] %></td>
+            <td><%= round_one[:wrong] %></td>
+            <td><%= round_one[:pass] %></td>
+            <td><%= round_two[:right] %></td>
+            <td><%= round_two[:wrong] %></td>
+            <td><%= round_two[:pass] %></td>
+            <td><%= ts = round_one[:score] + round_two[:score] %></td>
+            <td><%= ps = round_one[:possible_score] +
+                         round_two[:possible_score] %></td>
+            <!-- Efficiency -->
+            <% if ps.zero? %>
+              <td></td>
+            <% else %>
+              <td>
+                <%= number_with_precision((ts / ps.to_f), precision: 5) %>
+              </td>
+            <% end %>
+            <td><%= fr = topic.finals.where(result: 3).count %></td>
+            <td><%= fw = topic.finals.where(result: 1).count %></td>
+            <!-- Final Success Rate -->
+            <% if fw.zero? %>
+              <td></td>
+            <% else %>
+              <td>
+                <%= number_with_precision((fr / (fr + fw).to_f), precision: 5) %>
+              </td>
+            <% end %>
           </tr>
         <% end %>
       </tbody>

@@ -48,8 +48,6 @@ class Topic < ActiveRecord::Base
   # Provides a stats summary for either or both of the first two rounds.
   # Returns stats for round one or two only if passed the corresponding
   # integer, otherwise returns stats for both rounds.
-  # Note: score and possible_score are 1-based, not 200- or 400- based.
-  # TODO: Incorporate round value differences. (Add top_row_value to Sixth?)
   def main_game_stats(round = nil)
     stats = { right: 0, wrong: 0, pass: 0, score: 0, possible_score: 0,
               dd_right: 0, dd_wrong: 0 }

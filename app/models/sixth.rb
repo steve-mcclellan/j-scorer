@@ -19,23 +19,33 @@ class Sixth < ActiveRecord::Base
   scope :round_one_categories, -> { where(type: 'RoundOneCategory') }
   scope :round_two_categories, -> { where(type: 'RoundTwoCategory') }
 
+  def top_row_value
+    return CURRENT_TOP_ROW_VALUES[0] if type == 'RoundOneCategory'
+    return CURRENT_TOP_ROW_VALUES[1] if type == 'RoundTwoCategory'
+    nil
+  end
+
   def summary
     stats = { right: 0, wrong: 0, pass: 0, score: 0, possible_score: 0,
               dd_position: nil, dd_result: nil }
     results = [result1, result2, result3, result4, result5]
 
     results.each_with_index do |result_code, index|
-      row_number = index + 1
-
-      update_stats(stats, result_code, row_number)
-      update_dd_stats(stats, result_code, row_number) if result_code > 4
-      stats[:possible_score] += row_number unless [0, 4].include? result_code
+      add_clue_stats(stats, result_code, index + 1)
     end
 
+    stats[:score] *= top_row_value
+    stats[:possible_score] *= top_row_value
     stats
   end
 
   private
+
+  def add_clue_stats(stats, result_code, row_number)
+    update_stats(stats, result_code, row_number)
+    update_dd_stats(stats, result_code, row_number) if result_code > 4
+    stats[:possible_score] += row_number unless [0, 4].include? result_code
+  end
 
   def update_stats(stats, result_code, row_number)
     case result_code
