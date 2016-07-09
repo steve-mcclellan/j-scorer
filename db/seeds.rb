@@ -92,8 +92,9 @@ end
 
 final = utoc.create_final!(category_title: '20th CENTURY AMERICANS',
                            result: 1,
-                           contestants_right: 1,
-                           contestants_wrong: 2,
+                           third_right: false,
+                           second_right: false,
+                           first_right: true,
                            topics_string: "History, People")
 final.topics = [@history, @people]
 final.save

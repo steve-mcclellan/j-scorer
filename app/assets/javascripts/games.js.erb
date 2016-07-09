@@ -60,8 +60,9 @@ const NEW_GAME_COOKIE = {
     "category_title":"",
     "topics_string":"",
     "result":0,
-    "contestants_right":0,
-    "contestants_wrong":0
+    "third_right":null,
+    "second_right":null,
+    "first_right":null
   }
 };
 
@@ -253,10 +254,21 @@ $( ".games-new, .games-edit" ).ready( function() {
     $catTitleP.blur();
 
     $( "#final-topic-area" ).val( currentGame["final"]["topics_string"] );
-    $contestantsRight.val( currentGame["final"]["contestants_right"] );
-    $contestantsWrong.val( currentGame["final"]["contestants_wrong"] );
-
+    toggleContestantResults();
     $fj.show();
+  }
+
+  function toggleContestantResults() {
+    var d = [0,
+             currentGame["final"]["first_right"],
+             currentGame["final"]["second_right"],
+             currentGame["final"]["third_right"]];
+
+    for ( var i = 3; i >= 1; i-- ) {
+      $( "#p" + i + "right" ).toggleClass( "active", d[i] === true );
+      $( "#p" + i + "wrong" ).toggleClass( "active", d[i] === false );
+      $( "#p" + i + "dnp" ).toggleClass( "active", d[i] === null );
+    }
   }
 
   function populateMainGameBoard( unadjustedScores ) {
@@ -481,8 +493,6 @@ $( ".games-new, .games-edit" ).ready( function() {
   var $fj = $( "#final-over-board" );
   var $buttonFJRight = $( "#button-final-right" );
   var $buttonFJWrong = $( "#button-final-wrong" );
-  var $contestantsRight = $( "#final-right-number" );
-  var $contestantsWrong = $( "#final-wrong-number" );
 
   var $roundOneLink = $( "#round-one-link" );
   var $roundTwoLink = $( "#round-two-link" );
@@ -573,14 +583,14 @@ $( ".games-new, .games-edit" ).ready( function() {
     }
   });
 
-  $contestantsRight.on( "change", function() {
-    currentGame["final"]["contestants_right"] = $( this ).val();
-    updateCookies();
-  });
+  // Updating the status of a contestant Final response:
+  $( ".contestant-result label" ).on( "click", function() {
+    var $input = $( this ).find( "input" )[0];
+    var originalValue = currentGame["final"][$input.name];
+    var newValue = toBool( $input.value );
 
-  $contestantsWrong.on( "change", function() {
-    currentGame["final"]["contestants_wrong"] = $( this ).val();
-    updateCookies();
+    currentGame["final"][$input.name] = newValue;
+    updateCookies( newValue !== originalValue );
   });
 
   $roundOneLink.on( "click", function() {

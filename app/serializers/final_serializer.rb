@@ -3,6 +3,7 @@ class FinalSerializer < ActiveModel::Serializer
              :category_title,
              :topics_string,
              :result,
-             :contestants_right,
-             :contestants_wrong
+             :third_right,
+             :second_right,
+             :first_right
 end

@@ -1,3 +1,23 @@
+// First effort at a method that will return the proper non-string values.
+function toBool( string ) {
+  switch ( string ) {
+    case true:
+    case "true":
+      return true;
+    case false:
+    case "false":
+      return false;
+    case null:
+    case "null":
+      return null;
+    case undefined:
+    case "undefined":
+      return undefined;
+    default:
+      throw "Could not convert " + string + " to Boolean.";
+  }
+}
+
 // from accepted answer to stackoverflow.com/questions/4233265/
 function placeCaretAtEnd(el) {
   if (typeof window.getSelection != "undefined" &&
