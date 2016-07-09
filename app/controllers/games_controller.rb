@@ -88,8 +88,9 @@ class GamesController < ApplicationController
                                         :id] },
                   { final_attributes: [:category_title,
                                        :result,
-                                       :contestants_right,
-                                       :contestants_wrong,
+                                       :third_right,
+                                       :second_right,
+                                       :first_right,
                                        :topics_string,
                                        :id] })
   end
