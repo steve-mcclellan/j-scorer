@@ -94,6 +94,51 @@
         </div>
 
         <div id="final-contestant-results">
+          <div class="contestant-result" id="third-result">
+            Third place:
+            <div class="btn-group" data-toggle="buttons">
+              <label class="btn btn-default fj-button">
+                <input type="radio" name="third_right" value=true /> Right
+              </label>
+              <label class="btn btn-default fj-button">
+                <input type="radio" name="third_right" value=false /> Wrong
+              </label>
+              <label class="btn btn-default fj-button active">
+                <input type="radio" name="third_right" value=null /> N/A
+              </label>
+            </div>
+          </div>
+
+          <div class="contestant-result" id="second-result">
+            Second place:
+            <div class="btn-group" data-toggle="buttons">
+              <label class="btn btn-default fj-button">
+                <input type="radio" name="second_right" value=true /> Right
+              </label>
+              <label class="btn btn-default fj-button">
+                <input type="radio" name="second_right" value=false /> Wrong
+              </label>
+              <label class="btn btn-default fj-button active">
+                <input type="radio" name="second_right" value=null /> N/A
+              </label>
+            </div>
+          </div>
+
+          <div class="contestant-result" id="first-result">
+            First place:
+            <div class="btn-group" data-toggle="buttons">
+              <label class="btn btn-default fj-button">
+                <input type="radio" name="first_right" value=true /> Right
+              </label>
+              <label class="btn btn-default fj-button">
+                <input type="radio" name="first_right" value=false /> Wrong
+              </label>
+              <label class="btn btn-default fj-button active">
+                <input type="radio" name="first_right" value=null /> N/A
+              </label>
+            </div>
+          </div>
+          <!-- Old stuff, left here temporarily for reference.
           <div id="final-correct-contestants">
             <label for="final-right-number">Contestants right:&nbsp;</label>
             <input type="number" id="final-right-number" value=0 tabindex=4 />
@@ -103,6 +148,7 @@
             <label for="final-wrong-number">Contestants wrong:&nbsp;</label>
             <input type="number" id="final-wrong-number" value=0 tabindex=4 />
           </div>
+          -->
         </div>
       </div>
     </div>

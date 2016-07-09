@@ -10,11 +10,12 @@ $dark-background-color:   #222;
 $gameboard-color:  black;
 $disclaimer-color: #777;
 
-$j-blue:       #151e8c;
-$j-light-blue: #353eac;
-$j-yellow:     #cf9f3e;
-$j-shadow:     #101014;
-$dd-border:    #674f1f;
+$j-blue:         #151e8c;
+$j-light-blue:   #353eac;
+$j-lighter-blue: #8a8fc6;
+$j-yellow:       #cf9f3e;
+$j-shadow:       #101014;
+$dd-border:      #674f1f;
 
 /* universal */
 
@@ -421,14 +422,14 @@ input {
         border: 0.3vw solid $gameboard-color;
 
         #final-correctness-buttons {
-          height: 50%;
-          width: 80%;
+          height: 70%;
+          width: 100%;
           display: flex;
-          justify-content: space-between;
+          justify-content: space-around;
           align-items: center;
 
           button {
-            height: 60%;
+            height: 50%;
             width: 40%;
             font-size: 10vh;
             margin: 3vh 0;
@@ -436,32 +437,42 @@ input {
         }
 
         #final-contestant-results {
-          height: 50%;
-          width: 80%;
+          height: 30%;
+          width: 100%;
           display: flex;
-          flex-direction: column;
+          // flex-direction: column;
           justify-content: space-around;
-          align-items: center;
+          align-items: flex-start;
 
-          div {
+          .contestant-result {
+            color: white;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
+
+            label {
+              font-size: 2vw;
+              font-weight: normal;
+              margin: 0;
+            }
+
+            .btn-default.fj-button {
+              padding: 1vh 1vw;
+            }
+
+            .btn-default.fj-button.active {
+              background-color: $j-lighter-blue;
+            }
           }
 
-          label {
-            color: white;
-            font-size: 7vh;
-            font-weight: normal;
-            margin: 0;
-          }
 
           input {
-            width: 7vh;
-            height: 7vh;
-            font-size: 5vh;
-            text-align: center;
-            margin: 0;
+            // width: 7vh;
+            // height: 7vh;
+            // font-size: 5vh;
+            // text-align: center;
+            // margin: 0;
           }
         }
       }
