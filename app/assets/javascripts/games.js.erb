@@ -439,6 +439,8 @@ $( ".games-new, .games-edit" ).ready( function() {
       currentGameData = newDataCookie();
       setCookie( "gameData", currentGameData );
       populateSaveAreaFromCookie();
+      getScoresFromCookie();
+      populateBoard();
     });
   }
 
@@ -768,11 +770,12 @@ $( ".games-new, .games-edit" ).ready( function() {
     getShowFromDatabase( $( ".data-passer" ).data( "showdate" ) );
   } else if ( currentGame ) {
     populateSaveAreaFromCookie();
+    getScoresFromCookie();
+    populateBoard();
   } else {
     initializeNewGame();
+    getScoresFromCookie();
+    populateBoard();
   }
-
-  getScoresFromCookie();
-  populateBoard();
 
 });
