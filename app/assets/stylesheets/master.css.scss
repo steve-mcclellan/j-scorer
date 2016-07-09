@@ -446,6 +446,7 @@ input {
 
           .contestant-result {
             color: white;
+            font-size: 2vw;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -464,15 +465,6 @@ input {
             .btn-default.fj-button.active {
               background-color: $j-lighter-blue;
             }
-          }
-
-
-          input {
-            // width: 7vh;
-            // height: 7vh;
-            // font-size: 5vh;
-            // text-align: center;
-            // margin: 0;
           }
         }
       }
