@@ -77,9 +77,10 @@ CREATE TABLE finals (
     result integer DEFAULT 0,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    contestants_right integer DEFAULT 0,
-    contestants_wrong integer DEFAULT 0,
-    topics_string character varying
+    topics_string character varying,
+    first_right boolean,
+    second_right boolean,
+    third_right boolean
 );
 
 
@@ -520,4 +521,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160701212342');
 INSERT INTO schema_migrations (version) VALUES ('20160703132507');
 
 INSERT INTO schema_migrations (version) VALUES ('20160705211103');
+
+INSERT INTO schema_migrations (version) VALUES ('20160709133813');
 
