@@ -40,6 +40,8 @@
   </div>
 
   <div id="topics">
+    <h2>Topics for <%= @user.email %> (<%= @user.topics.count %>):</h2>
+
     <table id="topicTable" class="tablesorter">
       <thead>
         <tr>
@@ -86,7 +88,7 @@
             <td><%= fr = topic.finals.where(result: 3).count %></td>
             <td><%= fw = topic.finals.where(result: 1).count %></td>
             <!-- Final Success Rate -->
-            <% if fw.zero? %>
+            <% if (fr + fw).zero? %>
               <td></td>
             <% else %>
               <td>
