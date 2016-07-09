@@ -3,7 +3,8 @@
 fone:
   game: victoria
   category_title: Ranks & Titles
-  result: 1
-  contestants_right: 2
-  contestants_wrong: 1
+  result: 3
+  third_right: true
+  second_right: false
+  first_right: true
   topics_string: People, Titles
