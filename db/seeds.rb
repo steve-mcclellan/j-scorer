@@ -23,9 +23,11 @@ User.create!(email: 'david@example.com',
                              round_one_score: -1,
                              round_two_score: 0,
                              final_result: 0)
-  1.upto(6) { |i| game.round_one_categories.create!(board_position: i) }
-  1.upto(6) { |i| game.round_two_categories.create!(board_position: i) }
-  game.create_final!
+  1.upto(6) { |i| game.round_one_categories.create!(board_position: i,
+                                                    topics_string: '') }
+  1.upto(6) { |i| game.round_two_categories.create!(board_position: i,
+                                                    topics_string: '') }
+  game.create_final!(topics_string: '')
 end
 
 utoc = steve.games.create!(show_date: Date.new(2005, 5, 25),
