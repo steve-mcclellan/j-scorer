@@ -18,6 +18,21 @@ function toBool( string ) {
   }
 }
 
+// Replaces <div>s and <br>s that are auto-generated when a user presses Enter
+// to create a newline in a category title with HTML line feed entity.
+function fixLineBreaks( string ) {
+  return string.replace( /<div>/g, "&#10;" )
+               .replace( /<\/div>/g, "" )
+               .replace( /<br>/g, "&#10;" )
+               .replace( /<br \/>/g, "&#10;" )
+}
+
+// HACK: Line feed doesn't seem to display properly in the category area.
+// Replace it with a <br> tag.
+function htmlize( string ) {
+  return string.replace( /&#10;/g, "<br>" )
+}
+
 // from accepted answer to stackoverflow.com/questions/4233265/
 function placeCaretAtEnd(el) {
   if (typeof window.getSelection != "undefined" &&

@@ -278,7 +278,7 @@ $( ".games-new, .games-edit" ).ready( function() {
     for ( var col = 1; col <= 6; col++ ) {
       var catTitleText = roundArray[col - 1]["title"];
       var $catTitleP = $( "#cat-title-" + col + " p" );
-      $catTitleP.html( catTitleText );
+      $catTitleP.html( htmlize( catTitleText ) );
       // Applies appropriate formatting.
       oldValue = catTitleText;
       $catTitleP.blur();
@@ -719,7 +719,7 @@ $( ".games-new, .games-edit" ).ready( function() {
     if ( $e.html().trim() === $e.data( "defaultvalue" ) ) {
       $e.html( "" );
     }
-    oldValue = $e.html();
+    oldValue = fixLineBreaks( $e.html() );
     // $e has class "click-resistant" if it is just gaining focus.
     // It does not if it is clicked while already having focus.
     if ( $e.hasClass( "click-resistant" ) ) {
@@ -733,20 +733,25 @@ $( ".games-new, .games-edit" ).ready( function() {
   $( ".cat-title p, #final-cat-title p" ).on( "blur", function() {
     var $e = $( this );
     var content;
-    if ( $e.html().replace( /&nbsp;/gi, "" )
-        .replace( /<br>/gi, "" ).trim() === "" ) {
+    var title = fixLineBreaks( $e.html() );
+    // Is title empty (save for possible whitespace)?
+    if ( title.replace( /&nbsp;/g, "" )
+              .replace( /<br>/g, "" )
+              .replace( /<br \/>/g, "" )
+              .replace( /&#10;/g, "" )
+              .trim() === "" ) {
       $e.toggleClass( "default-cat", true );
       $e.html( $e.data( "defaultvalue" ) );
       content = "";
     } else {
       $e.toggleClass( "default-cat", false) ;
-      content = $e.html();
+      content = title;
     }
     $e.toggleClass( "click-resistant", true);
     if ( $e.hasClass( "final-cat" ) ) {
       currentGame["final"]["category_title"] = content;
     } else {
-      var cat = parseInt( $e.data( "column" ), 10) - 1;
+      var cat = parseInt( $e.data( "column" ), 10 ) - 1;
       currentGame[currentRound][cat]["title"] = content;
     }
     updateCookies( content !== oldValue );
