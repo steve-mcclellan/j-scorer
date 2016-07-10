@@ -140,8 +140,9 @@ $( ".games-new, .games-edit" ).ready( function() {
     $clue.css( "display", "flex" );
 
     var titleClass = "#cat-title-" + $currentClue.data( "column" ) + " p";
-    var catName = $( titleClass ).html().replace( /<div>/gi, " " )
-                                        .replace( /<\/div>/gi, "" )
+    var catName = $( titleClass ).html().replace( /<div>/g, " " )
+                                        .replace( /<\/div>/g, "" )
+                                        .replace( /<br>/g, " " )
                                         .trim();
     if ( catName.length > 20 ) {
       catName = catName.slice( 0, 15 ) + "...";

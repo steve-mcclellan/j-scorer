@@ -199,8 +199,8 @@ input {
           align-items: center;
           text-align: center;
           color: white;
-          text-transform: uppercase;
-          font-size: 1.44vw;
+          // text-transform: uppercase;
+          font-size: 2.5vmin;
           line-height: 110%;
           font-weight: bold;
           text-shadow: 0.1vw 0.1vw $j-shadow;
@@ -329,8 +329,10 @@ input {
           }
 
           input {
-            width: 7vh;
-            height: 7vh;
+            width: 5vh;
+            height: 5vh;
+            cursor: pointer;
+            -moz-appearance: none;
             margin: 0;
           }
 
@@ -384,8 +386,8 @@ input {
         align-items: center;
         text-align: center;
         color: white;
-        text-transform: uppercase;
-        font-size: 1.44vw;
+        // text-transform: uppercase;
+        font-size: 5vmin;
         line-height: 110%;
         font-weight: bold;
         text-shadow: 0.1vw 0.1vw $j-shadow;
