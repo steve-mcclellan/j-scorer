@@ -29,7 +29,7 @@ html, body {
 }
 
 body {
-  background-color: $medium-background-color;
+  background-color: $light-background-color;
 }
 
 main {
@@ -37,7 +37,11 @@ main {
 }
 
 a {
+  color: $j-light-blue;
   cursor: pointer;
+  &:hover {
+    color: $j-lighter-blue;
+  }
 }
 
 .data-passer {
@@ -54,6 +58,10 @@ a {
   padding-right: 0;
 }
 
+.btn.btn-primary {
+  background-color: $j-blue;
+}
+
 /* typography */
 
 h1, h2 {
@@ -66,7 +74,7 @@ p {
 }
 
 main {
-  font-size: 1.2vw;
+  font-size: 3vmin;
 }
 
 /* header */
@@ -166,6 +174,7 @@ input {
   width: 100%;
   display: flex;
   justify-content: space-between;
+  font-size: 1.2vw;
 
   #board-area {
     position: relative;
