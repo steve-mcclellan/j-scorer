@@ -1,5 +1,7 @@
 <% provide(:title, 'Sign up') %>
+<br />
 <h1>Sign up</h1>
+<br />
 
 <div class='row'>
   <div class='col-md-6 col-md-offset-3'>
@@ -14,6 +16,7 @@
 
       <%= f.label :password_confirmation, "Confirm password" %>
       <%= f.password_field :password_confirmation, class: 'form-control' %>
+      <br />
 
       <%= f.submit "Create account", class: 'btn btn-primary' %>
     <% end %>

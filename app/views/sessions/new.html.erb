@@ -1,5 +1,7 @@
 <% provide(:title, 'Log in') %>
+<br />
 <h1>Log in</h1>
+<br />
 
 <div class="row">
   <div class="col-md-6 col-md-offset-3">
@@ -11,6 +13,7 @@
       <%= f.label :password %>
       <%= link_to '(forgot password)', forgot_path, tabindex: 5 %>
       <%= f.password_field :password, class: 'form-control', tabindex: 2 %>
+      <br />
 
       <%= f.submit 'Log in', class: 'btn btn-primary', tabindex: 3 %>
     <% end %>
