@@ -127,6 +127,10 @@
         3: { sorter: false }
       }
     });
+
+    $( "#gameTable" ).stickyTableHeaders({
+      scrollableArea: $( '#stats-area' )
+    });
   });
 </script>
 
@@ -134,6 +138,10 @@
   $( function() {
     $( "#topicTable" ).tablesorter({
       sortList: [[0,0]]
+    });
+
+    $( "#topicTable" ).stickyTableHeaders({
+      scrollableArea: $( '#stats-area' )
     });
   });
 </script>

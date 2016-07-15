@@ -14,6 +14,7 @@
 //= require jquery_ujs
 //= require jquery-ui
 //= require jquery.tablesorter.min
+//= require jquery.stickytableheaders.min
 //= require jquery-readyselector
 //= require js.cookie
 //= require bootstrap
