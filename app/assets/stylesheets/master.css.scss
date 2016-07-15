@@ -228,9 +228,14 @@ input {
   }
 }
 
-/* about page */
+/* help and about pages */
 
 #about-page {
+  height: 100%;
+  overflow: auto;
+}
+
+#help-page {
   height: 100%;
   overflow: auto;
 }
@@ -251,7 +256,29 @@ input {
   }
 }
 
+.j-box {
+  color: white;
+  background-color: $j-blue;
+  margin-top: 15px;
+  border: 0.3vw solid $gameboard-color;
+  border-radius: 4px;
+
+  p {
+    font-size: large;
+  }
+
+  a {
+    color: $j-yellow;
+
+    &:hover {
+      color: white;
+      text-decoration: none;
+    }
+  }
+}
+
 /* stats page */
+
 #stats-area {
   height: 100%;
   overflow: auto;

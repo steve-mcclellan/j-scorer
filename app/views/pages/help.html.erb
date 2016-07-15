@@ -1,3 +1,71 @@
 <% provide(:title, 'Help') %>
-<h1>Help</h1>
-<p>This page will contain documentation on how to use the J! Scorer's features.</p>
+<div id="help-page">
+  <div class="col-xs-10 col-xs-offset-1 j-box">
+    <p>
+    Welcome, early adopter! The J! Scorer just recently launched (July 2016), and is still being actively developed. Any feedback is greatly appreciated. Have an idea for how something could be easier to use, or look better? Want to see a specific stat? Send any and all ideas to <a href="mailto:<%= ENV['SUPPORT_ADDRESS'] %>"><%= ENV['SUPPORT_ADDRESS'] %></a>.
+    </p>
+  </div>
+
+  <div class="col-xs-10 col-xs-offset-1 booyah-box">
+    <h2>How to use the J! Scorer</h2>
+    <p>
+    <em>Screenshots coming soon.</em>
+    </p>
+    <br />
+    <p>
+    The J! Scorer makes it easy for prospective <em>Jeopardy!</em> contestants to play along with the show and keep track of their training progress.
+    </p>
+    <br />
+    <p>
+    Both guests and registered users can use the J! Scorer to calculate their <a href="http://www.pisspoor.com/jep.html" target="_blank">Coryat score</a> while playing along with the show in real time. Registered users can also save their games and track their stats over time.
+    </p>
+    <br />
+    <p>
+    The <%= link_to 'game page', games_path %> is where the action is.
+    </p>
+    <br />
+    <p>
+    As on the show, the blue boxes at the top of the board are where the category names go. As the categories are revealed on the show, type in a bit of the name - enough to find the proper column when a clue is selected. (This area is for your reference only, and has no effect on any stats.)
+    </p>
+    <br />
+    <p>
+    When a contestant selects a clue, click on (or touch) the appropriate box. This will bring up an overlay with several buttons. Click on <strong>Right</strong> or <strong>Wrong</strong> as appropriate for your response, or <strong>Pass</strong> if you chose to <a href="http://j-archive.com/help.php#stayclam" target="_blank">STAY CLAM</a>. When a Daily Double is revealed, tick the <strong>DD</strong> checkbox. The <strong>NR</strong> button is for any clues that go unrevealed.
+    </p>
+    <br />
+    <p>
+    If you plan on saving your game, at the conclusion of each round, you can enter zero or more custom <strong>topics</strong> for each category in the white text box between the category name and the clue boxes. (Separate multiple topics with commas.) After your game has been saved, your results from that category will be added to your totals for each topic on the <%= link_to 'stats page', stats_path %>.
+    </p>
+    <br />
+    <p>
+    (For example, if the category is BEFORE &amp; AFTER, you might assign topics <em>Wordplay, General Knowledge</em>. If the category is THE <u>BILLBOARD</u> HOT 100, your topics might be <em>Entertainment, Lowbrow, Popular Music</em>. For best results, use whatever comes naturally to you; consistency is the key to good, useful stats.)
+    </p>
+    <br />
+    <p>
+    Navigate between rounds with the links below the scoreboard.
+    </p>
+    <br />
+    <p>
+    For the Final clue, the category and topic areas work as before. Use the large <strong>Right</strong> or <strong>Wrong</strong> button to record your result. A check mark or an X will appear next to your score, as appropriate.
+    </p>
+    <br />
+    <p>
+    At the bottom of the Final area, there are places to enter the contestants' results. In the future, this will enable you to view your Final stats broken down by contestant results, which can come in handy if you find yourself facing, say, <a href="http://j-archive.com/help.php#strattonsdilemma" target="_blank">Stratton's Dilemma</a>.
+    </p>
+    <br />
+    <p>
+    To save your game, make sure that the show date, date and time played, and play type are correct, then click the <strong>Save game</strong> link. When the game is successfully saved, the text of the link will change accordingly.
+    </p>
+    <br />
+    <p>
+    (Note: Your most-recently-displayed game is saved to a cookie in your browser. This enables you to visit other pages, like the login or signup page, and still have your game waiting for you when you return. To start a new game, click the <strong>New game</strong> link below the save area.)
+    </p>
+    <br />
+    <p>
+    Happy playing! If you have any questions that are not answered here (including the note on browsers below), please email <a href="mailto:<%= ENV['SUPPORT_ADDRESS'] %>"><%= ENV['SUPPORT_ADDRESS'] %></a>.
+    </p>
+    <br />
+    <p>
+    <strong>A note on browsers:</strong> The J! Scorer is developed primarily for recent versions of Chromium/Google Chrome, with regular checks that it works reasonably well in recent versions of Firefox. Support for other browsers is not planned at this time.
+    </p>
+  </div>
+</div>
