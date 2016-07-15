@@ -14,8 +14,8 @@ module Topicable
     topics_array = []
     topic_names_array.each do |topic_name|
       topic = game.user.topics.where('lower(name) = ?', topic_name.downcase)
-                  .first_or_create!(name: topic_name)
-      topics_array << topic
+                  .first_or_create(name: topic_name)
+      topics_array << topic if topic.valid?
     end
     self.topics = topics_array
   end
@@ -25,5 +25,6 @@ module Topicable
                  .squeeze(' ')          # Compress any consecutive spaces.
                  .gsub(/\s?,\s?/, ',')  # Remove any whitespace around commas.
                  .split(',')            # Convert to array of strings.
+                 .uniq(&:downcase)      # Remove any duplicates from array.
   end
 end
