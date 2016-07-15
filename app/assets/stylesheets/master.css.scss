@@ -161,7 +161,124 @@ input {
   }
 }
 
+/* home page */
+#home-container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+
+  p {
+    height: 10vh;
+    text-align: center;
+    font-size: 4vmin;
+    line-height: 13vh;
+  }
+
+  div {
+    height: 26vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .btn.btn-primary {
+    height: 20vh;
+    width: 75vw;
+    font-size: 10vmin;
+    line-height: 18vh;
+    color: $j-yellow;
+    text-shadow: 0.2vw 0.2vw $j-shadow;
+    border: 0.3vw solid $gameboard-color;
+
+    &:hover {
+      color: white;
+    }
+  }
+
+  .soft-sell {
+    height: 20vh;
+    width: 75vw;
+    display: flex;
+    flex-direction: column;
+    background-color: $j-blue;
+    border: 0.3vw solid $gameboard-color;
+    // To match the Bootstrap default for the buttons:
+    border-radius: 4px;
+
+    p {
+      height: 6vh;
+      line-height: 6vh;
+      font-size: 4.5vmin;
+      color: white;
+      text-shadow: 0.2vw 0.2vw $j-shadow;
+      text-align: center;
+
+      a {
+        color: $j-yellow;
+
+        &:hover {
+          color: white;
+          text-decoration: none;
+        }
+      }
+    }
+  }
+}
+
+/* help and about pages */
+
+#about-page {
+  height: 100%;
+  overflow: auto;
+}
+
+#help-page {
+  height: 100%;
+  overflow: auto;
+}
+
+.booyah-box {
+  -webkit-box-shadow: 1px 1px 2px 0 #d0d0d0;
+  -moz-box-shadow: 1px 1px 2px 0 #d0d0d0;
+  box-shadow: 1px 1px 2px 0 #d0d0d0;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-color: #e4e4e4 #bebebd #bebebd #e4e4e4;
+  margin-top: 10px;
+  margin-bottom: 15px;
+  padding: 20px;
+
+  p {
+    font-size: medium;
+  }
+}
+
+.j-box {
+  color: white;
+  background-color: $j-blue;
+  margin-top: 15px;
+  border: 0.3vw solid $gameboard-color;
+  border-radius: 4px;
+
+  p {
+    font-size: large;
+  }
+
+  a {
+    color: $j-yellow;
+
+    &:hover {
+      color: white;
+      text-decoration: none;
+    }
+  }
+}
+
 /* stats page */
+
 #stats-area {
   height: 100%;
   overflow: auto;

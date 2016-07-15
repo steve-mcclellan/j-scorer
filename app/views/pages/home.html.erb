@@ -1,28 +1,24 @@
-<div class="myclass">
-  <h1>J! Scorer</h1>
-  <p>This page will include links to sign up/log in, create a new game, and view stats.</p>
+<div id="home-container">
+  <% if logged_in? %>
+    <p>Welcome back, <%= current_user.email %>!</p>
+    <div><%= link_to 'Enter a Game', games_path, class: 'btn btn-primary' %></div>
+    <div><%= link_to 'View My Stats', stats_path, class: 'btn btn-primary' %></div>
+    <div><%= link_to 'Help', help_path, class: 'btn btn-primary' %></div>
+  <% else %>
+    <p>Welcome, Guest!</p>
+    <div><%= link_to 'What is This?', help_path, class: 'btn btn-primary' %></div>
+    <div><%= link_to 'Enter a Game', games_path, class: 'btn btn-primary' %></div>
+    <div>
+      <div class="soft-sell">
+        <p>
+          To save games and track stats,
+        </p>
+        <p>
+          <%= link_to 'log in', login_path %>
+          or
+          <%= link_to 'sign up', signup_path %>.
+        </p>
+      </div>
+    </div>
+  <% end %>
 </div>
-
-<!--
-<% if logged_in? %>
-  <div class='row'>
-    <aside class='col-md-4'>
-      <section class='user_info'>
-        <h2>Greetings, <%= current_user.email %>!</h2>
-        <span><%= link_to 'View stats', stats_path %></span>
-        <span><%= pluralize(current_user.games.count, 'game') %></span>
-      </section>
-      <section class='game_form'>
-        <%= form_for(@game) do |f| %>
-          <%= render 'shared/error_messages', object: f.object %>
-          <%= f.label :show_date %>
-          <%= f.date_field :show_date, value: Time.zone.today %>
-          <%= f.label :date_played, 'Played at' %>
-          <%= f.datetime_field :date_played, value: Time.zone.now %>
-          <%= f.submit 'Create', class: 'btn btn-primary' %>
-        <% end %>
-      </section>
-    </aside>
-  </div>
-<% end %>
--->
