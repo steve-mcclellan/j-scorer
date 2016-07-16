@@ -60,4 +60,29 @@ class User < ActiveRecord::Base
   def password_reset_expired?
     reset_sent_at < 1.hour.ago
   end
+
+  def all_game_summary
+    stats = { round_one: { right: 0, wrong: 0, pass: 0 },
+              round_two: { right: 0, wrong: 0, pass: 0 },
+              finals: { right: 0, wrong: 0 },
+              score: 0, possible_score: 0 }
+    games.each { |game| update_stats(stats, game.all_category_summary) }
+    stats
+  end
+
+  private
+
+  def update_stats(stats, game_summary)
+    [:round_one, :round_two].each do |round|
+      [:right, :wrong, :pass].each do |stat|
+        stats[round][stat] += game_summary[round][stat]
+      end
+    end
+
+    stats[:score] += game_summary[:score]
+    stats[:possible_score] += game_summary[:possible_score]
+
+    stats[:finals][:wrong] += 1 if game_summary[:final_status] == 1
+    stats[:finals][:right] += 1 if game_summary[:final_status] == 3
+  end
 end

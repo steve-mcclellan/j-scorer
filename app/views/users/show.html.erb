@@ -46,7 +46,7 @@
       <thead>
         <tr>
           <th>Topic</th>
-          <th>Times Used</th>
+          <th>Categories</th>
           <th>R1Right</th>
           <th>R1Wrong</th>
           <th>R1Pass</th>
@@ -62,6 +62,40 @@
         </tr>
       </thead>
       <tbody>
+        <!-- Universal Topic -->
+        <% summary = @user.all_game_summary %>
+        <tr>
+          <td>--ALL CATEGORIES--</td>
+          <td><%= @user.games.count * 13 %></td>
+          <td><%= summary[:round_one][:right] %></td>
+          <td><%= summary[:round_one][:wrong] %></td>
+          <td><%= summary[:round_one][:pass] %></td>
+          <td><%= summary[:round_two][:right] %></td>
+          <td><%= summary[:round_two][:wrong] %></td>
+          <td><%= summary[:round_two][:pass] %></td>
+          <td><%= ts = summary[:score] %></td>
+          <td><%= ps = summary[:possible_score] %></td>
+          <!-- Efficiency -->
+          <% if ps.zero? %>
+            <td></td>
+          <% else %>
+            <td>
+              <%= number_with_precision((ts / ps.to_f), precision: 5) %>
+            </td>
+          <% end %>
+          <td><%= fr = summary[:finals][:right] %></td>
+          <td><%= fw = summary[:finals][:wrong] %></td>
+          <!-- Final Success Rate -->
+          <% if (fr + fw).zero? %>
+            <td></td>
+          <% else %>
+            <td>
+              <%= number_with_precision((fr / (fr + fw).to_f), precision: 5) %>
+            </td>
+          <% end %>
+        </tr>
+
+        <!-- Individual Topics -->
         <% @user.topics.each do |topic| %>
           <% round_one = topic.round_one_stats %>
           <% round_two = topic.round_two_stats %>

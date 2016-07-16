@@ -29,4 +29,26 @@ class Game < ActiveRecord::Base
     (round_one_score * CURRENT_TOP_ROW_VALUES[0]) +
       (round_two_score * CURRENT_TOP_ROW_VALUES[1])
   end
+
+  def all_category_summary
+    stats = { round_one: { right: 0, wrong: 0, pass: 0 },
+              round_two: { right: 0, wrong: 0, pass: 0 },
+              score: 0, possible_score: 0, final_status: final_result }
+    round_one_categories.each { |cat| update_stats(stats, cat.summary, 1) }
+    round_two_categories.each { |cat| update_stats(stats, cat.summary, 2) }
+    stats
+  end
+
+  private
+
+  def update_stats(stats, category_summary, round)
+    current_round = [0, :round_one, :round_two][round]
+
+    [:right, :wrong, :pass].each do |stat|
+      stats[current_round][stat] += category_summary[stat]
+    end
+
+    stats[:score] += category_summary[:score]
+    stats[:possible_score] += category_summary[:possible_score]
+  end
 end
