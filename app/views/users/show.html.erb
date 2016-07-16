@@ -3,7 +3,7 @@
 <div id="stats-area">
   <div class="k-box">
     <p>
-    Hello there, early adopter! This is a small taste of the kinds of stats that will be available as development continues. Much, much more is coming, including a complete overhaul of the "By&nbsp;topic" tab. Is there a stat you'd like to see? Drop me a line at <a class="nowrap" href="mailto:<%= ENV['SUPPORT_ADDRESS'] %>"><%= ENV['SUPPORT_ADDRESS'] %></a>.
+    <%= random_greeting %>, early adopter! This is a small taste of the kinds of stats that will be available as development continues. Much, much more is coming, including a complete overhaul of the "By&nbsp;topic" tab. Is there a stat you'd like to see? Drop me a line at <a class="nowrap" href="mailto:<%= ENV['SUPPORT_ADDRESS'] %>"><%= ENV['SUPPORT_ADDRESS'] %></a>.
     </p>
   </div>
   <ul>
@@ -140,47 +140,3 @@
     </table>
   </div>
 </div>
-
-<script>
-  $( function() {
-    $( "#stats-area" ).tabs({
-      // Commented out as no Ajax requests are being made yet.
-      // beforeLoad: function( event, ui ) {
-      //   ui.jqXHR.fail( function() {
-      //     ui.panel.html(
-      //       "Couldn't load this tab. Please try again later." );
-      //   });
-      // }
-    });
-  });
-</script>
-
-<script>
-  $( function() {
-    // Make table sortable. Initialize default sort to
-    // [ leftmost column, descending ]. Prevent meaningless attempts
-    // to sort by "Actions" column (currently in position 3).
-    $( "#gameTable" ).tablesorter({
-      sortList: [[0,1]],
-      headers: {
-        3: { sorter: false }
-      }
-    });
-
-    $( "#gameTable" ).stickyTableHeaders({
-      scrollableArea: $( '#stats-area' )
-    });
-  });
-</script>
-
-<script>
-  $( function() {
-    $( "#topicTable" ).tablesorter({
-      sortList: [[0,0]]
-    });
-
-    $( "#topicTable" ).stickyTableHeaders({
-      scrollableArea: $( '#stats-area' )
-    });
-  });
-</script>
