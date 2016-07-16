@@ -1,6 +1,11 @@
 <% provide(:title, 'Stats') %>
 
 <div id="stats-area">
+  <div class="k-box">
+    <p>
+    <%= random_greeting %>, early adopter! This is a small taste of the kinds of stats that will be available as development continues. Much, much more is coming, including a complete overhaul of the "By&nbsp;topic" tab. Is there a stat you'd like to see? Drop me a line at <a class="nowrap" href="mailto:<%= ENV['SUPPORT_ADDRESS'] %>"><%= ENV['SUPPORT_ADDRESS'] %></a>.
+    </p>
+  </div>
   <ul>
     <li><a href="#games">By game</a></li>
     <li><a href="#topics">By topic</a></li>
@@ -46,7 +51,7 @@
       <thead>
         <tr>
           <th>Topic</th>
-          <th>Times Used</th>
+          <th>Categories</th>
           <th>R1Right</th>
           <th>R1Wrong</th>
           <th>R1Pass</th>
@@ -62,6 +67,40 @@
         </tr>
       </thead>
       <tbody>
+        <!-- Universal Topic -->
+        <% summary = @user.all_game_summary %>
+        <tr>
+          <td>--ALL CATEGORIES--</td>
+          <td><%= @user.games.count * 13 %></td>
+          <td><%= summary[:round_one][:right] %></td>
+          <td><%= summary[:round_one][:wrong] %></td>
+          <td><%= summary[:round_one][:pass] %></td>
+          <td><%= summary[:round_two][:right] %></td>
+          <td><%= summary[:round_two][:wrong] %></td>
+          <td><%= summary[:round_two][:pass] %></td>
+          <td><%= ts = summary[:score] %></td>
+          <td><%= ps = summary[:possible_score] %></td>
+          <!-- Efficiency -->
+          <% if ps.zero? %>
+            <td></td>
+          <% else %>
+            <td>
+              <%= number_with_precision((ts / ps.to_f), precision: 5) %>
+            </td>
+          <% end %>
+          <td><%= fr = summary[:finals][:right] %></td>
+          <td><%= fw = summary[:finals][:wrong] %></td>
+          <!-- Final Success Rate -->
+          <% if (fr + fw).zero? %>
+            <td></td>
+          <% else %>
+            <td>
+              <%= number_with_precision((fr / (fr + fw).to_f), precision: 5) %>
+            </td>
+          <% end %>
+        </tr>
+
+        <!-- Individual Topics -->
         <% @user.topics.each do |topic| %>
           <% round_one = topic.round_one_stats %>
           <% round_two = topic.round_two_stats %>
@@ -101,39 +140,3 @@
     </table>
   </div>
 </div>
-
-<script>
-  $( function() {
-    $( "#stats-area" ).tabs({
-      // Commented out as no Ajax requests are being made yet.
-      // beforeLoad: function( event, ui ) {
-      //   ui.jqXHR.fail( function() {
-      //     ui.panel.html(
-      //       "Couldn't load this tab. Please try again later." );
-      //   });
-      // }
-    });
-  });
-</script>
-
-<script>
-  $( function() {
-    // Make table sortable. Initialize default sort to
-    // [ leftmost column, descending ]. Prevent meaningless attempts
-    // to sort by "Actions" column (currently in position 3).
-    $( "#gameTable" ).tablesorter({
-      sortList: [[0,1]],
-      headers: {
-        3: { sorter: false }
-      }
-    });
-  });
-</script>
-
-<script>
-  $( function() {
-    $( "#topicTable" ).tablesorter({
-      sortList: [[0,0]]
-    });
-  });
-</script>
