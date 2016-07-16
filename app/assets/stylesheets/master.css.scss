@@ -263,7 +263,7 @@ input {
 .j-box {
   color: white;
   background-color: $j-blue;
-  margin-top: 15px;
+  margin-top: 10px;
   border: 0.3vw solid $gameboard-color;
   border-radius: 4px;
 
@@ -282,6 +282,27 @@ input {
 }
 
 /* stats page */
+
+.k-box {
+  color: white;
+  background-color: $j-blue;
+  margin-bottom: 10px;
+  border: 0.3vw solid $gameboard-color;
+  border-radius: 4px;
+
+  p {
+    font-size: medium;
+  }
+
+  a {
+    color: $j-yellow;
+
+    &:hover {
+      color: white;
+      text-decoration: none;
+    }
+  }
+}
 
 #stats-area {
   height: 100%;
