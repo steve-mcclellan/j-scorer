@@ -8,9 +8,6 @@
 
   <div class="col-xs-10 col-xs-offset-1 booyah-box">
     <h2>J! Scorer - What, Why, and How</h2>
-    <p>
-    <em>Screenshots coming soon.</em>
-    </p>
     <br />
     <p>
     The J! Scorer makes it easy for prospective <em>Jeopardy!</em> contestants to play along with the show and keep track of their training progress.
@@ -24,21 +21,27 @@
     The <%= link_to 'game page', games_path %> is where the action is.
     </p>
     <br />
+    <%= image_tag "game_page.png", class: 'img-responsive center-block' %>
+    <br />
     <p>
     As on the show, the blue boxes at the top of the board are where the category names go. As the categories are revealed on the show, type in a bit of the name - enough to find the proper column when a clue is selected. (This area is for your reference only, and has no effect on any stats.)
     </p>
     <br />
     <p>
-    When a contestant selects a clue, click on (or touch) the appropriate box. This will bring up an overlay with several buttons. Click on <strong>Right</strong> or <strong>Wrong</strong> as appropriate for your response, or <strong>Pass</strong> if you chose to <a href="http://j-archive.com/help.php#stayclam" target="_blank">STAY CLAM</a>. When a Daily Double is revealed, tick the <strong>DD</strong> checkbox. The <strong>NR</strong> button is for any clues that go unrevealed.
+    When a contestant selects a clue, click on (or touch) the appropriate box. This will bring up an overlay with several buttons. Click on <strong>Right</strong> or <strong>Wrong</strong> as appropriate for your response, or <strong>Pass</strong> if you chose to <a href="http://j-archive.com/help.php#stayclam" target="_blank">STAY CLAM</a>. When a Daily Double is uncovered, tick the <strong>DD</strong> checkbox. The <strong>NR</strong> button is for any clues that go unrevealed.
+    </p>
+    <br />
+    <%= image_tag "clue_overlay.png", class: 'img-responsive center-block' %>
+    <br />
+    <p>
+    If you plan on saving your game, at the conclusion of each round, you can enter zero or more custom <strong>topics</strong> for each category in the white box between the category name and the clue boxes. (Separate multiple topics with commas.) After your game has been saved, your results from that category will be added to your totals for each topic on the <%= link_to 'stats page', stats_path %>.
     </p>
     <br />
     <p>
-    If you plan on saving your game, at the conclusion of each round, you can enter zero or more custom <strong>topics</strong> for each category in the white text box between the category name and the clue boxes. (Separate multiple topics with commas.) After your game has been saved, your results from that category will be added to your totals for each topic on the <%= link_to 'stats page', stats_path %>.
+    (For example, if the category is BEFORE &amp; AFTER, you might assign topics <em>Wordplay, General Knowledge</em>. If the category is SHAKESPEARE, your topics might be <em>Entertainment, Highbrow, Plays, Shakespeare</em>. For best results, use whatever comes naturally to you; consistency is the key to good, useful stats.)
     </p>
     <br />
-    <p>
-    (For example, if the category is BEFORE &amp; AFTER, you might assign topics <em>Wordplay, General Knowledge</em>. If the category is THE <u>BILLBOARD</u> HOT 100, your topics might be <em>Entertainment, Lowbrow, Popular Music</em>. For best results, use whatever comes naturally to you; consistency is the key to good, useful stats.)
-    </p>
+    <%= image_tag "topic_and_round_links.png", class: 'img-responsive center-block' %>
     <br />
     <p>
     Navigate between rounds with the links below the scoreboard.
@@ -47,6 +50,8 @@
     <p>
     For the Final clue, the category and topic areas work as before. Use the large <strong>Right</strong> or <strong>Wrong</strong> button to record your result. A check mark or an X will appear next to your score, as appropriate.
     </p>
+    <br />
+    <%= image_tag "final_overlay.png", class: 'img-responsive center-block' %>
     <br />
     <p>
     At the bottom of the Final area, there are places to enter the contestants' results. In the future, this will enable you to view your Final stats broken down by contestant results, which can come in handy if you find yourself facing, say, <a href="http://j-archive.com/help.php#strattonsdilemma" target="_blank">Stratton's Dilemma</a>.
