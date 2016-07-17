@@ -7,6 +7,6 @@ module ApplicationHelper
 
   def random_greeting
     ['Hello there', 'Greetings', 'Hi', 'Salutations', 'Hi there', 'Howdy',
-     'Hey there', 'Welcome'].sample
+     'Hey there', 'Welcome', 'Hello'].sample
   end
 end

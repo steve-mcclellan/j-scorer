@@ -25,7 +25,7 @@ table.tablesorter tbody td {
 	background-color: #FFF;
 	vertical-align: top;
 }
-table.tablesorter tbody tr.odd td {
+table.tablesorter tbody tr:nth-child(odd) td {
 	background-color:#F0F0F6;
 }
 table.tablesorter thead tr .headerSortUp {
