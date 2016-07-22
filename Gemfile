@@ -63,6 +63,8 @@ gem 'rails_12factor', group: :production
 # Use better webserver than Rails default
 gem 'puma'
 # Without an initializer file, use default timeout of 15 seconds
+# HACK: Currently set to 60 seconds in config/initializers/rack_timeout.rb
+# Note: This is greater than Heroku's mandatory 30-second timeout.
 gem 'rack-timeout'
 
 # Use Bootstrap to make things look prettier
