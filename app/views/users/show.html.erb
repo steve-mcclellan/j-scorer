@@ -3,13 +3,53 @@
 <div id="stats-area">
   <div class="k-box">
     <p>
-    <%= random_greeting %>, early adopter! This is a small taste of the kinds of stats that will be available as development continues. Much, much more is coming, including a complete overhaul of the "By&nbsp;topic" tab. Is there a stat you'd like to see? Drop me a line at <a class="nowrap" href="mailto:<%= ENV['SUPPORT_ADDRESS'] %>"><%= ENV['SUPPORT_ADDRESS'] %></a>.
+    <%= random_greeting %>, early adopter! This is a small taste of the kinds of stats that will be available as development continues. Much, much more is coming, including complete overhauls of the "Overview" and "Topics" tabs. Is there a stat you'd like to see? Drop me a line at <a class="nowrap" href="mailto:<%= ENV['SUPPORT_ADDRESS'] %>"><%= ENV['SUPPORT_ADDRESS'] %></a>.
     </p>
   </div>
   <ul>
-    <li><a href="#games">By game</a></li>
-    <li><a href="#topics">By topic</a></li>
+    <li><a href="#overview">Overview</a></li>
+    <li><a href="#games">Games</a></li>
+    <li><a href="#topics">Topics</a></li>
   </ul>
+
+  <div id="overview">
+    <h2>Stats overview for <%= @user.email %>:</h2>
+    <br />
+    <% stats = @user.all_game_summary %>
+    <p>Games played: <%= gp = @user.games.count %></p>
+    <p>Total score: <%= number_to_currency(@user.total_score, precision: 0) %></p>
+    <% unless gp.zero? %>
+      <p>Average score: <%= number_to_currency(@user.average_score) %></p>
+    <% end %>
+    <p>Clues right: <%= stats[:round_one][:right] + stats[:round_two][:right] %></p>
+    <p>Clues wrong: <%= stats[:round_one][:wrong] + stats[:round_two][:wrong] %></p>
+    <p>Clues passed: <%= stats[:round_one][:pass] + stats[:round_two][:pass] %></p>
+    <p>
+      Round One DDs: <%= stats[:round_one][:dd_right] %>/<%= r1dds =
+        stats[:round_one][:dd_right] + stats[:round_one][:dd_wrong] %>
+      <% unless r1dds.zero? %>
+        (<%= number_to_percentage(
+          100 * stats[:round_one][:dd_right].to_f / r1dds, precision: 2) %>)
+      <% end %>
+    </p>
+    <p>
+      Round Two DDs: <%= stats[:round_two][:dd_right] %>/<%= r2dds =
+        stats[:round_two][:dd_right] + stats[:round_two][:dd_wrong] %>
+      <% unless r2dds.zero? %>
+        (<%= number_to_percentage(
+          100 * stats[:round_two][:dd_right].to_f / r2dds, precision: 2) %>)
+      <% end %>
+    </p>
+    <p>
+      Finals: <%= stats[:finals][:right] %>/<%= fs =
+        stats[:finals][:right] + stats[:finals][:wrong] %>
+      <% unless fs.zero? %>
+        (<%= number_to_percentage(
+          100 * stats[:finals][:right].to_f / fs, precision: 2) %>)
+      <% end %>
+    </p>
+
+  </div>
 
   <div id="games">
     <h2>Games played by <%= @user.email %> (<%= @user.games.count %>):</h2>
@@ -78,8 +118,10 @@
           <td><%= summary[:round_two][:right] %></td>
           <td><%= summary[:round_two][:wrong] %></td>
           <td><%= summary[:round_two][:pass] %></td>
-          <td><%= ts = summary[:score] %></td>
-          <td><%= ps = summary[:possible_score] %></td>
+          <td><%= ts = summary[:round_one][:score] +
+                       summary[:round_two][:score] %></td>
+          <td><%= ps = summary[:round_one][:possible_score] +
+                       summary[:round_two][:possible_score] %></td>
           <!-- Efficiency -->
           <% if ps.zero? %>
             <td></td>

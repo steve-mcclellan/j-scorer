@@ -31,9 +31,11 @@ class Game < ActiveRecord::Base
   end
 
   def all_category_summary
-    stats = { round_one: { right: 0, wrong: 0, pass: 0 },
-              round_two: { right: 0, wrong: 0, pass: 0 },
-              score: 0, possible_score: 0, final_status: final_result }
+    stats = { round_one: { right: 0, wrong: 0, pass: 0, dd: [],
+                           score: 0, possible_score: 0 },
+              round_two: { right: 0, wrong: 0, pass: 0, dd: [],
+                           score: 0, possible_score: 0 },
+              final_status: final_result }
     round_one_categories.each { |cat| update_stats(stats, cat.summary, 1) }
     round_two_categories.each { |cat| update_stats(stats, cat.summary, 2) }
     stats
@@ -48,7 +50,12 @@ class Game < ActiveRecord::Base
       stats[current_round][stat] += category_summary[stat]
     end
 
-    stats[:score] += category_summary[:score]
-    stats[:possible_score] += category_summary[:possible_score]
+    if category_summary[:dd_position]
+      stats[current_round][:dd] << [category_summary[:dd_position],
+                                    category_summary[:dd_result]]
+    end
+
+    stats[current_round][:score] += category_summary[:score]
+    stats[current_round][:possible_score] += category_summary[:possible_score]
   end
 end

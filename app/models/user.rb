@@ -62,12 +62,34 @@ class User < ActiveRecord::Base
   end
 
   def all_game_summary
-    stats = { round_one: { right: 0, wrong: 0, pass: 0 },
-              round_two: { right: 0, wrong: 0, pass: 0 },
-              finals: { right: 0, wrong: 0 },
-              score: 0, possible_score: 0 }
+    stats = { round_one: { right: 0, wrong: 0, pass: 0,
+                           dd_right: 0, dd_wrong: 0,
+                           score: 0, possible_score: 0 },
+              round_two: { right: 0, wrong: 0, pass: 0,
+                           dd_right: 0, dd_wrong: 0,
+                           score: 0, possible_score: 0 },
+              finals: { right: 0, wrong: 0 } }
     games.each { |game| update_stats(stats, game.all_category_summary) }
     stats
+  end
+
+  def total_score
+    stats = all_game_summary
+    stats[:round_one][:score] + stats[:round_two][:score]
+  end
+
+  def average_score
+    games_played = games.count
+    return nil if games_played.zero?
+    total_score / games_played.to_f
+  end
+
+  def efficiency
+    stats = all_game_summary
+    possible_score = stats[:round_one][:possible_score] +
+                     stats[:round_two][:possible_score]
+    return nil if possible_score.zero?
+    total_score / possible_score.to_f
   end
 
   private
@@ -77,11 +99,25 @@ class User < ActiveRecord::Base
       [:right, :wrong, :pass].each do |stat|
         stats[round][stat] += game_summary[round][stat]
       end
+
+      add_dd_stats(stats, game_summary, round)
+      stats[round][:score] += game_summary[round][:score]
+      stats[round][:possible_score] += game_summary[round][:possible_score]
     end
 
-    stats[:score] += game_summary[:score]
-    stats[:possible_score] += game_summary[:possible_score]
+    add_final_stats(stats, game_summary)
+  end
 
+  def add_dd_stats(stats, game_summary, round)
+    game_summary[round][:dd].each do |_row, result|
+      case result
+      when :correct then stats[round][:dd_right] += 1
+      when :incorrect then stats[round][:dd_wrong] += 1
+      end
+    end
+  end
+
+  def add_final_stats(stats, game_summary)
     stats[:finals][:wrong] += 1 if game_summary[:final_status] == 1
     stats[:finals][:right] += 1 if game_summary[:final_status] == 3
   end
