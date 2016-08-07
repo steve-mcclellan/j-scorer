@@ -245,6 +245,36 @@ $( ".games-new, .games-edit" ).ready( function() {
     scores = [unadjustedScores[0], unadjustedScores[1]];
     updateScoreboard();
     updateFinalSymbol();
+    updateRoundLinks( currentRound );
+  }
+
+  function updateRoundLinks( currentRound ) {
+    const r1link = '<a id="round-one-link" tabindex=100>Round One</a>';
+    const r2link = '<a id="round-two-link" tabindex=100>Round Two</a>';
+    const fjlink = '<a id="final-round-link" tabindex=100>Final Round</a>';
+    switch ( currentRound ) {
+      case "round_one_categories":
+        $r1slot.html( "<b>Round One</b>" );
+        $r2slot.html( r2link );
+        $fjslot.html( fjlink );
+        break;
+      case "round_two_categories":
+        $r1slot.html( r1link );
+        $r2slot.html( "<b>Round Two</b>" );
+        $fjslot.html( fjlink );
+        break;
+      case "final":
+        $r1slot.html( r1link );
+        $r2slot.html( r2link );
+        $fjslot.html( "<b>Final Round</b>" );
+        break;
+      default:
+        $r1slot.html( r1link );
+        $r2slot.html( r2link );
+        $fjslot.html( fjlink );
+        break;
+    }
+    activateRoundLinks();
   }
 
   function populateFinal() {
@@ -457,6 +487,27 @@ $( ".games-new, .games-edit" ).ready( function() {
     });
   }
 
+  function activateRoundLinks() {
+    var $roundOneLink = $( "#round-one-link" );
+    var $roundTwoLink = $( "#round-two-link" );
+    var $finalRoundLink = $( "#final-round-link" );
+
+    $roundOneLink.on( "click", function() {
+      currentGameData["activeRound"] = "round_one_categories";
+      updateRound();
+    });
+
+    $roundTwoLink.on( "click", function() {
+      currentGameData["activeRound"] = "round_two_categories";
+      updateRound();
+    });
+
+    $finalRoundLink.on( "click", function() {
+      currentGameData["activeRound"] = "final";
+      updateRound();
+    });
+  }
+
 
   // "scores" is of the form [roundOneScore, roundTwoScore], where each clue
   // is worth 1 to 5 points. Multiplying by the round's topRowValue will yield
@@ -495,9 +546,9 @@ $( ".games-new, .games-edit" ).ready( function() {
   var $buttonFJRight = $( "#button-final-right" );
   var $buttonFJWrong = $( "#button-final-wrong" );
 
-  var $roundOneLink = $( "#round-one-link" );
-  var $roundTwoLink = $( "#round-two-link" );
-  var $finalRoundLink = $( "#final-round-link" );
+  var $r1slot = $( "#r1slot" );
+  var $r2slot = $( "#r2slot" );
+  var $fjslot = $( "#fjslot" );
 
   var $showDatePicker = $( "#show-date-picker" );
   var $showDateValue = $( "#show-date-picker input" );
@@ -592,21 +643,6 @@ $( ".games-new, .games-edit" ).ready( function() {
 
     currentGame["final"][$input.name] = newValue;
     updateCookies( newValue !== originalValue );
-  });
-
-  $roundOneLink.on( "click", function() {
-    currentGameData["activeRound"] = "round_one_categories";
-    updateRound();
-  });
-
-  $roundTwoLink.on( "click", function() {
-    currentGameData["activeRound"] = "round_two_categories";
-    updateRound();
-  });
-
-  $finalRoundLink.on( "click", function() {
-    currentGameData["activeRound"] = "final";
-    updateRound();
   });
 
   $deleteGameLink.on( "click", function() {
