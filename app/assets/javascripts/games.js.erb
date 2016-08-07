@@ -563,12 +563,10 @@ $( ".games-new, .games-edit" ).ready( function() {
   function updateCategoryIds( dataObj ) {
     var idArray = dataObj["ids"];
     for( var i = 0; i < 6; i++ ) {
-      currentId = idArray.shift();
-      currentGame["round_one_categories"][i]["id"] = currentId;
+      currentGame["round_one_categories"][i]["id"] = idArray.shift();
     }
-    for( var i = 0; i < 6; i++ ) {
-      currentId = idArray.shift();
-      currentGame["round_two_categories"][i]["id"] = currentId;
+    for( i = 0; i < 6; i++ ) {
+      currentGame["round_two_categories"][i]["id"] = idArray.shift();
     }
     currentGame["final"]["id"] = idArray.shift();
     setCookie( "game", currentGame );
