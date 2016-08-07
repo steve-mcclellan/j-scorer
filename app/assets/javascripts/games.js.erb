@@ -371,18 +371,24 @@ $( ".games-new, .games-edit" ).ready( function() {
     if ( currentRound === "final" ) {
       $fj.show( "scale", 200, function() {
         $board.css( 'visibility', 'hidden' );
-        setTimeout( function() {
-          $( "#final-cat-title" ).trigger( "click" );
-        }, 0);
+
+        // Temporarily(?) removing the pre-selection of the (first) category
+        // title when the round is updated, as this creates a bit of
+        // unpleasantness on mobile devices with on-screen keyboards.
+
+        // setTimeout( function() {
+        //   $( "#final-cat-title" ).trigger( "click" );
+        // }, 0);
       });
       $fj.css( 'display', 'flex' );
 
     } else {
       $fj.hide( "scale", 200 );
       $board.css( 'visibility', 'visible');
-      setTimeout( function() {
-        $( "#cat-title-1" ).trigger( "click" );
-      }, 0);
+
+      // setTimeout( function() {
+      //   $( "#cat-title-1" ).trigger( "click" );
+      // }, 0);
     }
   }
 
