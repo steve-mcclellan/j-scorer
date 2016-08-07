@@ -7,10 +7,12 @@
   <div class='col-md-6 col-md-offset-3'>
     <%= form_for(:password_reset, url: forgot_path) do |f| %>
       <%= f.label :email, 'Email address' %>
-      <%= f.email_field :email, class: 'form-control' %>
+      <%= f.email_field :email, class: 'form-control',
+                                spellcheck: false,
+                                tabindex: 1 %>
       <br />
 
-      <%= f.submit 'Submit', class: 'btn btn-primary' %>
+      <%= f.submit 'Submit', class: 'btn btn-primary', tabindex: 2 %>
     <% end %>
   </div>
 </div>

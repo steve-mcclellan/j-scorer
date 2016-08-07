@@ -245,6 +245,36 @@ $( ".games-new, .games-edit" ).ready( function() {
     scores = [unadjustedScores[0], unadjustedScores[1]];
     updateScoreboard();
     updateFinalSymbol();
+    updateRoundLinks( currentRound );
+  }
+
+  function updateRoundLinks( currentRound ) {
+    const r1link = '<a id="round-one-link" tabindex=100>Round One</a>';
+    const r2link = '<a id="round-two-link" tabindex=100>Round Two</a>';
+    const fjlink = '<a id="final-round-link" tabindex=100>Final Round</a>';
+    switch ( currentRound ) {
+      case "round_one_categories":
+        $r1slot.html( "<b>Round One</b>" );
+        $r2slot.html( r2link );
+        $fjslot.html( fjlink );
+        break;
+      case "round_two_categories":
+        $r1slot.html( r1link );
+        $r2slot.html( "<b>Round Two</b>" );
+        $fjslot.html( fjlink );
+        break;
+      case "final":
+        $r1slot.html( r1link );
+        $r2slot.html( r2link );
+        $fjslot.html( "<b>Final Round</b>" );
+        break;
+      default:
+        $r1slot.html( r1link );
+        $r2slot.html( r2link );
+        $fjslot.html( fjlink );
+        break;
+    }
+    activateRoundLinks();
   }
 
   function populateFinal() {
@@ -341,18 +371,24 @@ $( ".games-new, .games-edit" ).ready( function() {
     if ( currentRound === "final" ) {
       $fj.show( "scale", 200, function() {
         $board.css( 'visibility', 'hidden' );
-        setTimeout( function() {
-          $( "#final-cat-title" ).trigger( "click" );
-        }, 0);
+
+        // Temporarily(?) removing the pre-selection of the (first) category
+        // title when the round is updated, as this creates a bit of
+        // unpleasantness on mobile devices with on-screen keyboards.
+
+        // setTimeout( function() {
+        //   $( "#final-cat-title" ).trigger( "click" );
+        // }, 0);
       });
       $fj.css( 'display', 'flex' );
 
     } else {
       $fj.hide( "scale", 200 );
       $board.css( 'visibility', 'visible');
-      setTimeout( function() {
-        $( "#cat-title-1" ).trigger( "click" );
-      }, 0);
+
+      // setTimeout( function() {
+      //   $( "#cat-title-1" ).trigger( "click" );
+      // }, 0);
     }
   }
 
@@ -457,6 +493,85 @@ $( ".games-new, .games-edit" ).ready( function() {
     });
   }
 
+  function activateRoundLinks() {
+    var $roundOneLink = $( "#round-one-link" );
+    var $roundTwoLink = $( "#round-two-link" );
+    var $finalRoundLink = $( "#final-round-link" );
+
+    $roundOneLink.on( "click", function() {
+      currentGameData["activeRound"] = "round_one_categories";
+      updateRound();
+    });
+
+    $roundTwoLink.on( "click", function() {
+      currentGameData["activeRound"] = "round_two_categories";
+      updateRound();
+    });
+
+    $finalRoundLink.on( "click", function() {
+      currentGameData["activeRound"] = "final";
+      updateRound();
+    });
+  }
+
+  function disableSaveLink( message ) {
+    $saveLink.data( "disabled", true ).addClass( "disabled" ).text( message );
+  }
+
+  function enableSaveLink() {
+    $saveLink.data( "disabled", false ).removeClass( "disabled" )
+                                       .text( "Save game" );
+  }
+
+  function afterSaveHandler( dataObj ) {
+    if ( dataObj.errors ) {
+      saveErrorHandler( dataObj.errors );
+      enableSaveLink();
+      return;
+    }
+    updateCategoryIds( dataObj );
+
+    currentGameData["modified"] = false;
+    setCookie( "gameData", currentGameData );
+    disableSaveLink( "Saved!" );
+  }
+
+  function saveErrorHandler( errors ) {
+    if ( errors["sixths.board_position"] &&
+         errors["sixths.board_position"][0] === "already exists" ) {
+      alert( 'Cannot save. A different game with show date "' +
+             currentGame.show_date +
+             '" already exists. If you want to modify or delete that game, ' +
+             'you can do so via the Stats link above (click the Games ' +
+             'tab). To save this game, please enter a unique show date.' );
+    } else {
+      console.log( "Unexpected error:" );
+      console.dir( errors );
+      console.log( 'Please note the name of the array (to the left of "' +
+                   'Array[x]"), and the contents of any "quoted strings" ' +
+                   'that are shown when you click on it. ' +
+                   '("length" and "__proto__" can be ignored.) ' +
+                   'Please email <%= ENV['SUPPORT_ADDRESS'] %> with this ' +
+                   'information. Thanks!' );
+      alert( "An unexpected error has occurred; the game cannot be " +
+             "saved. If you know how, please visit the JavaScript console in " +
+             "your browser, and follow the instructions there to report the " +
+             "problem." );
+    }
+  }
+
+  function updateCategoryIds( dataObj ) {
+    var idArray = dataObj["ids"];
+    for( var i = 0; i < 6; i++ ) {
+      currentGame["round_one_categories"][i]["id"] = idArray.shift();
+    }
+    for( i = 0; i < 6; i++ ) {
+      currentGame["round_two_categories"][i]["id"] = idArray.shift();
+    }
+    currentGame["final"]["id"] = idArray.shift();
+    setCookie( "game", currentGame );
+  }
+
 
   // "scores" is of the form [roundOneScore, roundTwoScore], where each clue
   // is worth 1 to 5 points. Multiplying by the round's topRowValue will yield
@@ -495,9 +610,9 @@ $( ".games-new, .games-edit" ).ready( function() {
   var $buttonFJRight = $( "#button-final-right" );
   var $buttonFJWrong = $( "#button-final-wrong" );
 
-  var $roundOneLink = $( "#round-one-link" );
-  var $roundTwoLink = $( "#round-two-link" );
-  var $finalRoundLink = $( "#final-round-link" );
+  var $r1slot = $( "#r1slot" );
+  var $r2slot = $( "#r2slot" );
+  var $fjslot = $( "#fjslot" );
 
   var $showDatePicker = $( "#show-date-picker" );
   var $showDateValue = $( "#show-date-picker input" );
@@ -594,21 +709,6 @@ $( ".games-new, .games-edit" ).ready( function() {
     updateCookies( newValue !== originalValue );
   });
 
-  $roundOneLink.on( "click", function() {
-    currentGameData["activeRound"] = "round_one_categories";
-    updateRound();
-  });
-
-  $roundTwoLink.on( "click", function() {
-    currentGameData["activeRound"] = "round_two_categories";
-    updateRound();
-  });
-
-  $finalRoundLink.on( "click", function() {
-    currentGameData["activeRound"] = "final";
-    updateRound();
-  });
-
   $deleteGameLink.on( "click", function() {
     initializeNewGame();
   });
@@ -628,6 +728,8 @@ $( ".games-new, .games-edit" ).ready( function() {
   $saveLink.on( "click", function() {
     // Make the Ajax request iff the save link is not disabled.
     if ( !$saveLink.data( "disabled" ) ) {
+      disableSaveLink( "Saving..." );
+
       $.ajax({
         type: "POST",
         url: "/save",
@@ -647,65 +749,6 @@ $( ".games-new, .games-edit" ).ready( function() {
     format: "YYYY-MM-DD h:mma"
   });
   $datePlayedPicker.data("DateTimePicker").timeZone(undefined);
-
-  function disableSaveLink( message ) {
-    $saveLink.data( "disabled", true ).addClass( "disabled" ).text( message );
-  }
-
-  function enableSaveLink() {
-    $saveLink.data( "disabled", false ).removeClass( "disabled" )
-                                       .text( "Save game" );
-  }
-
-  function afterSaveHandler( dataObj ) {
-    if ( dataObj.errors ) {
-      saveErrorHandler( dataObj.errors );
-      return;
-    }
-    updateCategoryIds( dataObj );
-
-    currentGameData["modified"] = false;
-    setCookie( "gameData", currentGameData );
-    disableSaveLink( "Saved!" );
-  }
-
-  function saveErrorHandler( errors ) {
-    if ( errors["sixths.board_position"] &&
-         errors["sixths.board_position"][0] === "already exists" ) {
-      alert( 'Cannot save. A different game with show date "' +
-             currentGame.show_date +
-             '" already exists. If you want to modify or delete that game, ' +
-             'you can do so via the Stats link above. To save this game, ' +
-             'please enter a unique show date.' );
-    } else {
-      console.log( "Unexpected error:" );
-      console.dir( errors );
-      console.log( 'Please note the name of the array (to the left of "' +
-                   'Array[x]"), and the contents of any "quoted strings" ' +
-                   'that are shown when you click on it. ' +
-                   '("length" and "__proto__" can be ignored.) ' +
-                   'Please email <%= ENV['SUPPORT_ADDRESS'] %> with this ' +
-                   'information. Thanks!' );
-      alert( "An unexpected error has occurred; the game cannot be " +
-             "saved. If you know how, please visit the JavaScript console in " +
-             "your browser, and follow the instructions there to report the " +
-             "problem." );
-    }
-  }
-
-  function updateCategoryIds( dataObj ) {
-    var idArray = dataObj["ids"];
-    for( var i = 0; i < 6; i++ ) {
-      currentId = idArray.shift();
-      currentGame["round_one_categories"][i]["id"] = currentId;
-    }
-    for( var i = 0; i < 6; i++ ) {
-      currentId = idArray.shift();
-      currentGame["round_two_categories"][i]["id"] = currentId;
-    }
-    currentGame["final"]["id"] = idArray.shift();
-    setCookie( "game", currentGame );
-  }
 
 
   // Category title and topic entry
