@@ -514,6 +514,66 @@ $( ".games-new, .games-edit" ).ready( function() {
     });
   }
 
+  function disableSaveLink( message ) {
+    $saveLink.data( "disabled", true ).addClass( "disabled" ).text( message );
+  }
+
+  function enableSaveLink() {
+    $saveLink.data( "disabled", false ).removeClass( "disabled" )
+                                       .text( "Save game" );
+  }
+
+  function afterSaveHandler( dataObj ) {
+    if ( dataObj.errors ) {
+      saveErrorHandler( dataObj.errors );
+      enableSaveLink();
+      return;
+    }
+    updateCategoryIds( dataObj );
+
+    currentGameData["modified"] = false;
+    setCookie( "gameData", currentGameData );
+    disableSaveLink( "Saved!" );
+  }
+
+  function saveErrorHandler( errors ) {
+    if ( errors["sixths.board_position"] &&
+         errors["sixths.board_position"][0] === "already exists" ) {
+      alert( 'Cannot save. A different game with show date "' +
+             currentGame.show_date +
+             '" already exists. If you want to modify or delete that game, ' +
+             'you can do so via the Stats link above (click the Games ' +
+             'tab). To save this game, please enter a unique show date.' );
+    } else {
+      console.log( "Unexpected error:" );
+      console.dir( errors );
+      console.log( 'Please note the name of the array (to the left of "' +
+                   'Array[x]"), and the contents of any "quoted strings" ' +
+                   'that are shown when you click on it. ' +
+                   '("length" and "__proto__" can be ignored.) ' +
+                   'Please email <%= ENV['SUPPORT_ADDRESS'] %> with this ' +
+                   'information. Thanks!' );
+      alert( "An unexpected error has occurred; the game cannot be " +
+             "saved. If you know how, please visit the JavaScript console in " +
+             "your browser, and follow the instructions there to report the " +
+             "problem." );
+    }
+  }
+
+  function updateCategoryIds( dataObj ) {
+    var idArray = dataObj["ids"];
+    for( var i = 0; i < 6; i++ ) {
+      currentId = idArray.shift();
+      currentGame["round_one_categories"][i]["id"] = currentId;
+    }
+    for( var i = 0; i < 6; i++ ) {
+      currentId = idArray.shift();
+      currentGame["round_two_categories"][i]["id"] = currentId;
+    }
+    currentGame["final"]["id"] = idArray.shift();
+    setCookie( "game", currentGame );
+  }
+
 
   // "scores" is of the form [roundOneScore, roundTwoScore], where each clue
   // is worth 1 to 5 points. Multiplying by the round's topRowValue will yield
@@ -691,66 +751,6 @@ $( ".games-new, .games-edit" ).ready( function() {
     format: "YYYY-MM-DD h:mma"
   });
   $datePlayedPicker.data("DateTimePicker").timeZone(undefined);
-
-  function disableSaveLink( message ) {
-    $saveLink.data( "disabled", true ).addClass( "disabled" ).text( message );
-  }
-
-  function enableSaveLink() {
-    $saveLink.data( "disabled", false ).removeClass( "disabled" )
-                                       .text( "Save game" );
-  }
-
-  function afterSaveHandler( dataObj ) {
-    if ( dataObj.errors ) {
-      saveErrorHandler( dataObj.errors );
-      enableSaveLink();
-      return;
-    }
-    updateCategoryIds( dataObj );
-
-    currentGameData["modified"] = false;
-    setCookie( "gameData", currentGameData );
-    disableSaveLink( "Saved!" );
-  }
-
-  function saveErrorHandler( errors ) {
-    if ( errors["sixths.board_position"] &&
-         errors["sixths.board_position"][0] === "already exists" ) {
-      alert( 'Cannot save. A different game with show date "' +
-             currentGame.show_date +
-             '" already exists. If you want to modify or delete that game, ' +
-             'you can do so via the Stats link above (click the Games ' +
-             'tab). To save this game, please enter a unique show date.' );
-    } else {
-      console.log( "Unexpected error:" );
-      console.dir( errors );
-      console.log( 'Please note the name of the array (to the left of "' +
-                   'Array[x]"), and the contents of any "quoted strings" ' +
-                   'that are shown when you click on it. ' +
-                   '("length" and "__proto__" can be ignored.) ' +
-                   'Please email <%= ENV['SUPPORT_ADDRESS'] %> with this ' +
-                   'information. Thanks!' );
-      alert( "An unexpected error has occurred; the game cannot be " +
-             "saved. If you know how, please visit the JavaScript console in " +
-             "your browser, and follow the instructions there to report the " +
-             "problem." );
-    }
-  }
-
-  function updateCategoryIds( dataObj ) {
-    var idArray = dataObj["ids"];
-    for( var i = 0; i < 6; i++ ) {
-      currentId = idArray.shift();
-      currentGame["round_one_categories"][i]["id"] = currentId;
-    }
-    for( var i = 0; i < 6; i++ ) {
-      currentId = idArray.shift();
-      currentGame["round_two_categories"][i]["id"] = currentId;
-    }
-    currentGame["final"]["id"] = idArray.shift();
-    setCookie( "game", currentGame );
-  }
 
 
   // Category title and topic entry
