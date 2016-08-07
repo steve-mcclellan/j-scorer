@@ -8,7 +8,9 @@
     <%= form_for(:session, url: login_path) do |f| %>
 
       <%= f.label :email, 'Email address' %>
-      <%= f.email_field :email, class: 'form-control', tabindex: 1 %>
+      <%= f.email_field :email, class: 'form-control',
+                                spellcheck: false,
+                                tabindex: 1 %>
 
       <%= f.label :password %>
       <%= link_to '(forgot password)', forgot_path, tabindex: 5 %>

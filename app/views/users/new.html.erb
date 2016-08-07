@@ -9,16 +9,19 @@
       <%= render 'shared/error_messages', object: f.object %>
 
       <%= f.label :email, "Email address" %>
-      <%= f.email_field :email, class: 'form-control' %>
+      <%= f.email_field :email, class: 'form-control',
+                                spellcheck: false,
+                                tabindex: 1 %>
 
       <%= f.label :password %>
-      <%= f.password_field :password, class: 'form-control' %>
+      <%= f.password_field :password, class: 'form-control', tabindex: 2 %>
 
       <%= f.label :password_confirmation, "Confirm password" %>
-      <%= f.password_field :password_confirmation, class: 'form-control' %>
+      <%= f.password_field :password_confirmation, class: 'form-control',
+                                                   tabindex: 3 %>
       <br />
 
-      <%= f.submit "Create account", class: 'btn btn-primary' %>
+      <%= f.submit "Create account", class: 'btn btn-primary', tabindex: 4 %>
     <% end %>
   </div>
 </div>
