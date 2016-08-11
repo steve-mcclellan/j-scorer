@@ -36,6 +36,49 @@ class GamesControllerTest < ActionController::TestCase
     assert_response :success
   end
 
+  test "should successfully destroy the correct user's game" do
+    log_in_here(@user)
+    assert_difference '@user.games.count', -1 do
+      delete :destroy, show_date: '1984-09-11'
+    end
+    assert_redirected_to stats_url
+  end
+
+  test 'should redirect destroy when not logged in' do
+    assert_no_difference 'Game.count' do
+      delete :destroy, show_date: '2005-05-25'
+    end
+    assert_redirected_to login_url
+  end
+
+  test "should redirect destroy if date doesn't correspond to a game by user" do
+    log_in_here(@user)
+    game = games(:steve)
+    assert_no_difference 'Game.count' do
+      delete :destroy, show_date: game.show_date
+    end
+    assert_redirected_to root_url
+  end
+
+  test 'should get json for valid date' do
+    log_in_here(@user)
+    get :json, show_date: games(:victoria)
+    assert_response :success
+    body = JSON.parse(response.body)
+    assert_equal 6, body['round_one_categories'][0]['result3']
+  end
+
+  test 'json action should return null for invalid date' do
+    log_in_here(@user)
+    get :json, show_date: '1956-11-26'
+    assert_response :success
+    assert_equal 'null', response.body
+  end
+
+  # TODO: Test the save action, including:
+  # * redirecting when not logged in
+  # * something for sixth IDs when show date changes
+
   # TODO: Move this to an integration test.
   # test 'should request game when logged-in user gives a date' do
   #   log_in_here(@user)
@@ -49,21 +92,5 @@ class GamesControllerTest < ActionController::TestCase
   #     post :create, game: { show_date: Time.zone.today, date_played: Time.zone.now }
   #   end
   #   assert_redirected_to login_url
-  # end
-
-  # test 'should redirect destroy when not logged in' do
-  #   assert_no_difference 'Game.count' do
-  #     delete :destroy, show_date: '2005-05-25'
-  #   end
-  #   assert_redirected_to login_url
-  # end
-
-  # test "should redirect destroy for wrong user's game" do
-  #   log_in_here(@user)
-  #   game = games(:steve)
-  #   assert_no_difference 'Game.count' do
-  #     delete :destroy, show_date: game.show_date
-  #   end
-  #   assert_redirected_to root_url
   # end
 end

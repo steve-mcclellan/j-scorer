@@ -45,7 +45,7 @@ class GamesController < ApplicationController
 
   def destroy
     @game.destroy
-    flash[:success] = 'Game deleted'
+    # flash[:success] = 'Game deleted'
     redirect_to request.referrer || stats_url
   end
 
@@ -75,7 +75,7 @@ class GamesController < ApplicationController
 
   def find_game
     @game = current_user.games.find_by(show_date: params[:show_date])
-    redirect_to root_url if @game.nil?
+    redirect_to request.referrer || root_url if @game.nil?
   end
 
   # rubocop:disable all
