@@ -1,0 +1,10 @@
+<%= render 'game_display' %>
+
+<div class='data-passer' data-showdate="<%= @date %>"
+                         data-existinggame="<%= @existing_game %>"></div>
+<br>
+<br>
+<br>
+<br>
+<h1>Passed date is <%= @date %></h1>
+<h2>Game exists? <%= @existing_game.present? %></h2>

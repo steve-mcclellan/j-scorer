@@ -1,13 +1,13 @@
 class GamesController < ApplicationController
-  before_action :logged_in_user, except: [:new]
-  before_action :correct_user, only: [:edit, :update, :destroy]
+  before_action :logged_in_user, except: [:game]
+  before_action :find_game, only: [:destroy]
 
-  def new
-    @game = Game.new
-    1.upto(6) { |i| @game.round_one_categories.build(board_position: i) }
-    1.upto(6) { |i| @game.round_two_categories.build(board_position: i) }
-    @game.build_final
-  end
+  # def new
+  #   @game = Game.new
+  #   1.upto(6) { |i| @game.round_one_categories.build(board_position: i) }
+  #   1.upto(6) { |i| @game.round_two_categories.build(board_position: i) }
+  #   @game.build_final
+  # end
 
   # def create
   #   @game = current_user.games.build(game_params)
@@ -19,9 +19,9 @@ class GamesController < ApplicationController
   #   end
   # end
 
-  def edit
-    # render json: @game
-  end
+  # def edit
+  #   render json: @game
+  # end
 
   # def update
   #   @game = current_user.games.find_by(show_date: params[:show_date])
@@ -31,6 +31,17 @@ class GamesController < ApplicationController
   #     redirect_to root_url
   #   end
   # end
+
+  def game
+    @date = Date.parse(params[:d])
+    @existing_game = current_user &&
+                     current_user.existing_game_date?(@date)
+  rescue ArgumentError, TypeError
+    # TypeError will be thrown if no date is given.
+    # ArgumentError will be thrown if date cannot be parsed.
+    @date = nil
+    @existing_game = false
+  end
 
   def destroy
     @game.destroy
@@ -62,7 +73,7 @@ class GamesController < ApplicationController
     game.sixths.map(&:id) + [game.final.id]
   end
 
-  def correct_user
+  def find_game
     @game = current_user.games.find_by(show_date: params[:show_date])
     redirect_to root_url if @game.nil?
   end

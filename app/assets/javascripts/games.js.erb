@@ -80,7 +80,8 @@ function newDataCookie() {
 }
 
 
-$( ".games-new, .games-edit" ).ready( function() {
+// $( ".games-new, .games-edit" ).ready( function() {
+$( ".games-game" ).ready( function() {
 
   function updateCookies( changed ) {
     if ( !currentGameData ) { currentGameData = newDataCookie(); }
@@ -450,14 +451,20 @@ $( ".games-new, .games-edit" ).ready( function() {
     updateCookies( modified );
   }
 
-  function initializeNewGame() {
+  function initializeNewGame( date ) {
     currentGame = newCookie();
     currentGameData = newDataCookie();
     // Initialize currentGameData before updating the date fields. That way,
     // those updates will change ["modified"] to true, enabling the user to
     // save a new game before entering any data, should they so desire.
     updateCookies();
-    showDateToCurrent();
+
+    if ( date ) {
+      $showDatePicker.data( "DateTimePicker" ).date( date );
+      updateShowDate();
+    } else {
+      showDateToCurrent();
+    }
     datePlayedToCurrent();
     // Set the play-type dropdown to its first option.
     $playTypeSelect.prop( "selectedIndex", 0);
@@ -825,8 +832,13 @@ $( ".games-new, .games-edit" ).ready( function() {
   // 1. Load from database, if applicable, overwriting the cookie.
   // 2. Otherwise, load from the cookie, if applicable.
   // 3. If neither of the above applies, initialize a new game.
-  if ( $( ".data-passer" ).data( "whichpage" ) === "Edit" ) {
-    getShowFromDatabase( $( ".data-passer" ).data( "showdate" ) );
+  var givenDate = $( ".data-passer" ).data( "showdate" );
+  if ( $( ".data-passer" ).data( "existinggame" ) ) {
+    getShowFromDatabase( givenDate );
+  } else if ( givenDate ) {
+    initializeNewGame( givenDate );
+    getScoresFromCookie();
+    populateBoard();
   } else if ( currentGame ) {
     populateSaveAreaFromCookie();
     getScoresFromCookie();
