@@ -75,16 +75,21 @@ class GamesController < ApplicationController
   end
 
   def find_or_create_game
-    final_id = params[:game][:final_attributes][:id]
-    if final_id && Final.find(final_id).game.show_date !=
-                   Date.parse(params[:game][:show_date])
-      render json: { errors: 'Invalid date change' }
+    unless date_matches_id?
+      render json: { errors: { date: ['Invalid date change'] } }
       return
     end
 
     @game = current_user.games.find_or_create_by!(
       show_date: params[:game][:show_date]
     )
+  end
+
+  def date_matches_id?
+    final_id = params[:game][:final_attributes][:id]
+    final_id.blank? ||
+      Final.find(final_id).game.show_date ==
+        Date.parse(params[:game][:show_date])
   end
 
   # rubocop:disable all

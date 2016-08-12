@@ -551,6 +551,13 @@ $( ".games-game" ).ready( function() {
              '" already exists. If you want to modify or delete that game, ' +
              'you can do so via the Stats link above (click the Games ' +
              'tab). To save this game, please enter a unique show date.' );
+    } else if ( errors["date"] &&
+                errors["date"][0] === "Invalid date change" ) {
+      alert( 'Cannot save. The show date has been changed in an unsupported ' +
+             'manner. To save the game, please change the show date back ' +
+             'to its original value. Currently, the only way to change a ' +
+             'show date is by emailing <%= ENV['SUPPORT_ADDRESS'] %> ' +
+             'with a request.' );
     } else {
       console.log( "Unexpected error:" );
       console.dir( errors );

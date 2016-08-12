@@ -124,7 +124,7 @@ class GamesControllerTest < ActionController::TestCase
       end
     end
     body = JSON.parse(response.body)
-    assert_equal 'Invalid date change', body['errors']
+    assert_equal 'Invalid date change', body['errors']['date'][0]
     this_game = @user.games.reload.find_by(show_date: '1016-08-12')
     assert_equal 2, this_game.round_one_score
   end
