@@ -1,6 +1,7 @@
 class GamesController < ApplicationController
   before_action :logged_in_user, except: [:game]
   before_action :find_game, only: [:destroy]
+  before_action :find_or_create_game, only: [:save]
 
   # def new
   #   @game = Game.new
@@ -55,15 +56,10 @@ class GamesController < ApplicationController
   end
 
   def save
-    game = current_user.games.find_or_create_by!(
-      show_date: params[:game][:show_date]
-    )
-    # puts game.inspect
-    # game.create_categories! if game.sixths.empty?
-    if game.update(game_params)
-      render json: { ids: category_ids(game) }
+    if @game.update(game_params)
+      render json: { ids: category_ids(@game) }
     else
-      render json: { errors: game.errors }
+      render json: { errors: @game.errors }
     end
   end
 
@@ -76,6 +72,19 @@ class GamesController < ApplicationController
   def find_game
     @game = current_user.games.find_by(show_date: params[:show_date])
     redirect_to request.referrer || root_url if @game.nil?
+  end
+
+  def find_or_create_game
+    final_id = params[:game][:final_attributes][:id]
+    if final_id && Final.find(final_id).game.show_date !=
+                   Date.parse(params[:game][:show_date])
+      render json: { errors: 'Invalid date change' }
+      return
+    end
+
+    @game = current_user.games.find_or_create_by!(
+      show_date: params[:game][:show_date]
+    )
   end
 
   # rubocop:disable all
