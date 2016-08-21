@@ -70,11 +70,14 @@
             <td><%= game.show_date %></td>
             <td>$<%= game.adjusted_game_score %></td>
             <% if current_user?(game.user) %>
-              <td><%= link_to 'edit', game_path(game) %></td>
+              <td><%= link_to 'edit', game_path(d: game.show_date) %></td>
               <td><%= link_to 'delete',
-                              game_path(game),
+                              delete_path(game),
                               method: :delete,
-                              data: { confirm: 'Are you sure?' } %></td>
+                              data: { confirm: 'Are you sure you want to ' +
+                                               'delete the game from ' +
+                                               game.show_date.to_s +
+                                               '?' } %></td>
             <% else %>
               <td colspan=2></td>
             <% end %>

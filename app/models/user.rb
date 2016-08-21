@@ -61,6 +61,10 @@ class User < ActiveRecord::Base
     reset_sent_at < 1.hour.ago
   end
 
+  def existing_game_date?(date)
+    games.find_by(show_date: date).present?
+  end
+
   def all_game_summary
     stats = { round_one: { right: 0, wrong: 0, pass: 0,
                            dd_right: 0, dd_wrong: 0,

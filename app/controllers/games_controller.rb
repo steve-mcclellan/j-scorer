@@ -1,13 +1,14 @@
 class GamesController < ApplicationController
-  before_action :logged_in_user, except: [:new]
-  before_action :correct_user, only: [:edit, :update, :destroy]
+  before_action :logged_in_user, except: [:game]
+  before_action :find_game, only: [:destroy]
+  before_action :find_or_create_game, only: [:save]
 
-  def new
-    @game = Game.new
-    1.upto(6) { |i| @game.round_one_categories.build(board_position: i) }
-    1.upto(6) { |i| @game.round_two_categories.build(board_position: i) }
-    @game.build_final
-  end
+  # def new
+  #   @game = Game.new
+  #   1.upto(6) { |i| @game.round_one_categories.build(board_position: i) }
+  #   1.upto(6) { |i| @game.round_two_categories.build(board_position: i) }
+  #   @game.build_final
+  # end
 
   # def create
   #   @game = current_user.games.build(game_params)
@@ -19,9 +20,9 @@ class GamesController < ApplicationController
   #   end
   # end
 
-  def edit
-    # render json: @game
-  end
+  # def edit
+  #   render json: @game
+  # end
 
   # def update
   #   @game = current_user.games.find_by(show_date: params[:show_date])
@@ -32,9 +33,20 @@ class GamesController < ApplicationController
   #   end
   # end
 
+  def game
+    @date = Date.parse(params[:d])
+    @existing_game = current_user &&
+                     current_user.existing_game_date?(@date)
+  rescue ArgumentError, TypeError
+    # TypeError will be thrown if no date is given.
+    # ArgumentError will be thrown if date cannot be parsed.
+    @date = nil
+    @existing_game = false
+  end
+
   def destroy
     @game.destroy
-    flash[:success] = 'Game deleted'
+    # flash[:success] = 'Game deleted'
     redirect_to request.referrer || stats_url
   end
 
@@ -44,15 +56,10 @@ class GamesController < ApplicationController
   end
 
   def save
-    game = current_user.games.find_or_create_by!(
-      show_date: params[:game][:show_date]
-    )
-    # puts game.inspect
-    # game.create_categories! if game.sixths.empty?
-    if game.update(game_params)
-      render json: { ids: category_ids(game) }
+    if @game.update(game_params)
+      render json: { ids: category_ids(@game) }
     else
-      render json: { errors: game.errors }
+      render json: { errors: @game.errors }
     end
   end
 
@@ -62,9 +69,27 @@ class GamesController < ApplicationController
     game.sixths.map(&:id) + [game.final.id]
   end
 
-  def correct_user
+  def find_game
     @game = current_user.games.find_by(show_date: params[:show_date])
-    redirect_to root_url if @game.nil?
+    redirect_to request.referrer || root_url if @game.nil?
+  end
+
+  def find_or_create_game
+    unless date_matches_id?
+      render json: { errors: { date: ['Invalid date change'] } }
+      return
+    end
+
+    @game = current_user.games.find_or_create_by!(
+      show_date: params[:game][:show_date]
+    )
+  end
+
+  def date_matches_id?
+    final_id = params[:game][:final_attributes][:id]
+    final_id.blank? ||
+      Final.find(final_id).game.show_date ==
+        Date.parse(params[:game][:show_date])
   end
 
   # rubocop:disable all

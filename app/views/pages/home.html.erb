@@ -1,13 +1,13 @@
 <div id="home-container">
   <% if logged_in? %>
     <p>Welcome back, <%= current_user.email %>!</p>
-    <div><%= link_to 'Enter a Game', games_path, class: 'btn btn-primary' %></div>
+    <div><%= link_to 'Enter a Game', game_path, class: 'btn btn-primary' %></div>
     <div><%= link_to 'View My Stats', stats_path, class: 'btn btn-primary' %></div>
     <div><%= link_to 'Help', help_path, class: 'btn btn-primary' %></div>
   <% else %>
     <p>Welcome, Guest!</p>
     <div><%= link_to 'What is This?', help_path, class: 'btn btn-primary' %></div>
-    <div><%= link_to 'Enter a Game', games_path, class: 'btn btn-primary' %></div>
+    <div><%= link_to 'Enter a Game', game_path, class: 'btn btn-primary' %></div>
     <div>
       <div class="soft-sell">
         <p>
