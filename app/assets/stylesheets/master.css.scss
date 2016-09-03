@@ -681,6 +681,18 @@ input {
 
     #save-area {
       width: 100%;
+
+      #show-date-area.disabled {
+        .form-control[disabled] {
+          background-color: $light-background-color;
+          cursor: default;
+        }
+
+        .input-group-addon {
+          background-color: $light-background-color;
+          cursor: default;
+        }
+      }
     }
 
     #panel-links {

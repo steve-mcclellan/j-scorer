@@ -530,6 +530,18 @@ $( ".games-game" ).ready( function() {
                                        .text( "Save game" );
   }
 
+  function disableShowDate() {
+    $showDateArea.toggleClass( "disabled", true );
+    $showDateInput.prop( "disabled", true );
+    $showDateChangeLink.show();
+  }
+
+  function enableShowDate() {
+    $showDateArea.toggleClass( "disabled", false );
+    $showDateInput.prop( "disabled", false );
+    $showDateChangeLink.hide();
+  }
+
   function afterSaveHandler( dataObj ) {
     if ( dataObj.errors ) {
       saveErrorHandler( dataObj.errors );
@@ -628,8 +640,12 @@ $( ".games-game" ).ready( function() {
   var $r2slot = $( "#r2slot" );
   var $fjslot = $( "#fjslot" );
 
+  var $showDateChangeLink = $( "#show-date-change-link" );
+  var $showDateArea = $( "#show-date-area" );
+  var $showDateInput = $( "#show-date-area input" );
   var $showDatePicker = $( "#show-date-picker" );
   var $showDateValue = $( "#show-date-picker input" );
+
   var $datePlayedPicker = $( "#played-picker" );
   var $datePlayedValue = $( "#played-picker input" );
   var $playTypeSelect = $( "#play-type-select" );
