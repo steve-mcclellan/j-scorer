@@ -32,16 +32,22 @@ function fixLineBreaks( string ) {
 // one character.
 // Example: escapedStringSlice( "I &lt;3 U", 0, 4 ) returns "I &lt;3".
 function escapedStringSlice( string, start, end ) {
-  console.log( string );
-  newString =  string.replace( /&lt;/g, "<" )
+  return string.replace( /&lt;/g, "<" )
                .replace( /&gt;/g, ">" )
                .replace( /&amp;/g, "&" )
                .slice( start, end )
                .replace( /&/g, "&amp;" )
                .replace( /</g, "&lt;" )
-               .replace( />/g, "&gt;" );
-  console.log( newString );
-  return newString;
+               .replace( />/g, "&gt;" )
+}
+
+// Same as above, but returns the length of the string when unescaped.
+// Example: escapedStringLength( "A&amp;M" ) returns 3.
+function escapedStringLength( string ) {
+  return string.replace( /&lt;/g, "<" )
+               .replace( /&gt;/g, ">" )
+               .replace( /&amp;/g, "&" )
+               .length
 }
 
 // HACK: Line feed doesn't seem to display properly in the category area.

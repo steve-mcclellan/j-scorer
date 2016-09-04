@@ -146,8 +146,9 @@ $( ".games-game" ).ready( function() {
                                         .replace( /<span.*?>/g, '' )
                                         .replace( /<\/span>/g, '' )
                                         .replace( /<br>/g, " " )
+                                        .replace( /&nbsp;/g, " " )
                                         .trim();
-    if ( catName.length > 20 ) {
+    if ( escapedStringLength( catName ) > 20 ) {
       catName = escapedStringSlice( catName, 0, 15 ) + "...";
     }
     $overlayCat.html( catName );
