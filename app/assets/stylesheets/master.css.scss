@@ -285,6 +285,21 @@ input {
   border: 1px solid $gameboard-color;
 }
 
+/* signup page */
+
+#signup-page {
+  height: 100%;
+  overflow: auto;
+
+  #signup-privacy {
+    font-size: medium;
+
+    ul {
+      list-style-position: inside;
+    }
+  }
+}
+
 /* stats page */
 
 .k-box {

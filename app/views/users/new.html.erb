@@ -1,27 +1,42 @@
 <% provide(:title, 'Sign up') %>
-<br />
-<h1>Sign up</h1>
-<br />
+<div id="signup-page">
+  <br />
+  <h1>Sign up</h1>
+  <br />
 
-<div class='row'>
-  <div class='col-md-6 col-md-offset-3'>
-    <%= form_for @user do |f| %>
-      <%= render 'shared/error_messages', object: f.object %>
+  <div class='row'>
+    <div class='col-md-6 col-md-offset-3'>
+      <%= form_for @user do |f| %>
+        <%= render 'shared/error_messages', object: f.object %>
 
-      <%= f.label :email, "Email address" %>
-      <%= f.email_field :email, class: 'form-control',
-                                spellcheck: false,
-                                tabindex: 1 %>
+        <%= f.label :email, "Email address" %>
+        <%= f.email_field :email, class: 'form-control',
+                                  spellcheck: false,
+                                  tabindex: 1 %>
 
-      <%= f.label :password %>
-      <%= f.password_field :password, class: 'form-control', tabindex: 2 %>
+        <%= f.label :password %>
+        <%= f.password_field :password, class: 'form-control', tabindex: 2 %>
 
-      <%= f.label :password_confirmation, "Confirm password" %>
-      <%= f.password_field :password_confirmation, class: 'form-control',
-                                                   tabindex: 3 %>
-      <br />
+        <%= f.label :password_confirmation, "Confirm password" %>
+        <%= f.password_field :password_confirmation, class: 'form-control',
+                                                     tabindex: 3 %>
+        <br />
 
-      <%= f.submit "Create account", class: 'btn btn-primary', tabindex: 4 %>
-    <% end %>
+        <%= f.submit "Create account", class: 'btn btn-primary', tabindex: 4 %>
+      <% end %>
+    </div>
+  </div>
+  <br />
+  <div id="signup-privacy" class='row'>
+    <div class='col-md-6 col-md-offset-3 no-padding'>
+      <p>
+        <strong>Privacy:</strong>
+      </p>
+      <ul>
+        <li>I will not share your personal information with anyone unless I'm required to by law.</li>
+        <li>I may, in the future, send you email about the J! Scorer. If I do, I will include an easy way to unsubscribe.</li>
+        <li>I may, in the future, compile and share aggregate statistical data (get rates, etc.) for the J! Scorer's users. I will never share any of your individual data with anyone except you.</li>
+      </ul>
+    </div>
   </div>
 </div>
