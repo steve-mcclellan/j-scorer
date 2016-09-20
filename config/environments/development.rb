@@ -41,4 +41,8 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
+
+  # Allow rails s to serve to anywhere on the local network.
+  # ( To enable, you might need to use: rails s -b 0.0.0.0 )
+  config.web_console.whitelisted_ips = '192.168.0.0/16'
 end
