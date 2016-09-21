@@ -159,9 +159,16 @@
     </div>
 
     <div id="save-area">
-      Show date: &nbsp;
-      <!-- TODO: Turn "Change" into a link to a modal. -->
-      <span id="show-date-change-link">Change</span>
+
+      <div class="row">
+        <div class="col-xs-6 col-compact">
+          Show date:
+        </div>
+        <div class="col-xs-6 col-compact text-right">
+          <span id="show-date-change">(<a>change</a>)</span>
+        </div>
+      </div>
+
       <div id="show-date-area" class="">
         <div class="row">
           <div class='col-xs-12 col-compact'>
@@ -179,8 +186,17 @@
           </div>
         </div>
       </div>
-      Played at: &nbsp; <span id="time-zone">(Time zone: Pacific)</span>
-      <div>
+
+      <div class="row">
+        <div class="col-xs-4 col-compact">
+          Played at:
+        </div>
+        <div class="col-xs-8 col-compact text-right">
+          <span id="time-zone">(Time zone: Pacific)</span>
+        </div>
+      </div>
+
+      <div id="played-at-area">
         <div class="row">
           <div class='col-xs-12 col-compact'>
             <div class="form-group">

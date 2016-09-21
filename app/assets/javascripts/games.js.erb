@@ -462,6 +462,7 @@ $( ".games-game" ).ready( function() {
     // save a new game before entering any data, should they so desire.
     updateCookies();
 
+    enableShowDate();
     if ( date ) {
       $showDatePicker.data( "DateTimePicker" ).date( date );
       updateShowDate();
@@ -481,7 +482,14 @@ $( ".games-game" ).ready( function() {
     $datePlayedPicker.data( "DateTimePicker" )
                      .date( currentGame.date_played );
     $playTypeSelect.val( currentGame.play_type );
+
     if ( !currentGameData.modified ) { disableSaveLink( "Game loaded!" ); }
+
+    if ( currentGame["final"]["id"] ) {
+      disableShowDate();
+    } else {
+      enableShowDate();
+    }
   }
 
   function getShowFromDatabase( showDate ) {
@@ -536,13 +544,13 @@ $( ".games-game" ).ready( function() {
   function disableShowDate() {
     $showDateArea.toggleClass( "disabled", true );
     $showDateInput.prop( "disabled", true );
-    $showDateChangeLink.show();
+    $showDateChangeSpan.show();
   }
 
   function enableShowDate() {
     $showDateArea.toggleClass( "disabled", false );
     $showDateInput.prop( "disabled", false );
-    $showDateChangeLink.hide();
+    $showDateChangeSpan.hide();
   }
 
   function afterSaveHandler( dataObj ) {
@@ -556,6 +564,7 @@ $( ".games-game" ).ready( function() {
     currentGameData["modified"] = false;
     setCookie( "gameData", currentGameData );
     disableSaveLink( "Saved!" );
+    disableShowDate();
   }
 
   function saveErrorHandler( errors ) {
@@ -569,10 +578,9 @@ $( ".games-game" ).ready( function() {
     } else if ( errors["date"] &&
                 errors["date"][0] === "Invalid date change" ) {
       alert( 'Cannot save. The show date has been changed in an unsupported ' +
-             'manner. To save the game, please change the show date back ' +
-             'to its original value. Currently, the only way to change a ' +
-             'show date is by emailing <%= ENV['SUPPORT_ADDRESS'] %> ' +
-             'with a request.' );
+             'manner. To save the game, change the show date back ' +
+             "to its original value. To change a game's show date, " +
+             'use the "Change" link above the date field.' );
     } else {
       console.log( "Unexpected error:" );
       console.dir( errors );
@@ -643,7 +651,8 @@ $( ".games-game" ).ready( function() {
   var $r2slot = $( "#r2slot" );
   var $fjslot = $( "#fjslot" );
 
-  var $showDateChangeLink = $( "#show-date-change-link" );
+  var $showDateChangeSpan = $( "#show-date-change" );
+  var $showDateChangeLink = $( "#show-date-change a" );
   var $showDateArea = $( "#show-date-area" );
   var $showDateInput = $( "#show-date-area input" );
   var $showDatePicker = $( "#show-date-picker" );
@@ -654,7 +663,6 @@ $( ".games-game" ).ready( function() {
   var $playTypeSelect = $( "#play-type-select" );
   var $saveLink = $( "#save-link" );
   var $deleteGameLink = $( "#delete-game-link" );
-
 
   $( ".clue-box" ).on( "click", function( event ) {
     $currentClue = $( this );
