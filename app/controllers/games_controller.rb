@@ -46,8 +46,7 @@ class GamesController < ApplicationController
     return render json: { errors: ['occupied'] }, status: 409 if new_date_game
 
     game.update_attribute(:show_date, new_date)
-    render json: { success: true,
-                   newDate: new_date.strftime("%F") }
+    render json: { success: true, newDate: new_date.strftime('%F') }
 
   rescue ArgumentError
     render json: { errors: ['bad_date'] }, status: 400
