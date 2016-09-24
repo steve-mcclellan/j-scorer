@@ -9,7 +9,7 @@
           <div class="cat-title" id="cat-title-<%= cat_num %>">
             <p contenteditable="true"
                class="default-cat click-resistant"
-               tabindex=1
+               tabindex="1"
                data-defaultvalue="CATEGORY <%= cat_num %>"
                data-column=<%= cat_num %>
                spellcheck="false">
@@ -19,7 +19,7 @@
 
           <input class="topic-area" id="topic-area-<%= cat_num %>"
                                     placeholder="Topic(s)"
-                                    tabindex=2
+                                    tabindex="2"
                                     data-column=<%= cat_num %> />
 
           <% 1.upto(5) do |box_num| %>
@@ -32,9 +32,9 @@
               <span>.</span>
             </div>
           <% end %>
-        </div>
+        </div> <!-- category -->
       <% end %>
-    </div>
+    </div> <!-- board -->
 
     <div id="clue-over-board">
       <div id="clue-heading">
@@ -64,31 +64,31 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> <!-- clue-over-board -->
 
     <div id="final-over-board">
       <div id="final-cat-title">
         <p contenteditable="true"
            class="final-cat default-cat click-resistant"
-           tabindex=1
+           tabindex="1"
            data-defaultvalue="FINAL CATEGORY"
            spellcheck="false">
         .
         </p>
       </div>
 
-      <input id="final-topic-area" placeholder="Topic(s)" tabindex=2 />
+      <input id="final-topic-area" placeholder="Topic(s)" tabindex="2" />
 
       <div id="final-clue-body">
         <div id="final-correctness-buttons">
           <button type="button"
                   id="button-final-right"
-                  tabindex=3>
+                  tabindex="3">
             Right
           </button>
           <button type="button"
                   id="button-final-wrong"
-                  tabindex=3>
+                  tabindex="3">
             Wrong
           </button>
         </div>
@@ -138,24 +138,24 @@
               </label>
             </div>
           </div>
-        </div>
-      </div>
-    </div>
-  </div>
+        </div> <!-- final-contestant-results -->
+      </div> <!-- final-clue-body -->
+    </div> <!-- final-over-board -->
+  </div> <!-- board-area -->
 
   <div id="panel">
     <div id="scoreboard">
       Score
       <div>
-        <span id="score">$...</span>
+        <span id="score">$&hellip;</span>
         <span id="final-symbol"></span>
       </div>
     </div>
 
     <div id="round-links">
-      <div id="r1slot"><a id="round-one-link" tabindex=100>Round One</a></div>
-      <div id="r2slot"><a id="round-two-link" tabindex=100>Round Two</a></div>
-      <div id="fjslot"><a id="final-round-link" tabindex=100>Final Round</a></div>
+      <div id="r1slot"><a id="round-one-link" tabindex="100">Round One</a></div>
+      <div id="r2slot"><a id="round-two-link" tabindex="100">Round Two</a></div>
+      <div id="fjslot"><a id="final-round-link" tabindex="100">Final Round</a></div>
     </div>
 
     <div id="save-area">
@@ -165,7 +165,12 @@
           Show date:
         </div>
         <div class="col-xs-6 col-compact text-right">
-          <span id="show-date-change">(<a>change</a>)</span>
+          <span id="show-date-change">
+            (<a id="change-show-date-link"
+                tabindex="200"
+                data-toggle="modal"
+                data-target="#date-change-modal">change</a>)
+          </span>
         </div>
       </div>
 
@@ -176,7 +181,7 @@
               <div class='input-group date' id='show-date-picker'>
                 <input type='text'
                        class="form-control"
-                       tabindex=200
+                       tabindex="200"
                        spellcheck="false" />
                 <span class="input-group-addon">
                   <span class="glyphicon glyphicon-calendar"></span>
@@ -185,7 +190,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> <!-- show-date-area -->
 
       <div class="row">
         <div class="col-xs-4 col-compact">
@@ -203,7 +208,7 @@
               <div class='input-group date' id='played-picker'>
                 <input type='text'
                        class="form-control"
-                       tabindex=200
+                       tabindex="200"
                        spellcheck="false" />
                 <span class="input-group-addon">
                   <span class="glyphicon glyphicon-calendar"></span>
@@ -212,9 +217,9 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> <!-- played-at-area -->
       Play type:
-      <select id="play-type-select" tabindex=200>
+      <select id="play-type-select" tabindex="200">
         <option value="regular">regular play</option>
         <option value="power">Power Players Week</option>
         <option value="teachers">Teachers Tournament</option>
@@ -242,16 +247,63 @@
 
       <div class="text-center">
         <% if current_user %>
-          <a id="save-link" tabindex=300 data-disabled="false">Save game</a>
+          <a id="save-link" tabindex="300" data-disabled="false">Save game</a>
         <% else %>
-          <%= link_to 'Log in', login_path, tabindex: 300 %> to save game
+          <%= link_to 'Log in', login_path, tabindex: "300" %> to save game
         <% end %>
       </div>
-    </div>
+    </div> <!-- save-area -->
 
 
     <div id="panel-links">
-      <a id="delete-game-link" tabindex=400>New game</a>
+      <a id="delete-game-link" tabindex="400">New game</a>
     </div>
-  </div>
-</div>
+  </div> <!-- panel -->
+</div> <!-- game-container -->
+
+<!-- Modal for changing show date -->
+<div id="date-change-modal" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="date-change-modal-label">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title" id="date-change-modal-label">Date Change</h4>
+      </div>
+
+      <div class="modal-body">
+        <p>Change the airdate of this show from:</p>
+        <p id="old-show-date">.</p>
+        <p>to:</p>
+        <div class="row">
+          <div class='col-xs-12 col-compact'>
+            <div class="form-group">
+              <div class='input-group date' id='change-show-date-picker'>
+                <input type='text'
+                       class="form-control"
+                       tabindex="1"
+                       spellcheck="false" />
+                <span class="input-group-addon">
+                  <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> <!-- modal-body -->
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">
+          Close
+        </button>
+        <button id="change-show-date-button" type="button" class="btn btn-primary">
+          Change show date
+        </button>
+      </div>
+
+    </div> <!-- modal-content -->
+  </div> <!-- modal-dialog -->
+</div> <!-- date-change-modal -->
