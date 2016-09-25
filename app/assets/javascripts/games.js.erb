@@ -677,6 +677,7 @@ $( ".games-game" ).ready( function() {
   var $deleteGameLink = $( "#delete-game-link" );
 
   var $dateChangeModal = $( "#date-change-modal" );
+  var $oldShowDate = $( "#old-show-date" );
   var $changeShowDatePicker = $( "#change-show-date-picker" );
   var $changeShowDateValue = $( "#change-show-date-picker input" );
   var $changeShowDateButton = $( "#change-show-date-button" );
@@ -806,7 +807,8 @@ $( ".games-game" ).ready( function() {
     if ( $changeShowDateLink.data( "disabled" ) ) {
       event.stopPropagation();
     } else {
-      // TODO: Plug the current show date into the modal.
+      $oldShowDate.html( currentGame.show_date );
+      $changeShowDateValue.val( '' );
     }
   });
 
