@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
 
   root 'pages#home'
+
   get 'help' => 'pages#help'
   get 'about' => 'pages#about'
 
@@ -17,11 +18,9 @@ Rails.application.routes.draw do
   get 'reset/:id' => 'password_resets#edit', as: :reset
   patch 'reset/:id' => 'password_resets#update'
 
-  # get 'game/:show_date' => 'games#edit', as: :game
-  # patch 'game/:show_date' => 'games#update'
-  delete 'delete/:show_date' => 'games#destroy', as: :delete
   get 'game' => 'games#game', as: :game
-  # post 'game' => 'games#create'
+  delete 'delete/:show_date' => 'games#destroy', as: :delete
   get 'json/:show_date' => 'games#json', as: :json
   post 'save' => 'games#save', as: :save
+  patch 'redate' => 'games#redate', as: :redate
 end

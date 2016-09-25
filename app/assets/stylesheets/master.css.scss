@@ -53,9 +53,17 @@ a {
   margin-right: 0;
 }
 
-.col-xs-12.col-compact {
+.col-xs-4.col-compact, .col-xs-6.col-compact,
+.col-xs-8.col-compact, .col-xs-12.col-compact {
   padding-left: 0;
   padding-right: 0;
+}
+
+p.padded-graf {
+  margin-top: 1vh;
+  margin-bottom: 2vh;
+  padding-left: 0.5vw;
+  padding-right: 0.5vw;
 }
 
 .btn.btn-primary {
@@ -696,6 +704,18 @@ input {
 
     #save-area {
       width: 100%;
+
+      #show-date-area.disabled {
+        .form-control[disabled] {
+          background-color: $light-background-color;
+          cursor: default;
+        }
+
+        .input-group-addon {
+          background-color: $light-background-color;
+          cursor: default;
+        }
+      }
     }
 
     #panel-links {

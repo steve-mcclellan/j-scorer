@@ -142,11 +142,14 @@ $( ".games-game" ).ready( function() {
 
     var titleClass = "#cat-title-" + $currentClue.data( "column" ) + " p";
     var catName = $( titleClass ).html().replace( /<div>/g, " " )
-                                        .replace( /<\/div>/g, "" )
+                                        .replace( /<\/div>/g, '' )
+                                        .replace( /<span.*?>/g, '' )
+                                        .replace( /<\/span>/g, '' )
                                         .replace( /<br>/g, " " )
+                                        .replace( /&nbsp;/g, " " )
                                         .trim();
-    if ( catName.length > 20 ) {
-      catName = catName.slice( 0, 15 ) + "...";
+    if ( escapedStringLength( catName ) > 20 ) {
+      catName = escapedStringSlice( catName, 0, 15 ) + "&hellip;";
     }
     $overlayCat.html( catName );
     $overlayValue.html( "$" + clueValue);
@@ -459,6 +462,7 @@ $( ".games-game" ).ready( function() {
     // save a new game before entering any data, should they so desire.
     updateCookies();
 
+    enableShowDate();
     if ( date ) {
       $showDatePicker.data( "DateTimePicker" ).date( date );
       updateShowDate();
@@ -478,25 +482,42 @@ $( ".games-game" ).ready( function() {
     $datePlayedPicker.data( "DateTimePicker" )
                      .date( currentGame.date_played );
     $playTypeSelect.val( currentGame.play_type );
+
     if ( !currentGameData.modified ) { disableSaveLink( "Game loaded!" ); }
+
+    if ( currentGame["final"]["id"] ) {
+      disableShowDate();
+    } else {
+      enableShowDate();
+    }
   }
 
   function getShowFromDatabase( showDate ) {
-    $.get( "/json/" + showDate ).success( function( data ) {
-      currentGame = data;
-      // Grab the number of hours of offset from the time string in the data.
-      var datePlayedOffset = ( currentGame.date_played.slice(-4, -3) );
-      // Put date_played in display format instead of database format, so it's
-      // not erroneously flagged as changed.
-      currentGame.date_played = moment.utc( currentGame.date_played )
-                                      .subtract( datePlayedOffset, "hours" )
-                                      .format( "YYYY-MM-DD h:mma" );
-      setCookie( "game", currentGame );
-      currentGameData = newDataCookie();
-      setCookie( "gameData", currentGameData );
-      populateSaveAreaFromCookie();
-      getScoresFromCookie();
-      populateBoard();
+    $.ajax({
+      method: "GET",
+      url: "/json/" + showDate,
+      success: function( data ) {
+        currentGame = data;
+        // Grab the number of hours of offset from the time string in the data.
+        var datePlayedOffset = ( currentGame.date_played.slice(-4, -3) );
+        // Put date_played in display format instead of database format, so
+        // it's not erroneously flagged as changed.
+        currentGame.date_played = moment.utc( currentGame.date_played )
+                                        .subtract( datePlayedOffset, "hours" )
+                                        .format( "YYYY-MM-DD h:mma" );
+        setCookie( "game", currentGame );
+        currentGameData = newDataCookie();
+        setCookie( "gameData", currentGameData );
+        populateSaveAreaFromCookie();
+        getScoresFromCookie();
+        populateBoard();
+      },
+      error: function() {
+        alert("Could not retrieve game. Please try again later. " +
+              "If this persists, please let me know: " +
+              "<%= ENV['SUPPORT_ADDRESS'] %>");
+      },
+      dataType: "json"
     });
   }
 
@@ -522,28 +543,50 @@ $( ".games-game" ).ready( function() {
   }
 
   function disableSaveLink( message ) {
-    $saveLink.data( "disabled", true ).addClass( "disabled" ).text( message );
+    $saveLink.data( "disabled", true ).addClass( "disabled" ).html( message );
   }
 
   function enableSaveLink() {
     $saveLink.data( "disabled", false ).removeClass( "disabled" )
-                                       .text( "Save game" );
+                                       .html( "Save game" );
   }
 
-  function afterSaveHandler( dataObj ) {
-    if ( dataObj.errors ) {
-      saveErrorHandler( dataObj.errors );
-      enableSaveLink();
-      return;
-    }
-    updateCategoryIds( dataObj );
+  function disableShowDate() {
+    $showDateArea.toggleClass( "disabled", true );
+    $showDateInput.prop( "disabled", true );
+    $changeShowDateSpan.show();
+  }
+
+  function enableShowDate() {
+    $showDateArea.toggleClass( "disabled", false );
+    $showDateInput.prop( "disabled", false );
+    $changeShowDateSpan.hide();
+  }
+
+  function disableChangeShowDateLink( message ) {
+    $changeShowDateLink.data( "disabled", true )
+                       .addClass( "disabled")
+                       .html( message );
+  }
+
+  function enableChangeShowDateLink() {
+    $changeShowDateLink.data( "disabled", false )
+                       .removeClass( "disabled" )
+                       .html( "change" );
+  }
+
+  function afterSaveHandler( data ) {
+    updateCategoryIds( data );
 
     currentGameData["modified"] = false;
     setCookie( "gameData", currentGameData );
     disableSaveLink( "Saved!" );
+    disableShowDate();
   }
 
-  function saveErrorHandler( errors ) {
+  function saveErrorHandler( data ) {
+    var errors = JSON.parse( data.responseText );
+
     if ( errors["sixths.board_position"] &&
          errors["sixths.board_position"][0] === "already exists" ) {
       alert( 'Cannot save. A different game with show date "' +
@@ -551,13 +594,14 @@ $( ".games-game" ).ready( function() {
              '" already exists. If you want to modify or delete that game, ' +
              'you can do so via the Stats link above (click the Games ' +
              'tab). To save this game, please enter a unique show date.' );
+
     } else if ( errors["date"] &&
                 errors["date"][0] === "Invalid date change" ) {
       alert( 'Cannot save. The show date has been changed in an unsupported ' +
-             'manner. To save the game, please change the show date back ' +
-             'to its original value. Currently, the only way to change a ' +
-             'show date is by emailing <%= ENV['SUPPORT_ADDRESS'] %> ' +
-             'with a request.' );
+             'manner. To save the game, change the show date back ' +
+             "to its original value. To change a game's show date, " +
+             'use the "Change" link above the date field.' );
+
     } else {
       console.log( "Unexpected error:" );
       console.dir( errors );
@@ -572,6 +616,7 @@ $( ".games-game" ).ready( function() {
              "your browser, and follow the instructions there to report the " +
              "problem." );
     }
+    enableSaveLink();
   }
 
   function updateCategoryIds( dataObj ) {
@@ -628,13 +673,24 @@ $( ".games-game" ).ready( function() {
   var $r2slot = $( "#r2slot" );
   var $fjslot = $( "#fjslot" );
 
+  var $changeShowDateSpan = $( "#show-date-change" );
+  var $changeShowDateLink = $( "#change-show-date-link" );
+  var $showDateArea = $( "#show-date-area" );
+  var $showDateInput = $( "#show-date-area input" );
   var $showDatePicker = $( "#show-date-picker" );
   var $showDateValue = $( "#show-date-picker input" );
+
   var $datePlayedPicker = $( "#played-picker" );
   var $datePlayedValue = $( "#played-picker input" );
   var $playTypeSelect = $( "#play-type-select" );
   var $saveLink = $( "#save-link" );
   var $deleteGameLink = $( "#delete-game-link" );
+
+  var $dateChangeModal = $( "#date-change-modal" );
+  var $oldShowDate = $( "#old-show-date" );
+  var $changeShowDatePicker = $( "#change-show-date-picker" );
+  var $changeShowDateValue = $( "#change-show-date-picker input" );
+  var $changeShowDateButton = $( "#change-show-date-button" );
 
 
   $( ".clue-box" ).on( "click", function( event ) {
@@ -742,27 +798,95 @@ $( ".games-game" ).ready( function() {
   $saveLink.on( "click", function() {
     // Make the Ajax request iff the save link is not disabled.
     if ( !$saveLink.data( "disabled" ) ) {
-      disableSaveLink( "Saving..." );
+      disableSaveLink( "Saving&hellip;" );
 
       $.ajax({
-        type: "POST",
+        method: "POST",
         url: "/save",
         data: { "game":attributize() },
-        success: function( data ) { afterSaveHandler( JSON.parse( data ) ); },
-        dataType: "text"
+        success: function( data ) { afterSaveHandler( data ); },
+        error: function( data ) { saveErrorHandler( data ); },
+        dataType: "json"
       });
     }
   });
 
+  // The HTML uses Bootstrap to open the modal, which happens regardless
+  // of the link's status. Override that behavior when the link is disabled.
+  // Otherwise, plug the current show date into the modal.
+  $changeShowDateLink.on( "click", function( event ) {
+    if ( $changeShowDateLink.data( "disabled" ) ) {
+      event.stopPropagation();
+    } else {
+      $oldShowDate.html( currentGame.show_date );
+      $changeShowDateValue.val( '' );
+    }
+  });
+
+  $changeShowDateButton.on( "click", function() {
+    $dateChangeModal.modal( "hide" );
+    disableChangeShowDateLink( "changing&hellip;" );
+
+    $.ajax({
+      method: "PATCH",
+      url: "/redate",
+      data: { "oldDate": currentGame.show_date,
+              "newDate": $changeShowDateValue.val() },
+      success: function( data ) { afterDateChangeHandler( data ) },
+      error: function( data ) { dateChangeErrorHandler( data ) },
+      dataType: "json"
+    });
+  });
+
+  function afterDateChangeHandler( data ) {
+    alert("Success!");
+    var newDate = data.newDate;
+    currentGame.show_date = newDate;
+    $showDateValue.val( newDate );
+    updateCookies( false );
+    enableChangeShowDateLink();
+  }
+
+  function dateChangeErrorHandler( data ) {
+    switch ( JSON.parse( data.responseText ).errors[0] ) {
+      case "occupied":
+        alert( "Error: Another game already exists at the given date.\n\n" +
+               "Please select a different date, or move the other game " +
+               "first ( Stats -> Games -> desired game -> edit ). " );
+        break;
+      case "bad_date":
+        alert( "Error: Could not parse the given date.\n\n" +
+               'Please enter dates in "YYYY-MM-DD" format.' );
+        break;
+      case "no_show":
+        alert( "Error: Could not find a show at the original date.\n\n" +
+               "If you're seeing this error during normal use, you've " +
+               "found a bug. Please email me with a description of the " +
+               "situation: <%= ENV['SUPPORT_ADDRESS'] %>" );
+        break;
+      default:
+        alert( "Unknown error.\n\n" +
+               "If you're seeing this error during normal use, you've " +
+               "found a bug. Please email me with a description of the " +
+               "situation: <%= ENV['SUPPORT_ADDRESS'] %>" );
+    }
+    enableChangeShowDateLink();
+  }
+
   $showDatePicker.datetimepicker({
     format: "YYYY-MM-DD"
   });
-  $showDatePicker.data("DateTimePicker").timeZone(undefined);
+  $showDatePicker.data( "DateTimePicker" ).timeZone(undefined);
 
   $datePlayedPicker.datetimepicker({
     format: "YYYY-MM-DD h:mma"
   });
-  $datePlayedPicker.data("DateTimePicker").timeZone(undefined);
+  $datePlayedPicker.data( "DateTimePicker" ).timeZone(undefined);
+
+  $changeShowDatePicker.datetimepicker({
+    format: "YYYY-MM-DD"
+  });
+  $changeShowDatePicker.data( "DateTimePicker" ).timeZone(undefined);
 
 
   // Category title and topic entry

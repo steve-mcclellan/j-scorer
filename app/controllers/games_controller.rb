@@ -1,37 +1,8 @@
 class GamesController < ApplicationController
   before_action :logged_in_user, except: [:game]
+  before_action :parse_show_date, only: [:destroy, :json]
   before_action :find_game, only: [:destroy]
   before_action :find_or_create_game, only: [:save]
-
-  # def new
-  #   @game = Game.new
-  #   1.upto(6) { |i| @game.round_one_categories.build(board_position: i) }
-  #   1.upto(6) { |i| @game.round_two_categories.build(board_position: i) }
-  #   @game.build_final
-  # end
-
-  # def create
-  #   @game = current_user.games.build(game_params)
-  #   if @game.save
-  #     flash[:success] = 'Game created!'
-  #     redirect_to stats_url
-  #   else
-  #     redirect_to root_url
-  #   end
-  # end
-
-  # def edit
-  #   render json: @game
-  # end
-
-  # def update
-  #   @game = current_user.games.find_by(show_date: params[:show_date])
-  #   if @game.update(game_params)
-  #     redirect_to stats_url
-  #   else
-  #     redirect_to root_url
-  #   end
-  # end
 
   def game
     @date = Date.parse(params[:d])
@@ -46,43 +17,69 @@ class GamesController < ApplicationController
 
   def destroy
     @game.destroy
-    # flash[:success] = 'Game deleted'
     redirect_to request.referrer || stats_url
   end
 
   def json
-    game = current_user.games.find_by(show_date: params[:show_date])
-    render json: game
+    if (game = current_user.games.find_by(show_date: @show_date))
+      render json: game
+    else
+      render json: {}, status: 404
+    end
   end
 
   def save
     if @game.update(game_params)
       render json: { ids: category_ids(@game) }
     else
-      render json: { errors: @game.errors }
+      render json: @game.errors, status: 409
     end
   end
 
+  def redate
+    old_date = Date.parse(params[:oldDate])
+    new_date = Date.parse(params[:newDate])
+
+    game = current_user.games.find_by(show_date: old_date)
+    return render json: { errors: ['no_show'] }, status: 404 if game.nil?
+
+    new_date_game = current_user.games.find_by(show_date: new_date)
+    return render json: { errors: ['occupied'] }, status: 409 if new_date_game
+
+    game.update_attribute(:show_date, new_date)
+    render json: { success: true, newDate: new_date.strftime('%F') }
+
+  rescue ArgumentError
+    render json: { errors: ['bad_date'] }, status: 400
+  end
+
   private
+
+  def parse_show_date
+    @show_date = Date.parse(params[:show_date])
+  rescue ArgumentError
+    @show_date = nil
+  end
 
   def category_ids(game)
     game.sixths.map(&:id) + [game.final.id]
   end
 
   def find_game
-    @game = current_user.games.find_by(show_date: params[:show_date])
+    @game = current_user.games.find_by(show_date: @show_date)
     redirect_to request.referrer || root_url if @game.nil?
   end
 
   def find_or_create_game
     unless date_matches_id?
-      render json: { errors: { date: ['Invalid date change'] } }
+      render json: { date: ['Invalid date change'] }, status: 400
       return
     end
 
-    @game = current_user.games.find_or_create_by!(
-      show_date: params[:game][:show_date]
-    )
+    show_date = Date.parse(params[:game][:show_date])
+    @game = current_user.games.find_or_create_by!(show_date: show_date)
+  rescue ArgumentError
+    redirect_to game_url
   end
 
   def date_matches_id?

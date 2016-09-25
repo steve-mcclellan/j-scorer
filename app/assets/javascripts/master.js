@@ -27,6 +27,29 @@ function fixLineBreaks( string ) {
                .replace( /<br \/>/g, "&#10;" )
 }
 
+// Takes a string where <, >, and & have been replaced by &lt;, &gt;, and &amp;.
+// Returns the result of slicing the string if each escape code is counted as
+// one character.
+// Example: escapedStringSlice( "I &lt;3 U", 0, 4 ) returns "I &lt;3".
+function escapedStringSlice( string, start, end ) {
+  return string.replace( /&lt;/g, "<" )
+               .replace( /&gt;/g, ">" )
+               .replace( /&amp;/g, "&" )
+               .slice( start, end )
+               .replace( /&/g, "&amp;" )
+               .replace( /</g, "&lt;" )
+               .replace( />/g, "&gt;" )
+}
+
+// Same as above, but returns the length of the string when unescaped.
+// Example: escapedStringLength( "A&amp;M" ) returns 3.
+function escapedStringLength( string ) {
+  return string.replace( /&lt;/g, "<" )
+               .replace( /&gt;/g, ">" )
+               .replace( /&amp;/g, "&" )
+               .length
+}
+
 // HACK: Line feed doesn't seem to display properly in the category area.
 // Replace it with a <br> tag.
 function htmlize( string ) {
