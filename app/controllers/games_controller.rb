@@ -4,8 +4,6 @@ class GamesController < ApplicationController
   before_action :find_game, only: [:destroy]
   before_action :find_or_create_game, only: [:save]
 
-  # TODO: Deuglify this. I'd prefer it not need to use rescue when
-  #       no date is given (y'know, the default case...).
   def game
     @date = Date.parse(params[:d])
     @existing_game = current_user &&
@@ -23,15 +21,18 @@ class GamesController < ApplicationController
   end
 
   def json
-    game = current_user.games.find_by(show_date: @show_date)
-    render json: game
+    if (game = current_user.games.find_by(show_date: @show_date))
+      render json: game
+    else
+      render json: {}, status: 404
+    end
   end
 
   def save
     if @game.update(game_params)
       render json: { ids: category_ids(@game) }
     else
-      render json: { errors: @game.errors }
+      render json: @game.errors, status: 409
     end
   end
 
@@ -71,7 +72,7 @@ class GamesController < ApplicationController
 
   def find_or_create_game
     unless date_matches_id?
-      render json: { errors: { date: ['Invalid date change'] } }
+      render json: { date: ['Invalid date change'] }, status: 400
       return
     end
 

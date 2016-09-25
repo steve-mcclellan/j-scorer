@@ -83,18 +83,18 @@ class GamesControllerTest < ActionController::TestCase
     assert_equal 6, body['round_one_categories'][0]['result3']
   end
 
-  test 'json action should return null for invalid date format' do
+  test 'json action should throw 404 for invalid date format' do
     log_in_here(@user)
     get :json, show_date: 'thisIsNotADate'
-    assert_response :success
-    assert_equal 'null', response.body
+    assert_response :not_found
+    assert_equal '{}', response.body
   end
 
-  test 'json action should return null for date with no game' do
+  test 'json action should throw 404 for date with no game' do
     log_in_here(@user)
     get :json, show_date: '1956-11-26'
-    assert_response :success
-    assert_equal 'null', response.body
+    assert_response :not_found
+    assert_equal '{}', response.body
   end
 
   test 'should redirect json action when not logged in' do
@@ -164,7 +164,8 @@ class GamesControllerTest < ActionController::TestCase
       end
     end
     body = JSON.parse(response.body)
-    assert_equal 'Invalid date change', body['errors']['date'][0]
+    assert_response :bad_request
+    assert_equal 'Invalid date change', body['date'][0]
     this_game = @user.games.reload.find_by(show_date: '1016-08-12')
     assert_equal 2, this_game.round_one_score
   end

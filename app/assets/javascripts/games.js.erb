@@ -493,21 +493,31 @@ $( ".games-game" ).ready( function() {
   }
 
   function getShowFromDatabase( showDate ) {
-    $.get( "/json/" + showDate ).success( function( data ) {
-      currentGame = data;
-      // Grab the number of hours of offset from the time string in the data.
-      var datePlayedOffset = ( currentGame.date_played.slice(-4, -3) );
-      // Put date_played in display format instead of database format, so it's
-      // not erroneously flagged as changed.
-      currentGame.date_played = moment.utc( currentGame.date_played )
-                                      .subtract( datePlayedOffset, "hours" )
-                                      .format( "YYYY-MM-DD h:mma" );
-      setCookie( "game", currentGame );
-      currentGameData = newDataCookie();
-      setCookie( "gameData", currentGameData );
-      populateSaveAreaFromCookie();
-      getScoresFromCookie();
-      populateBoard();
+    $.ajax({
+      method: "GET",
+      url: "/json/" + showDate,
+      success: function( data ) {
+        currentGame = data;
+        // Grab the number of hours of offset from the time string in the data.
+        var datePlayedOffset = ( currentGame.date_played.slice(-4, -3) );
+        // Put date_played in display format instead of database format, so
+        // it's not erroneously flagged as changed.
+        currentGame.date_played = moment.utc( currentGame.date_played )
+                                        .subtract( datePlayedOffset, "hours" )
+                                        .format( "YYYY-MM-DD h:mma" );
+        setCookie( "game", currentGame );
+        currentGameData = newDataCookie();
+        setCookie( "gameData", currentGameData );
+        populateSaveAreaFromCookie();
+        getScoresFromCookie();
+        populateBoard();
+      },
+      error: function() {
+        alert("Could not retrieve game. Please try again later. " +
+              "If this persists, please let me know: " +
+              "<%= ENV['SUPPORT_ADDRESS'] %>");
+      },
+      dataType: "json"
     });
   }
 
@@ -565,13 +575,8 @@ $( ".games-game" ).ready( function() {
                        .html( "change" );
   }
 
-  function afterSaveHandler( dataObj ) {
-    if ( dataObj.errors ) {
-      saveErrorHandler( dataObj.errors );
-      enableSaveLink();
-      return;
-    }
-    updateCategoryIds( dataObj );
+  function afterSaveHandler( data ) {
+    updateCategoryIds( data );
 
     currentGameData["modified"] = false;
     setCookie( "gameData", currentGameData );
@@ -579,7 +584,9 @@ $( ".games-game" ).ready( function() {
     disableShowDate();
   }
 
-  function saveErrorHandler( errors ) {
+  function saveErrorHandler( data ) {
+    var errors = JSON.parse( data.responseText );
+
     if ( errors["sixths.board_position"] &&
          errors["sixths.board_position"][0] === "already exists" ) {
       alert( 'Cannot save. A different game with show date "' +
@@ -587,12 +594,14 @@ $( ".games-game" ).ready( function() {
              '" already exists. If you want to modify or delete that game, ' +
              'you can do so via the Stats link above (click the Games ' +
              'tab). To save this game, please enter a unique show date.' );
+
     } else if ( errors["date"] &&
                 errors["date"][0] === "Invalid date change" ) {
       alert( 'Cannot save. The show date has been changed in an unsupported ' +
              'manner. To save the game, change the show date back ' +
              "to its original value. To change a game's show date, " +
              'use the "Change" link above the date field.' );
+
     } else {
       console.log( "Unexpected error:" );
       console.dir( errors );
@@ -607,6 +616,7 @@ $( ".games-game" ).ready( function() {
              "your browser, and follow the instructions there to report the " +
              "problem." );
     }
+    enableSaveLink();
   }
 
   function updateCategoryIds( dataObj ) {
@@ -791,11 +801,12 @@ $( ".games-game" ).ready( function() {
       disableSaveLink( "Saving&hellip;" );
 
       $.ajax({
-        type: "POST",
+        method: "POST",
         url: "/save",
         data: { "game":attributize() },
-        success: function( data ) { afterSaveHandler( JSON.parse( data ) ); },
-        dataType: "text"
+        success: function( data ) { afterSaveHandler( data ); },
+        error: function( data ) { saveErrorHandler( data ); },
+        dataType: "json"
       });
     }
   });
