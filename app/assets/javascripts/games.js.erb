@@ -513,7 +513,7 @@ $( ".games-game" ).ready( function() {
         populateBoard();
       },
       error: function() {
-        alert("Could not retrieve game. Please try again later. " +
+        alert("Could not retrieve game. Please try again later.\n" +
               "If this persists, please let me know: " +
               "<%= ENV['SUPPORT_ADDRESS'] %>");
       },
@@ -833,7 +833,9 @@ $( ".games-game" ).ready( function() {
       data: { "oldDate": currentGame.show_date,
               "newDate": $changeShowDateValue.val() },
       success: function( data ) { afterDateChangeHandler( data ) },
-      error: function( data ) { dateChangeErrorHandler( data ) },
+      error: function( data, textStatus, errorThrown ) {
+        dateChangeErrorHandler( data, textStatus, errorThrown )
+      },
       dataType: "json"
     });
   });
@@ -847,7 +849,10 @@ $( ".games-game" ).ready( function() {
     enableChangeShowDateLink();
   }
 
-  function dateChangeErrorHandler( data ) {
+  function dateChangeErrorHandler( data, textStatus, errorThrown ) {
+    console.log( data );
+    console.log( textStatus );
+    console.log( errorThrown );
     switch ( JSON.parse( data.responseText ).errors[0] ) {
       case "occupied":
         alert( "Error: Another game already exists at the given date.\n\n" +
