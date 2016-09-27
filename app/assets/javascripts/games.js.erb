@@ -486,7 +486,7 @@ $( ".games-game" ).ready( function() {
     if ( !currentGameData.modified ) { disableSaveLink( "Game loaded!" ); }
 
     if ( currentGame["final"]["id"] ) {
-      disableShowDate( verificationRequired );
+      verificationRequired ? checkShowDate() : disableShowDate();
     } else {
       enableShowDate();
     }
@@ -551,12 +551,24 @@ $( ".games-game" ).ready( function() {
                                        .html( "Save game" );
   }
 
-  function disableShowDate( verificationRequired ) {
-    if ( verificationRequired ) {
-      // Make an Ajax request to a new controller action, which will state
-      // whether the cookie's game exists in the database and belongs to
-      // the current user. Skip the disabling if this is not the case.
-    }
+  function checkShowDate() {
+    $.ajax({
+      method: "GET",
+      url: "/check/" + currentGame['final']['id'],
+      success: function( data ) {
+        if ( data.match ) {
+          disableShowDate();
+        } else {
+          enableShowDate();
+          // TODO: Also remove IDs from sixths and final in cookie.
+          // TODO: Prevent responseText: "ActiveRecord::RecordNotFound ..."
+        }
+      },
+      dataType: "json"
+    });
+  }
+
+  function disableShowDate() {
     $showDateArea.toggleClass( "disabled", true );
     $showDateInput.prop( "disabled", true );
     $changeShowDateSpan.show();
