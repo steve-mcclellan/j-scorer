@@ -585,38 +585,88 @@ $( ".games-game" ).ready( function() {
   }
 
   function saveErrorHandler( data ) {
-    var errors = JSON.parse( data.responseText );
+    // If there is no connection, the following will be true:
+    // * data.readyState === 0;  ( will be 4 otherwise )
+    // * data.responseText === "";  ( stringified JSON otherwise )
+    // * data.status === 0;  ( an HTTP status code otherwise )
+    // * data.statusText === "error";  ( "OK", "Conflict", etc... )
 
-    if ( errors["sixths.board_position"] &&
-         errors["sixths.board_position"][0] === "already exists" ) {
-      alert( 'Cannot save. A different game with show date "' +
-             currentGame.show_date +
-             '" already exists. If you want to modify or delete that game, ' +
-             'you can do so via the Stats link above (click the Games ' +
-             'tab). To save this game, please enter a unique show date.' );
-
-    } else if ( errors["date"] &&
-                errors["date"][0] === "Invalid date change" ) {
-      alert( 'Cannot save. The show date has been changed in an unsupported ' +
-             'manner. To save the game, change the show date back ' +
-             "to its original value. To change a game's show date, " +
-             'use the "Change" link above the date field.' );
-
+    if ( data.readyState === 0 || data.responseText === "" ) {
+      alert( "Oops! It looks like the request was not sent successfully.\n\n" +
+             "Please check your Internet connection and try again." );
     } else {
-      console.log( "Unexpected error:" );
-      console.dir( errors );
-      console.log( 'Please note the name of the array (to the left of "' +
-                   'Array[x]"), and the contents of any "quoted strings" ' +
-                   'that are shown when you click on it. ' +
-                   '("length" and "__proto__" can be ignored.) ' +
-                   'Please email <%= ENV['SUPPORT_ADDRESS'] %> with this ' +
-                   'information. Thanks!' );
-      alert( "An unexpected error has occurred; the game cannot be " +
-             "saved. If you know how, please visit the JavaScript console in " +
-             "your browser, and follow the instructions there to report the " +
-             "problem." );
+      var errors = JSON.parse( data.responseText );
+      if ( errors["sixths.board_position"] &&
+           errors["sixths.board_position"][0] === "already exists" ) {
+        alert( 'Cannot save. A different game with show date "' +
+               currentGame.show_date +
+               '" already exists. If you want to modify or delete that game, ' +
+               'you can do so via the Stats link above (click the Games ' +
+               'tab). To save this game, please enter a unique show date.' );
+
+      } else if ( errors["date"] &&
+                  errors["date"][0] === "Invalid date change" ) {
+        alert( 'Cannot save. The show date has been changed in an ' +
+               'unsupported manner. To save the game, change the show date ' +
+               "back to its original value. To change a game's show date, " +
+               'use the "Change" link above the date field.' );
+
+      } else {
+        console.log( "Unexpected error:" );
+        console.dir( errors );
+        console.log( 'Please note the name of the array (to the left of "' +
+                     'Array[x]"), and the contents of any "quoted strings" ' +
+                     'that are shown when you click on it. ' +
+                     '("length" and "__proto__" can be ignored.) ' +
+                     'Please email <%= ENV['SUPPORT_ADDRESS'] %> with this ' +
+                     'information. Thanks!' );
+        alert( "An unexpected error has occurred; the game cannot be saved. " +
+               "If you know how, please visit the JavaScript console in your " +
+               "browser, and follow the instructions there to report the " +
+               "problem." );
+      }
     }
     enableSaveLink();
+  }
+
+  function afterDateChangeHandler( data ) {
+    alert("Success!");
+    var newDate = data.newDate;
+    currentGame.show_date = newDate;
+    $showDateValue.val( newDate );
+    updateCookies( false );
+    enableChangeShowDateLink();
+  }
+
+  function dateChangeErrorHandler( data ) {
+    if ( data.readyState === 0 || data.responseText === "" ) {
+      alert( "Oops! It looks like the request was not sent successfully.\n\n" +
+             "Please check your Internet connection and try again." );
+    } else {
+      switch ( JSON.parse( data.responseText ).errors[0] ) {
+        case "occupied":
+          alert( "Error: Another game already exists at the given date.\n\n" +
+                 "Please select a different date, or move the other game " +
+                 "first ( Stats -> Games -> desired game -> edit ). " );
+          break;
+        case "bad_date":
+          alert( "Error: Could not parse the given date.\n\n" +
+                 'Please enter dates in "YYYY-MM-DD" format.' );
+          break;
+        case "no_show":
+          alert( "Error: Could not find a show at the original date.\n\n" +
+                 "If you're seeing this error during normal use, you've " +
+                 "found a bug. Please email me with a description of the " +
+                 "situation: <%= ENV['SUPPORT_ADDRESS'] %>" );
+          break;
+        default:
+          alert( "Unknown error.\n\n" +
+                 "If you're seeing this error during normal use, you've " +
+                 "found a bug. Please email me with a description of the " +
+                 "situation: <%= ENV['SUPPORT_ADDRESS'] %>" );
+      }
+    }
+    enableChangeShowDateLink();
   }
 
   function updateCategoryIds( dataObj ) {
@@ -833,50 +883,10 @@ $( ".games-game" ).ready( function() {
       data: { "oldDate": currentGame.show_date,
               "newDate": $changeShowDateValue.val() },
       success: function( data ) { afterDateChangeHandler( data ) },
-      error: function( data, textStatus, errorThrown ) {
-        dateChangeErrorHandler( data, textStatus, errorThrown )
-      },
+      error: function( data ) { dateChangeErrorHandler( data ) },
       dataType: "json"
     });
   });
-
-  function afterDateChangeHandler( data ) {
-    alert("Success!");
-    var newDate = data.newDate;
-    currentGame.show_date = newDate;
-    $showDateValue.val( newDate );
-    updateCookies( false );
-    enableChangeShowDateLink();
-  }
-
-  function dateChangeErrorHandler( data, textStatus, errorThrown ) {
-    console.log( data );
-    console.log( textStatus );
-    console.log( errorThrown );
-    switch ( JSON.parse( data.responseText ).errors[0] ) {
-      case "occupied":
-        alert( "Error: Another game already exists at the given date.\n\n" +
-               "Please select a different date, or move the other game " +
-               "first ( Stats -> Games -> desired game -> edit ). " );
-        break;
-      case "bad_date":
-        alert( "Error: Could not parse the given date.\n\n" +
-               'Please enter dates in "YYYY-MM-DD" format.' );
-        break;
-      case "no_show":
-        alert( "Error: Could not find a show at the original date.\n\n" +
-               "If you're seeing this error during normal use, you've " +
-               "found a bug. Please email me with a description of the " +
-               "situation: <%= ENV['SUPPORT_ADDRESS'] %>" );
-        break;
-      default:
-        alert( "Unknown error.\n\n" +
-               "If you're seeing this error during normal use, you've " +
-               "found a bug. Please email me with a description of the " +
-               "situation: <%= ENV['SUPPORT_ADDRESS'] %>" );
-    }
-    enableChangeShowDateLink();
-  }
 
   $showDatePicker.datetimepicker({
     format: "YYYY-MM-DD"
