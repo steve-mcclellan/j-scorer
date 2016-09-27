@@ -476,7 +476,7 @@ $( ".games-game" ).ready( function() {
     updateRound();
   }
 
-  function populateSaveAreaFromCookie() {
+  function populateSaveAreaFromCookie( verificationRequired ) {
     $showDatePicker.data( "DateTimePicker" )
                    .date( currentGame.show_date );
     $datePlayedPicker.data( "DateTimePicker" )
@@ -486,7 +486,7 @@ $( ".games-game" ).ready( function() {
     if ( !currentGameData.modified ) { disableSaveLink( "Game loaded!" ); }
 
     if ( currentGame["final"]["id"] ) {
-      disableShowDate();
+      disableShowDate( verificationRequired );
     } else {
       enableShowDate();
     }
@@ -551,7 +551,12 @@ $( ".games-game" ).ready( function() {
                                        .html( "Save game" );
   }
 
-  function disableShowDate() {
+  function disableShowDate( verificationRequired ) {
+    if ( verificationRequired ) {
+      // Make an Ajax request to a new controller action, which will state
+      // whether the cookie's game exists in the database and belongs to
+      // the current user. Skip the disabling if this is not the case.
+    }
     $showDateArea.toggleClass( "disabled", true );
     $showDateInput.prop( "disabled", true );
     $changeShowDateSpan.show();
@@ -986,7 +991,7 @@ $( ".games-game" ).ready( function() {
     getScoresFromCookie();
     populateBoard();
   } else if ( currentGame ) {
-    populateSaveAreaFromCookie();
+    populateSaveAreaFromCookie( true );
     getScoresFromCookie();
     populateBoard();
   } else {

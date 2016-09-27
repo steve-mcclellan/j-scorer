@@ -1,5 +1,5 @@
 class GamesController < ApplicationController
-  before_action :logged_in_user, except: [:game]
+  before_action :logged_in_user, except: [:game, :check]
   before_action :parse_show_date, only: [:destroy, :json]
   before_action :find_game, only: [:destroy]
   before_action :find_or_create_game, only: [:save]
@@ -53,6 +53,16 @@ class GamesController < ApplicationController
     render json: { errors: ['bad_date'] }, status: 400
   end
 
+  def check
+    if logged_in? && Final.find(params[:final_id]).game.user == current_user
+      render json: { match: true }
+    else
+      render json: { match: '' }
+    end
+  rescue ActiveRecord::RecordNotFound
+    render json: { match: '' }
+  end
+
   private
 
   def parse_show_date
@@ -92,29 +102,14 @@ class GamesController < ApplicationController
   # rubocop:disable all
   def game_params
     params.require(:game)
-          .permit(:show_date,
-                  :date_played,
-                  :play_type,
-                  :round_one_score,
-                  :round_two_score,
-                  :final_result,
-                  { sixths_attributes: [:type,
-                                        :board_position,
-                                        :title,
-                                        :result1,
-                                        :result2,
-                                        :result3,
-                                        :result4,
-                                        :result5,
-                                        :topics_string,
-                                        :id] },
-                  { final_attributes: [:category_title,
-                                       :result,
-                                       :third_right,
-                                       :second_right,
-                                       :first_right,
-                                       :topics_string,
-                                       :id] })
+          .permit(:show_date, :date_played, :play_type, :round_one_score,
+                  :round_two_score, :final_result,
+                  { sixths_attributes: [:type, :board_position, :title,
+                                        :result1, :result2, :result3, :result4,
+                                        :result5, :topics_string, :id] },
+                  { final_attributes: [:category_title, :result, :third_right,
+                                       :second_right, :first_right,
+                                       :topics_string, :id] })
   end
   # rubocop:enable all
 end
