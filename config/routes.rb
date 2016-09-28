@@ -23,4 +23,5 @@ Rails.application.routes.draw do
   get 'json/:show_date' => 'games#json', as: :json
   post 'save' => 'games#save', as: :save
   patch 'redate' => 'games#redate', as: :redate
+  get 'check/:final_id' => 'games#check', as: :check
 end

@@ -4,6 +4,7 @@ require 'test_helper'
 class GamesControllerTest < ActionController::TestCase
   def setup
     @user = users(:dave)
+    @other_user = users(:steve)
   end
 
   test 'should get game page when no date is given' do
@@ -165,7 +166,7 @@ class GamesControllerTest < ActionController::TestCase
     end
     body = JSON.parse(response.body)
     assert_response :bad_request
-    assert_equal 'Invalid date change', body['date'][0]
+    assert_equal 'Invalid change', body['date'][0]
     this_game = @user.games.reload.find_by(show_date: '1016-08-12')
     assert_equal 2, this_game.round_one_score
   end
@@ -234,5 +235,36 @@ class GamesControllerTest < ActionController::TestCase
     assert_equal true, body['success']
     assert_nil @user.reload.games.find_by(show_date: '2005-05-25')
     assert_not_nil @user.reload.games.find_by(show_date: '2345-01-23')
+  end
+
+  test 'check action should return empty string when not logged in' do
+    get :check, final_id: 1
+    assert_response :success
+    body = JSON.parse(response.body)
+    assert_equal '', body['match']
+  end
+
+  test 'check action should return true when final belongs to current user' do
+    log_in_here(@user)
+    get :check, final_id: finals(:fone).id
+    assert_response :success
+    body = JSON.parse(response.body)
+    assert_equal true, body['match']
+  end
+
+  test "check action should return empty string if other user's game" do
+    log_in_here(@other_user)
+    get :check, final_id: finals(:fone).id
+    assert_response :success
+    body = JSON.parse(response.body)
+    assert_equal '', body['match']
+  end
+
+  test 'check action should return empty string if given invalid final_id' do
+    log_in_here(@user)
+    get :check, final_id: 'meatball'
+    assert_response :success
+    body = JSON.parse(response.body)
+    assert_equal '', body['match']
   end
 end
