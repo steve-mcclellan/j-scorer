@@ -80,7 +80,6 @@ function newDataCookie() {
 }
 
 
-// $( ".games-new, .games-edit" ).ready( function() {
 $( ".games-game" ).ready( function() {
 
   function updateCookies( changed ) {
@@ -556,12 +555,18 @@ $( ".games-game" ).ready( function() {
       method: "GET",
       url: "/check/" + currentGame['final']['id'],
       success: function( data ) {
+        // data.match will be truthy iff currentGame's final id
+        // matches up with a valid game in the database belonging
+        // to the currently-logged-in user.
         if ( data.match ) {
           disableShowDate();
         } else {
           enableShowDate();
-          // TODO: Also remove IDs from sixths and final in cookie.
-          // TODO: Prevent responseText: "ActiveRecord::RecordNotFound ..."
+          // If we're in this block, the category IDs are incorrect.
+          // Remove them.
+          updateCategoryIds( { ids: [ null, null, null, null, null, null, null,
+                                      null, null, null, null, null, null ] } );
+          enableSaveLink();
         }
       },
       dataType: "json"
@@ -607,7 +612,6 @@ $( ".games-game" ).ready( function() {
     // * data.responseText === "";  ( stringified JSON otherwise )
     // * data.status === 0;  ( an HTTP status code otherwise )
     // * data.statusText === "error";  ( "OK", "Conflict", etc... )
-
     if ( data.readyState === 0 || data.responseText === "" ) {
       alert( "Oops! It looks like the request was not sent successfully.\n\n" +
              "Please check your Internet connection and try again." );
@@ -622,11 +626,17 @@ $( ".games-game" ).ready( function() {
                'tab). To save this game, please enter a unique show date.' );
 
       } else if ( errors["date"] &&
-                  errors["date"][0] === "Invalid date change" ) {
+                  errors["date"][0] === "Invalid change" ) {
         alert( 'Cannot save. The show date has been changed in an ' +
                'unsupported manner. To save the game, change the show date ' +
                "back to its original value. To change a game's show date, " +
                'use the "Change" link above the date field.' );
+
+      } else if ( errors["final_id"] &&
+                  errors["final_id"][0] === "No match" ) {
+        alert( 'Cannot save. There is a conflict between the data in your ' +
+               'browser and the data on the server. Reloading the page ' +
+               'might fix this.' );
 
       } else {
         console.log( "Unexpected error:" );

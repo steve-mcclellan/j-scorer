@@ -34,6 +34,13 @@ class GamesController < ApplicationController
     else
       render json: @game.errors, status: 409
     end
+  rescue ActiveRecord::RecordNotFound
+    # This will fire if there is a mismatch between the category IDs
+    # in the request and those in @game.
+    # TODO: Test this. It looks like it will require an integration test
+    #       to change users mid-test.
+    @game.destroy if @game.sixths.empty?
+    render json: { final_id: ['No match'] }, status: 409
   end
 
   def redate
@@ -82,8 +89,7 @@ class GamesController < ApplicationController
 
   def find_or_create_game
     unless date_matches_id?
-      render json: { date: ['Invalid date change'] }, status: 400
-      return
+      return render json: { date: ['Invalid change'] }, status: 400
     end
 
     show_date = Date.parse(params[:game][:show_date])
