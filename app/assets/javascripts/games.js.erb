@@ -72,6 +72,7 @@ function newCookie() {
 
 const NEW_DATA_COOKIE = {
   "modified":false,
+  "conflict":false,
   "activeRound":"round_one_categories"
 };
 
@@ -560,14 +561,13 @@ $( ".games-game" ).ready( function() {
         // to the currently-logged-in user.
         if ( data.match ) {
           disableShowDate();
+          currentGameData["conflict"] = false;
         } else {
           enableShowDate();
-          // If we're in this block, the category IDs are incorrect.
-          // Remove them.
-          updateCategoryIds( { ids: [ null, null, null, null, null, null, null,
-                                      null, null, null, null, null, null ] } );
+          currentGameData["conflict"] = true;
           enableSaveLink();
         }
+        setCookie( "gameData", currentGameData );
       },
       dataType: "json"
     });
@@ -873,9 +873,16 @@ $( ".games-game" ).ready( function() {
   });
 
   $saveLink.on( "click", function() {
-    // Make the Ajax request iff the save link is not disabled.
+    // Take action only if the save link is not disabled.
     if ( !$saveLink.data( "disabled" ) ) {
       disableSaveLink( "Saving&hellip;" );
+
+      // If the conflict (between cookie and database) flag was set when
+      // the page was loaded, remove the category IDs from currentGame.
+      if (currentGameData["conflict"]) {
+        updateCategoryIds( { ids: [ null, null, null, null, null, null, null,
+                                    null, null, null, null, null, null ] } );
+      }
 
       $.ajax({
         method: "POST",
@@ -885,6 +892,9 @@ $( ".games-game" ).ready( function() {
         error: function( data ) { saveErrorHandler( data ); },
         dataType: "json"
       });
+
+      currentGameData["conflict"] = false;
+      setCookie( "gameData", currentGameData );
     }
   });
 
