@@ -72,6 +72,7 @@ function newCookie() {
 
 const NEW_DATA_COOKIE = {
   "modified":false,
+  "conflict":false,
   "activeRound":"round_one_categories"
 };
 
@@ -558,8 +559,6 @@ $( ".games-game" ).ready( function() {
         // data.match will be truthy iff currentGame's final id
         // matches up with a valid game in the database belonging
         // to the currently-logged-in user.
-        // Set the "conflict" flag in currentGameData if there is
-        // non-matching category ID data in currentGame.
         if ( data.match ) {
           disableShowDate();
           currentGameData["conflict"] = false;
@@ -884,7 +883,6 @@ $( ".games-game" ).ready( function() {
         updateCategoryIds( { ids: [ null, null, null, null, null, null, null,
                                     null, null, null, null, null, null ] } );
       }
-      currentGameData["conflict"] = false;
 
       $.ajax({
         method: "POST",
@@ -895,6 +893,7 @@ $( ".games-game" ).ready( function() {
         dataType: "json"
       });
 
+      currentGameData["conflict"] = false;
       setCookie( "gameData", currentGameData );
     }
   });
