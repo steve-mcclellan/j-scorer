@@ -1,9 +1,9 @@
-<% provide(:title, 'Stats') %>
+<% provide(:title, @sample ? 'Sample stats' : 'Stats') %>
 
 <div id="stats-area">
   <div class="k-box">
     <p>
-    <%= random_greeting %>, early adopter! This is a small taste of the kinds of stats that will be available as development continues. Much, much more is coming, including complete overhauls of the "Overview" and "Topics" tabs. Is there a stat you'd like to see? Drop me a line at <a class="nowrap" href="mailto:<%= ENV['SUPPORT_ADDRESS'] %>"><%= ENV['SUPPORT_ADDRESS'] %></a>.
+    <%= random_greeting %>, early adopter! This is a small taste of the kinds of stats that will be available as development continues. Much, much more will be coming as I work on this page throughout November. Is there a stat you'd like to see? Drop me a line at <a class="nowrap" href="mailto:<%= ENV['SUPPORT_ADDRESS'] %>"><%= ENV['SUPPORT_ADDRESS'] %></a>.
     </p>
   </div>
   <ul>
@@ -13,7 +13,7 @@
   </ul>
 
   <div id="overview">
-    <h2>Stats overview for <%= @user.email %>:</h2>
+    <h2>Stats overview for <%= @sample ? @email : @user.email %>:</h2>
     <br />
     <% stats = @user.all_game_summary %>
     <p>Games played: <%= gp = @user.games.count %></p>
@@ -52,7 +52,10 @@
   </div>
 
   <div id="games">
-    <h2>Games played by <%= @user.email %> (<%= @user.games.count %>):</h2>
+    <h2>
+      Games played by <%= @sample ? @email : @user.email %>
+      (<%= @user.games.count %>):
+    </h2>
 
     <table id="gameTable" class="tablesorter">
       <thead>
@@ -79,7 +82,8 @@
                                                game.show_date.to_s +
                                                '?' } %></td>
             <% else %>
-              <td colspan=2></td>
+              <td class="disabled">edit</td>
+              <td class="disabled">delete</td>
             <% end %>
           </tr>
         <% end %>
@@ -88,7 +92,10 @@
   </div>
 
   <div id="topics">
-    <h2>Topics for <%= @user.email %> (<%= @user.topics.count %>):</h2>
+    <h2>
+      Topics for <%= @sample ? @email : @user.email %>
+      (<%= @user.topics.count %>):
+    </h2>
 
     <table id="topicTable" class="tablesorter">
       <thead>

@@ -4,6 +4,10 @@
     <p>
     Welcome, early adopter! The J! Scorer just recently launched, and is still being actively developed. Any feedback is greatly appreciated. Have an idea for how something could be easier to use, or look better? Want to see a specific stat? Send any and all ideas to <a class="nowrap" href="mailto:<%= ENV['SUPPORT_ADDRESS'] %>"><%= ENV['SUPPORT_ADDRESS'] %></a>.
     </p>
+    <br />
+    <p>
+    New! See an interactive sample stats page <%= link_to 'here', sample_path, class: "nowrap" %>.
+    </p>
   </div>
 
   <div class="col-xs-10 col-xs-offset-1 booyah-box">
@@ -14,11 +18,11 @@
     </p>
     <br />
     <p>
-    Both guests and registered users can use the J! Scorer to calculate their <a href="http://www.pisspoor.com/jep.html" target="_blank">Coryat score</a> while playing along with the show in real time. Registered users can also save their games and track their stats over time.
+    Both guests and registered users can use the J! Scorer to calculate their <a class="nowrap" href="http://www.pisspoor.com/jep.html" target="_blank">Coryat score</a> while playing along with the show in real time. Registered users can also save their games and track their stats over time.
     </p>
     <br />
     <p>
-    The <%= link_to 'game page', game_path %> is where the action is.
+    The <%= link_to 'game page', game_path, class: "nowrap" %> is where the action is.
     </p>
     <br />
     <%= image_tag "game_page.png", class: 'img-responsive center-block' %>
@@ -28,13 +32,13 @@
     </p>
     <br />
     <p>
-    When a contestant selects a clue, click on (or touch) the appropriate box. This will bring up an overlay with several buttons. Click on <strong>Right</strong> or <strong>Wrong</strong> as appropriate for your response, or <strong>Pass</strong> if you chose to <a href="http://j-archive.com/help.php#stayclam" target="_blank">STAY CLAM</a>. When a Daily Double is uncovered, tick the <strong>DD</strong> checkbox. The <strong>NR</strong> button is for any clues that go unrevealed.
+    When a contestant selects a clue, click on (or touch) the appropriate box. This will bring up an overlay with several buttons. Click on <strong>Right</strong> or <strong>Wrong</strong> as appropriate for your response, or <strong>Pass</strong> if you chose to <a class="nowrap" href="http://j-archive.com/help.php#stayclam" target="_blank">STAY CLAM</a>. When a Daily Double is uncovered, tick the <strong>DD</strong> checkbox. The <strong>NR</strong> button is for any clues that go unrevealed.
     </p>
     <br />
     <%= image_tag "clue_overlay.png", class: 'img-responsive center-block' %>
     <br />
     <p>
-    If you plan on saving your game, at the conclusion of each round, you can enter zero or more custom <strong>topics</strong> for each category in the white box between the category name and the clue boxes. (Separate multiple topics with commas.) After your game has been saved, your results from that category will be added to your totals for each topic on the <%= link_to 'stats page', stats_path %>.
+    If you plan on saving your game, at the conclusion of each round, you can enter zero or more custom <strong>topics</strong> for each category in the white box between the category name and the clue boxes. (Separate multiple topics with commas.) After your game has been saved, your results from that category will be added to your totals for each topic on the <%= link_to 'stats page', stats_path, class: "nowrap" %>. (See an interactive sample stats page <%= link_to 'here', sample_path, class: "nowrap" %>.)
     </p>
     <br />
     <p>
@@ -54,7 +58,7 @@
     <%= image_tag "final_overlay.png", class: 'img-responsive center-block' %>
     <br />
     <p>
-    At the bottom of the Final area, there are places to enter the contestants' results. In the future, this will enable you to view your Final stats broken down by contestant results, which can come in handy if you find yourself facing, say, <a href="http://j-archive.com/help.php#strattonsdilemma" target="_blank">Stratton's Dilemma</a>.
+    At the bottom of the Final area, there are places to enter the contestants' results. In the future, this will enable you to view your Final stats broken down by contestant results, which can come in handy if you find yourself facing, say, <a class="nowrap" href="http://j-archive.com/help.php#strattonsdilemma" target="_blank">Stratton's Dilemma</a>.
     </p>
     <br />
     <p>

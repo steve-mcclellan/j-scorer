@@ -22,4 +22,15 @@ class UsersControllerTest < ActionController::TestCase
     assert flash.empty?
     assert_response :success
   end
+
+  test 'should get sample when not logged in' do
+    get :sample
+    assert_response :success
+  end
+
+  test 'should get sample when logged in' do
+    log_in_here(@user)
+    get :sample
+    assert_response :success
+  end
 end
