@@ -11,12 +11,15 @@
     <div>
       <div class="soft-sell">
         <p>
-          To save games and track stats,
+          See a <%= link_to "sample stats page", sample_path, class: "nowrap" %>.
         </p>
         <p>
-          <%= link_to 'log in', login_path %>
+          To track your own stats,
+        </p>
+        <p>
+          <%= link_to 'log in', login_path, class: "nowrap" %>
           or
-          <%= link_to 'sign up', signup_path %>.
+          <%= link_to 'sign up', signup_path, class: "nowrap" %>.
         </p>
       </div>
     </div>
