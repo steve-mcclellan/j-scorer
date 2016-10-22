@@ -20,6 +20,13 @@ class UsersController < ApplicationController
     end
   end
 
+  def sample
+    @user = ENV['SAMPLE_USER'] ? User.find(ENV['SAMPLE_USER']) : User.first
+    @email = ENV['SAMPLE_USER_EMAIL'] || @user.email
+    @sample = true
+    render 'show'
+  end
+
   private
 
   def user_params

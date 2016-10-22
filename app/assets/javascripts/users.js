@@ -1,4 +1,4 @@
-$( ".users-show" ).ready( function() {
+$( ".users-show, .users-sample" ).ready( function() {
   $( "#stats-area" ).tabs({
     // Commented out as no Ajax requests are being made yet.
     // beforeLoad: function( event, ui ) {
@@ -9,7 +9,7 @@ $( ".users-show" ).ready( function() {
     // }
   });
 
-  // Make "By game" table sortable. Initialize default sort to
+  // Make "Games" table sortable. Initialize default sort to
   // [ leftmost column, descending ]. Prevent meaningless attempts
   // to sort by "Actions" column (currently in position 3).
   $( "#gameTable" ).tablesorter({
@@ -23,7 +23,7 @@ $( ".users-show" ).ready( function() {
     scrollableArea: $( '#stats-area' )
   });
 
-  // Similarly, make "By topic" table sortable.
+  // Similarly, make "Topics" table sortable.
   // Default sort: [ leftmost column, ascending ].
   $( "#topicTable" ).tablesorter({
     sortList: [[0,0]]

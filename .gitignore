@@ -17,3 +17,5 @@
 
 # Ignore environment file for Heroku Local.
 /.env
+
+/config/secrets.yml
