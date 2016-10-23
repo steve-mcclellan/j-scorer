@@ -10,10 +10,10 @@
 
       <%= hidden_field_tag :email, @user.email %>
 
-      <%= f.label :password %>
+      <%= f.label :password, 'Choose a new password' %>
       <%= f.password_field :password, class: 'form-control' %>
 
-      <%= f.label :password_confirmation, 'Confirm password' %>
+      <%= f.label :password_confirmation, 'Confirm new password' %>
       <%= f.password_field :password_confirmation, class: 'form-control' %>
       <br />
 
