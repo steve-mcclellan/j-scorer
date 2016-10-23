@@ -17,6 +17,12 @@ $j-yellow:       #cf9f3e;
 $j-shadow:       #101014;
 $dd-border:      #674f1f;
 
+$check-green: #00ff00;
+$check-light-green: #88ff88;
+
+$x-red: #ff0000;
+$x-light-red: #ff8888;
+
 /* universal */
 
 *{
@@ -425,6 +431,18 @@ input {
           cursor: default;
         }
 
+        .clue-box.clue-right {
+          color: $check-green;
+        }
+
+        .clue-box.clue-wrong {
+          color: $x-red;
+        }
+
+        .clue-box.clue-pass {
+          color: $j-lighter-blue;
+        }
+
         .active-clue-box:hover {
           background-color: $j-light-blue;
         }
@@ -486,6 +504,18 @@ input {
             font-size: 10vh;
             margin: 3vh 0;
           }
+
+          #button-right.active {
+            background-color: $check-light-green;
+          }
+
+          #button-wrong.active {
+            background-color: $x-light-red;
+          }
+
+          #button-pass.active {
+            background-color: $j-lighter-blue;
+          }
         }
 
         #dd-nr-cancel {
@@ -524,6 +554,10 @@ input {
             height: 100%;
             width: 100%;
             font-size: 10vh;
+          }
+
+          #button-nr button.active {
+            background-color: $j-lighter-blue;
           }
 
           a {

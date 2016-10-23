@@ -154,7 +154,16 @@ $( ".games-game" ).ready( function() {
     $overlayCat.html( catName );
     $overlayValue.html( "$" + clueValue);
 
+    setOverlayData();
+  }
+
+  function setOverlayData() {
     $ddCheckbox.prop( "checked", $currentClue.data( "isdd" ) );
+
+    $buttonRight.toggleClass( "active", $currentClue.hasClass( "clue-right" ) );
+    $buttonWrong.toggleClass( "active", $currentClue.hasClass( "clue-wrong" ) );
+    $buttonPass.toggleClass( "active", $currentClue.hasClass( "clue-pass" ) );
+    $buttonNR.toggleClass( "active", $currentClue.hasClass( "clue-nr" ) );
   }
 
   function hideOverlay() {
@@ -183,13 +192,32 @@ $( ".games-game" ).ready( function() {
     $currentClue.html( "<span>" + html + "</span>" );
     var col = $currentClue.data( "column" );
     var row = $currentClue.data( "row" );
-    var currentClueState = currentGame[currentRound][col - 1]["result" + row]
-    $currentClue.data( "boxstate", boxstate );
-    $currentClue.toggleClass( "active-clue-box", boxActive );
+    var currentClueState = currentGame[currentRound][col - 1]["result" + row];
+    setClueData( boxstate, boxActive );
     setDD( ddCheckboxState() );
     if ( addDD && ddCheckboxState() ) { statusCode += 4; }
     currentGame[currentRound][col - 1]["result" + row] = statusCode;
     updateCookies( currentClueState !== statusCode );
+  }
+
+  function setClueData( boxstate, boxActive ) {
+    $currentClue.data( "boxstate", boxstate );
+    $currentClue.removeClass( "clue-right clue-wrong clue-pass clue-nr" );
+    switch ( boxstate ) {
+      case "right":
+        $currentClue.addClass( "clue-right" );
+        break;
+      case "wrong":
+        $currentClue.addClass( "clue-wrong" );
+        break;
+      case "pass":
+        $currentClue.addClass( "clue-pass" );
+        break;
+      case "nr":
+        $currentClue.addClass( "clue-nr" );
+        break;
+    }
+    $currentClue.toggleClass( "active-clue-box", boxActive );
   }
 
   function setDD( bool ) {
@@ -734,7 +762,7 @@ $( ".games-game" ).ready( function() {
   var $buttonRight = $( "#button-right" );
   var $buttonPass = $( "#button-pass" );
   var $buttonWrong = $( "#button-wrong" );
-  var $buttonNR = $( "#button-nr" );
+  var $buttonNR = $( "#button-nr button" );
   var $ddCheckbox = $( "#dd-checkbox" );
   var $resetLink = $( "#reset-link" );
   var $cancelLink = $( "#cancel-link" );
