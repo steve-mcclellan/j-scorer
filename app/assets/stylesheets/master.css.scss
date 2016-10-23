@@ -654,6 +654,14 @@ input {
             font-size: 10vh;
             margin: 3vh 0;
           }
+
+          #button-final-right.active {
+            background-color: $check-light-green;
+          }
+
+          #button-final-wrong.active {
+            background-color: $x-light-red;
+          }
         }
 
         #final-contestant-results {
@@ -681,7 +689,15 @@ input {
               padding: 1vh 1vw;
             }
 
-            .btn-default.fj-button.active {
+            .btn-default.fj-button.fj-right.active {
+              background-color: $check-light-green;
+            }
+
+            .btn-default.fj-button.fj-wrong.active {
+              background-color: $x-light-red;
+            }
+
+            .btn-default.fj-button.fj-dnp.active {
               background-color: $j-lighter-blue;
             }
           }

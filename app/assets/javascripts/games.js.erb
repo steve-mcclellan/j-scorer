@@ -120,15 +120,23 @@ $( ".games-game" ).ready( function() {
     switch ( currentGame["final"]["result"] ) {
       case 0:
         $finalSymbol.html("");
+        $buttonFJRight.removeClass( "active" );
+        $buttonFJWrong.removeClass( "active" );
         break;
       case 1:
         $finalSymbol.html( "&nbsp;&#x2718;" );
+        $buttonFJRight.removeClass( "active" );
+        $buttonFJWrong.addClass( "active" );
         break;
       case 3:
         $finalSymbol.html( "&nbsp;&#x2713;" );
+        $buttonFJRight.addClass( "active" );
+        $buttonFJWrong.removeClass( "active" );
         break;
       default:
         $finalSymbol.html( "&nbsp;?" );
+        $buttonFJRight.removeClass( "active" );
+        $buttonFJWrong.removeClass( "active" );
         break;
     }
   }
