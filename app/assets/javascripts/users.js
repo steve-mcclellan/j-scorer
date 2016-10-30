@@ -1,12 +1,27 @@
 $( ".users-show, .users-sample" ).ready( function() {
   $( "#stats-area" ).tabs({
-    // Commented out as no Ajax requests are being made yet.
-    // beforeLoad: function( event, ui ) {
-    //   ui.jqXHR.fail( function() {
-    //     ui.panel.html(
-    //       "Couldn't load this tab. Please try again later." );
-    //   });
-    // }
+    // Ajax request stuff, mostly pulled from jQuery UI's docs.
+    beforeLoad: function( event, ui ) {
+
+      // There's no need to do a fresh Ajax request each time the tab
+      // is clicked. If the tab has been loaded already, skip the request
+      // and display the pre-existing data.
+      if ( ui.tab.data( "loaded" ) ) {
+        event.preventDefault();
+        return;
+      }
+
+      ui.panel.html( "Retrieving data - one moment please..." );
+
+      ui.jqXHR.success( function() {
+        ui.tab.data( "loaded", true );
+      });
+
+      ui.jqXHR.fail( function() {
+        ui.panel.html(
+          "Couldn't load this tab. Please try again later." );
+      });
+    }
   });
 
   // Make "Games" table sortable. Initialize default sort to
