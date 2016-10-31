@@ -41,6 +41,15 @@ class Game < ActiveRecord::Base
     stats
   end
 
+  def final_symbol
+    case final_result
+    when 0 then ''
+    when 1 then '&#x2718;'.html_safe
+    when 3 then '&#x2713;'.html_safe
+    else '?'
+    end
+  end
+
   private
 
   def update_stats(stats, category_summary, round)

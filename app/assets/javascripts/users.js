@@ -26,11 +26,11 @@ $( ".users-show, .users-sample" ).ready( function() {
 
   // Make "Games" table sortable. Initialize default sort to
   // [ leftmost column, descending ]. Prevent meaningless attempts
-  // to sort by "Actions" column (currently in position 3).
+  // to sort by "Actions" column (currently in position 4).
   $( "#gameTable" ).tablesorter({
     sortList: [[0,1]],
     headers: {
-      3: { sorter: false }
+      4: { sorter: false }
     }
   });
 
@@ -38,13 +38,4 @@ $( ".users-show, .users-sample" ).ready( function() {
     scrollableArea: $( '#stats-area' )
   });
 
-  // Similarly, make "Topics" table sortable.
-  // Default sort: [ leftmost column, ascending ].
-  $( "#topicTable" ).tablesorter({
-    sortList: [[0,0]]
-  });
-
-  $( "#topicTable" ).stickyTableHeaders({
-    scrollableArea: $( '#stats-area' )
-  });
 });

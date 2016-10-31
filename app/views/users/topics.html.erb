@@ -110,3 +110,15 @@
     </tbody>
   </table>
 </div>
+
+<script>
+// Make table sortable.
+// Default sort: [ leftmost column, ascending ].
+$( "#topicTable" ).tablesorter({
+  sortList: [[0,0]]
+});
+
+$( "#topicTable" ).stickyTableHeaders({
+  scrollableArea: $( '#stats-area' )
+});
+</script>
