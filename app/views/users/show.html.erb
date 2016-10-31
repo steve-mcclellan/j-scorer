@@ -67,6 +67,8 @@
           <th>Played</th>
           <th>Show date</th>
           <th>Score</th>
+          <th>DDs Right</th>
+          <th>DDs Wrong</th>
           <th>Final</th>
           <th colspan=2>Actions</th>
         </tr>
@@ -77,6 +79,8 @@
             <td><%= game.date_played.in_time_zone.to_s %></td>
             <td><%= game.show_date %></td>
             <td>$<%= game.adjusted_game_score %></td>
+            <td><%= game.dds_right %></td>
+            <td><%= game.dds_wrong %></td>
             <td><%= game.final_symbol %></td>
             <% if current_user?(game.user) %>
               <td><%= link_to 'edit', game_path(d: game.show_date) %></td>

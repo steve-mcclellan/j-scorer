@@ -62,6 +62,6 @@ class Sixth < ActiveRecord::Base
 
   def update_dd_stats(stats, result_code, row_number)
     stats[:dd_position] = row_number
-    stats[:dd_result] = result_code == 7 ? :correct : :incorrect
+    stats[:dd_result] = result_code
   end
 end
