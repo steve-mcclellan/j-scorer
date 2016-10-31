@@ -115,10 +115,8 @@ class User < ActiveRecord::Base
 
   def add_dd_stats(stats, game_summary, round)
     game_summary[round][:dd].each do |_row, result|
-      case result
-      when :correct then stats[round][:dd_right] += 1
-      when :incorrect then stats[round][:dd_wrong] += 1
-      end
+      stats[round][:dd_right] += 1 if result == 7
+      stats[round][:dd_wrong] += 1 if [5, 6].include? result
     end
   end
 

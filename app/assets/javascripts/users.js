@@ -26,11 +26,11 @@ $( ".users-show, .users-sample" ).ready( function() {
 
   // Make "Games" table sortable. Initialize default sort to
   // [ leftmost column, descending ]. Prevent meaningless attempts
-  // to sort by "Actions" column (currently in position 4).
+  // to sort by "Actions" column (currently in position 6).
   $( "#gameTable" ).tablesorter({
     sortList: [[0,1]],
     headers: {
-      4: { sorter: false }
+      6: { sorter: false }
     }
   });
 

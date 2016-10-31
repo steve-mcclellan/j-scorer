@@ -31,12 +31,6 @@ class Topic < ActiveRecord::Base
             presence: true,
             uniqueness: { scope: :user_id, case_sensitive: false }
 
-  # def self.by_user_and_name(user, name)
-  #   user.topics
-  #       .where('lower(name) = ?', name.downcase)
-  #       .first_or_create!(name: name)
-  # end
-
   def round_one_stats
     main_game_stats(1)
   end
@@ -57,7 +51,7 @@ class Topic < ActiveRecord::Base
                  when 2 then round_two_categories
                  else sixths
                  end
-    # categories = round == 1 ? round_one_categories : round_two_categories
+
     categories.each { |category| update_stats(stats, category) }
 
     stats
@@ -74,7 +68,7 @@ class Topic < ActiveRecord::Base
   end
 
   def update_dd_stats(stats, result)
-    return stats[:dd_right] += 1 if result == :correct
+    return stats[:dd_right] += 1 if result == 7
     stats[:dd_wrong] += 1
   end
 end

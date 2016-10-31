@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.5.3
--- Dumped by pg_dump version 9.5.3
+-- Dumped from database version 9.5.4
+-- Dumped by pg_dump version 9.5.4
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -117,7 +117,10 @@ CREATE TABLE games (
     play_type character varying DEFAULT 'regular'::character varying,
     round_one_score integer,
     round_two_score integer,
-    final_result integer
+    final_result integer,
+    dd1_result integer,
+    dd2a_result integer,
+    dd2b_result integer
 );
 
 
@@ -523,4 +526,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160703132507');
 INSERT INTO schema_migrations (version) VALUES ('20160705211103');
 
 INSERT INTO schema_migrations (version) VALUES ('20160709133813');
+
+INSERT INTO schema_migrations (version) VALUES ('20161031155918');
 
