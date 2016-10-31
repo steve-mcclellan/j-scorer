@@ -346,6 +346,12 @@ input {
     color: #999;
     cursor: default;
   }
+
+  /* Force some padding onto the table headings to keep
+   * text and arrows from overlapping. */
+  table.tablesorter thead tr th, table.tablesorter tfoot tr th {
+    padding-right: 20px;
+  }
 }
 
 /* game page */
