@@ -21,8 +21,15 @@ Rails.application.routes.draw do
 
   get 'game' => 'games#game', as: :game
   delete 'delete/:show_date' => 'games#destroy', as: :delete
-  get 'json/:show_date' => 'games#json', as: :json
-  post 'save' => 'games#save', as: :save
-  patch 'redate' => 'games#redate', as: :redate
-  get 'check/:final_id' => 'games#check', as: :check
+
+  # Allow only Ajax requests to the following routes:
+  constraints(->(req) { req.xhr? }) do
+    get 'json/:show_date' => 'games#json', as: :json
+    post 'save' => 'games#save', as: :save
+    patch 'redate' => 'games#redate', as: :redate
+    get 'check/:final_id' => 'games#check', as: :check
+
+    get 'stats/topics' => 'users#topics', as: :topics
+    get 'sample/topics' => 'users#sample_topics'
+  end
 end
