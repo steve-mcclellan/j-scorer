@@ -7,6 +7,9 @@ debut:
   round_one_score: 0
   round_two_score: 0
   final_result: 0
+  dd1_result: 0
+  dd2a_result: 0
+  dd2b_result: 0
 
 two:
   user: dave
@@ -15,6 +18,9 @@ two:
   round_one_score: 0
   round_two_score: 0
   final_result: 0
+  dd1_result: 0
+  dd2a_result: 0
+  dd2b_result: 0
 
 most_recent:
   user: dave
@@ -23,6 +29,9 @@ most_recent:
   round_one_score: 0
   round_two_score: 0
   final_result: 0
+  dd1_result: 0
+  dd2a_result: 0
+  dd2b_result: 0
 
 victoria:
   user: dave
@@ -32,6 +41,9 @@ victoria:
   round_one_score: 0
   round_two_score: 0
   final_result: 0
+  dd1_result: 0
+  dd2a_result: 0
+  dd2b_result: 0
 
 steve:
   user: steve
@@ -40,3 +52,6 @@ steve:
   round_one_score: 0
   round_two_score: 0
   final_result: 0
+  dd1_result: 0
+  dd2a_result: 0
+  dd2b_result: 0
