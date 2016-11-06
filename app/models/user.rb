@@ -1,6 +1,7 @@
 class User < ActiveRecord::Base
   has_many :games, dependent: :destroy
   has_many :topics, dependent: :destroy
+  has_many :sixths, through: :games
 
   attr_accessor :remember_token, :reset_token
   before_save { email.downcase! }
@@ -66,5 +67,9 @@ class User < ActiveRecord::Base
 
   def all_game_summary
     @ags ||= AllGameSummary.new(self)
+  end
+
+  def results_by_row
+    @rbr ||= ResultsByRow.new(self)
   end
 end
