@@ -22,6 +22,7 @@ class UsersController < ApplicationController
 
   def topics
     @user = current_user
+    @user_stats = @user.all_game_summary.stats
     render layout: false
   end
 
@@ -35,6 +36,7 @@ class UsersController < ApplicationController
   def sample_topics
     @user = ENV['SAMPLE_USER'] ? User.find(ENV['SAMPLE_USER']) : User.first
     @email = ENV['SAMPLE_USER_EMAIL'] || @user.email
+    @user_stats = @user.all_game_summary.stats
     @sample = true
     render 'topics', layout: false
   end

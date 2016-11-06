@@ -19,11 +19,12 @@
   <div id="overview">
     <h2>Stats overview for <%= @sample ? @email : @user.email %>:</h2>
     <br />
-    <% stats = @user.all_game_summary %>
+    <% ags = @user.all_game_summary %>
+    <% stats = ags.stats %>
     <p>Games played: <%= gp = @user.games.count %></p>
-    <p>Total score: <%= number_to_currency(@user.total_score, precision: 0) %></p>
+    <p>Total score: <%= number_to_currency(ags.total_score, precision: 0) %></p>
     <% unless gp.zero? %>
-      <p>Average score: <%= number_to_currency(@user.average_score) %></p>
+      <p>Average score: <%= number_to_currency(ags.average_score) %></p>
     <% end %>
     <p>Clues right: <%= stats[:round_one][:right] + stats[:round_two][:right] %></p>
     <p>Clues wrong: <%= stats[:round_one][:wrong] + stats[:round_two][:wrong] %></p>
