@@ -3,7 +3,7 @@
 <div id="stats-area">
   <div class="k-box">
     <p>
-    <%= random_greeting %>, early adopter! This is a small taste of the kinds of stats that will be available as development continues. Much, much more will be coming as I work on this page throughout November. Is there a stat you'd like to see? Drop me a line at <a class="nowrap" href="mailto:<%= ENV['SUPPORT_ADDRESS'] %>"><%= ENV['SUPPORT_ADDRESS'] %></a>.
+    <%= random_greeting %>, early adopter! This is a small taste of the kinds of stats that will be available as development continues. More will be coming as I work on this page throughout November. Is there a stat you'd like to see? Drop me a line at <a class="nowrap" href="mailto:<%= ENV['SUPPORT_ADDRESS'] %>"><%= ENV['SUPPORT_ADDRESS'] %></a>.
     </p>
   </div>
   <ul>
@@ -12,6 +12,11 @@
     <li>
       <a href="<%= @sample ? sample_topics_path : topics_path %>">
         Topics
+      </a>
+    </li>
+    <li>
+      <a href="<%= @sample ? sample_by_row_path : by_row_path %>">
+        By row
       </a>
     </li>
   </ul>

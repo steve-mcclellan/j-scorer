@@ -65,4 +65,27 @@ class UsersControllerTest < ActionController::TestCase
     get :sample_topics, xhr: true
     assert_response :success
   end
+
+  test 'should redirect by-row when not logged in' do
+    get :by_row, xhr: true
+    assert_not flash.empty?
+    assert_redirected_to login_url
+  end
+
+  test 'should get by-row via Ajax request' do
+    log_in_here(@user)
+    get :by_row, xhr: true
+    assert_response :success
+  end
+
+  test 'should get sample_by_row when not logged in' do
+    get :sample_by_row, xhr: true
+    assert_response :success
+  end
+
+  test 'should get sample_by_row when logged in' do
+    log_in_here(@user)
+    get :sample_by_row, xhr: true
+    assert_response :success
+  end
 end
