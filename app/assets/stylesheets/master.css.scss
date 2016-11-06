@@ -352,7 +352,111 @@ input {
   table.tablesorter thead tr th, table.tablesorter tfoot tr th {
     padding-right: 20px;
   }
+
+  /* "By row" tab */
+  #ui-id-6 {
+    height: 100%;
+    width: 100%;
+    padding: 0;
+
+    #by-rows {
+      height: 100%;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      border: 0.3vw solid $gameboard-color;
+
+      .round-by-rows {
+        height: 100%;
+        width: 100%;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        .by-rows-row {
+          height: 100%;
+          width: 100%;
+          flex: 1;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+
+          .by-rows-value-box {
+            height: 100%;
+            width: 100%;
+            flex: 2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: $j-yellow;
+            text-shadow: 0.2vw 0.2vw $j-shadow;
+            font-size: 3vw;
+            font-weight: bold;
+            background-color: $j-blue;
+            border: 0.3vw solid $gameboard-color;
+          }
+
+          .by-rows-regular-box {
+            height: 100%;
+            width: 100%;
+            flex: 3;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 0.3vw solid $gameboard-color;
+
+            .counting-stats {
+              height: 100%;
+              width: 100%;
+              flex: 1;
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              align-items: center;
+              border: 2px solid limegreen;
+
+              .check {
+                color: $check-green;
+              }
+
+              .ecks {
+                color: $x-red;
+              }
+
+              .dot {
+                color: $j-lighter-blue;
+              }
+            }
+
+            .rate-stats {
+              height: 100%;
+              width: 100%;
+              flex: 1;
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              align-items: center;
+              border: 2px solid orange;
+            }
+          }
+
+          .by-rows-dd-box {
+            height: 100%;
+            width: 100%;
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border: 0.3vw solid $dd-border;
+          }
+        }
+      }
+    }
+  }
 }
+
 
 /* game page */
 

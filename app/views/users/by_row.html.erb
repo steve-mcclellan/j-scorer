@@ -1,1 +1,42 @@
-<%= @stats %>
+<div id="by-rows">
+  <% [:round_one, :round_two].each_with_index do |round, round_index| %>
+    <div class="round-by-rows">
+      <% 1.upto(5) do |row_number| %>
+        <div class="by-rows-row">
+          <div class="by-rows-value-box">
+            $<%= CURRENT_TOP_ROW_VALUES[round_index] * row_number %>:
+          </div>
+          <div class="by-rows-regular-box">
+            <div class="counting-stats">
+              <div>
+                <span class="check"><abbr title="right">&#x2713;</abbr></span>
+                <%= @stats[round][row_number][:right] %>
+              </div>
+              <div>
+                <span class="ecks"><abbr title="wrong">&#x2718;</abbr></span>
+                <%= @stats[round][row_number][:wrong] %>
+              </div>
+              <div>
+                <span class="dot"><abbr title="pass">&#x2022;</abbr></span>
+                <%= @stats[round][row_number][:pass] %>
+              </div>
+            </div>
+            <div class="rate-stats">
+              <div>efficiency</div>
+              <div>goes</div>
+              <div>here</div>
+            </div>
+          </div>
+          <div class="by-rows-dd-box">
+            <div>DDs: <%= ddr =  @stats[round][row_number][:dd_right] %>/<%= dd_tot = (@stats[round][row_number][:dd_wrong] + ddr) %></div>
+            <% unless dd_tot.zero? %>
+              <div>
+                (<%= number_to_percentage(ddr.fdiv(dd_tot) * 100, precision: 1) %>)
+              </div>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>
