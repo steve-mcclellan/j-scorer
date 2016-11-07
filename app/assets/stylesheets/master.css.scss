@@ -365,6 +365,7 @@ input {
       display: flex;
       justify-content: space-between;
       border: 0.3vw solid $gameboard-color;
+      font-size: 2.2vmin;
 
       .round-by-rows {
         height: 100%;
@@ -382,6 +383,11 @@ input {
           justify-content: center;
           align-items: center;
 
+          .three-liner div {
+            color: black;
+            margin: 0.5vh;
+          }
+
           .by-rows-value-box {
             height: 100%;
             width: 100%;
@@ -391,7 +397,7 @@ input {
             align-items: center;
             color: $j-yellow;
             text-shadow: 0.2vw 0.2vw $j-shadow;
-            font-size: 3vw;
+            font-size: 4vmin;
             font-weight: bold;
             background-color: $j-blue;
             border: 0.3vw solid $gameboard-color;
@@ -409,12 +415,11 @@ input {
             .counting-stats {
               height: 100%;
               width: 100%;
-              flex: 1;
+              flex: 3;
               display: flex;
               flex-direction: column;
               justify-content: center;
               align-items: center;
-              border: 2px solid limegreen;
 
               .check {
                 color: $check-green;
@@ -432,12 +437,12 @@ input {
             .rate-stats {
               height: 100%;
               width: 100%;
-              flex: 1;
+              flex: 4;
               display: flex;
               flex-direction: column;
               justify-content: center;
               align-items: center;
-              border: 2px solid orange;
+              border-left: 1px solid $gameboard-color;
             }
           }
 
