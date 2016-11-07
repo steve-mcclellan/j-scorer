@@ -2,6 +2,13 @@ class Sixth < ActiveRecord::Base
   belongs_to :game, inverse_of: :sixths, touch: true
 
   validates :game, presence: true
+
+  # TODO: Determine whether this type validation is redundant.
+  #       Does self.types, below, do the same thing?
+  validates :type,
+            presence: true,
+            inclusion: { in: %w(RoundOneCategory RoundTwoCategory) }
+
   validates :board_position,
             presence: true,
             inclusion: { in: [1, 2, 3, 4, 5, 6] },

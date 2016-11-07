@@ -37,9 +37,8 @@
     </thead>
     <tbody>
       <!-- Universal Topic -->
-      <% summary = @user.all_game_summary %>
-      <% round_one = summary[:round_one] %>
-      <% round_two = summary[:round_two] %>
+      <% round_one = @user_stats[:round_one] %>
+      <% round_two = @user_stats[:round_two] %>
       <tr>
         <td>
           <span class="nowrap">--ALL</span>
@@ -74,8 +73,8 @@
         <% end %>
         <td><%= round_one[:dd_right] + round_two[:dd_right] %></td>
         <td><%= round_one[:dd_wrong] + round_two[:dd_wrong] %></td>
-        <td><%= fr = summary[:finals][:right] %></td>
-        <td><%= fw = summary[:finals][:wrong] %></td>
+        <td><%= fr = @user_stats[:finals][:right] %></td>
+        <td><%= fw = @user_stats[:finals][:wrong] %></td>
         <!-- Final Success Rate -->
         <% if (fr + fw).zero? %>
           <td></td>

@@ -1,6 +1,7 @@
 class User < ActiveRecord::Base
   has_many :games, dependent: :destroy
   has_many :topics, dependent: :destroy
+  has_many :sixths, through: :games
 
   attr_accessor :remember_token, :reset_token
   before_save { email.downcase! }
@@ -52,12 +53,10 @@ class User < ActiveRecord::Base
                    reset_sent_at: Time.zone.now)
   end
 
-  # Sends password reset email.
   def send_password_reset_email
     UserMailer.password_reset(self).deliver_now
   end
 
-  # Returns true if a password reset has expired.
   def password_reset_expired?
     reset_sent_at < 1.hour.ago
   end
@@ -67,61 +66,10 @@ class User < ActiveRecord::Base
   end
 
   def all_game_summary
-    stats = { round_one: { right: 0, wrong: 0, pass: 0,
-                           dd_right: 0, dd_wrong: 0,
-                           score: 0, possible_score: 0 },
-              round_two: { right: 0, wrong: 0, pass: 0,
-                           dd_right: 0, dd_wrong: 0,
-                           score: 0, possible_score: 0 },
-              finals: { right: 0, wrong: 0 } }
-    games.each { |game| update_stats(stats, game.all_category_summary) }
-    stats
+    @ags ||= AllGameSummary.new(self)
   end
 
-  def total_score
-    stats = all_game_summary
-    stats[:round_one][:score] + stats[:round_two][:score]
-  end
-
-  def average_score
-    games_played = games.count
-    return nil if games_played.zero?
-    total_score / games_played.to_f
-  end
-
-  def efficiency
-    stats = all_game_summary
-    possible_score = stats[:round_one][:possible_score] +
-                     stats[:round_two][:possible_score]
-    return nil if possible_score.zero?
-    total_score / possible_score.to_f
-  end
-
-  private
-
-  def update_stats(stats, game_summary)
-    [:round_one, :round_two].each do |round|
-      [:right, :wrong, :pass].each do |stat|
-        stats[round][stat] += game_summary[round][stat]
-      end
-
-      add_dd_stats(stats, game_summary, round)
-      stats[round][:score] += game_summary[round][:score]
-      stats[round][:possible_score] += game_summary[round][:possible_score]
-    end
-
-    add_final_stats(stats, game_summary)
-  end
-
-  def add_dd_stats(stats, game_summary, round)
-    game_summary[round][:dd].each do |_row, result|
-      stats[round][:dd_right] += 1 if result == 7
-      stats[round][:dd_wrong] += 1 if [5, 6].include? result
-    end
-  end
-
-  def add_final_stats(stats, game_summary)
-    stats[:finals][:wrong] += 1 if game_summary[:final_status] == 1
-    stats[:finals][:right] += 1 if game_summary[:final_status] == 3
+  def results_by_row
+    @rbr ||= ResultsByRow.new(self)
   end
 end

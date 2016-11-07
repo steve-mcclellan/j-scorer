@@ -3,7 +3,7 @@
 <div id="stats-area">
   <div class="k-box">
     <p>
-    <%= random_greeting %>, early adopter! This is a small taste of the kinds of stats that will be available as development continues. Much, much more will be coming as I work on this page throughout November. Is there a stat you'd like to see? Drop me a line at <a class="nowrap" href="mailto:<%= ENV['SUPPORT_ADDRESS'] %>"><%= ENV['SUPPORT_ADDRESS'] %></a>.
+    <%= random_greeting %>, early adopter! This is a small taste of the kinds of stats that will be available as development continues. More will be coming as I work on this page throughout November. Is there a stat you'd like to see? Drop me a line at <a class="nowrap" href="mailto:<%= ENV['SUPPORT_ADDRESS'] %>"><%= ENV['SUPPORT_ADDRESS'] %></a>.
     </p>
   </div>
   <ul>
@@ -14,16 +14,22 @@
         Topics
       </a>
     </li>
+    <li>
+      <a href="<%= @sample ? sample_by_row_path : by_row_path %>">
+        By row
+      </a>
+    </li>
   </ul>
 
   <div id="overview">
     <h2>Stats overview for <%= @sample ? @email : @user.email %>:</h2>
     <br />
-    <% stats = @user.all_game_summary %>
+    <% ags = @user.all_game_summary %>
+    <% stats = ags.stats %>
     <p>Games played: <%= gp = @user.games.count %></p>
-    <p>Total score: <%= number_to_currency(@user.total_score, precision: 0) %></p>
+    <p>Total score: <%= number_to_currency(ags.total_score, precision: 0) %></p>
     <% unless gp.zero? %>
-      <p>Average score: <%= number_to_currency(@user.average_score) %></p>
+      <p>Average score: <%= number_to_currency(ags.average_score) %></p>
     <% end %>
     <p>Clues right: <%= stats[:round_one][:right] + stats[:round_two][:right] %></p>
     <p>Clues wrong: <%= stats[:round_one][:wrong] + stats[:round_two][:wrong] %></p>
