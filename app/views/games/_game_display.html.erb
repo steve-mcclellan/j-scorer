@@ -242,29 +242,9 @@
       </script>
       <!-- end temporary message -->
       <select id="play-type-select" tabindex="200">
-        <option value="teen">Teen Tournament</option>
-        <option value="regular">regular play</option>
-        <option value="power">Power Players Week</option>
-        <option value="teachers">Teachers Tournament</option>
-        <option value="college">College Championship</option>
-        <option value="toc">Tournament of Champions</option>
-        <option value="celebrity">Celebrity</option>
-        <option value="kids">Kids Week / Back to School Week</option>
-        <option value="decades">Battle of the Decades</option>
-        <option value="ibm">The IBM Challenge</option>
-        <option value="mdci">Million Dollar Celebrity Invitational</option>
-        <option value="kids-reunion">Kids Week Reunion</option>
-        <option value="utoc">Ultimate Tournament of Champions</option>
-        <option value="mdm">Million Dollar Masters</option>
-        <option value="intl">International / Olympic</option>
-        <option value="armed">Armed Forces Week</option>
-        <option value="teen-reunion">Teen Reunion Tournament</option>
-        <option value="senior">Seniors Tournament</option>
-        <option value="tenth">Tenth-Anniversary Tournament</option>
-        <option value="super">Super Jeopardy!</option>
-        <option value="rock">Rock &amp; Roll Jeopardy!</option>
-        <option value="sports">Sports Jeopardy!</option>
-        <option value="other">other</option>
+        <% PLAY_TYPES.each do |abbr, name| %>
+          <option value="<%= abbr %>"><%= name %></option>
+        <% end %>
       </select>
 
       <div class="text-center">

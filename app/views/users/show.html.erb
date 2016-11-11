@@ -72,6 +72,7 @@
         <tr>
           <th>Played</th>
           <th>Show date</th>
+          <th>Play type</th>
           <th>Score</th>
           <th>DDs Right</th>
           <th>DDs Wrong</th>
@@ -84,6 +85,7 @@
           <tr>
             <td><%= game.date_played.in_time_zone.to_s %></td>
             <td><%= game.show_date %></td>
+            <td><%= PLAY_TYPES[game.play_type] %></td>
             <td>$<%= game.adjusted_game_score %></td>
             <td><%= game.dds_right %></td>
             <td><%= game.dds_wrong %></td>
