@@ -82,7 +82,7 @@
       </thead>
       <tbody>
         <% @user.games.each do |game| %>
-          <tr>
+          <tr class="<%= game.play_type %>">
             <td><%= game.date_played.in_time_zone.to_s %></td>
             <td><%= game.show_date %></td>
             <td><%= PLAY_TYPES[game.play_type] %></td>
