@@ -1,4 +1,10 @@
 $( ".users-show, .users-sample" ).ready( function() {
+  function getCheckedBoxes() {
+    return $( "#typeTable :checked" ).map( function() {
+      return this.id.slice(0, -4);
+    }).get();
+  }
+
   $( "#stats-area" ).tabs({
     // Ajax request stuff, mostly pulled from jQuery UI's docs.
     beforeLoad: function( event, ui ) {
@@ -22,8 +28,7 @@ $( ".users-show, .users-sample" ).ready( function() {
 
       ui.jqXHR.fail( function() {
         ui.tab.data( "loading", false );
-        ui.panel.html(
-          "Couldn't load this tab. Please try again later." );
+        ui.panel.html( "Couldn't load this tab. Please try again later." );
       });
     }
   });
@@ -40,6 +45,29 @@ $( ".users-show, .users-sample" ).ready( function() {
 
   $( "#gameTable" ).stickyTableHeaders({
     scrollableArea: $( '#stats-area' )
+  });
+
+  // Similar for "Play types" table. Initialize default sort to
+  // [ Games played, descending ]. Prevent meaningless attempts
+  // to sort by checkbox column (currently in position 0).
+  $( "#typeTable" ).tablesorter({
+    sortList: [[2,1]],
+    headers: {
+      0: { sorter: false }
+    }
+  });
+
+  $( "#typeTable" ).stickyTableHeaders({
+    scrollableArea: $( '#stats-area' )
+  });
+
+  $( "#update-displayed-types" ).on( "click", function() {
+    console.log( getCheckedBoxes() );
+    // window.location.reload( true );
+  });
+
+  $( "#update-sample-types" ).on( "click", function() {
+    window.location.replace( "/sample" );
   });
 
   // Set the topics tab (currently in position 2) to load in the background

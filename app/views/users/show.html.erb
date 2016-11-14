@@ -19,6 +19,7 @@
         By row
       </a>
     </li>
+    <li><a href="#types">Play types</a></li>
   </ul>
 
   <div id="overview">
@@ -107,5 +108,37 @@
         <% end %>
       </tbody>
     </table>
-  </div>
+  </div> <!-- games -->
+
+  <div id="types">
+    <h2>Play types for <%= @sample ? @email : @user.email %>:</h2>
+    <button id="<%= @sample ? "update-sample-types" : "update-displayed-types" %>">
+      Have a button!
+    </button>
+
+    <table id="typeTable" class="tablesorter">
+      <thead>
+        <tr>
+          <th>Here's a checkbox...</th>
+          <th>Type</th>
+          <th>Games played</th>
+          <th>Average score</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% PLAY_TYPES.each do |abbr, type| %>
+          <% games_of_type = @user.games.where(play_type: abbr) %>
+          <% unless games_of_type.empty? %>
+            <tr class="<%= abbr %>">
+              <td><input id="<%= abbr %>-box" type="checkbox"></td>
+              <td><%= type %></td>
+              <td><%= games_of_type.count %></td>
+              <% tot = games_of_type.reduce(0) { |t, g| t + g.adjusted_game_score } %>
+              <td><%= number_to_currency(tot.fdiv(games_of_type.count)) %></td>
+            </tr>
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+  </div> <!-- types -->
 </div>
