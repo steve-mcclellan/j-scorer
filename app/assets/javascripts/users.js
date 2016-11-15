@@ -1,8 +1,18 @@
 $( ".users-show, .users-sample" ).ready( function() {
+
+  // Returns an array of play type abbreviations corresponding
+  // to the checked boxes on the play types tab.
   function getCheckedBoxes() {
     return $( "#typeTable :checked" ).map( function() {
       return this.id.slice(0, -4);
     }).get();
+  }
+
+  // Returns an appropriate url query string for the checked boxes.
+  function queryString() {
+    var selections = getCheckedBoxes();
+    if ( selections.length === 0 ) { return "?types=none"; }
+    return "?types=" + selections.join();
   }
 
   $( "#stats-area" ).tabs({
@@ -62,12 +72,16 @@ $( ".users-show, .users-sample" ).ready( function() {
   });
 
   $( "#update-displayed-types" ).on( "click", function() {
-    console.log( getCheckedBoxes() );
+    var url = "/stats" + queryString();
+    window.location.replace( url );
+    // var playTypes = getCheckedBoxes().join();
+    // console.log( playTypes );
     // window.location.reload( true );
   });
 
   $( "#update-sample-types" ).on( "click", function() {
-    window.location.replace( "/sample" );
+    var url = "/sample" + queryString();
+    window.location.replace( url );
   });
 
   // Set the topics tab (currently in position 2) to load in the background

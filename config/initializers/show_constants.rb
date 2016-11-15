@@ -21,7 +21,7 @@ PLAY_TYPES = {
         "senior"       => "Seniors Tournament",
         "tenth"        => "Tenth-Anniversary Tournament",
         "super"        => "Super Jeopardy!",
-        "rock"         => "Rock &amp; Roll Jeopardy!".html_safe,
+        "rock"         => "Rock & Roll Jeopardy!",
         "sports"       => "Sports Jeopardy!",
         "other"        => "other"
 }.freeze

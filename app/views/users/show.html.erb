@@ -6,31 +6,34 @@
     <%= random_greeting %>, early adopter! This is a small taste of the kinds of stats that will be available as development continues. More will be coming as I work on this page throughout November. Is there a stat you'd like to see? Drop me a line at <a class="nowrap" href="mailto:<%= ENV['SUPPORT_ADDRESS'] %>"><%= ENV['SUPPORT_ADDRESS'] %></a>.
     </p>
   </div>
+  <% types_param = params['types'] ? '?types=' + params['types'] : '' %>
+  <% topics_link = if @sample
+                     sample_topics_path + types_param
+                   else
+                     topics_path + types_param
+                   end %>
+  <% by_row_link = if @sample
+                     sample_by_row_path + types_param
+                   else
+                     by_row_path + types_param
+                   end %>
   <ul>
     <li><a href="#overview">Overview</a></li>
     <li><a href="#games">Games</a></li>
-    <li>
-      <a href="<%= @sample ? sample_topics_path : topics_path %>">
-        Topics
-      </a>
-    </li>
-    <li>
-      <a href="<%= @sample ? sample_by_row_path : by_row_path %>">
-        By row
-      </a>
-    </li>
+    <li><a href="<%= topics_link %>">Topics</a></li>
+    <li><a href="<%= by_row_link %>">By row</a></li>
     <li><a href="#types">Play types</a></li>
   </ul>
 
   <div id="overview">
     <h2>Stats overview for <%= @sample ? @email : @user.email %>:</h2>
     <br />
-    <% ags = @user.all_game_summary %>
-    <% stats = ags.stats %>
-    <p>Games played: <%= gp = @user.games.count %></p>
-    <p>Total score: <%= number_to_currency(ags.total_score, precision: 0) %></p>
+    <% mgs = @user.multi_game_summary(@play_types) %>
+    <% stats = mgs.stats %>
+    <p>Games played: <%= gp = mgs.games_tracked %></p>
+    <p>Total score: <%= number_to_currency(mgs.total_score, precision: 0) %></p>
     <% unless gp.zero? %>
-      <p>Average score: <%= number_to_currency(ags.average_score) %></p>
+      <p>Average score: <%= number_to_currency(mgs.average_score) %></p>
     <% end %>
     <p>Clues right: <%= stats[:round_one][:right] + stats[:round_two][:right] %></p>
     <p>Clues wrong: <%= stats[:round_one][:wrong] + stats[:round_two][:wrong] %></p>

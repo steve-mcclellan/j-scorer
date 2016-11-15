@@ -1,7 +1,7 @@
-class AllGameSummary
+class MultiGameSummary
   attr_reader :stats
 
-  def initialize(user)
+  def initialize(user, play_types)
     @user = user
     @stats = { round_one: { right: 0, wrong: 0, pass: 0,
                             dd_right: 0, dd_wrong: 0,
@@ -11,17 +11,20 @@ class AllGameSummary
                             score: 0, possible_score: 0 },
                finals: { right: 0, wrong: 0 } }
 
-    user.games.each { |game| update_stats(game.all_category_summary) }
+    @games = @user.games.where(play_type: play_types)
+    @games.each { |game| update_stats(game.all_category_summary) }
   end
 
   def total_score
     @stats[:round_one][:score] + @stats[:round_two][:score]
   end
 
+  def games_tracked
+    @game_count ||= @games.count
+  end
+
   def average_score
-    games_played = @user.games.count
-    return nil if games_played.zero?
-    total_score.fdiv(games_played)
+    games_tracked.zero? ? nil : total_score.fdiv(games_tracked)
   end
 
   # Currently unused, but I might change that at some point.

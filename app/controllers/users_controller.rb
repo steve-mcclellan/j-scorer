@@ -2,6 +2,7 @@ class UsersController < ApplicationController
   before_action :logged_in_user, only: [:show, :topics, :by_row]
   before_action :set_sample_data,
                 only: [:sample, :sample_topics, :sample_by_row]
+  before_action :set_play_types, except: [:new, :create]
 
   def new
     @user = User.new
@@ -24,7 +25,7 @@ class UsersController < ApplicationController
 
   def topics
     @user = current_user
-    @user_stats = @user.all_game_summary.stats
+    @user_stats = @user.multi_game_summary.stats
     render layout: false
   end
 
@@ -39,7 +40,7 @@ class UsersController < ApplicationController
   end
 
   def sample_topics
-    @user_stats = @user.all_game_summary.stats
+    @user_stats = @user.multi_game_summary.stats
     render 'topics', layout: false
   end
 
@@ -49,6 +50,10 @@ class UsersController < ApplicationController
   end
 
   private
+
+  def set_play_types
+    @play_types = params[:types] ? params[:types].split(',') : nil
+  end
 
   def set_sample_data
     @user = ENV['SAMPLE_USER'] ? User.find(ENV['SAMPLE_USER']) : User.first
