@@ -24,7 +24,7 @@
     <% stats = mgs.stats %>
     <p>Games played: <%= tracked = mgs.games_tracked %></p>
     <% unless tracked == @user.games.count %>
-      <p class="aside">(plus <%= @user.games.count - tracked %> untracked games - visit the "Play types" tab to change)<br /><br /></p>
+      <p class="aside">(plus <%= pluralize(@user.games.count - tracked, 'untracked game') %> - visit the "Play types" tab to change)<br /><br /></p>
     <% end %>
     <p>Total score: <%= number_to_currency(mgs.total_score, precision: 0) %></p>
     <% unless tracked.zero? %>
@@ -121,13 +121,13 @@
   <div id="types">
     <h2>Play types for <%= @sample ? @email : @user.email %>:</h2>
     <button id="<%= @sample ? "update-sample-types" : "update-displayed-types" %>">
-      Have a button!
+      Update stats
     </button>
 
     <table id="typeTable" class="tablesorter">
       <thead>
         <tr>
-          <th>Here's a checkbox...</th>
+          <th>Include in stats?</th>
           <th>Type</th>
           <th>Games played</th>
           <th>Average score</th>
@@ -138,7 +138,10 @@
           <% games_of_type = @user.games.where(play_type: abbr) %>
           <% unless games_of_type.empty? %>
             <tr class="<%= abbr %>">
-              <td><input id="<%= abbr %>-box" type="checkbox"></td>
+              <td>
+                <input id="<%= abbr %>-box" type="checkbox"
+                       <%= 'checked="true"' if @play_types.include?(abbr) %>>
+              </td>
               <td><%= type %></td>
               <td><%= games_of_type.count %></td>
               <% tot = games_of_type.reduce(0) { |t, g| t + g.adjusted_game_score } %>
@@ -148,5 +151,5 @@
         <% end %>
       </tbody>
     </table>
-  </div> <!-- types -->
+  </div> <!-- Play types tab -->
 </div>
