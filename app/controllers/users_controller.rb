@@ -31,7 +31,7 @@ class UsersController < ApplicationController
 
   def by_row
     @user = current_user
-    @stats = @user.results_by_row.stats
+    @stats = @user.results_by_row(@play_types).stats
     render layout: false
   end
 
@@ -45,7 +45,7 @@ class UsersController < ApplicationController
   end
 
   def sample_by_row
-    @stats = @user.results_by_row.stats
+    @stats = @user.results_by_row(@play_types).stats
     render 'by_row', layout: false
   end
 

@@ -69,7 +69,7 @@ class User < ActiveRecord::Base
     @mgs ||= MultiGameSummary.new(self, play_types)
   end
 
-  def results_by_row
-    @rbr ||= ResultsByRow.new(self)
+  def results_by_row(play_types = [])
+    @rbr ||= ResultsByRow.new(self, play_types)
   end
 end
