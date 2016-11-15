@@ -45,11 +45,11 @@ $( ".users-show, .users-sample" ).ready( function() {
 
   // Make "Games" table sortable. Initialize default sort to
   // [ leftmost column, descending ]. Prevent meaningless attempts
-  // to sort by "Actions" column (currently in position 6).
+  // to sort by "Actions" column (currently in position 7).
   $( "#gameTable" ).tablesorter({
     sortList: [[0,1]],
     headers: {
-      6: { sorter: false }
+      7: { sorter: false }
     }
   });
 
@@ -69,6 +69,21 @@ $( ".users-show, .users-sample" ).ready( function() {
 
   $( "#typeTable" ).stickyTableHeaders({
     scrollableArea: $( '#stats-area' )
+  });
+
+  var $untracked = $( "tr.untracked" );
+  $untracked.hide();
+
+  $( "#show-all-games" ).on( "click", function() {
+    $untracked.show();
+    $( "#some-hidden" ).hide();
+    $( "#all-shown" ).show();
+  });
+
+  $( "#hide-untracked-games" ).on( "click", function() {
+    $untracked.hide();
+    $( "#all-shown" ).hide();
+    $( "#some-hidden" ).show();
   });
 
   $( "#update-displayed-types" ).on( "click", function() {

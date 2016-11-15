@@ -22,12 +22,12 @@
     <br />
     <% mgs = @user.multi_game_summary(@play_types) %>
     <% stats = mgs.stats %>
-    <p>Games played: <%= gp = mgs.games_tracked %></p>
-    <% unless gp == @user.games.count %>
-      <p class="aside">(plus <%= @user.games.count - gp %> untracked games - visit the "Play types" tab to change)<br /><br /></p>
+    <p>Games played: <%= tracked = mgs.games_tracked %></p>
+    <% unless tracked == @user.games.count %>
+      <p class="aside">(plus <%= @user.games.count - tracked %> untracked games - visit the "Play types" tab to change)<br /><br /></p>
     <% end %>
     <p>Total score: <%= number_to_currency(mgs.total_score, precision: 0) %></p>
-    <% unless gp.zero? %>
+    <% unless tracked.zero? %>
       <p>Average score: <%= number_to_currency(mgs.average_score) %></p>
     <% end %>
     <p>Clues right: <%= stats[:round_one][:right] + stats[:round_two][:right] %></p>
@@ -57,13 +57,23 @@
           100 * stats[:finals][:right].to_f / fs, precision: 2) %>)
       <% end %>
     </p>
-
-  </div>
+  </div> <!-- Overview tab -->
 
   <div id="games">
     <h2>
       Games played by <%= @sample ? @email : @user.email %>
-      (<%= @user.games.count %>):
+      <% if tracked == @user.games.count %>
+        (<%= @user.games.count %>):
+      <% else %>
+        <span id="some-hidden">
+          (<%= tracked %> of <%= @user.games.count %> -
+          <a id="show-all-games">show all</a>):
+        </span>
+        <span id="all-shown" style="display: none;">
+          (all <%= @user.games.count %> -
+          <a id="hide-untracked-games">hide untracked</a>):
+        </span>
+      <% end %>
     </h2>
 
     <table id="gameTable" class="tablesorter">
@@ -81,7 +91,7 @@
       </thead>
       <tbody>
         <% @user.games.each do |game| %>
-          <tr class="<%= game.play_type %>">
+          <tr class="<%= game.play_type %><%= ' untracked' unless @play_types.include?(game.play_type) %>">
             <td><%= game.date_played.in_time_zone.to_s %></td>
             <td><%= game.show_date %></td>
             <td><%= PLAY_TYPES[game.play_type] %></td>
@@ -106,7 +116,7 @@
         <% end %>
       </tbody>
     </table>
-  </div> <!-- games -->
+  </div> <!-- Games tab -->
 
   <div id="types">
     <h2>Play types for <%= @sample ? @email : @user.email %>:</h2>
