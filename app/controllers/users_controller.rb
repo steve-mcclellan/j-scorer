@@ -52,7 +52,13 @@ class UsersController < ApplicationController
   private
 
   def set_play_types
-    @play_types = params[:types] ? params[:types].split(',') : nil
+    @play_types = if params[:types] == 'all'
+                    PLAY_TYPES.keys
+                  elsif params[:types]
+                    params[:types].split(',')
+                  else
+                    ['regular']
+                  end
   end
 
   def set_sample_data
