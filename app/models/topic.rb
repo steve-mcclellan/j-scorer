@@ -31,18 +31,18 @@ class Topic < ActiveRecord::Base
             presence: true,
             uniqueness: { scope: :user_id, case_sensitive: false }
 
-  def round_one_stats
-    main_game_stats(1)
+  def round_one_stats(play_types)
+    main_game_stats(play_types, 1)
   end
 
-  def round_two_stats
-    main_game_stats(2)
+  def round_two_stats(play_types)
+    main_game_stats(play_types, 2)
   end
 
   # Provides a stats summary for either or both of the first two rounds.
   # Returns stats for round one or two only if passed the corresponding
   # integer, otherwise returns stats for both rounds.
-  def main_game_stats(round = nil)
+  def main_game_stats(play_types, round = nil)
     stats = { right: 0, wrong: 0, pass: 0, score: 0, possible_score: 0,
               dd_right: 0, dd_wrong: 0 }
 
@@ -52,9 +52,24 @@ class Topic < ActiveRecord::Base
                  else sixths
                  end
 
-    categories.each { |category| update_stats(stats, category) }
+    cats = categories.joins(:game).where(games: { play_type: play_types })
+    cats.each { |cat| update_stats(stats, cat) }
 
     stats
+  end
+
+  def categories_tracked(play_types)
+    s = sixths.joins(:game).where(games: { play_type: play_types }).count
+    f = finals.joins(:game).where(games: { play_type: play_types }).count
+    s + f
+  end
+
+  def finals_right(play_types)
+    finals.joins(:game).where(games: { play_type: play_types }, result: 3).count
+  end
+
+  def finals_wrong(play_types)
+    finals.joins(:game).where(games: { play_type: play_types }, result: 1).count
   end
 
   private

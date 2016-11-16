@@ -25,7 +25,7 @@ class UsersController < ApplicationController
 
   def topics
     @user = current_user
-    @user_stats = @user.multi_game_summary.stats
+    @summary = @user.multi_game_summary(@play_types)
     render layout: false
   end
 
@@ -40,7 +40,7 @@ class UsersController < ApplicationController
   end
 
   def sample_topics
-    @user_stats = @user.multi_game_summary.stats
+    @summary = @user.multi_game_summary(@play_types)
     render 'topics', layout: false
   end
 

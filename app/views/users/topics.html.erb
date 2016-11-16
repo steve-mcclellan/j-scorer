@@ -9,22 +9,9 @@
       <tr>
         <th>Topic</th>
         <th>Categories</th>
-        <!--
-        <th>R1Right</th>
-        <th>R1Wrong</th>
-        <th>R1Pass</th>
-        <th>DDRight</th>
-        <th>DDWrong</th>
-        <th>R2Right</th>
-        <th>R2Wrong</th>
-        <th>R2Pass</th>
-        <th>DDRight</th>
-        <th>DDWrong</th>
-        -->
         <th>Right</th>
         <th>Wrong</th>
         <th>Pass</th>
-        <!-- -->
         <th>Total Score</th>
         <th>Possible Score</th>
         <th>Efficiency</th>
@@ -37,30 +24,17 @@
     </thead>
     <tbody>
       <!-- Universal Topic -->
-      <% round_one = @user_stats[:round_one] %>
-      <% round_two = @user_stats[:round_two] %>
+      <% round_one = @summary.stats[:round_one] %>
+      <% round_two = @summary.stats[:round_two] %>
       <tr>
         <td>
           <span class="nowrap">--ALL</span>
           <span class="nowrap">CATEGORIES--</span>
         </td>
-        <td><%= @user.games.count * 13 %></td>
-        <!--
-        <td><%= round_one[:right] %></td>
-        <td><%= round_one[:wrong] %></td>
-        <td><%= round_one[:pass] %></td>
-        <td><%= round_one[:dd_right] %></td>
-        <td><%= round_one[:dd_wrong] %></td>
-        <td><%= round_two[:right] %></td>
-        <td><%= round_two[:wrong] %></td>
-        <td><%= round_two[:pass] %></td>
-        <td><%= round_two[:dd_right] %></td>
-        <td><%= round_two[:dd_wrong] %></td>
-        -->
+        <td><%= @summary.games_tracked * 13 %></td>
         <td><%= round_one[:right] + round_two[:right] %></td>
         <td><%= round_one[:wrong] + round_two[:wrong] %></td>
         <td><%= round_one[:pass] + round_two[:pass] %></td>
-        <!-- -->
         <td><%= ts = round_one[:score] + round_two[:score] %></td>
         <td><%= ps = round_one[:possible_score] + round_two[:possible_score] %></td>
         <!-- Efficiency -->
@@ -73,8 +47,8 @@
         <% end %>
         <td><%= round_one[:dd_right] + round_two[:dd_right] %></td>
         <td><%= round_one[:dd_wrong] + round_two[:dd_wrong] %></td>
-        <td><%= fr = @user_stats[:finals][:right] %></td>
-        <td><%= fw = @user_stats[:finals][:wrong] %></td>
+        <td><%= fr = @summary.stats[:finals][:right] %></td>
+        <td><%= fw = @summary.stats[:finals][:wrong] %></td>
         <!-- Final Success Rate -->
         <% if (fr + fw).zero? %>
           <td></td>
@@ -87,30 +61,15 @@
 
       <!-- Individual Topics -->
       <% @user.topics.each do |topic| %>
-        <% round_one = topic.round_one_stats %>
-        <% round_two = topic.round_two_stats %>
+        <% stats = topic.main_game_stats(@play_types) %>
         <tr>
           <td><%= topic.name %></td>
-          <td><%= topic.sixths.count + topic.finals.count %></td>
-          <!--
-          <td><%= round_one[:right] %></td>
-          <td><%= round_one[:wrong] %></td>
-          <td><%= round_one[:pass] %></td>
-          <td><%= round_one[:dd_right] %></td>
-          <td><%= round_one[:dd_wrong] %></td>
-          <td><%= round_two[:right] %></td>
-          <td><%= round_two[:wrong] %></td>
-          <td><%= round_two[:pass] %></td>
-          <td><%= round_two[:dd_right] %></td>
-          <td><%= round_two[:dd_wrong] %></td>
-          -->
-          <td><%= round_one[:right] + round_two[:right] %></td>
-          <td><%= round_one[:wrong] + round_two[:wrong] %></td>
-          <td><%= round_one[:pass] + round_two[:pass] %></td>
-          <!-- -->
-          <td><%= ts = round_one[:score] + round_two[:score] %></td>
-          <td><%= ps = round_one[:possible_score] +
-                       round_two[:possible_score] %></td>
+          <td><%= topic.categories_tracked(@play_types) %></td>
+          <td><%= stats[:right] %></td>
+          <td><%= stats[:wrong] %></td>
+          <td><%= stats[:pass] %></td>
+          <td><%= ts = stats[:score] %></td>
+          <td><%= ps = stats[:possible_score] %></td>
           <!-- Efficiency -->
           <% if ps.zero? %>
             <td></td>
@@ -119,10 +78,10 @@
               <%= number_with_precision((ts / ps.to_f), precision: 5) %>
             </td>
           <% end %>
-          <td><%= round_one[:dd_right] + round_two[:dd_right] %></td>
-          <td><%= round_one[:dd_wrong] + round_two[:dd_wrong] %></td>
-          <td><%= fr = topic.finals.where(result: 3).count %></td>
-          <td><%= fw = topic.finals.where(result: 1).count %></td>
+          <td><%= stats[:dd_right] %></td>
+          <td><%= stats[:dd_wrong] %></td>
+          <td><%= fr = topic.finals_right(@play_types) %></td>
+          <td><%= fw = topic.finals_wrong(@play_types) %></td>
           <!-- Final Success Rate -->
           <% if (fr + fw).zero? %>
             <td></td>
