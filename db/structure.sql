@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.5.4
--- Dumped by pg_dump version 9.5.4
+-- Dumped from database version 9.5.5
+-- Dumped by pg_dump version 9.5.5
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -406,6 +406,13 @@ CREATE UNIQUE INDEX index_games_on_user_id_and_show_date ON games USING btree (u
 
 
 --
+-- Name: index_sixths_on_game_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_sixths_on_game_id ON sixths USING btree (game_id);
+
+
+--
 -- Name: index_topics_on_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -528,4 +535,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160705211103');
 INSERT INTO schema_migrations (version) VALUES ('20160709133813');
 
 INSERT INTO schema_migrations (version) VALUES ('20161031155918');
+
+INSERT INTO schema_migrations (version) VALUES ('20161116170851');
 
