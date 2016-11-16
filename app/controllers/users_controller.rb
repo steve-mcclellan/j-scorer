@@ -1,8 +1,8 @@
 class UsersController < ApplicationController
-  before_action :logged_in_user, only: [:show, :topics, :by_row]
+  before_action :logged_in_user, only: [:show, :topics, :by_row, :types]
   before_action :set_sample_data,
                 only: [:sample, :sample_topics, :sample_by_row]
-  before_action :set_play_types, except: [:new, :create]
+  before_action :set_play_types, except: [:new, :create, :types]
 
   def new
     @user = User.new
@@ -49,6 +49,15 @@ class UsersController < ApplicationController
     render 'by_row', layout: false
   end
 
+  def types
+    return render json: {}, status: 400 unless params[:play_types].is_a? Array
+    if current_user.update(play_types: params[:play_types])
+      render json: { success: true }
+    else
+      render json: current_user.errors, status: 400
+    end
+  end
+
   private
 
   def set_play_types
@@ -56,8 +65,11 @@ class UsersController < ApplicationController
                     PLAY_TYPES.keys
                   elsif params[:types]
                     params[:types].split(',')
+                  elsif !@sample
+                    current_user.play_types
                   else
-                    ['regular']
+                    # TODO: Change this back to ['regular'].
+                    []
                   end
   end
 

@@ -1,18 +1,15 @@
 $( ".users-show, .users-sample" ).ready( function() {
 
   // Returns an array of play type abbreviations corresponding
-  // to the checked boxes on the play types tab.
+  // to the checked boxes on the play types tab, or ['none']
+  // if no boxes are checked.
   function getCheckedBoxes() {
-    return $( "#typeTable :checked" ).map( function() {
+    var types = $( "#typeTable :checked" ).map( function() {
       return this.id.slice(0, -4);
     }).get();
-  }
 
-  // Returns an appropriate url query string for the checked boxes.
-  function queryString() {
-    var selections = getCheckedBoxes();
-    if ( selections.length === 0 ) { return "?types=none"; }
-    return "?types=" + selections.join();
+    if (types.length === 0) { return ['none']; }
+    return types;
   }
 
   $( "#stats-area" ).tabs({
@@ -87,16 +84,29 @@ $( ".users-show, .users-sample" ).ready( function() {
   });
 
   $( "#update-displayed-types" ).on( "click", function() {
-    var url = "/stats" + queryString();
-    window.location.replace( url );
-    // var playTypes = getCheckedBoxes().join();
-    // console.log( playTypes );
-    // window.location.reload( true );
+    if ( !$( this ).hasClass( "disabled" ) ) {
+      $( this ).addClass( "disabled" ).html( 'Updating...' );
+      $.ajax({
+        url: '/types',
+        method: 'PATCH',
+        data: { play_types: getCheckedBoxes() },
+        dataType: 'json',
+        success: function() { window.location.replace( '/stats' ); },
+        error: function() {
+          alert('Oops. Something went wrong.');
+          $( "#update-displayed-types" ).removeClass( "disabled" )
+                                        .html( 'Update stats' );
+        }
+      });
+    }
   });
 
   $( "#update-sample-types" ).on( "click", function() {
-    var url = "/sample" + queryString();
-    window.location.replace( url );
+    if ( !$( this ).hasClass( "disabled" ) ) {
+      $( this ).addClass( "disabled" ).html( 'Updating...' );
+      var url = "/sample?types=" + getCheckedBoxes().join();
+      window.location.replace( url );
+    }
   });
 
   // Set the topics tab (currently in position 2) to load in the background

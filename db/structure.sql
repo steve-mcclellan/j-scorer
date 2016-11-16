@@ -236,7 +236,8 @@ CREATE TABLE users (
     password_digest character varying,
     remember_digest character varying,
     reset_digest character varying,
-    reset_sent_at timestamp without time zone
+    reset_sent_at timestamp without time zone,
+    play_types character varying[] DEFAULT '{regular}'::character varying[]
 );
 
 
@@ -546,4 +547,6 @@ INSERT INTO schema_migrations (version) VALUES ('20161031155918');
 INSERT INTO schema_migrations (version) VALUES ('20161116170851');
 
 INSERT INTO schema_migrations (version) VALUES ('20161116205246');
+
+INSERT INTO schema_migrations (version) VALUES ('20161116222030');
 
