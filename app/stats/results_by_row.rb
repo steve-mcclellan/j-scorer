@@ -4,7 +4,6 @@ class ResultsByRow
   # rubocop:disable MethodLength
   def initialize(user, play_types)
     @user = user
-    @play_types = play_types
     @stats = { round_one:
                [0,
                 { right: 0, wrong: 0, pass: 0, dd_right: 0, dd_wrong: 0 },
@@ -20,7 +19,8 @@ class ResultsByRow
                 { right: 0, wrong: 0, pass: 0, dd_right: 0, dd_wrong: 0 },
                 { right: 0, wrong: 0, pass: 0, dd_right: 0, dd_wrong: 0 }] }
 
-    user.sixths.each { |cat| add_category_to_stats(cat) }
+    cats = user.sixths.joins(:game).where(games: { play_type: play_types })
+    cats.each { |cat| add_category_to_stats(cat) }
 
     add_efficiencies
   end
@@ -29,9 +29,6 @@ class ResultsByRow
   private
 
   def add_category_to_stats(cat)
-    # TODO: Replace this line by adding play_type to the Sixths table
-    #       and doing the filtering in line 23 instead?
-    return false unless @play_types.include?(cat.game.play_type)
     round = cat.is_a?(RoundOneCategory) ? :round_one : :round_two
 
     1.upto(5) do |row|
