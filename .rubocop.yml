@@ -27,3 +27,6 @@ Style/ClassAndModuleChildren:
 
 Style/Documentation:
   Enabled: false
+
+Style/AndOr:
+  Enabled: false

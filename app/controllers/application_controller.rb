@@ -6,6 +6,8 @@ class ApplicationController < ActionController::Base
 
   before_action :check_domain
 
+  private
+
   def check_domain
     if Rails.env.production? &&
        ENV['PROPER_DOMAIN'] &&
@@ -16,8 +18,6 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  private
-
   # Confirms that a user is logged in.
   def logged_in_user
     unless logged_in?
@@ -25,5 +25,9 @@ class ApplicationController < ActionController::Base
       flash[:danger] = 'Please log in.'
       redirect_to login_url
     end
+  end
+
+  def logged_in_for_json
+    render 'pages/login_plz', layout: false unless logged_in?
   end
 end

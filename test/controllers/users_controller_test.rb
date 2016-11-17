@@ -36,8 +36,9 @@ class UsersControllerTest < ActionController::TestCase
 
   test 'should redirect topics when not logged in' do
     get :topics, xhr: true
-    assert_not flash.empty?
-    assert_redirected_to login_url
+    assert_response :success
+    assert_template 'pages/login_plz'
+    assert_template layout: false
   end
 
   # TODO: This works properly outside of the test framework.
@@ -68,8 +69,9 @@ class UsersControllerTest < ActionController::TestCase
 
   test 'should redirect by-row when not logged in' do
     get :by_row, xhr: true
-    assert_not flash.empty?
-    assert_redirected_to login_url
+    assert_response :success
+    assert_template 'pages/login_plz'
+    assert_template layout: false
   end
 
   test 'should get by-row via Ajax request' do
