@@ -95,6 +95,20 @@ main {
   white-space: nowrap;
 }
 
+/* override tablesorter styles */
+
+.tablesorter {
+  font-size: 8pt;
+
+  tbody tr:nth-child(odd) td {
+    background-color: #f0f0f6;
+  }
+
+  tbody tr:hover td {
+    background-color: #ccc;
+  }
+}
+
 /* header */
 
 header {

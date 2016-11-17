@@ -40,47 +40,64 @@ $( ".users-show, .users-sample" ).ready( function() {
     }
   });
 
+  var $gameTable = $( "#gameTable" );
+  var $typeTable = $( "#typeTable" );
+
+  // Remove these before Tablesorter can get its grubby mitts on them.
+  $untracked = $( "tr.untracked" ).detach();
+
   // Make "Games" table sortable. Initialize default sort to
   // [ leftmost column, descending ]. Prevent meaningless attempts
   // to sort by "Actions" column (currently in position 7).
-  $( "#gameTable" ).tablesorter({
-    sortList: [[0,1]],
-    headers: {
-      7: { sorter: false }
-    }
-  });
+  // To prevent a JS error, skip this if the table is empty.
+  if ( !$gameTable.hasClass( 'empty' ) ) {
+    $gameTable.tablesorter({
+      sortList: [[0,1]],
+      sortInitialOrder: "desc",
+      headers: {
+        2: { sortInitialOrder: "asc" },  // Play type (text)
+        6: { sortInitialOrder: "asc" },  // Final (check or X)
+        7: { sorter: false }
+      }
+    });
+  }
 
-  $( "#gameTable" ).stickyTableHeaders({
+  $gameTable.stickyTableHeaders({
     scrollableArea: $( '#stats-area' )
   });
 
   // Similar for "Play types" table. Initialize default sort to
   // [ Games played, descending ]. Prevent meaningless attempts
   // to sort by checkbox column (currently in position 0).
-  $( "#typeTable" ).tablesorter({
-    sortList: [[2,1]],
-    headers: {
-      0: { sorter: false }
-    }
-  });
+  // To prevent a JS error, skip this if the table is empty.
+  if ( !$typeTable.hasClass( 'empty' ) ) {
+    $typeTable.tablesorter({
+      sortList: [[2,1]],
+      sortInitialOrder: "desc",
+      headers: {
+        0: { sorter: false },
+        1: { sortInitialOrder: "asc" }  // Play type (text)
+      }
+    });
+  }
 
-  $( "#typeTable" ).stickyTableHeaders({
+  $typeTable.stickyTableHeaders({
     scrollableArea: $( '#stats-area' )
   });
 
-  var $untracked = $( "tr.untracked" );
-  $untracked.hide();
-
   $( "#show-all-games" ).on( "click", function() {
-    $untracked.show();
+    $untracked.appendTo( "#gameTable tbody" );
+    $untracked = null;
     $( "#some-hidden" ).hide();
     $( "#all-shown" ).show();
+    $gameTable.trigger( "update", true );
   });
 
   $( "#hide-untracked-games" ).on( "click", function() {
-    $untracked.hide();
+    $untracked = $( "tr.untracked" ).detach();
     $( "#all-shown" ).hide();
     $( "#some-hidden" ).show();
+    $gameTable.trigger( "update", true );
   });
 
   $( "#update-displayed-types" ).on( "click", function() {

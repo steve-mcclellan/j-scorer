@@ -4,7 +4,7 @@
     (<%= @user.topics.count %>):
   </h2>
 
-  <table id="topicTable" class="tablesorter">
+  <table id="topicTable" class="tablesorter tablesorter-blue">
     <thead>
       <tr>
         <th>Topic</th>
@@ -99,8 +99,13 @@
 <script>
 // Make table sortable.
 // Default sort: [ leftmost column, ascending ].
+// Make everything else sort descending on first click.
 $( "#topicTable" ).tablesorter({
-  sortList: [[0,0]]
+  sortList: [[0,0]],
+  sortInitialOrder: "desc",
+  headers: {
+    0: { sortInitialOrder: "asc" }
+  }
 });
 
 $( "#topicTable" ).stickyTableHeaders({

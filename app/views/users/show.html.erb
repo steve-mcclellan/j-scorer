@@ -22,9 +22,10 @@
     <br />
     <% mgs = @user.multi_game_summary(@play_types) %>
     <% stats = mgs.stats %>
+    <% user_games_count = @user.games.count %>
     <p>Games played: <%= tracked = mgs.games_tracked %></p>
-    <% unless tracked == @user.games.count %>
-      <p class="aside">(plus <%= pluralize(@user.games.count - tracked, 'untracked game') %> - visit the "Play types" tab to change)<br /><br /></p>
+    <% unless tracked == user_games_count %>
+      <p class="aside">(plus <%= pluralize(user_games_count - tracked, 'untracked game') %> - visit the "Play types" tab to change)<br /><br /></p>
     <% end %>
     <p>Total score: <%= number_to_currency(mgs.total_score, precision: 0) %></p>
     <% unless tracked.zero? %>
@@ -62,21 +63,21 @@
   <div id="games">
     <h2>
       Games played by <%= @sample ? @email : @user.email %>
-      <% if tracked == @user.games.count %>
-        (<%= @user.games.count %>):
+      <% if tracked == user_games_count %>
+        (<%= user_games_count %>):
       <% else %>
         <span id="some-hidden">
-          (<%= tracked %> of <%= @user.games.count %> -
+          (<%= tracked %> of <%= user_games_count %> -
           <a id="show-all-games">show all</a>):
         </span>
         <span id="all-shown" style="display: none;">
-          (all <%= @user.games.count %> -
+          (all <%= user_games_count %> -
           <a id="hide-untracked-games">hide untracked</a>):
         </span>
       <% end %>
     </h2>
 
-    <table id="gameTable" class="tablesorter">
+    <table id="gameTable" class="tablesorter tablesorter-blue<%= ' empty' if user_games_count.zero? %>">
       <thead>
         <tr>
           <th>Played</th>
@@ -124,7 +125,7 @@
       Update stats
     </button>
 
-    <table id="typeTable" class="tablesorter">
+    <table id="typeTable" class="tablesorter tablesorter-blue<%= ' empty' if user_games_count.zero? %>">
       <thead>
         <tr>
           <th>Include in stats?</th>
