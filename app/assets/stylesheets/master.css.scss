@@ -95,6 +95,20 @@ main {
   white-space: nowrap;
 }
 
+/* override tablesorter styles */
+
+.tablesorter {
+  font-size: 8pt;
+
+  tbody tr:nth-child(odd) td {
+    background-color: #f0f0f6;
+  }
+
+  tbody tr:hover td {
+    background-color: #ccc;
+  }
+}
+
 /* header */
 
 header {
@@ -341,6 +355,19 @@ input {
 #stats-area {
   height: 100%;
   overflow: auto;
+  font-size: 3.5vmin;
+
+  ul {
+    font-size: 2.5vmin;
+  }
+
+  .ui-tabs-panel a {
+    color: $j-blue;
+  }
+
+  p.aside {
+    font-size: 2vmin;
+  }
 
   .disabled {
     color: #999;
@@ -351,6 +378,36 @@ input {
    * text and arrows from overlapping. */
   table.tablesorter thead tr th, table.tablesorter tfoot tr th {
     padding-right: 20px;
+  }
+
+  /* Color code non-regular play types in Games and Play types tabs */
+  table.tablesorter tbody {
+    tr.teen td { background-color: #bed; }
+    tr.toc td { background-color: #fbb; }
+    tr.power td { background-color: #cdf; }
+    tr.teachers td { background-color: #ffd; }
+    tr.college td { background-color: #fec; }
+    tr.celebrity td { background-color: #cbf; }
+    tr.kids td { background-color: #bfb; }
+    tr.decades td { background-color: #faa; }
+    tr.ibm td { background-color: #fbf; }
+    tr.mdci td { background-color: #ebf; }
+    tr.kids-reunion td { background-color: #cfd; }
+    tr.utoc td { background-color: #f99; }
+    tr.mdm td { background-color: #fab; }
+    tr.intl td { background-color: #eba; }
+    tr.armed td { background-color: #fdc; }
+    tr.teen-reunion td { background-color: #cfe; }
+    tr.senior td { background-color: #cdc; }
+    tr.tenth td { background-color: #fba; }
+    tr.super td { background-color: #fa9; }
+    tr.rock td { background-color: #99f; }
+    tr.sports td { background-color: #bb8; }
+    tr.other td { background-color: #bbc; }
+
+    a {
+      color: black;
+    }
   }
 
   /* "By row" tab */
@@ -459,6 +516,14 @@ input {
         }
       }
     }
+  }
+
+  #types button {
+    font-size: large;
+  }
+
+  #typeTable tbody td {
+    vertical-align: middle;
   }
 }
 

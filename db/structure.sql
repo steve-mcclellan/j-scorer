@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.5.4
--- Dumped by pg_dump version 9.5.4
+-- Dumped from database version 9.5.5
+-- Dumped by pg_dump version 9.5.5
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -236,7 +236,8 @@ CREATE TABLE users (
     password_digest character varying,
     remember_digest character varying,
     reset_digest character varying,
-    reset_sent_at timestamp without time zone
+    reset_sent_at timestamp without time zone,
+    play_types character varying[] DEFAULT '{regular}'::character varying[]
 );
 
 
@@ -378,6 +379,13 @@ CREATE INDEX index_finals_on_game_id ON finals USING btree (game_id);
 
 
 --
+-- Name: index_games_on_play_type; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_games_on_play_type ON games USING btree (play_type);
+
+
+--
 -- Name: index_games_on_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -403,6 +411,13 @@ CREATE INDEX index_games_on_user_id_and_play_type ON games USING btree (user_id,
 --
 
 CREATE UNIQUE INDEX index_games_on_user_id_and_show_date ON games USING btree (user_id, show_date);
+
+
+--
+-- Name: index_sixths_on_game_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_sixths_on_game_id ON sixths USING btree (game_id);
 
 
 --
@@ -528,4 +543,10 @@ INSERT INTO schema_migrations (version) VALUES ('20160705211103');
 INSERT INTO schema_migrations (version) VALUES ('20160709133813');
 
 INSERT INTO schema_migrations (version) VALUES ('20161031155918');
+
+INSERT INTO schema_migrations (version) VALUES ('20161116170851');
+
+INSERT INTO schema_migrations (version) VALUES ('20161116205246');
+
+INSERT INTO schema_migrations (version) VALUES ('20161116222030');
 

@@ -11,7 +11,7 @@
  * file per style scope.
  *
  *= require jquery-ui
- *= require tablesorter_blue
+ *= require tablesorter.blue
  *= require bootstrap-datetimepicker
  *= require_tree .
  *= require_self

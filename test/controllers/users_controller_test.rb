@@ -36,8 +36,9 @@ class UsersControllerTest < ActionController::TestCase
 
   test 'should redirect topics when not logged in' do
     get :topics, xhr: true
-    assert_not flash.empty?
-    assert_redirected_to login_url
+    assert_response :success
+    assert_template 'pages/login_plz'
+    assert_template layout: false
   end
 
   # TODO: This works properly outside of the test framework.
@@ -68,8 +69,9 @@ class UsersControllerTest < ActionController::TestCase
 
   test 'should redirect by-row when not logged in' do
     get :by_row, xhr: true
-    assert_not flash.empty?
-    assert_redirected_to login_url
+    assert_response :success
+    assert_template 'pages/login_plz'
+    assert_template layout: false
   end
 
   test 'should get by-row via Ajax request' do
@@ -87,5 +89,27 @@ class UsersControllerTest < ActionController::TestCase
     log_in_here(@user)
     get :sample_by_row, xhr: true
     assert_response :success
+  end
+
+  test 'should redirect types when not logged in' do
+    patch :types, play_types: ['tenth'], xhr: true
+    assert_not flash.empty?
+    assert_redirected_to login_url
+  end
+
+  test 'should overwrite play_types on a valid request' do
+    log_in_here(@user)
+    assert_equal ['regular'], @user.play_types
+    patch :types, play_types: ['tenth'], xhr: true
+    assert_response :success
+    assert_equal ['tenth'], @user.reload.play_types
+  end
+
+  test 'should fail gracefully when given invalid types' do
+    log_in_here(@user)
+    assert_equal ['regular'], @user.play_types
+    patch :types, play_types: 'not-an-array', xhr: true
+    assert_response :bad_request
+    assert_equal ['regular'], @user.reload.play_types
   end
 end
