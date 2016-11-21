@@ -1,0 +1,40 @@
+<div id="overview">
+  <h2>Stats overview for <%= @sample ? @email : @user.email %>:</h2>
+  <br />
+  <% stats = mgs.stats %>
+  <p>Games played: <%= tracked %></p>
+  <% unless tracked == user_games_count %>
+    <p class="aside">(plus <%= pluralize(user_games_count - tracked, 'untracked game') %> - visit the "Play types" tab to change)<br /><br /></p>
+  <% end %>
+  <p>Total score: <%= number_to_currency(mgs.total_score, precision: 0) %></p>
+  <% unless tracked.zero? %>
+    <p>Average score: <%= number_to_currency(mgs.average_score) %></p>
+  <% end %>
+  <p>Clues right: <%= stats[:round_one][:right] + stats[:round_two][:right] %></p>
+  <p>Clues wrong: <%= stats[:round_one][:wrong] + stats[:round_two][:wrong] %></p>
+  <p>Clues passed: <%= stats[:round_one][:pass] + stats[:round_two][:pass] %></p>
+  <p>
+    Round One DDs: <%= stats[:round_one][:dd_right] %>/<%= r1dds =
+      stats[:round_one][:dd_right] + stats[:round_one][:dd_wrong] %>
+    <% unless r1dds.zero? %>
+      (<%= number_to_percentage(
+        100 * stats[:round_one][:dd_right].to_f / r1dds, precision: 2) %>)
+    <% end %>
+  </p>
+  <p>
+    Round Two DDs: <%= stats[:round_two][:dd_right] %>/<%= r2dds =
+      stats[:round_two][:dd_right] + stats[:round_two][:dd_wrong] %>
+    <% unless r2dds.zero? %>
+      (<%= number_to_percentage(
+        100 * stats[:round_two][:dd_right].to_f / r2dds, precision: 2) %>)
+    <% end %>
+  </p>
+  <p>
+    Finals: <%= stats[:finals][:right] %>/<%= fs =
+      stats[:finals][:right] + stats[:finals][:wrong] %>
+    <% unless fs.zero? %>
+      (<%= number_to_percentage(
+        100 * stats[:finals][:right].to_f / fs, precision: 2) %>)
+    <% end %>
+  </p>
+</div> <!-- Overview tab -->

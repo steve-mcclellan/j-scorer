@@ -17,140 +17,15 @@
     <li><a href="#types">Play types</a></li>
   </ul>
 
-  <div id="overview">
-    <h2>Stats overview for <%= @sample ? @email : @user.email %>:</h2>
-    <br />
-    <% mgs = @user.multi_game_summary(@play_types) %>
-    <% stats = mgs.stats %>
-    <% user_games_count = @user.games.count %>
-    <p>Games played: <%= tracked = mgs.games_tracked %></p>
-    <% unless tracked == user_games_count %>
-      <p class="aside">(plus <%= pluralize(user_games_count - tracked, 'untracked game') %> - visit the "Play types" tab to change)<br /><br /></p>
-    <% end %>
-    <p>Total score: <%= number_to_currency(mgs.total_score, precision: 0) %></p>
-    <% unless tracked.zero? %>
-      <p>Average score: <%= number_to_currency(mgs.average_score) %></p>
-    <% end %>
-    <p>Clues right: <%= stats[:round_one][:right] + stats[:round_two][:right] %></p>
-    <p>Clues wrong: <%= stats[:round_one][:wrong] + stats[:round_two][:wrong] %></p>
-    <p>Clues passed: <%= stats[:round_one][:pass] + stats[:round_two][:pass] %></p>
-    <p>
-      Round One DDs: <%= stats[:round_one][:dd_right] %>/<%= r1dds =
-        stats[:round_one][:dd_right] + stats[:round_one][:dd_wrong] %>
-      <% unless r1dds.zero? %>
-        (<%= number_to_percentage(
-          100 * stats[:round_one][:dd_right].to_f / r1dds, precision: 2) %>)
-      <% end %>
-    </p>
-    <p>
-      Round Two DDs: <%= stats[:round_two][:dd_right] %>/<%= r2dds =
-        stats[:round_two][:dd_right] + stats[:round_two][:dd_wrong] %>
-      <% unless r2dds.zero? %>
-        (<%= number_to_percentage(
-          100 * stats[:round_two][:dd_right].to_f / r2dds, precision: 2) %>)
-      <% end %>
-    </p>
-    <p>
-      Finals: <%= stats[:finals][:right] %>/<%= fs =
-        stats[:finals][:right] + stats[:finals][:wrong] %>
-      <% unless fs.zero? %>
-        (<%= number_to_percentage(
-          100 * stats[:finals][:right].to_f / fs, precision: 2) %>)
-      <% end %>
-    </p>
-  </div> <!-- Overview tab -->
+  <% mgs = @user.multi_game_summary(@play_types) %>
+  <% user_games_count = @user.games.count %>
+  <% tracked = mgs.games_tracked %>
 
-  <div id="games">
-    <h2>
-      Games played by <%= @sample ? @email : @user.email %>
-      <% if tracked == user_games_count %>
-        (<%= user_games_count %>):
-      <% else %>
-        <span id="some-hidden">
-          (<%= tracked %> of <%= user_games_count %> -
-          <a id="show-all-games">show all</a>):
-        </span>
-        <span id="all-shown" style="display: none;">
-          (all <%= user_games_count %> -
-          <a id="hide-untracked-games">hide untracked</a>):
-        </span>
-      <% end %>
-    </h2>
+  <%= render 'overview', mgs: mgs, user_games_count: user_games_count,
+                         tracked: tracked %>
 
-    <table id="gameTable" class="tablesorter tablesorter-blue<%= ' empty' if user_games_count.zero? %>">
-      <thead>
-        <tr>
-          <th>Played</th>
-          <th>Show date</th>
-          <th>Play type</th>
-          <th>Score</th>
-          <th>DDs Right</th>
-          <th>DDs Wrong</th>
-          <th>Final</th>
-          <th colspan=2>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @user.games.each do |game| %>
-          <tr class="<%= game.play_type %><%= ' untracked' unless @play_types.include?(game.play_type) %>">
-            <td><%= game.date_played.in_time_zone.to_s %></td>
-            <td><%= game.show_date %></td>
-            <td><%= PLAY_TYPES[game.play_type] %></td>
-            <td>$<%= game.adjusted_game_score %></td>
-            <td><%= game.dds_right %></td>
-            <td><%= game.dds_wrong %></td>
-            <td><%= game.final_symbol %></td>
-            <% if current_user?(game.user) %>
-              <td><%= link_to 'edit', game_path(d: game.show_date) %></td>
-              <td><%= link_to 'delete',
-                              delete_path(game),
-                              method: :delete,
-                              data: { confirm: 'Are you sure you want to ' +
-                                               'delete the game from ' +
-                                               game.show_date.to_s +
-                                               '?' } %></td>
-            <% else %>
-              <td class="disabled">edit</td>
-              <td class="disabled">delete</td>
-            <% end %>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  </div> <!-- Games tab -->
+  <%= render 'games', user_games_count: user_games_count, tracked: tracked %>
 
-  <div id="types">
-    <h2>Play types for <%= @sample ? @email : @user.email %>:</h2>
-    <button id="<%= @sample ? "update-sample-types" : "update-displayed-types" %>">
-      Update stats
-    </button>
+  <%= render 'types', user_games_count: user_games_count %>
 
-    <table id="typeTable" class="tablesorter tablesorter-blue<%= ' empty' if user_games_count.zero? %>">
-      <thead>
-        <tr>
-          <th>Include in stats?</th>
-          <th>Type</th>
-          <th>Games played</th>
-          <th>Average score</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% PLAY_TYPES.each do |abbr, type| %>
-          <% games_of_type = @user.games.where(play_type: abbr) %>
-          <% unless games_of_type.empty? %>
-            <tr class="<%= abbr %>">
-              <td>
-                <input id="<%= abbr %>-box" type="checkbox"
-                       <%= 'checked="true"' if @play_types.include?(abbr) %>>
-              </td>
-              <td><%= type %></td>
-              <td><%= games_of_type.count %></td>
-              <% tot = games_of_type.reduce(0) { |t, g| t + g.adjusted_game_score } %>
-              <td><%= number_to_currency(tot.fdiv(games_of_type.count)) %></td>
-            </tr>
-          <% end %>
-        <% end %>
-      </tbody>
-    </table>
-  </div> <!-- Play types tab -->
 </div>
