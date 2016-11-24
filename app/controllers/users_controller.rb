@@ -27,6 +27,7 @@ class UsersController < ApplicationController
 
   def topics
     @summary = @user.multi_game_summary(@play_types)
+    @stats = TopicsSummary.new(@user, @play_types).stats
     render layout: false
   end
 
@@ -41,6 +42,7 @@ class UsersController < ApplicationController
 
   def sample_topics
     @summary = @user.multi_game_summary(@play_types)
+    @stats = TopicsSummary.new(@user, @play_types).stats
     render 'topics', layout: false
   end
 

@@ -40,8 +40,9 @@ module TopicsQueries
   #   "
   # end
 
-  def topics_query(user)
+  def topics_query(user, play_types)
     raise ArgumentError unless user.is_a? User
+    play_types_array = "'{" + play_types.join(', ') + "}'::text[]"
     "
     SELECT t.name AS topic, s.result1, s.result2, s.result3, s.result4,
       s.result5, s.type AS sixth_type, f.result AS final_result
@@ -59,7 +60,7 @@ module TopicsQueries
     INNER JOIN users u
       ON t.user_id = u.id
     WHERE t.user_id = #{user.id}
-      AND COALESCE(gOne.play_type, gTwo.play_type) = ANY (u.play_types)
+      AND COALESCE(gOne.play_type, gTwo.play_type) = ANY (#{play_types_array})
     ORDER BY t.name ASC
     "
   end

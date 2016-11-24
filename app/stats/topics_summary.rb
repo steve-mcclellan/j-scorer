@@ -5,13 +5,15 @@ class TopicsSummary
   # attr_reader :sixth_stats, :final_stats
   attr_reader :stats
 
-  def initialize(user)
+  def initialize(user, play_types)
     # @sixths = ActiveRecord::Base.connection
     #                             .select_all(topic_sixths_query(user)).to_hash
     # @finals = ActiveRecord::Base.connection
     #                             .select_all(topic_finals_query(user)).to_hash
 
-    data = ActiveRecord::Base.connection.select_all(topics_query(user)).to_hash
+    data = ActiveRecord::Base.connection
+                             .select_all(topics_query(user, play_types))
+                             .to_hash
 
     crunch_numbers(data)
     # crunch_numbers_each(@sixths, @finals)
@@ -30,7 +32,7 @@ class TopicsSummary
       end
     end
 
-    add_rate_stats
+    add_calculated_stats
   end
 
   # def crunch_numbers_each(sixths_data, final_data)
@@ -89,13 +91,12 @@ class TopicsSummary
   end
   # rubocop:enable MethodLength
 
-  def add_rate_stats
+  def add_calculated_stats
     @stats.each_value do |topic_hash|
       topic_hash[:efficiency] = quotient(topic_hash[:score],
                                          topic_hash[:possible_score])
 
-      topic_hash[:final_rate] = quotient(topic_hash[:finals_right],
-                                         topic_hash[:finals_count])
+      topic_hash[:dds] = topic_hash[:dd_right] + topic_hash[:dd_wrong]
     end
   end
 
