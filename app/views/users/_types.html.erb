@@ -1,5 +1,6 @@
 <div id="types">
   <h2>Play types for <%= @sample ? @email : @user.email %>:</h2>
+
   <button id="<%= @sample ? "update-sample-types" : "update-displayed-types" %>">
     Update stats
   </button>
@@ -11,24 +12,24 @@
         <th>Type</th>
         <th>Games played</th>
         <th>Average score</th>
+        <th>High score</th>
+        <th>Low score</th>
       </tr>
     </thead>
     <tbody>
-      <% PLAY_TYPES.each do |abbr, type| %>
-        <% games_of_type = @user.games.where(play_type: abbr) %>
-        <% unless games_of_type.empty? %>
-          <tr class="<%= abbr %>">
-            <td>
-              <input id="<%= abbr %>-box" type="checkbox"
-                     <%= 'checked="true"' if @play_types.include?(abbr) %>>
-            </td>
-            <td><%= type %></td>
-            <td><%= games_of_type.count %></td>
-            <% tot = games_of_type.reduce(0) { |t, g| t + g.adjusted_game_score } %>
-            <td><%= number_to_currency(tot.fdiv(games_of_type.count)) %></td>
-          </tr>
-        <% end %>
+      <% @play_type_summary.each do |type_abbr, type_stats| %>
+        <tr class="<%= type_abbr %>">
+          <td>
+            <input id="<%= type_abbr %>-box" type="checkbox"
+                   <%= 'checked="true"' if @play_types.include?(type_abbr) %>>
+          </td>
+          <td><%= PLAY_TYPES[type_abbr] %></td>
+          <td><%= type_stats[:games_count] %></td>
+          <td><%= number_to_currency(type_stats[:average_score]) %></td>
+          <td><%= number_to_currency(type_stats[:max], precision: 0) %></td>
+          <td><%= number_to_currency(type_stats[:min], precision: 0) %></td>
+        </tr>
       <% end %>
     </tbody>
   </table>
-</div> <!-- Play types tab -->
+</div>

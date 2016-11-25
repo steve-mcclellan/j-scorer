@@ -76,4 +76,8 @@ class User < ActiveRecord::Base
   def results_by_row(play_types)
     @rbr ||= ResultsByRow.new(self, play_types).stats
   end
+
+  def play_type_summary
+    @pts ||= PlayTypeSummary.new(self).stats
+  end
 end

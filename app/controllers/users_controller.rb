@@ -25,6 +25,7 @@ class UsersController < ApplicationController
   end
 
   def show
+    @play_type_summary = @user.play_type_summary
   end
 
   def topics
@@ -38,6 +39,7 @@ class UsersController < ApplicationController
   end
 
   def sample
+    @play_type_summary = @user.play_type_summary
     render 'show'
   end
 
