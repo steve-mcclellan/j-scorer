@@ -23,10 +23,11 @@ class UsersController < ApplicationController
   end
 
   def show
+    @summary = @user.multi_game_summary(@play_types).stats
   end
 
   def topics
-    @summary = @user.multi_game_summary(@play_types)
+    @summary = @user.multi_game_summary(@play_types).stats
     @stats = TopicsSummary.new(@user, @play_types).stats
     render layout: false
   end
@@ -37,11 +38,12 @@ class UsersController < ApplicationController
   end
 
   def sample
+    @summary = @user.multi_game_summary(@play_types).stats
     render 'show'
   end
 
   def sample_topics
-    @summary = @user.multi_game_summary(@play_types)
+    @summary = @user.multi_game_summary(@play_types).stats
     @stats = TopicsSummary.new(@user, @play_types).stats
     render 'topics', layout: false
   end

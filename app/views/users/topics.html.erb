@@ -29,35 +29,24 @@
     </thead>
     <tbody>
       <!-- Universal Topic -->
-      <% round_one = @summary.stats[:round_one] %>
-      <% round_two = @summary.stats[:round_two] %>
       <tr>
         <td>
           <span class="nowrap">--ALL</span>
           <span class="nowrap">CATEGORIES--</span>
         </td>
-        <td><%= @summary.games_tracked * 12 %></td>
-        <td><%= round_one[:right] + round_two[:right] %></td>
-        <td><%= round_one[:wrong] + round_two[:wrong] %></td>
-        <td><%= round_one[:pass] + round_two[:pass] %></td>
-        <td><%= ts = round_one[:score] + round_two[:score] %></td>
-        <td><%= ps = round_one[:possible_score] + round_two[:possible_score] %></td>
-        <!-- Efficiency -->
-        <% if ps.zero? %>
-          <td></td>
-        <% else %>
-          <td>
-            <%= number_with_precision((ts / ps.to_f), precision: 5) %>
-          </td>
-        <% end %>
-        <td><%= (ddr = round_one[:dd_right] + round_two[:dd_right]) +
-                (ddw = round_one[:dd_wrong] + round_two[:dd_wrong]) %></td>
-        <td><%= ddr %></td>
-        <td><%= ddw %></td>
-        <td><%= (fr = @summary.stats[:finals][:right] ) +
-                (fw = @summary.stats[:finals][:wrong] ) %></td>
-        <td><%= fr %></td>
-        <td><%= fw %></td>
+        <td><%= @summary[:all][:game_count] * 12 %></td>
+        <td><%= @summary[:all][:right] %></td>
+        <td><%= @summary[:all][:wrong] %></td>
+        <td><%= @summary[:all][:pass] %></td>
+        <td><%= @summary[:all][:score] %></td>
+        <td><%= @summary[:all][:possible_score] %></td>
+        <td><%= number_with_precision(@summary[:all][:efficiency], precision: 5) %></td>
+        <td><%= @summary[:all][:dds] %></td>
+        <td><%= @summary[:all][:dd_right] %></td>
+        <td><%= @summary[:all][:dd_wrong] %></td>
+        <td><%= @summary[:finals][:count] %></td>
+        <td><%= @summary[:finals][:right] %></td>
+        <td><%= @summary[:finals][:wrong] %></td>
       </tr>
 
       <!-- Individual Topics -->

@@ -17,12 +17,10 @@
     <li><a href="#types">Play types</a></li>
   </ul>
 
-  <% mgs = @user.multi_game_summary(@play_types) %>
   <% user_games_count = @user.games.count %>
-  <% tracked = mgs.games_tracked %>
+  <% tracked = @summary[:all][:game_count] %>
 
-  <%= render 'overview', mgs: mgs, user_games_count: user_games_count,
-                         tracked: tracked %>
+  <%= render 'overview', user_games_count: user_games_count, tracked: tracked %>
 
   <%= render 'games', user_games_count: user_games_count, tracked: tracked %>
 
