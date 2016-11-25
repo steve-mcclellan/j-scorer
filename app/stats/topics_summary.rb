@@ -1,5 +1,5 @@
 class TopicsSummary
-  include TopicsQueries
+  include TopicsQueries, SharedStatsMethods
 
   # TODO: Test whether one of these methods works noticeably faster.
   # attr_reader :sixth_stats, :final_stats
@@ -66,31 +66,6 @@ class TopicsSummary
     end
   end
 
-  # rubocop:disable MethodLength
-  def add_clue_to_stats(topic_stats, result_code, clue_value)
-    case result_code.to_i
-    when 1
-      topic_stats[:wrong] += 1
-      topic_stats[:score] -= clue_value
-      topic_stats[:possible_score] += clue_value
-    when 2
-      topic_stats[:pass] += 1
-      topic_stats[:possible_score] += clue_value
-    when 3
-      topic_stats[:right] += 1
-      topic_stats[:score] += clue_value
-      topic_stats[:possible_score] += clue_value
-    when 5, 6
-      topic_stats[:dd_wrong] += 1
-      topic_stats[:possible_score] += clue_value
-    when 7
-      topic_stats[:dd_right] += 1
-      topic_stats[:score] += clue_value
-      topic_stats[:possible_score] += clue_value
-    end
-  end
-  # rubocop:enable MethodLength
-
   def add_calculated_stats
     @stats.each_value do |topic_hash|
       topic_hash[:efficiency] = quotient(topic_hash[:score],
@@ -113,11 +88,6 @@ class TopicsSummary
   #                                        topic_hash[:finals_count])
   #   end
   # end
-
-  def quotient(numerator, denominator)
-    return nil if denominator.zero?
-    numerator.fdiv(denominator)
-  end
 
   def top_row_value(sixth_hash)
     if sixth_hash['sixth_type'] == 'RoundOneCategory'

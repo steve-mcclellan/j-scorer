@@ -1,11 +1,11 @@
 <div id="topics">
   <h2>
     Topics for <%= @sample ? @email : @user.email %>
-  <% if @stats.size == (user_topics_count = @user.topics.count) %>
-    (<%= user_topics_count %>):
-  <% else %>
-    (<%= @stats.size %> of <%= user_topics_count %>):
-  <% end %>
+    <% if @stats.size == (user_topics_count = @user.topics.count) %>
+      (<%= user_topics_count %>):
+    <% else %>
+      (<%= @stats.size %> of <%= user_topics_count %>):
+    <% end %>
   </h2>
 
   <table id="topicTable" class="tablesorter tablesorter-blue">

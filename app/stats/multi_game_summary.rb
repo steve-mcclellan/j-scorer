@@ -1,5 +1,5 @@
 class MultiGameSummary
-  include MultiGameQueries
+  include MultiGameQueries, SharedStatsMethods
 
   attr_reader :stats
 
@@ -43,31 +43,6 @@ class MultiGameSummary
     end
   end
 
-  # rubocop:disable MethodLength
-  def add_clue_to_stats(round_stats, result_code, clue_value)
-    case result_code.to_i
-    when 1
-      round_stats[:wrong] += 1
-      round_stats[:score] -= clue_value
-      round_stats[:possible_score] += clue_value
-    when 2
-      round_stats[:pass] += 1
-      round_stats[:possible_score] += clue_value
-    when 3
-      round_stats[:right] += 1
-      round_stats[:score] += clue_value
-      round_stats[:possible_score] += clue_value
-    when 5, 6
-      round_stats[:dd_wrong] += 1
-      round_stats[:possible_score] += clue_value
-    when 7
-      round_stats[:dd_right] += 1
-      round_stats[:score] += clue_value
-      round_stats[:possible_score] += clue_value
-    end
-  end
-  # rubocop:enable MethodLength
-
   def add_calculated_stats(count)
     @stats[:all][:game_count] = count['games'].to_i
 
@@ -101,10 +76,5 @@ class MultiGameSummary
       @stats[round][:dd_rate] = quotient(@stats[round][:dd_right],
                                          @stats[round][:dds])
     end
-  end
-
-  def quotient(numerator, denominator)
-    return nil if denominator.zero?
-    numerator.fdiv(denominator)
   end
 end

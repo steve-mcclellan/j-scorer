@@ -65,11 +65,15 @@ class User < ActiveRecord::Base
     games.find_by(show_date: date).present?
   end
 
-  def multi_game_summary(play_types = [])
-    @mgs ||= MultiGameSummary.new(self, play_types)
+  def multi_game_summary(play_types)
+    @mgs ||= MultiGameSummary.new(self, play_types).stats
   end
 
-  def results_by_row(play_types = [])
-    @rbr ||= ResultsByRow.new(self, play_types)
+  def topics_summary(play_types)
+    @ts ||= TopicsSummary.new(self, play_types).stats
+  end
+
+  def results_by_row(play_types)
+    @rbr ||= ResultsByRow.new(self, play_types).stats
   end
 end
