@@ -41,8 +41,8 @@ module TopicsQueries
   # end
 
   def topics_query(user, play_types)
-    raise ArgumentError unless user.is_a? User
-    play_types_array = "'{" + play_types.join(', ') + "}'::text[]"
+    raise ArgumentError unless user.is_a?(User) && play_types.is_a?(Array)
+    play_types_list = play_types.map { |x| "'#{x}'" }.join(', ')
     "
     SELECT t.name AS topic, s.result1, s.result2, s.result3, s.result4,
       s.result5, s.type AS sixth_type, f.result AS final_result
@@ -57,11 +57,8 @@ module TopicsQueries
       ON s.game_id = gOne.id
     LEFT JOIN games gTwo
       ON f.game_id = gTwo.id
-    INNER JOIN users u
-      ON t.user_id = u.id
     WHERE t.user_id = #{user.id}
-      AND COALESCE(gOne.play_type, gTwo.play_type) = ANY (#{play_types_array})
-    ORDER BY t.name ASC
+      AND COALESCE(gOne.play_type, gTwo.play_type) IN (#{play_types_list})
     "
   end
   # rubocop:enable MethodLength
