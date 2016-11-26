@@ -21,9 +21,11 @@
         <th>Played</th>
         <th>Show date</th>
         <th>Play type</th>
-        <th>Score</th>
-        <th>DDs Right</th>
-        <th>DDs Wrong</th>
+        <th>Coryat score</th>
+        <th>Round one</th>
+        <th>Round two</th>
+        <th>DDs right</th>
+        <th>DDs wrong</th>
         <th>Final</th>
         <th colspan=2>Actions</th>
       </tr>
@@ -34,7 +36,9 @@
           <td><%= game.date_played.in_time_zone.to_s %></td>
           <td><%= game.show_date %></td>
           <td><%= PLAY_TYPES[game.play_type] %></td>
-          <td>$<%= game.adjusted_game_score %></td>
+          <td><%= number_to_currency(game.adjusted_game_score, precision: 0) %></td>
+          <td><%= number_to_currency(game.adjusted_round_one_score, precision: 0) %></td>
+          <td><%= number_to_currency(game.adjusted_round_two_score, precision: 0) %></td>
           <td><%= game.dds_right %></td>
           <td><%= game.dds_wrong %></td>
           <td><%= game.final_symbol %></td>
