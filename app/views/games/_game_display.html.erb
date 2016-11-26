@@ -218,29 +218,7 @@
           </div>
         </div>
       </div> <!-- played-at-area -->
-      <!-- temporary message - to undo, remove everything between the comments
-                               except the "Play type:" line. -->
-      <div id="temp-text" style="display: none; border: 1px solid black;">
-        Hi there! I've just pushed a big update to the <%= link_to "stats page", stats_path %> (and the <%= link_to "sample stats page", sample_path %>). You can now filter stats by play type - check it out! Thanks again for using the <span class="nowrap">J! Scorer.</span> (Click the link again to hide this message.)
-      </div>
-      <div class="row">
-        <div class="col-xs-4 col-compact">
       Play type:
-        </div>
-        <div class="col-xs-8 col-compact">
-          <a id="temp-link" title="Click to show; click again to hide.">
-            Updated: Read Me!
-          </a>
-        </div>
-      </div>
-      <script>
-        $(function() {
-          $('#temp-link').click(function() {
-            $('#temp-text').toggle();
-          });
-        });
-      </script>
-      <!-- end temporary message -->
       <select id="play-type-select" tabindex="200">
         <% PLAY_TYPES.each do |abbr, name| %>
           <option value="<%= abbr %>"><%= name %></option>

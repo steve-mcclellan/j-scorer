@@ -1,0 +1,62 @@
+<div id="games">
+  <h2>
+    Games played by <%= @sample ? @email : @user.email %>
+    <% if tracked == user_games_count %>
+      (<%= user_games_count %>):
+    <% else %>
+      <span id="some-hidden">
+        (<%= tracked %> of <%= user_games_count %> -
+        <a id="show-all-games">show all</a>):
+      </span>
+      <span id="all-shown" style="display: none;">
+        (all <%= user_games_count %> -
+        <a id="hide-untracked-games">hide untracked</a>):
+      </span>
+    <% end %>
+  </h2>
+
+  <table id="gameTable" class="tablesorter tablesorter-blue<%= ' empty' if user_games_count.zero? %>">
+    <thead>
+      <tr>
+        <th>Played at</th>
+        <th>Show date</th>
+        <th>Play type</th>
+        <th>Coryat score</th>
+        <th>Round one</th>
+        <th>Round two</th>
+        <th>DDs right</th>
+        <th>DDs wrong</th>
+        <th>Final</th>
+        <th colspan=2>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @user.games.each do |game| %>
+        <tr class="<%= game.play_type %><%= ' untracked' unless @play_types.include?(game.play_type) %>">
+          <td><%= game.date_played.in_time_zone.to_s %></td>
+          <td><%= game.show_date %></td>
+          <td><%= PLAY_TYPES[game.play_type] %></td>
+          <td><%= number_to_currency(game.adjusted_game_score, precision: 0) %></td>
+          <td><%= number_to_currency(game.adjusted_round_one_score, precision: 0) %></td>
+          <td><%= number_to_currency(game.adjusted_round_two_score, precision: 0) %></td>
+          <td><%= game.dds_right %></td>
+          <td><%= game.dds_wrong %></td>
+          <td><%= game.final_symbol %></td>
+          <% if current_user?(game.user) %>
+            <td><%= link_to 'edit', game_path(d: game.show_date) %></td>
+            <td><%= link_to 'delete',
+                            delete_path(game),
+                            method: :delete,
+                            data: { confirm: 'Are you sure you want to ' +
+                                             'delete the game from ' +
+                                             game.show_date.to_s +
+                                             '?' } %></td>
+          <% else %>
+            <td class="disabled">edit</td>
+            <td class="disabled">delete</td>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div> <!-- Games tab -->

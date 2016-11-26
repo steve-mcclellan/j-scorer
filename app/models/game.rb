@@ -21,9 +21,16 @@ class Game < ActiveRecord::Base
     show_date.to_s.parameterize
   end
 
+  def adjusted_round_one_score
+    round_one_score * CURRENT_TOP_ROW_VALUES[0]
+  end
+
+  def adjusted_round_two_score
+    round_two_score * CURRENT_TOP_ROW_VALUES[1]
+  end
+
   def adjusted_game_score
-    (round_one_score * CURRENT_TOP_ROW_VALUES[0]) +
-      (round_two_score * CURRENT_TOP_ROW_VALUES[1])
+    adjusted_round_one_score + adjusted_round_two_score
   end
 
   def all_category_summary

@@ -1,0 +1,35 @@
+<div id="types">
+  <h2>Play types for <%= @sample ? @email : @user.email %>:</h2>
+
+  <button id="<%= @sample ? "update-sample-types" : "update-displayed-types" %>">
+    Update stats
+  </button>
+
+  <table id="typeTable" class="tablesorter tablesorter-blue<%= ' empty' if user_games_count.zero? %>">
+    <thead>
+      <tr>
+        <th>Include in stats?</th>
+        <th>Play type</th>
+        <th>Games played</th>
+        <th>Average score</th>
+        <th>High score</th>
+        <th>Low score</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @play_type_summary.each do |type_abbr, type_stats| %>
+        <tr class="<%= type_abbr %>">
+          <td>
+            <input id="<%= type_abbr %>-box" type="checkbox"
+                   <%= 'checked="true"' if @play_types.include?(type_abbr) %>>
+          </td>
+          <td><%= PLAY_TYPES[type_abbr] %></td>
+          <td><%= type_stats[:games_count] %></td>
+          <td><%= number_to_currency(type_stats[:average_score]) %></td>
+          <td><%= number_to_currency(type_stats[:max], precision: 0) %></td>
+          <td><%= number_to_currency(type_stats[:min], precision: 0) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

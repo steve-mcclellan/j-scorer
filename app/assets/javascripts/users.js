@@ -48,7 +48,7 @@ $( ".users-show, .users-sample" ).ready( function() {
 
   // Make "Games" table sortable. Initialize default sort to
   // [ leftmost column, descending ]. Prevent meaningless attempts
-  // to sort by "Actions" column (currently in position 7).
+  // to sort by "Actions" column (currently in position 9).
   // To prevent a JS error, skip this if the table is empty.
   if ( !$gameTable.hasClass( 'empty' ) ) {
     $gameTable.tablesorter({
@@ -56,8 +56,8 @@ $( ".users-show, .users-sample" ).ready( function() {
       sortInitialOrder: "desc",
       headers: {
         2: { sortInitialOrder: "asc" },  // Play type (text)
-        6: { sortInitialOrder: "asc" },  // Final (check or X)
-        7: { sorter: false }
+        8: { sortInitialOrder: "asc" },  // Final (check or X)
+        9: { sorter: false }
       }
     });
   }

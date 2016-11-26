@@ -410,6 +410,10 @@ input {
     }
   }
 
+  .end-of-group {
+    border-right: 1px solid black;
+  }
+
   /* "By row" tab */
   #ui-id-6 {
     height: 100%;
