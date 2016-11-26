@@ -13,9 +13,16 @@
     <p>Average score: <%= number_to_currency(@summary[:all][:average_score]) %></p>
   <% end %>
 
-  <p>Clues right: <%= @summary[:all][:right] %></p>
-  <p>Clues wrong: <%= @summary[:all][:wrong] %></p>
-  <p>Clues passed: <%= @summary[:all][:pass] %></p>
+  <p><abbr title="Not including Daily Doubles or Finals.">
+    Clues right: <%= @summary[:all][:right] %>
+  </abbr></p>
+  <p><abbr title="Not including Daily Doubles or Finals.">
+    Clues wrong: <%= @summary[:all][:wrong] %>
+  </abbr></p>
+  <p><abbr title="Not including Daily Doubles or Finals.">
+    Clues passed: <%= @summary[:all][:pass] %>
+  </abbr></p>
+
   <p>
     Round One DDs:
     <%= @summary[:round_one][:dd_right] %>/<%= @summary[:round_one][:dds] %>

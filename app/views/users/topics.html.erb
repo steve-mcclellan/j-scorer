@@ -13,18 +13,20 @@
       <tr>
         <th>Topic</th>
         <th>Categories</th>
-        <th>Right</th>
-        <th>Wrong</th>
-        <th>Pass</th>
+        <th><abbr title="Not including Daily Doubles or Finals.">Right</abbr></th>
+        <th><abbr title="Not including Daily Doubles or Finals.">Wrong</abbr></th>
+        <th><abbr title="Not including Daily Doubles or Finals.">Pass</abbr></th>
         <th>Total Score</th>
         <th>Possible Score</th>
-        <th>Efficiency</th>
+        <th class="end-of-group">
+          <abbr title="Total score divided by possible score.">Efficiency</abbr>
+        </th>
         <th>DDs</th>
-        <th>DDRight</th>
-        <th>DDWrong</th>
+        <th>Right</th>
+        <th class="end-of-group">Wrong</th>
         <th>Finals</th>
-        <th>Finals Right</th>
-        <th>Finals Wrong</th>
+        <th>Right</th>
+        <th class="end-of-group">Wrong</th>
       </tr>
     </thead>
     <tbody>
@@ -38,15 +40,17 @@
         <td><%= @summary[:all][:right] %></td>
         <td><%= @summary[:all][:wrong] %></td>
         <td><%= @summary[:all][:pass] %></td>
-        <td><%= @summary[:all][:score] %></td>
-        <td><%= @summary[:all][:possible_score] %></td>
-        <td><%= number_with_precision(@summary[:all][:efficiency], precision: 5) %></td>
+        <td><%= number_to_currency(@summary[:all][:score], precision: 0) %></td>
+        <td><%= number_to_currency(@summary[:all][:possible_score], precision: 0) %></td>
+        <td class="end-of-group">
+          <%= number_with_precision(@summary[:all][:efficiency], precision: 5) %>
+        </td>
         <td><%= @summary[:all][:dds] %></td>
         <td><%= @summary[:all][:dd_right] %></td>
-        <td><%= @summary[:all][:dd_wrong] %></td>
+        <td class="end-of-group"><%= @summary[:all][:dd_wrong] %></td>
         <td><%= @summary[:finals][:count] %></td>
         <td><%= @summary[:finals][:right] %></td>
-        <td><%= @summary[:finals][:wrong] %></td>
+        <td class="end-of-group"><%= @summary[:finals][:wrong] %></td>
       </tr>
 
       <!-- Individual Topics -->
@@ -57,15 +61,17 @@
           <td><%= stats[:right] %></td>
           <td><%= stats[:wrong] %></td>
           <td><%= stats[:pass] %></td>
-          <td><%= stats[:score] %></td>
-          <td><%= stats[:possible_score] %></td>
-          <td><%= number_with_precision(stats[:efficiency], precision: 5) %></td>
+          <td><%= number_to_currency(stats[:score], precision: 0) %></td>
+          <td><%= number_to_currency(stats[:possible_score], precision: 0) %></td>
+          <td class="end-of-group">
+            <%= number_with_precision(stats[:efficiency], precision: 5) %>
+          </td>
           <td><%= stats[:dds] %></td>
           <td><%= stats[:dd_right] %></td>
-          <td><%= stats[:dd_wrong] %></td>
+          <td class="end-of-group"><%= stats[:dd_wrong] %></td>
           <td><%= stats[:finals_count] %></td>
           <td><%= stats[:finals_right] %></td>
-          <td><%= stats[:finals_wrong] %></td>
+          <td class="end-of-group"><%= stats[:finals_wrong] %></td>
         </tr>
       <% end %>
     </tbody>
