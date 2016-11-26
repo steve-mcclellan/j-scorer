@@ -1,6 +1,7 @@
+# These queries use the valid_types? method from the SharedStatsMethods module.
 module MultiGameQueries
   def sixths_query(user, play_types)
-    raise ArgumentError unless user.is_a?(User) && play_types.is_a?(Array)
+    raise ArgumentError unless user.is_a?(User) && valid_types?(play_types)
     play_types_list = play_types.map { |x| "'#{x}'" }.join(', ')
 
     "
@@ -12,7 +13,7 @@ module MultiGameQueries
   end
 
   def count_query(user, play_types)
-    raise ArgumentError unless user.is_a?(User) && play_types.is_a?(Array)
+    raise ArgumentError unless user.is_a?(User) && valid_types?(play_types)
     play_types_list = play_types.map { |x| "'#{x}'" }.join(', ')
 
     "

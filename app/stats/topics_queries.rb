@@ -1,3 +1,4 @@
+# This module relies on valid_types? from the SharedStatsMethods module.
 module TopicsQueries
   # rubocop:disable MethodLength
 
@@ -41,7 +42,7 @@ module TopicsQueries
   # end
 
   def topics_query(user, play_types)
-    raise ArgumentError unless user.is_a?(User) && play_types.is_a?(Array)
+    raise ArgumentError unless user.is_a?(User) && valid_types?(play_types)
     play_types_list = play_types.map { |x| "'#{x}'" }.join(', ')
     "
     SELECT t.name AS topic, s.result1, s.result2, s.result3, s.result4,

@@ -25,3 +25,5 @@ PLAY_TYPES = {
         "sports"       => "Sports Jeopardy!",
         "other"        => "other"
 }.freeze
+
+VALID_TYPE_INPUTS = PLAY_TYPES.keys + ['all', 'none']

@@ -35,6 +35,6 @@ Rails.application.routes.draw do
     get 'stats/by-row' => 'users#by_row', as: :by_row
     get 'sample/by-row' => 'users#sample_by_row'
 
-    patch 'types' => 'users#types'
+    patch 'types' => 'users#update_user_types'
   end
 end

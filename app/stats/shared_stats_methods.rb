@@ -1,4 +1,10 @@
 module SharedStatsMethods
+  def valid_types?(play_types)
+    return false unless play_types.is_a?(Array)
+    play_types.push('none') if play_types.empty?
+    play_types.all? { |type| VALID_TYPE_INPUTS.include?(type) }
+  end
+
   def quotient(numerator, denominator)
     return nil if denominator.zero?
     numerator.fdiv(denominator)

@@ -1,12 +1,13 @@
 class UsersController < ApplicationController
-  before_action :logged_in_user, only: [:show, :types]
+  before_action :logged_in_user, only: [:show, :update_user_types]
   before_action :logged_in_for_json, only: [:topics, :by_row]
-  before_action :set_current_user, only: [:show, :topics, :by_row, :types]
+  before_action :set_current_user, only: [:show, :topics, :by_row,
+                                          :update_user_types]
 
   before_action :set_sample_data,
                 only: [:sample, :sample_topics, :sample_by_row]
 
-  before_action :set_play_types, except: [:new, :create, :types]
+  before_action :set_play_types, except: [:new, :create, :update_user_types]
   before_action :set_summary, only: [:show, :sample, :topics, :sample_topics]
 
   def new
@@ -53,12 +54,13 @@ class UsersController < ApplicationController
     render 'by_row', layout: false
   end
 
-  def types
-    unless params[:play_types].is_a? Array
-      render json: {}, status: 400 and return
-    end
+  def update_user_types
+    new_types = params[:play_types]
+    render json: {}, status: 400 and return unless new_types.is_a? Array
 
-    if @user.update(play_types: params[:play_types])
+    new_types.select! { |type| VALID_TYPE_INPUTS.include?(type) }
+
+    if @user.update(play_types: new_types)
       render json: { success: true }
     else
       render json: @user.errors, status: 400
@@ -76,7 +78,7 @@ class UsersController < ApplicationController
                     current_user.play_types
                   else
                     ['regular']
-                  end
+                  end.select { |type| VALID_TYPE_INPUTS.include?(type) }
   end
 
   def set_sample_data
