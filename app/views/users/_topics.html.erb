@@ -77,20 +77,3 @@
     </tbody>
   </table>
 </div>
-
-<script>
-// Make table sortable.
-// Default sort: [ leftmost column, ascending ].
-// Make everything else sort descending on first click.
-$( "#topicTable" ).tablesorter({
-  sortList: [[0,0]],
-  sortInitialOrder: "desc",
-  headers: {
-    0: { sortInitialOrder: "asc" }
-  }
-});
-
-$( "#topicTable" ).stickyTableHeaders({
-  scrollableArea: $( '#stats-area' )
-});
-</script>
