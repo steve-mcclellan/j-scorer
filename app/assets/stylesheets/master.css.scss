@@ -415,108 +415,104 @@ input {
   }
 
   /* "By row" tab */
-  #ui-id-6 {
+
+  #by-rows {
     height: 100%;
     width: 100%;
     padding: 0;
+    display: flex;
+    justify-content: space-between;
+    border: 0.3vw solid $gameboard-color;
+    font-size: 2.2vmin;
 
-    #by-rows {
+    .round-by-rows {
       height: 100%;
       width: 100%;
+      flex: 1;
       display: flex;
+      flex-direction: column;
       justify-content: space-between;
-      border: 0.3vw solid $gameboard-color;
-      font-size: 2.2vmin;
 
-      .round-by-rows {
+      .by-rows-row {
         height: 100%;
         width: 100%;
         flex: 1;
         display: flex;
-        flex-direction: column;
-        justify-content: space-between;
+        justify-content: center;
+        align-items: center;
 
-        .by-rows-row {
+        .three-liner div {
+          color: black;
+          margin: 0.5vh;
+        }
+
+        .by-rows-value-box {
           height: 100%;
           width: 100%;
-          flex: 1;
+          flex: 2;
           display: flex;
           justify-content: center;
           align-items: center;
+          color: $j-yellow;
+          text-shadow: 0.2vw 0.2vw $j-shadow;
+          font-size: 4vmin;
+          font-weight: bold;
+          background-color: $j-blue;
+          border: 0.3vw solid $gameboard-color;
+        }
 
-          .three-liner div {
-            color: black;
-            margin: 0.5vh;
-          }
+        .by-rows-regular-box {
+          height: 100%;
+          width: 100%;
+          flex: 3;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          border: 0.3vw solid $gameboard-color;
 
-          .by-rows-value-box {
-            height: 100%;
-            width: 100%;
-            flex: 2;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: $j-yellow;
-            text-shadow: 0.2vw 0.2vw $j-shadow;
-            font-size: 4vmin;
-            font-weight: bold;
-            background-color: $j-blue;
-            border: 0.3vw solid $gameboard-color;
-          }
-
-          .by-rows-regular-box {
+          .counting-stats {
             height: 100%;
             width: 100%;
             flex: 3;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            border: 0.3vw solid $gameboard-color;
 
-            .counting-stats {
-              height: 100%;
-              width: 100%;
-              flex: 3;
-              display: flex;
-              flex-direction: column;
-              justify-content: center;
-              align-items: center;
-
-              .check {
-                color: $check-green;
-              }
-
-              .ecks {
-                color: $x-red;
-              }
-
-              .dot {
-                color: $j-lighter-blue;
-              }
+            .check {
+              color: $check-green;
             }
 
-            .rate-stats {
-              height: 100%;
-              width: 100%;
-              flex: 4;
-              display: flex;
-              flex-direction: column;
-              justify-content: center;
-              align-items: center;
-              border-left: 1px solid $gameboard-color;
+            .ecks {
+              color: $x-red;
+            }
+
+            .dot {
+              color: $j-lighter-blue;
             }
           }
 
-          .by-rows-dd-box {
+          .rate-stats {
             height: 100%;
             width: 100%;
-            flex: 2;
+            flex: 4;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            border: 0.3vw solid $dd-border;
+            border-left: 1px solid $gameboard-color;
           }
+        }
+
+        .by-rows-dd-box {
+          height: 100%;
+          width: 100%;
+          flex: 2;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          border: 0.3vw solid $dd-border;
         }
       }
     }
