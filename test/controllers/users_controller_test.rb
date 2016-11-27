@@ -67,30 +67,6 @@ class UsersControllerTest < ActionController::TestCase
     assert_response :success
   end
 
-  test 'should redirect by-row when not logged in' do
-    get :by_row, xhr: true
-    assert_response :success
-    assert_template 'pages/login_plz'
-    assert_template layout: false
-  end
-
-  test 'should get by-row via Ajax request' do
-    log_in_here(@user)
-    get :by_row, xhr: true
-    assert_response :success
-  end
-
-  test 'should get sample_by_row when not logged in' do
-    get :sample_by_row, xhr: true
-    assert_response :success
-  end
-
-  test 'should get sample_by_row when logged in' do
-    log_in_here(@user)
-    get :sample_by_row, xhr: true
-    assert_response :success
-  end
-
   test 'should redirect update_user_types when not logged in' do
     patch :update_user_types, play_types: ['tenth'], xhr: true
     assert_not flash.empty?

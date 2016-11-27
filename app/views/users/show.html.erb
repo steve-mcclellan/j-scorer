@@ -8,12 +8,11 @@
   </div>
   <% types_param = params['types'] ? '?types=' + params['types'] : '' %>
   <% topics_link = (@sample ? sample_topics_path : topics_path) + types_param %>
-  <% by_row_link = (@sample ? sample_by_row_path : by_row_path) + types_param %>
   <ul>
     <li><a href="#overview">Overview</a></li>
     <li><a href="#games">Games</a></li>
     <li><a href="<%= topics_link %>">Topics</a></li>
-    <li><a href="<%= by_row_link %>">By row</a></li>
+    <li><a href="#by-rows">By row</a></li>
     <li><a href="#types">Play types</a></li>
   </ul>
 
@@ -23,6 +22,8 @@
   <%= render 'overview', user_games_count: user_games_count, tracked: tracked %>
 
   <%= render 'games', user_games_count: user_games_count, tracked: tracked %>
+
+  <%= render 'by_row', stats: @stats_by_row %>
 
   <%= render 'types', user_games_count: user_games_count %>
 
