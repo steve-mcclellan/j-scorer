@@ -29,9 +29,6 @@ Rails.application.routes.draw do
     patch 'redate' => 'games#redate', as: :redate
     get 'check/:final_id' => 'games#check', as: :check
 
-    get 'stats/topics' => 'users#topics', as: :topics
-    get 'sample/topics' => 'users#sample_topics'
-
     patch 'types' => 'users#update_user_types'
   end
 end

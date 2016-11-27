@@ -1,10 +1,10 @@
 <div id="topics">
   <h2>
     Topics for <%= @sample ? @email : @user.email %>
-    <% if @stats.size == (user_topics_count = @user.topics.count) %>
+    <% if stats.size == (user_topics_count = @user.topics.count) %>
       (<%= user_topics_count %>):
     <% else %>
-      (<%= @stats.size %> of <%= user_topics_count %>):
+      (<%= stats.size %> of <%= user_topics_count %>):
     <% end %>
   </h2>
 
@@ -54,24 +54,24 @@
       </tr>
 
       <!-- Individual Topics -->
-      <% @stats.each do |topic, stats| %>
+      <% stats.each do |topic, results| %>
         <tr>
           <td><%= topic %></td>
-          <td><%= stats[:sixths_count] %></td>
-          <td><%= stats[:right] %></td>
-          <td><%= stats[:wrong] %></td>
-          <td><%= stats[:pass] %></td>
-          <td><%= number_to_currency(stats[:score], precision: 0) %></td>
-          <td><%= number_to_currency(stats[:possible_score], precision: 0) %></td>
+          <td><%= results[:sixths_count] %></td>
+          <td><%= results[:right] %></td>
+          <td><%= results[:wrong] %></td>
+          <td><%= results[:pass] %></td>
+          <td><%= number_to_currency(results[:score], precision: 0) %></td>
+          <td><%= number_to_currency(results[:possible_score], precision: 0) %></td>
           <td class="end-of-group">
-            <%= number_with_precision(stats[:efficiency], precision: 5) %>
+            <%= number_with_precision(results[:efficiency], precision: 5) %>
           </td>
-          <td><%= stats[:dds] %></td>
-          <td><%= stats[:dd_right] %></td>
-          <td class="end-of-group"><%= stats[:dd_wrong] %></td>
-          <td><%= stats[:finals_count] %></td>
-          <td><%= stats[:finals_right] %></td>
-          <td class="end-of-group"><%= stats[:finals_wrong] %></td>
+          <td><%= results[:dds] %></td>
+          <td><%= results[:dd_right] %></td>
+          <td class="end-of-group"><%= results[:dd_wrong] %></td>
+          <td><%= results[:finals_count] %></td>
+          <td><%= results[:finals_right] %></td>
+          <td class="end-of-group"><%= results[:finals_wrong] %></td>
         </tr>
       <% end %>
     </tbody>

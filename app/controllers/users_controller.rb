@@ -1,12 +1,11 @@
 class UsersController < ApplicationController
   before_action :logged_in_user, only: [:show, :update_user_types]
-  before_action :logged_in_for_json, only: [:topics]
-  before_action :set_current_user, only: [:show, :topics, :update_user_types]
+  before_action :set_current_user, only: [:show, :update_user_types]
 
-  before_action :set_sample_data, only: [:sample, :sample_topics]
+  before_action :set_sample_data, only: [:sample]
 
   before_action :set_play_types, except: [:new, :create, :update_user_types]
-  before_action :set_summary, only: [:show, :sample, :topics, :sample_topics]
+  before_action :set_summary, only: [:show, :sample]
 
   def new
     @user = User.new
@@ -26,22 +25,14 @@ class UsersController < ApplicationController
   def show
     @play_type_summary = @user.play_type_summary
     @stats_by_row = @user.results_by_row(@play_types)
-  end
-
-  def topics
-    @stats = @user.topics_summary(@play_types)
-    render layout: false
+    @stats_by_topic = @user.topics_summary(@play_types)
   end
 
   def sample
     @play_type_summary = @user.play_type_summary
     @stats_by_row = @user.results_by_row(@play_types)
+    @stats_by_topic = @user.topics_summary(@play_types)
     render 'show'
-  end
-
-  def sample_topics
-    @stats = @user.topics_summary(@play_types)
-    render 'topics', layout: false
   end
 
   def update_user_types

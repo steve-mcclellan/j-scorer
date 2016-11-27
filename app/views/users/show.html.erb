@@ -1,17 +1,17 @@
 <% provide(:title, @sample ? 'Sample stats' : 'Stats') %>
 
 <div id="stats-area">
+
   <div class="k-box">
     <p>
     <%= random_full_greeting %> I've completely overhauled the way this page retrieves data and calculates stats. (It should be significantly faster now.) Note that your counts of clues right/wrong/passed have changed, as they no longer include Daily Doubles. As always, please let me know if I broke anything, and what you'd like to see added: <a class="nowrap" href="mailto:<%= ENV['SUPPORT_ADDRESS'] %>"><%= ENV['SUPPORT_ADDRESS'] %></a>.
     </p>
   </div>
-  <% types_param = params['types'] ? '?types=' + params['types'] : '' %>
-  <% topics_link = (@sample ? sample_topics_path : topics_path) + types_param %>
+
   <ul>
     <li><a href="#overview">Overview</a></li>
     <li><a href="#games">Games</a></li>
-    <li><a href="<%= topics_link %>">Topics</a></li>
+    <li><a href="#topics">Topics</a></li>
     <li><a href="#by-rows">By row</a></li>
     <li><a href="#types">Play types</a></li>
   </ul>
@@ -22,6 +22,8 @@
   <%= render 'overview', user_games_count: user_games_count, tracked: tracked %>
 
   <%= render 'games', user_games_count: user_games_count, tracked: tracked %>
+
+  <%= render 'topics', stats: @stats_by_topic %>
 
   <%= render 'by_row', stats: @stats_by_row %>
 
