@@ -26,8 +26,4 @@ class ApplicationController < ActionController::Base
       redirect_to login_url
     end
   end
-
-  def logged_in_for_json
-    render 'pages/login_plz', layout: false unless logged_in?
-  end
 end

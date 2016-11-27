@@ -1,6 +1,6 @@
 <div id="topics">
   <h2>
-    Topics for <%= @sample ? @email : @user.email %>
+    Topics for <%= @email %>
     <% if stats.size == (user_topics_count = @user.topics.count) %>
       (<%= user_topics_count %>):
     <% else %>

@@ -1,11 +1,5 @@
 class UsersController < ApplicationController
   before_action :logged_in_user, only: [:show, :update_user_types]
-  before_action :set_current_user, only: [:show, :update_user_types]
-
-  before_action :set_sample_data, only: [:sample]
-
-  before_action :set_play_types, except: [:new, :create, :update_user_types]
-  before_action :set_summary, only: [:show, :sample]
 
   def new
     @user = User.new
@@ -23,19 +17,26 @@ class UsersController < ApplicationController
   end
 
   def show
-    @play_type_summary = @user.play_type_summary
-    @stats_by_row = @user.results_by_row(@play_types)
-    @stats_by_topic = @user.topics_summary(@play_types)
+    @user = current_user
+    @email = @user.email
+    @sample = false
+
+    set_play_types
+    set_stats_vars
   end
 
   def sample
-    @play_type_summary = @user.play_type_summary
-    @stats_by_row = @user.results_by_row(@play_types)
-    @stats_by_topic = @user.topics_summary(@play_types)
+    @user = ENV['SAMPLE_USER'] ? User.find(ENV['SAMPLE_USER']) : User.first
+    @email = ENV['SAMPLE_USER_EMAIL'] || @user.email
+    @sample = true
+
+    set_play_types
+    set_stats_vars
     render 'show'
   end
 
   def update_user_types
+    @user = current_user
     new_types = params[:play_types]
     render json: {}, status: 400 and return unless new_types.is_a? Array
 
@@ -62,18 +63,11 @@ class UsersController < ApplicationController
                   end.select { |type| VALID_TYPE_INPUTS.include?(type) }
   end
 
-  def set_sample_data
-    @user = ENV['SAMPLE_USER'] ? User.find(ENV['SAMPLE_USER']) : User.first
-    @email = ENV['SAMPLE_USER_EMAIL'] || @user.email
-    @sample = true
-  end
-
-  def set_summary
+  def set_stats_vars
     @summary = @user.multi_game_summary(@play_types)
-  end
-
-  def set_current_user
-    @user = current_user
+    @stats_by_topic = @user.topics_summary(@play_types)
+    @stats_by_row = @user.results_by_row(@play_types)
+    @play_type_summary = @user.play_type_summary
   end
 
   def user_params
