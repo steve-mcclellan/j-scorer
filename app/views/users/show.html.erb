@@ -1,4 +1,9 @@
 <% provide(:title, @sample ? 'Sample stats' : 'Stats') %>
+<% if @sample %>
+  <% provide(:tags, "description: A sample stats page (with the developer's real stats), to give you a taste of what the J! Scorer can do.".html_safe) %>
+<% else %>
+  <% provide(:tags, 'description: Your up-to-the-minute stats, broken down by game, topic, row, play type, and more.') %>
+<% end %>
 
 <div id="stats-area">
 

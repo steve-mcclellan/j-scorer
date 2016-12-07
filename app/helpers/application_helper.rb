@@ -5,6 +5,14 @@ module ApplicationHelper
     page_title.blank? ? base_title : base_title + ' - ' + page_title
   end
 
+  # Returns tags for descriptions, etc., on a per-page basis.
+  def other_meta_tags(tags_string = '')
+    tags_string.split('; ').map do |tag_string|
+      name, content = tag_string.split(': ')
+      "<meta name=\"#{name}\" content=\"#{content}\">"
+    end.join("\n").html_safe
+  end
+
   def random_partial_greeting
     ['Hello there', 'Greetings', 'Hi', 'Salutations', 'Hi there',
      'Howdy', 'Hey there', 'Welcome', 'Hello', 'Yo', '<i>¡Hola</i>',

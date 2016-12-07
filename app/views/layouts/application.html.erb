@@ -5,7 +5,17 @@
     <%= stylesheet_link_tag    'application', media: 'all' %>
     <%= javascript_include_tag 'application' %>
     <%= csrf_meta_tags %>
+    <%= other_meta_tags(yield(:tags)) %>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "http://schema.org",
+        "@type": "WebSite",
+        "name": "J! Scorer",
+        "url": "https://j-scorer.com"
+      }
+    </script>
   </head>
 
   <body class="<%= controller_name %>-<%= action_name %>">
