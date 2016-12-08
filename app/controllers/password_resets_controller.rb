@@ -13,8 +13,9 @@ class PasswordResetsController < ApplicationController
       @user.create_reset_digest
       @user.send_password_reset_email
     end
-    flash[:info] = 'If this address exists in the database, an email ' \
-                   'has been sent with password reset instructions.'
+    flash[:info] = 'If this address exists in the database, an email with ' \
+                   'password reset instructions will be sent in the next ' \
+                   'minute or two. Thanks for your patience.'
     redirect_to root_url
   end
 
