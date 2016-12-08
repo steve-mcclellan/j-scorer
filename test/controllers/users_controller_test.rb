@@ -51,7 +51,9 @@ class UsersControllerTest < ActionController::TestCase
   test 'should filter out invalid play_types' do
     log_in_here(@user)
     assert_equal ['regular'], @user.play_types
+    # rubocop:disable WordArray
     patch :update_user_types, play_types: ['not_a_type', 'kids'], xhr: true
+    # rubocop:enable WordArray
     assert_response :success
     assert_equal ['kids'], @user.reload.play_types
   end

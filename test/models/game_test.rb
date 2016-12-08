@@ -4,6 +4,7 @@ class GameTest < ActiveSupport::TestCase
   def setup
     @user = users(:dave)
     @game = @user.games.create!(show_date: Date.new(1984, 9, 12),
+                                play_type: 'regular',
                                 date_played: 1.day.ago)
   end
 
@@ -13,6 +14,19 @@ class GameTest < ActiveSupport::TestCase
 
   test 'user should be present' do
     @game.user = nil
+    assert_not @game.valid?
+  end
+
+  test 'play type should be present' do
+    @game.play_type = nil
+    assert_not @game.valid?
+  end
+
+  test 'play type should be in the PLAY_TYPES hash' do
+    @game.play_type = 'armed'
+    assert @game.valid?
+
+    @game.play_type = 'user-defined-type'
     assert_not @game.valid?
   end
 
