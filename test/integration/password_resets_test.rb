@@ -11,8 +11,9 @@ class PasswordResetsTest < ActionDispatch::IntegrationTest
     assert_template 'password_resets/new'
     # Invalid email
     post forgot_path, password_reset: { email: '' }
+    assert_equal 0, ActionMailer::Base.deliveries.size
     assert_not flash.empty?
-    assert_template 'password_resets/new'
+    assert_redirected_to root_url
     # Valid email
     post forgot_path, password_reset: { email: @user.email }
     assert_not_equal @user.reset_digest, @user.reload.reset_digest
