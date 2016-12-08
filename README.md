@@ -16,6 +16,12 @@ The J! Scorer uses the following custom environment variables:
 * PROPER_DOMAIN (production only, optional) -> (e.g., j-scorer.com) If
   a request gets to the app from any other domain (or subdomain), redirect it
   to this one.
+* MAILER_DOMAIN (production only) -> The value of
+  ActionMailer::Base.smtp_settings[:domain]. (From the docs: "If you need to
+  specify a HELO domain, you can do it here.")
+* MAILER_HOST (production only) -> The value of
+  config.action_mailer.default_url_options[:host]. This is the base url for generated
+  links in emails.
 
 Otherwise, this is a pretty-standard Rails 4 app. If you don't know what
 to do with that, any decent tutorial should get you started.

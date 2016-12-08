@@ -11,6 +11,7 @@ class Game < ActiveRecord::Base
 
   validates :user, presence: true
   validates :show_date, presence: true, uniqueness: { scope: :user_id }
+  validates :play_type, presence: true, inclusion: { in: PLAY_TYPES.keys }
 
   after_save :set_dd_results
 
