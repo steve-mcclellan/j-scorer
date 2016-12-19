@@ -416,7 +416,7 @@ input {
 
   /* "By row" tab */
 
-  #by-rows {
+  #by-row {
     height: 100%;
     width: 100%;
     padding: 0;
@@ -425,7 +425,7 @@ input {
     border: 0.3vw solid $gameboard-color;
     font-size: 2.2vmin;
 
-    .round-by-rows {
+    .round-by-row {
       height: 100%;
       width: 100%;
       flex: 1;
@@ -433,7 +433,7 @@ input {
       flex-direction: column;
       justify-content: space-between;
 
-      .by-rows-row {
+      .by-row-row {
         height: 100%;
         width: 100%;
         flex: 1;
@@ -446,7 +446,7 @@ input {
           margin: 0.5vh;
         }
 
-        .by-rows-value-box {
+        .by-row-value-box {
           height: 100%;
           width: 100%;
           flex: 2;
@@ -461,7 +461,7 @@ input {
           border: 0.3vw solid $gameboard-color;
         }
 
-        .by-rows-regular-box {
+        .by-row-regular-box {
           height: 100%;
           width: 100%;
           flex: 3;
@@ -504,7 +504,7 @@ input {
           }
         }
 
-        .by-rows-dd-box {
+        .by-row-dd-box {
           height: 100%;
           width: 100%;
           flex: 2;

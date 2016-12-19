@@ -17,7 +17,8 @@
     <li><a href="#overview">Overview</a></li>
     <li><a href="#games">Games</a></li>
     <li><a href="#topics">Topics</a></li>
-    <li><a href="#by-rows">By row</a></li>
+    <li><a href="#by-row">By row</a></li>
+    <li><a href="#finals">Finals</a></li>
     <li><a href="#types">Play types</a></li>
   </ul>
 
@@ -31,6 +32,8 @@
   <%= render 'topics', stats: @stats_by_topic %>
 
   <%= render 'by_row', stats: @stats_by_row %>
+
+  <%= render 'finals' %>
 
   <%= render 'types', user_games_count: user_games_count %>
 
