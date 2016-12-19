@@ -77,6 +77,10 @@ class User < ActiveRecord::Base
     @rbr ||= ResultsByRow.new(self, play_types).stats
   end
 
+  def final_stats(play_types)
+    @fs ||= FinalStatsReport.new(self, play_types).stats
+  end
+
   def play_type_summary
     @pts ||= PlayTypeSummary.new(self).stats
   end
