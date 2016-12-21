@@ -12,9 +12,7 @@ $( ".users-show, .users-sample" ).ready( function() {
     return types;
   }
 
-  // For development, temporarily make the Finals tab show when the page is
-  // loaded. When done, call tabs with no arguments.
-  $( "#stats-area" ).tabs( { active: 4 } );
+  $( "#stats-area" ).tabs();
 
   var $gameTable = $( "#gameTable" );
   var $typeTable = $( "#typeTable" );
