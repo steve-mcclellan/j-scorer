@@ -1,0 +1,54 @@
+<div id="finals">
+  <h2>Final stats for <%= @user.email %>:</h2>
+  <hr>
+  <h2>Overall rate: <%= display_rate(stats[:user]) %></h2>
+  <hr>
+
+  <div class="row">
+    <div class="col-xs-4">
+      <p><strong><i>On-air contestants:</i></strong></p>
+    </div>
+    <div class="col-xs-8">
+      <p><strong>You:</strong></p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-4 top-pad"><i>
+      <% %w(1st 2nd 3rd).each_with_index do |place, i| %>
+        <p class="breathable">
+          <%= place %> place: <%= display_rate(stats[:contestants][i + 1]) %>
+        </p>
+      <% end %>
+      <p class="top-pad">Overall: <%= display_rate(stats[:contestants][0]) %></p>
+    </i></div>
+    <% %w(right wrong).each do |status| %>
+      <div class="col-xs-4 top-pad">
+        <% %w(1st 2nd 3rd).each_with_index do |player, i| %>
+          <p class="breathable">
+            When <%= player %> is <%= status %>:
+            <%= display_rate(stats["when_#{status}".to_sym][i + 1]) %>
+          </p>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+
+  <hr>
+
+  <div class="row">
+    <div class="col-xs-12">
+      <p><strong>Your results when the contestants go...</strong><p>
+    </div>
+    <% 3.downto(0) do |players| %>
+      <div class="col-xs-4 top-pad">
+        <% players.downto(0) do |correct_responders| %>
+          <p class="breathable">
+          <%= correct_responders %>-for-<%= players %>:
+          <%= display_rate(stats[:by_get_rate][correct_responders][players]) %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+
+</div>

@@ -1,12 +1,12 @@
-<div id="by-rows">
+<div id="by-row">
   <% [:round_one, :round_two].each_with_index do |round, round_index| %>
-    <div class="round-by-rows">
+    <div class="round-by-row">
       <% 1.upto(5) do |row_number| %>
-        <div class="by-rows-row">
-          <div class="by-rows-value-box">
+        <div class="by-row-row">
+          <div class="by-row-value-box">
             $<%= CURRENT_TOP_ROW_VALUES[round_index] * row_number %>:
           </div>
-          <div class="by-rows-regular-box"
+          <div class="by-row-regular-box"
                style="background-color: <%= stats[round][row_number][:regular_color] %>;">
             <div class="counting-stats three-liner">
               <div>
@@ -29,17 +29,17 @@
                 <div>(<%= number_to_percentage(eff * 100, precision: 1) %>)</div>
               <% end %>
             </div>
-          </div> <!-- by-rows-regular-box -->
-          <div class="by-rows-dd-box three-liner"
+          </div> <!-- by-row-regular-box -->
+          <div class="by-row-dd-box three-liner"
                style="background-color: <%= stats[round][row_number][:dd_color] %>;">
             <div><abbr title="Daily Doubles. These are not included in the main stats.">DDs</abbr>:</div>
             <div><%= (ddr = stats[round][row_number][:dd_right]) %>/<%= stats[round][row_number][:dd_wrong] + ddr %></div>
             <% unless (dd_eff = stats[round][row_number][:dd_eff]).nil? %>
               <div>(<%= number_to_percentage(dd_eff * 100, precision: 1) %>)</div>
             <% end %>
-          </div> <!-- by-rows-dd-box -->
-        </div> <!-- by-rows-row -->
+          </div> <!-- by-row-dd-box -->
+        </div> <!-- by-row-row -->
       <% end %> <!-- each row number -->
-    </div> <!-- round-by-rows -->
+    </div> <!-- round-by-row -->
   <% end %> <!-- each round -->
 </div>
