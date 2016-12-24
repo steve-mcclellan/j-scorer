@@ -16,6 +16,9 @@ Rails:
 Metrics/LineLength:
   Enabled: false
 
+Metrics/BlockLength:
+  Enabled: false
+
 Metrics/AbcSize:
   Max: 20
 
@@ -29,4 +32,7 @@ Style/Documentation:
   Enabled: false
 
 Style/AndOr:
+  Enabled: false
+
+Rails/HttpPositionalArguments:
   Enabled: false

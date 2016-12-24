@@ -3,9 +3,7 @@ class PagesController < ApplicationController
     @game = current_user.games.build if logged_in?
   end
 
-  def help
-  end
+  def help; end
 
-  def about
-  end
+  def about; end
 end

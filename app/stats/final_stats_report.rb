@@ -73,7 +73,7 @@ class FinalStatsReport
   # rubocop:disable AbcSize
   def post_processing
     sc = @stats[:contestants]
-    sc[0] = sc[1..3].inject([0, 0]) { |a, e| [a[0] + e[0], a[1] + e[1]] }
+    sc[0] = sc[1..3].transpose.map { |arr| arr.reduce(:+) }
 
     arrs = [@stats[:user]] + @stats[:contestants] + @stats[:by_get_rate][0] +
            @stats[:by_get_rate][1][1..3] + @stats[:by_get_rate][2][2..3] +
