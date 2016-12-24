@@ -1,10 +1,10 @@
 language: ruby
 
 rvm:
-  - 2.3.1
+  - 2.3.3
 
 addons:
-  postgresql: "9.4"
+  postgresql: "9.5"
 
 before_script:
   - cp config/database.yml.travis config/database.yml
