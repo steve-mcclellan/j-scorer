@@ -1,4 +1,4 @@
-class Game < ActiveRecord::Base
+class Game < ApplicationRecord
   belongs_to :user, inverse_of: :games, touch: true
   has_many :sixths, inverse_of: :game, dependent: :destroy
   has_one :final, inverse_of: :game, dependent: :destroy
@@ -48,8 +48,8 @@ class Game < ActiveRecord::Base
   def final_symbol
     case final_result
     when 0 then ''
-    when 1 then '&#x2718;'.html_safe
-    when 3 then '&#x2713;'.html_safe
+    when 1 then '✘'
+    when 3 then '✓'
     else '?'
     end
   end

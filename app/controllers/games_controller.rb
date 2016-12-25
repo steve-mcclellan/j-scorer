@@ -17,7 +17,7 @@ class GamesController < ApplicationController
 
   def destroy
     @game.destroy
-    redirect_to request.referrer || stats_url
+    redirect_to request.referer || stats_url
   end
 
   def json
@@ -84,7 +84,7 @@ class GamesController < ApplicationController
 
   def find_game
     @game = current_user.games.find_by(show_date: @show_date)
-    redirect_to request.referrer || root_url if @game.nil?
+    redirect_to request.referer || root_url if @game.nil?
   end
 
   def find_or_create_game

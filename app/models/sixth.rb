@@ -1,4 +1,4 @@
-class Sixth < ActiveRecord::Base
+class Sixth < ApplicationRecord
   belongs_to :game, inverse_of: :sixths, touch: true
 
   validates :game, presence: true

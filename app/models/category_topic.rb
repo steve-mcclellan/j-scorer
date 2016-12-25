@@ -1,4 +1,4 @@
-class CategoryTopic < ActiveRecord::Base
+class CategoryTopic < ApplicationRecord
   belongs_to :category, polymorphic: true, touch: true
   belongs_to :topic, touch: true
 
@@ -14,8 +14,7 @@ class CategoryTopic < ActiveRecord::Base
   private
 
   def category_and_topic_must_belong_to_same_user
-    if category && topic && category.game.user != topic.user
-      errors.add(:topic, "can't belong to a different user than game")
-    end
+    return unless category && topic && category.game.user != topic.user
+    errors.add(:topic, "can't belong to a different user than game")
   end
 end
