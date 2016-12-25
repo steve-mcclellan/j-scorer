@@ -1,4 +1,4 @@
-class Game < ActiveRecord::Base
+class Game < ApplicationRecord
   belongs_to :user, inverse_of: :games, touch: true
   has_many :sixths, inverse_of: :game, dependent: :destroy
   has_one :final, inverse_of: :game, dependent: :destroy

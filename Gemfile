@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 ruby '2.3.3'
-gem 'rails', '~> 4.2.6'
+gem 'rails', '~> 5.0.1'
 
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 0.15'
@@ -49,6 +49,9 @@ group :test do
   # Make Travis CI happy
   gem 'rake'
   gem 'rubocop', require: false
+
+  # The assigns and assert_template methods have been moved here
+  gem 'rails-controller-testing'
 end
 
 # Heroku will gripe if this isn't present

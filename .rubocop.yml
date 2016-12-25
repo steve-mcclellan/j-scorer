@@ -33,6 +33,3 @@ Style/Documentation:
 
 Style/AndOr:
   Enabled: false
-
-Rails/HttpPositionalArguments:
-  Enabled: false

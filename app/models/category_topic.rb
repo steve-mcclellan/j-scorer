@@ -1,4 +1,4 @@
-class CategoryTopic < ActiveRecord::Base
+class CategoryTopic < ApplicationRecord
   belongs_to :category, polymorphic: true, touch: true
   belongs_to :topic, touch: true
 
