@@ -1,15 +1,18 @@
 language: ruby
 
+dist: trusty
+sudo: false
+
 rvm:
-  - 2.3.3
+  - 2.3
 
 addons:
-  postgresql: "9.4"
+  postgresql: "9.5"
 
 before_script:
   - cp config/database.yml.travis config/database.yml
   - psql -c 'create database travis_ci_test;' -U postgres
-  - bundle exec rake db:setup RAILS_ENV=test
+  - psql -d travis_ci_test < db/structure.sql
 
 script:
   - bundle exec rake
