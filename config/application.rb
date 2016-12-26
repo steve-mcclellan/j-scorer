@@ -15,9 +15,6 @@ module JScorer
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
     config.time_zone = 'Pacific Time (US & Canada)'
 
-    # Do not swallow errors in after_commit/after_rollback callbacks.
-    config.active_record.raise_in_transactional_callbacks = true
-
     # Enable arrays in database by changing schema format to :sql.
     config.active_record.schema_format = :sql
   end

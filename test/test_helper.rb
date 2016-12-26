@@ -19,8 +19,8 @@ class ActiveSupport::TestCase
   def log_in_here(user, options = {})
     password = options[:password] || 'password'
     if integration_test?
-      post login_path, session: { email: user.email,
-                                  password: password }
+      post login_path, params: { session: { email: user.email,
+                                            password: password } }
     else
       session[:user_id] = user.id
     end
