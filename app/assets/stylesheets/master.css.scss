@@ -357,8 +357,22 @@ input {
   overflow: auto;
   font-size: 3.5vmin;
 
-  ul {
+  ul.ui-tabs-nav {
     font-size: 2.5vmin;
+
+    a, a:link, a:visited {
+      color: #666;
+    }
+
+    .ui-tabs-tab.ui-tabs-active.ui-state-active {
+      background-color: white;
+      border: 1px solid #aaa;
+      border-bottom: none;
+
+      a, a:link, a:visited {
+        color: black;
+      }
+    }
   }
 
   .ui-tabs-panel a {
