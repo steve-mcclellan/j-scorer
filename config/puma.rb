@@ -46,7 +46,5 @@ end
 # Allow puma to be restarted by `rails restart` command.
 plugin :tmp_restart
 
-# Heroku-requested additions from the Rails 4.2 days:
+# Addition from Heroku's Puma documentation:
 rackup      DefaultRackup
-port        ENV['PORT']     || 3000
-environment ENV['RACK_ENV'] || 'development'
