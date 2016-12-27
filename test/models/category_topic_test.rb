@@ -36,7 +36,7 @@ class CategoryTopicTest < ActiveSupport::TestCase
     assert @cattop2.valid?
     @cattop2.topic = topics(:highbrow)
     assert_not @cattop2.valid?
-    @cattop2.category_type = 'RoundTwoCategory'
+    @cattop2.category = sixths(:djthree)
     assert @cattop2.valid?
   end
 end

@@ -4,8 +4,7 @@ class PasswordResetsController < ApplicationController
   before_action :check_expiration, only: [:edit, :update]
   before_action :password_present, only: [:update]
 
-  def new
-  end
+  def new; end
 
   def create
     @user = User.find_by(email: params[:password_reset][:email].downcase)
@@ -19,8 +18,7 @@ class PasswordResetsController < ApplicationController
     redirect_to root_url
   end
 
-  def edit
-  end
+  def edit; end
 
   def update
     if @user.update(user_params)
@@ -46,22 +44,19 @@ class PasswordResetsController < ApplicationController
   end
 
   def valid_user
-    unless @user && @user.authenticated?(:reset, params[:id])
-      redirect_to root_url
-    end
+    return 'OK' if @user && @user.authenticated?(:reset, params[:id])
+    redirect_to root_url
   end
 
   def check_expiration
-    if @user.password_reset_expired?
-      flash[:danger] = 'Password reset has expired.'
-      redirect_to forgot_url
-    end
+    return 'OK' unless @user.password_reset_expired?
+    flash[:danger] = 'Password reset has expired.'
+    redirect_to forgot_url
   end
 
   def password_present
-    if params[:user][:password].empty?
-      @user.errors.add(:password, "can't be empty")
-      render 'edit'
-    end
+    return 'OK' unless params[:user][:password].empty?
+    @user.errors.add(:password, "can't be empty")
+    render 'edit'
   end
 end

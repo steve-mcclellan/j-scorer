@@ -1,4 +1,4 @@
-class User < ActiveRecord::Base
+class User < ApplicationRecord
   has_many :games, dependent: :destroy
   has_many :topics, dependent: :destroy
   has_many :sixths, through: :games

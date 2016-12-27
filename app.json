@@ -1,7 +1,7 @@
 {
   "name": "j-scorer",
   "scripts": {
-    "postdeploy": "bundle exec rake db:setup"
+    "postdeploy": "bundle exec rake db:structure:load db:seed"
   },
   "env": {
     "LANG": {

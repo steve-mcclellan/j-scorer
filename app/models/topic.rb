@@ -1,4 +1,4 @@
-class Topic < ActiveRecord::Base
+class Topic < ApplicationRecord
   belongs_to :user, touch: true
 
   has_many :category_topics, dependent: :destroy
