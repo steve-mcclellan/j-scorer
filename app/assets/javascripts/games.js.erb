@@ -272,12 +272,12 @@ $( ".games-game" ).ready( function() {
     }
   }
 
-  function populateBoard() {
+  function populateBoard( forceFinalDisplay ) {
     var unadjustedScores = [scores[0], scores[1]];
     currentRound = currentGameData["activeRound"];
     setCurrentRoundIndex();
     if ( currentRound === "final" ) {
-      populateFinal();
+      populateFinal( forceFinalDisplay );
     } else {
       populateMainGameBoard( unadjustedScores );
     }
@@ -317,7 +317,7 @@ $( ".games-game" ).ready( function() {
     activateRoundLinks();
   }
 
-  function populateFinal() {
+  function populateFinal( forceFinalDisplay ) {
     var catTitleText = currentGame["final"]["category_title"];
     var $catTitleP = $( "#final-cat-title p" )
     $catTitleP.html( catTitleText );
@@ -326,7 +326,12 @@ $( ".games-game" ).ready( function() {
 
     $( "#final-topic-area" ).val( currentGame["final"]["topics_string"] );
     toggleContestantResults();
-    $fj.show();
+
+    // FJ display is scaled in by updateRound in the vast majority of cases.
+    // This line covers the only other case: the page being populated from
+    // cookies where gameData lists the activeRound as "final".
+    // Scaling in doesn't seem appropriate here.
+    if ( forceFinalDisplay ) { $fj.show(); }
   }
 
   function toggleContestantResults() {
@@ -1064,7 +1069,7 @@ $( ".games-game" ).ready( function() {
   } else if ( currentGame ) {
     populateSaveAreaFromCookie( true );
     getScoresFromCookie();
-    populateBoard();
+    populateBoard( true );
   } else {
     initializeNewGame();
     getScoresFromCookie();
