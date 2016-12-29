@@ -14,6 +14,7 @@
         <th>Average score</th>
         <th>High score</th>
         <th>Low score</th>
+        <th>Final rate</th>
       </tr>
     </thead>
     <tbody>
@@ -28,6 +29,11 @@
           <td><%= number_to_currency(type_stats[:average_score]) %></td>
           <td><%= number_to_currency(type_stats[:max], precision: 0) %></td>
           <td><%= number_to_currency(type_stats[:min], precision: 0) %></td>
+          <% if (fr = type_stats[:final_rate]).nil? %>
+            <td></td>
+          <% else %>
+            <td><%= number_to_percentage(fr * 100, precision: 1) %></td>
+          <% end %>
         </tr>
       <% end %>
     </tbody>
