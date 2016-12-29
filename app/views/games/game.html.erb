@@ -1,7 +1,12 @@
 <% provide(:title, 'Game') %>
 <% provide(:tags, 'description: Keep score along with a single game of Jeopardy!, and save your results to track your stats over time.') %>
 
-<%= render 'game_display' %>
+<div id="game-container">
+  <%= render 'board_area' %>
+  <%= render 'panel' %>
+</div>
+
+<%= render 'date_change_modal' %>
 
 <div class='data-passer' data-showdate="<%= @date %>"
                          data-existinggame="<%= @existing_game %>"></div>

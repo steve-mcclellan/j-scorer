@@ -1,22 +1,14 @@
 class TopicsSummary
   include TopicsQueries, SharedStatsMethods
 
-  # TODO: Test whether one of these methods works noticeably faster.
-  # attr_reader :sixth_stats, :final_stats
   attr_reader :stats
 
   def initialize(user, play_types)
-    # @sixths = ActiveRecord::Base.connection
-    #                             .select_all(topic_sixths_query(user)).to_hash
-    # @finals = ActiveRecord::Base.connection
-    #                             .select_all(topic_finals_query(user)).to_hash
-
     data = ActiveRecord::Base.connection
                              .select_all(topics_query(user, play_types))
                              .to_hash
 
     crunch_numbers(data)
-    # crunch_numbers_each(@sixths, @finals)
   end
 
   private
@@ -34,17 +26,6 @@ class TopicsSummary
 
     add_calculated_stats
   end
-
-  # def crunch_numbers_each(sixths_data, final_data)
-  #   @sixth_stats = Hash.new { |hash, key| hash[key] = Hash.new(0) }
-  #   @final_stats = Hash.new { |hash, key| hash[key] = Hash.new(0) }
-
-  #   sixths_data.each { |sixth| add_sixth_to_stats(sixth, @sixth_stats) }
-  #   final_data.each { |final| add_final_to_stats(final, @final_stats) }
-
-  #   add_efficiency(@sixth_stats)
-  #   add_final_rate(@final_stats)
-  # end
 
   def add_sixth_to_stats(cat_hash)
     topic_stats = @stats[cat_hash['topic']]
@@ -74,20 +55,6 @@ class TopicsSummary
       topic_hash[:dds] = topic_hash[:dd_right] + topic_hash[:dd_wrong]
     end
   end
-
-  # def add_efficiency(stats)
-  #   stats.each_value do |topic_hash|
-  #     topic_hash[:efficiency] = quotient(topic_hash[:score],
-  #                                        topic_hash[:possible_score])
-  #   end
-  # end
-
-  # def add_final_rate(stats)
-  #   stats.each_value do |topic_hash|
-  #     topic_hash[:final_rate] = quotient(topic_hash[:finals_right],
-  #                                        topic_hash[:finals_count])
-  #   end
-  # end
 
   def top_row_value(sixth_hash)
     if sixth_hash['sixth_type'] == 'RoundOneCategory'
