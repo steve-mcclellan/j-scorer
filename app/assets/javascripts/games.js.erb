@@ -970,17 +970,21 @@ $( ".games-game" ).ready( function() {
   });
 
   $showDatePicker.datetimepicker({
-    format: "YYYY-MM-DD"
+    format: "YYYY-MM-DD",
+    focusOnShow: false
   });
   $showDatePicker.data( "DateTimePicker" ).timeZone(undefined);
 
   $datePlayedPicker.datetimepicker({
-    format: "YYYY-MM-DD h:mma"
+    format: "YYYY-MM-DD h:mma",
+    showClose: true,
+    focusOnShow: false
   });
   $datePlayedPicker.data( "DateTimePicker" ).timeZone(undefined);
 
   $changeShowDatePicker.datetimepicker({
-    format: "YYYY-MM-DD"
+    format: "YYYY-MM-DD",
+    focusOnShow: false
   });
   $changeShowDatePicker.data( "DateTimePicker" ).timeZone(undefined);
 
