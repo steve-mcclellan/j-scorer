@@ -428,6 +428,14 @@ input {
     border-right: 1px solid black;
   }
 
+  #topics-notes {
+    font-size: x-small;
+
+    #notes-title {
+      text-decoration: underline;
+    }
+  }
+
   /* "By row" tab */
 
   #by-row {
