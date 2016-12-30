@@ -17,10 +17,10 @@
 
     <div class="row">
       <div class="col-xs-6 col-compact">
-        Show date:
+        <span class="title">Show date:</span>
       </div>
       <div class="col-xs-6 col-compact text-right">
-        <span id="show-date-change">
+        <span id="show-date-change" class="title">
           (<a id="change-show-date-link"
               tabindex="200"
               data-toggle="modal"
@@ -49,10 +49,10 @@
 
     <div class="row">
       <div class="col-xs-4 col-compact">
-        Played at:
+        <span class="title">Played at:</span>
       </div>
       <div class="col-xs-8 col-compact text-right">
-        <span id="time-zone">(Time zone: Pacific)</span>
+        <span id="time-zone" class="title">(Time zone: Pacific)</span>
       </div>
     </div>
 
@@ -73,7 +73,7 @@
         </div>
       </div>
     </div> <!-- played-at-area -->
-    Play type:
+    <span class="title">Play type:</span>
     <select id="play-type-select" tabindex="200">
       <% PLAY_TYPES.each do |abbr, name| %>
         <option value="<%= abbr %>"><%= name %></option>

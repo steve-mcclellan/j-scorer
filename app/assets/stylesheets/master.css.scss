@@ -975,6 +975,21 @@ input {
     #save-area {
       width: 100%;
 
+      .title {
+        padding: 0 1.25vw;
+      }
+
+      .form-control {
+        height: 2.75vw;
+        padding: 0 1.25vw;
+        font-size: 1.25vw;
+      }
+
+      .input-group-addon {
+        padding: 0 1vw;
+        font-size: 1.25vw;
+      }
+
       #show-date-area.disabled {
         .form-control[disabled] {
           background-color: $light-background-color;
@@ -985,6 +1000,10 @@ input {
           background-color: $light-background-color;
           cursor: default;
         }
+      }
+
+      #play-type-select {
+        padding: 0 1vw;
       }
     }
 
