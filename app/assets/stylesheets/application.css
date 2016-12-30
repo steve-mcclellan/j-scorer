@@ -14,6 +14,7 @@
  *= require jquery-ui/tabs
  *= require tablesorter.blue
  *= require bootstrap-datetimepicker
+ *= require mobile_friendly_tooltip
  *= require_tree .
  *= require_self
  */

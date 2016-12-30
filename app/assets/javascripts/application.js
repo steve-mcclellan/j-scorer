@@ -21,4 +21,5 @@
 //= require bootstrap
 //= require moment
 //= require bootstrap-datetimepicker
+//= require mobile_friendly_tooltip
 //= require_tree .
