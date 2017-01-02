@@ -565,6 +565,9 @@ $( ".games-game" ).ready( function() {
     });
   }
 
+  // This is called from populateBoard. It also makes all of the gameboard
+  // and panel links respond to presses of the space bar or enter key when
+  // they have focus.
   function activateRoundLinks() {
     var $roundOneLink = $( "#round-one-link" );
     var $roundTwoLink = $( "#round-two-link" );
@@ -583,6 +586,14 @@ $( ".games-game" ).ready( function() {
     $finalRoundLink.on( "click", function() {
       currentGameData["activeRound"] = "final";
       updateRound();
+    });
+
+    $( "#game-container a" ).on( "keydown", function( event ) {
+      var code = event.which;
+      // Enter is 13; space is 32.
+      if ( code === 13 || code === 32 ) {
+        $( this ).trigger( "click" );
+      }
     });
   }
 
