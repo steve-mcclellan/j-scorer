@@ -886,19 +886,23 @@ $( ".games-game" ).ready( function() {
 
 
   $buttonFJRight.on( "click", function() {
-    if ( currentGame["final"]["result"] !== 3 ) {
+    if ( currentGame["final"]["result"] === 3 ) {
+      currentGame["final"]["result"] = 0;
+    } else {
       currentGame["final"]["result"] = 3;
-      updateCookies();
-      updateFinalSymbol();
     }
+    updateCookies();
+    updateFinalSymbol();
   });
 
   $buttonFJWrong.on( "click", function() {
-    if ( currentGame["final"]["result"] !== 1 ) {
+    if ( currentGame["final"]["result"] === 1 ) {
+      currentGame["final"]["result"] = 0;
+    } else {
       currentGame["final"]["result"] = 1;
-      updateCookies();
-      updateFinalSymbol();
     }
+    updateCookies();
+    updateFinalSymbol();
   });
 
   // Updating the status of a contestant Final response:
