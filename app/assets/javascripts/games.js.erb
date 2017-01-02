@@ -90,6 +90,7 @@ $( ".games-game" ).ready( function() {
     if ( changed ) {
       currentGameData["modified"] = true;
       enableSaveLink();
+      $deleteGameLink.text( 'New game' );
     }
     setCookie( "game", currentGame );
     setCookie( "gameData", currentGameData );
@@ -496,6 +497,12 @@ $( ".games-game" ).ready( function() {
     var modified = ( currentGame["play_type"] !== $playTypeSelect.val() );
     currentGame["play_type"] = $playTypeSelect.val();
     updateCookies( modified );
+  }
+
+  function initializeFromCookie() {
+    populateSaveAreaFromCookie( true );
+    getScoresFromCookie();
+    populateBoard( true );
   }
 
   function initializeNewGame( date ) {
@@ -927,7 +934,17 @@ $( ".games-game" ).ready( function() {
   });
 
   $deleteGameLink.on( "click", function() {
-    initializeNewGame();
+    if ( $( this ).text() === 'Undo' ) {
+      currentGame = getCookie( "oldGame" );
+      currentGameData = getCookie( "oldGameData" );
+      initializeFromCookie();
+      $( this ).text( 'New game' );
+    } else {
+      setCookie( "oldGame", currentGame );
+      setCookie( "oldGameData", currentGameData );
+      initializeNewGame();
+      $( this ).text( 'Undo' );
+    }
   });
 
   $showDatePicker.on( "dp.change", function( e ) {
@@ -1097,9 +1114,7 @@ $( ".games-game" ).ready( function() {
     getScoresFromCookie();
     populateBoard();
   } else if ( currentGame ) {
-    populateSaveAreaFromCookie( true );
-    getScoresFromCookie();
-    populateBoard( true );
+    initializeFromCookie();
   } else {
     initializeNewGame();
     getScoresFromCookie();
