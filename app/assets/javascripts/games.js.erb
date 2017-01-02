@@ -659,6 +659,13 @@ $( ".games-game" ).ready( function() {
     if ( data.readyState === 0 || data.responseText === "" ) {
       alert( "Oops! It looks like the request was not sent successfully.\n\n" +
              "Please check your Internet connection and try again." );
+    } else if ( data.status === 503 ) {
+      // 503: Service Unavailable is returned when the app is in
+      // maintenance mode.
+      alert( 'Oops! The database is currently unavailable. This usually ' +
+             'means that a new version of the J! Scorer is in the process of ' +
+             'going live. This rarely lasts more than a minute or two. ' +
+             'Please try again shortly.' );
     } else {
       var errors = JSON.parse( data.responseText );
       if ( errors["sixths.board_position"] &&
@@ -701,7 +708,6 @@ $( ".games-game" ).ready( function() {
   }
 
   function afterDateChangeHandler( data ) {
-    alert("Success!");
     var newDate = data.newDate;
     currentGame.show_date = newDate;
     $showDateValue.val( newDate );
@@ -713,6 +719,11 @@ $( ".games-game" ).ready( function() {
     if ( data.readyState === 0 || data.responseText === "" ) {
       alert( "Oops! It looks like the request was not sent successfully.\n\n" +
              "Please check your Internet connection and try again." );
+    } else if ( data.status === 503 ) {
+      alert( 'Oops! The database is currently unavailable. This usually ' +
+             'means that a new version of the J! Scorer is in the process of ' +
+             'going live. This rarely lasts more than a minute or two. ' +
+             'Please try again shortly.' );
     } else {
       switch ( JSON.parse( data.responseText ).errors[0] ) {
         case "occupied":
