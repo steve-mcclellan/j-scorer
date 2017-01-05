@@ -944,6 +944,14 @@ $( ".games-game" ).ready( function() {
       setCookie( "oldGameData", currentGameData );
       initializeNewGame();
       $( this ).text( 'Undo' );
+
+      // Also clear the date from the query string, if any. This code from
+      // http://atodorov.org/blog/2013/01/28/remove-query-string-with-javascript-and-html5/
+      var uri = window.location.toString();
+      if ( uri.indexOf( "?" ) > 0 ) {
+        var clean_uri = uri.substring(0, uri.indexOf( "?" ) );
+        window.history.replaceState( {}, document.title, clean_uri );
+      }
     }
   });
 
