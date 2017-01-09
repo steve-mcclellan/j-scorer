@@ -24,7 +24,9 @@
                                                      tabindex: 3 %>
         <br />
 
-        <%= f.submit "Create account", class: 'btn btn-primary', tabindex: 4 %>
+        <%= f.submit "Create account", class: 'btn btn-primary submit-button',
+                                       data: { disable_with: 'Creating...' },
+                                       tabindex: 4 %>
       <% end %>
     </div>
   </div>

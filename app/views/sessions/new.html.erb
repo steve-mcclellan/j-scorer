@@ -19,7 +19,9 @@
       <%= f.password_field :password, class: 'form-control', tabindex: 2 %>
       <br />
 
-      <%= f.submit 'Log in', class: 'btn btn-primary', tabindex: 3 %>
+      <%= f.submit 'Log in', class: 'btn btn-primary submit-button',
+                             data: { disable_with: 'Logging in...' },
+                             tabindex: 3 %>
     <% end %>
 
     <p>New user? <%= link_to 'Sign up now.', signup_path, tabindex: 4 %></p>

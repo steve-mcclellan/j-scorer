@@ -22,4 +22,5 @@
 //= require moment
 //= require bootstrap-datetimepicker
 //= require mobile_friendly_tooltip
+//= require modernizr-custom
 //= require_tree .

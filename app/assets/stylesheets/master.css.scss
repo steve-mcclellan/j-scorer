@@ -193,12 +193,21 @@ input {
   }
 }
 
-/* for non-JavaScript-enabled browsers */
+/* Warning boxes for browser incompatibilities */
 
 .no-js-box {
   border: 1px solid red;
   background-color: #ecc;
   font-size: xx-large;
+  width: 80%;
+  margin: 2vh 10%;
+  padding: 3vh 5%;
+}
+
+.no-cookie-box {
+  border: 1px solid red;
+  background-color: #ecc;
+  font-size: x-large;
   width: 80%;
   margin: 2vh 10%;
   padding: 3vh 5%;
