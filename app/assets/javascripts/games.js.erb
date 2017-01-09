@@ -949,7 +949,7 @@ $( ".games-game" ).ready( function() {
       // http://atodorov.org/blog/2013/01/28/remove-query-string-with-javascript-and-html5/
       var uri = window.location.toString();
       if ( uri.indexOf( "?" ) > 0 ) {
-        var clean_uri = uri.substring(0, uri.indexOf( "?" ) );
+        var clean_uri = uri.substring( 0, uri.indexOf( "?" ) );
         window.history.replaceState( {}, document.title, clean_uri );
       }
     }
@@ -974,7 +974,7 @@ $( ".games-game" ).ready( function() {
 
       // If the conflict (between cookie and database) flag was set when
       // the page was loaded, remove the category IDs from currentGame.
-      if (currentGameData["conflict"]) {
+      if ( currentGameData["conflict"] ) {
         updateCategoryIds( { ids: [ null, null, null, null, null, null, null,
                                     null, null, null, null, null, null ] } );
       }

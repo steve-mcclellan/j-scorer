@@ -21,6 +21,18 @@
   <body class="<%= controller_name %>-<%= action_name %>">
     <%= render 'layouts/header' %>
 
+      <noscript>
+        <div class="no-js-box text-center">
+          <p>
+          It looks like JavaScript isn't enabled in your browser. The <span class="nowrap">J! Scorer</span> relies on JavaScript to do its thing.
+          </p>
+          <br />
+          <p>
+          Feel free to take a look around. If you'd like to use the <span class="nowrap">J! Scorer</span> yourself, you'll need to either <a href="http://www.enable-javascript.com/" target="_blank">enable JavaScript</a> or switch browsers.
+          </p>
+        </div>
+      </noscript>
+
       <div>
         <% flash.each do |message_type, message| %>
           <div class="alert alert-<%= message_type %> alert-dismissible" role="alert">

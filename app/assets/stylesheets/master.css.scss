@@ -193,6 +193,17 @@ input {
   }
 }
 
+/* for non-JavaScript-enabled browsers */
+
+.no-js-box {
+  border: 1px solid red;
+  background-color: #ecc;
+  font-size: xx-large;
+  width: 80%;
+  margin: 2vh 10%;
+  padding: 3vh 5%;
+}
+
 /* home page */
 
 #home-container {
