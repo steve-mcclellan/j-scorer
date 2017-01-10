@@ -1,0 +1,26 @@
+<div id="flash-messages">
+  <% flash.each do |message_type, message| %>
+    <div class="alert alert-<%= message_type %> alert-dismissible" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <%= message %>
+    </div>
+  <% end %>
+</div>
+
+<noscript>
+  <div class="no-js-box text-center">
+    <p>
+      It looks like JavaScript isn't enabled in your browser. The <span class="nowrap">J! Scorer</span> relies on JavaScript to do its thing.
+    </p>
+    <br />
+    <p>
+      Feel free to take a look around. If you'd like to use the <span class="nowrap">J! Scorer</span> yourself, you'll need to either <a href="http://www.enable-javascript.com/" target="_blank" class="nowrap">enable JavaScript</a> or switch browsers.
+    </p>
+  </div>
+</noscript>
+
+<div id="old-browser-warning" class="no-js-box text-center">
+  <p>
+    It looks like you're using an old browser. The <span class="nowrap">J! Scorer</span> relies on CSS3 features that your browser doesn't recognize. To use the <span class="nowrap">J! Scorer</span> (and the rest of the modern web), please upgrade your browser.
+  </p>
+</div>

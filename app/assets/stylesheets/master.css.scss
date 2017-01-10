@@ -213,6 +213,14 @@ input {
   padding: 3vh 5%;
 }
 
+#old-browser-warning {
+  display: none;
+}
+
+.no-flexbox #old-browser-warning, .no-cssvminunit #old-browser-warning {
+  display: block;
+}
+
 /* home page */
 
 #home-container {
