@@ -1,0 +1,142 @@
+<div id="board-area">
+
+  <div id="board">
+    <% 1.upto(6) do |cat_num| %>
+      <div class="category" id="category-<%= cat_num %>">
+
+        <div class="cat-title" id="cat-title-<%= cat_num %>">
+          <p contenteditable="true"
+             class="default-cat click-resistant"
+             tabindex="1"
+             data-defaultvalue="CATEGORY <%= cat_num %>"
+             data-column=<%= cat_num %>
+             spellcheck="false">
+             .
+          </p>
+        </div>
+
+        <input class="topic-area" id="topic-area-<%= cat_num %>"
+                                  placeholder="Topic(s)"
+                                  tabindex="2"
+                                  data-column=<%= cat_num %> />
+
+        <% 1.upto(5) do |box_num| %>
+          <div class="clue-box active-clue-box"
+               id="clue-box-<%= cat_num %>-<%= box_num %>"
+               data-column=<%= cat_num %>
+               data-row=<%= box_num %>
+               data-isdd=false
+               data-boxstate="active">
+            <span>.</span>
+          </div>
+        <% end %>
+      </div> <!-- category -->
+    <% end %>
+  </div> <!-- board -->
+
+  <div id="clue-over-board">
+    <div id="clue-heading">
+      <span id="overlay-cat">{Category}</span>
+      &nbsp;-&nbsp;
+      <span id="overlay-value">{Value}</span>
+    </div>
+
+    <div id="clue-body">
+      <div id="correctness-buttons">
+        <button type="button" id="button-right">Right</button>
+        <button type="button" id="button-pass">Pass</button>
+        <button type="button" id="button-wrong">Wrong</button>
+      </div>
+
+      <div id="dd-nr-cancel">
+        <div id="dd-checkbox-container">
+          <label for="dd-checkbox">DD&nbsp;</label>
+          <input type="checkbox" id="dd-checkbox" value="DD" />
+        </div>
+        <div id="button-nr">
+          <button type="button">NR</button>
+        </div>
+        <div id="reset-cancel">
+          <a id="reset-link">Reset clue</a>
+          <a id="cancel-link">Cancel</a>
+        </div>
+      </div>
+    </div>
+  </div> <!-- clue-over-board -->
+
+  <div id="final-over-board">
+    <div id="final-cat-title">
+      <p contenteditable="true"
+         class="final-cat default-cat click-resistant"
+         tabindex="1"
+         data-defaultvalue="FINAL CATEGORY"
+         spellcheck="false">
+      .
+      </p>
+    </div>
+
+    <input id="final-topic-area" placeholder="Topic(s)" tabindex="2" />
+
+    <div id="final-clue-body">
+      <div id="final-correctness-buttons">
+        <button type="button"
+                id="button-final-right"
+                tabindex="3">
+          Right
+        </button>
+        <button type="button"
+                id="button-final-wrong"
+                tabindex="3">
+          Wrong
+        </button>
+      </div>
+
+      <div id="final-contestant-results">
+        <div class="contestant-result" id="third-result">
+          Third place:
+          <div class="btn-group" data-toggle="buttons">
+            <label id="p3right" class="btn btn-default fj-button fj-right">
+              <input type="radio" name="third_right" value=true /> Right
+            </label>
+            <label id="p3wrong" class="btn btn-default fj-button fj-wrong">
+              <input type="radio" name="third_right" value=false /> Wrong
+            </label>
+            <label id="p3dnp" class="btn btn-default fj-button fj-dnp">
+              <input type="radio" name="third_right" value=null /> N/A
+            </label>
+          </div>
+        </div>
+
+        <div class="contestant-result" id="second-result">
+          Second place:
+          <div class="btn-group" data-toggle="buttons">
+            <label id="p2right" class="btn btn-default fj-button fj-right">
+              <input type="radio" name="second_right" value=true /> Right
+            </label>
+            <label id="p2wrong" class="btn btn-default fj-button fj-wrong">
+              <input type="radio" name="second_right" value=false /> Wrong
+            </label>
+            <label id="p2dnp" class="btn btn-default fj-button fj-dnp">
+              <input type="radio" name="second_right" value=null /> N/A
+            </label>
+          </div>
+        </div>
+
+        <div class="contestant-result" id="first-result">
+          First place:
+          <div class="btn-group" data-toggle="buttons">
+            <label id="p1right" class="btn btn-default fj-button fj-right">
+              <input type="radio" name="first_right" value=true /> Right
+            </label>
+            <label id="p1wrong" class="btn btn-default fj-button fj-wrong">
+              <input type="radio" name="first_right" value=false /> Wrong
+            </label>
+            <label id="p1dnp" class="btn btn-default fj-button fj-dnp">
+              <input type="radio" name="first_right" value=null /> N/A
+            </label>
+          </div>
+        </div>
+      </div> <!-- final-contestant-results -->
+    </div> <!-- final-clue-body -->
+  </div> <!-- final-over-board -->
+</div> <!-- board-area -->

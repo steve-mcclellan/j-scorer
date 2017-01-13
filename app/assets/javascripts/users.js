@@ -1,3 +1,6 @@
+// NOTE: The shared function that produces a disabled-cookies warning on
+//       the signup and login pages is located in the sessions.js file.
+
 $( ".users-show, .users-sample" ).ready( function() {
 
   // Returns an array of play type abbreviations corresponding

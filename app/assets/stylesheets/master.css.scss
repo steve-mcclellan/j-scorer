@@ -193,6 +193,34 @@ input {
   }
 }
 
+/* Warning boxes for browser incompatibilities */
+
+.no-js-box {
+  border: 1px solid red;
+  background-color: #ecc;
+  font-size: xx-large;
+  width: 80%;
+  margin: 2vh 10%;
+  padding: 3vh 5%;
+}
+
+.no-cookie-box {
+  border: 1px solid red;
+  background-color: #ecc;
+  font-size: x-large;
+  width: 80%;
+  margin: 2vh 10%;
+  padding: 3vh 5%;
+}
+
+#old-browser-warning {
+  display: none;
+}
+
+.no-flexbox #old-browser-warning, .no-cssvminunit #old-browser-warning {
+  display: block;
+}
+
 /* home page */
 
 #home-container {
@@ -428,6 +456,14 @@ input {
     border-right: 1px solid black;
   }
 
+  #topics-notes {
+    font-size: x-small;
+
+    #notes-title {
+      text-decoration: underline;
+    }
+  }
+
   /* "By row" tab */
 
   #by-row {
@@ -595,7 +631,6 @@ input {
           align-items: center;
           text-align: center;
           color: white;
-          // text-transform: uppercase;
           font-size: 2.1vmin;
           line-height: 110%;
           font-weight: bold;
@@ -680,13 +715,6 @@ input {
         align-items: center;
         color: white;
         font-size: 6vh;
-
-        #overlay-cat {
-          text-transform: uppercase;
-        }
-
-        #overlay-value {
-        }
       }
 
       #clue-body {
@@ -810,7 +838,6 @@ input {
         align-items: center;
         text-align: center;
         color: white;
-        // text-transform: uppercase;
         font-size: 5vmin;
         line-height: 110%;
         font-weight: bold;
@@ -967,6 +994,33 @@ input {
     #save-area {
       width: 100%;
 
+      .btn-link {
+        color: $j-light-blue;
+        padding: 0;
+        font-size: 1.2vw;
+        line-height: 1;
+        height: 1.5vw;
+
+        &.disabled {
+          color: #999;
+        }
+      }
+
+      .title {
+        padding: 0 1.25vw;
+      }
+
+      .form-control {
+        height: 2.75vw;
+        padding: 0 1.25vw;
+        font-size: 1.25vw;
+      }
+
+      .input-group-addon {
+        padding: 0 1vw;
+        font-size: 1.25vw;
+      }
+
       #show-date-area.disabled {
         .form-control[disabled] {
           background-color: $light-background-color;
@@ -977,6 +1031,10 @@ input {
           background-color: $light-background-color;
           cursor: default;
         }
+      }
+
+      #play-type-select {
+        padding: 0 1vw;
       }
     }
 

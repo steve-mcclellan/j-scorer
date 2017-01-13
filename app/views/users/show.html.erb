@@ -11,7 +11,7 @@
     <p>
     <%= random_full_greeting %>
 
-    I've just done some major behind-the-scenes work to make the J! Scorer a bit more future-proof. If you notice anything broken, <em>please</em> let me know:
+    New: a bunch of tiny improvements I've been wanting to get to for a while. (Summary <a href="https://github.com/steve-mcclellan/j-scorer/pull/30" target="_blank">here</a>.) As always, let me know if I've broken anything, and what you'd like to see next:
 
     <a class="nowrap" href="mailto:<%= ENV['SUPPORT_ADDRESS'] %>"><%= ENV['SUPPORT_ADDRESS'] %></a>.
     </p>
@@ -25,6 +25,14 @@
     <li><a href="#finals">Finals</a></li>
     <li><a href="#types">Play types</a></li>
   </ul>
+
+  <noscript>
+    <div class="no-js-box text-center">
+      <p>
+        Note: With JavaScript enabled, this same information is in a tabbed format which is much easier to read.
+      </p>
+    </div>
+  </noscript>
 
   <% user_games_count = @user.games.count %>
   <% tracked = @summary[:all][:game_count] %>

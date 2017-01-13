@@ -3,7 +3,6 @@ class ResultsByRow
 
   # rubocop:disable MethodLength
   def initialize(user, play_types)
-    @user = user
     @stats = { round_one:
                [0,
                 { right: 0, wrong: 0, pass: 0, dd_right: 0, dd_wrong: 0 },

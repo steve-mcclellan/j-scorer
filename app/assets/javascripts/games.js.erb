@@ -1,4 +1,4 @@
-const topRowValues = <%= CURRENT_TOP_ROW_VALUES %>;
+var topRowValues = <%= CURRENT_TOP_ROW_VALUES %>;
 
 function setCookie( name, value ) {
   Cookies.set( name, value, { expires: 7305, path: '/game',
@@ -16,7 +16,7 @@ function destroyCookie( name ) {
   Cookies.remove( name, { path: '/game', secure: <%= Rails.env.production? %> } );
 }
 
-const NEW_CATEGORY = {
+var NEW_CATEGORY = {
   "id":null,
   "board_position":null,
   "title":"",
@@ -34,7 +34,7 @@ function newCategory( position ) {
   return cat;
 }
 
-const NEW_GAME_COOKIE = {
+var NEW_GAME_COOKIE = {
   "show_date":"",
   "date_played":"",
   "play_type":"",
@@ -70,7 +70,7 @@ function newCookie() {
   return JSON.parse( JSON.stringify( NEW_GAME_COOKIE ) );
 }
 
-const NEW_DATA_COOKIE = {
+var NEW_DATA_COOKIE = {
   "modified":false,
   "conflict":false,
   "activeRound":"round_one_categories"
@@ -90,6 +90,7 @@ $( ".games-game" ).ready( function() {
     if ( changed ) {
       currentGameData["modified"] = true;
       enableSaveLink();
+      $deleteGameLink.text( 'New game' );
     }
     setCookie( "game", currentGame );
     setCookie( "gameData", currentGameData );
@@ -272,12 +273,12 @@ $( ".games-game" ).ready( function() {
     }
   }
 
-  function populateBoard() {
+  function populateBoard( forceFinalDisplay ) {
     var unadjustedScores = [scores[0], scores[1]];
     currentRound = currentGameData["activeRound"];
     setCurrentRoundIndex();
     if ( currentRound === "final" ) {
-      populateFinal();
+      populateFinal( forceFinalDisplay );
     } else {
       populateMainGameBoard( unadjustedScores );
     }
@@ -289,9 +290,9 @@ $( ".games-game" ).ready( function() {
   }
 
   function updateRoundLinks( currentRound ) {
-    const r1link = '<a id="round-one-link" tabindex=100>Round One</a>';
-    const r2link = '<a id="round-two-link" tabindex=100>Round Two</a>';
-    const fjlink = '<a id="final-round-link" tabindex=100>Final Round</a>';
+    var r1link = '<a id="round-one-link" tabindex=100>Round One</a>';
+    var r2link = '<a id="round-two-link" tabindex=100>Round Two</a>';
+    var fjlink = '<a id="final-round-link" tabindex=100>Final Round</a>';
     switch ( currentRound ) {
       case "round_one_categories":
         $r1slot.html( "<b>Round One</b>" );
@@ -317,7 +318,7 @@ $( ".games-game" ).ready( function() {
     activateRoundLinks();
   }
 
-  function populateFinal() {
+  function populateFinal( forceFinalDisplay ) {
     var catTitleText = currentGame["final"]["category_title"];
     var $catTitleP = $( "#final-cat-title p" )
     $catTitleP.html( catTitleText );
@@ -326,7 +327,12 @@ $( ".games-game" ).ready( function() {
 
     $( "#final-topic-area" ).val( currentGame["final"]["topics_string"] );
     toggleContestantResults();
-    $fj.show();
+
+    // FJ display is scaled in by updateRound in the vast majority of cases.
+    // This line covers the only other case: the page being populated from
+    // cookies where gameData lists the activeRound as "final".
+    // Scaling in doesn't seem appropriate here.
+    if ( forceFinalDisplay ) { $fj.show(); }
   }
 
   function toggleContestantResults() {
@@ -493,6 +499,12 @@ $( ".games-game" ).ready( function() {
     updateCookies( modified );
   }
 
+  function initializeFromCookie() {
+    populateSaveAreaFromCookie( true );
+    getScoresFromCookie();
+    populateBoard( true );
+  }
+
   function initializeNewGame( date ) {
     currentGame = newCookie();
     currentGameData = newDataCookie();
@@ -560,6 +572,9 @@ $( ".games-game" ).ready( function() {
     });
   }
 
+  // This is called from populateBoard. It also makes all of the gameboard
+  // and panel links respond to presses of the space bar or enter key when
+  // they have focus.
   function activateRoundLinks() {
     var $roundOneLink = $( "#round-one-link" );
     var $roundTwoLink = $( "#round-two-link" );
@@ -578,6 +593,14 @@ $( ".games-game" ).ready( function() {
     $finalRoundLink.on( "click", function() {
       currentGameData["activeRound"] = "final";
       updateRound();
+    });
+
+    $( "#game-container a" ).on( "keydown", function( event ) {
+      var code = event.which;
+      // Enter is 13; space is 32.
+      if ( code === 13 || code === 32 ) {
+        $( this ).trigger( "click" );
+      }
     });
   }
 
@@ -654,6 +677,13 @@ $( ".games-game" ).ready( function() {
     if ( data.readyState === 0 || data.responseText === "" ) {
       alert( "Oops! It looks like the request was not sent successfully.\n\n" +
              "Please check your Internet connection and try again." );
+    } else if ( data.status === 503 ) {
+      // 503: Service Unavailable is returned when the app is in
+      // maintenance mode.
+      alert( 'Oops! The database is currently unavailable. This usually ' +
+             'means that a new version of the J! Scorer is in the process of ' +
+             'going live. This rarely lasts more than a minute or two. ' +
+             'Please try again shortly.' );
     } else {
       var errors = JSON.parse( data.responseText );
       if ( errors["sixths.board_position"] &&
@@ -696,7 +726,6 @@ $( ".games-game" ).ready( function() {
   }
 
   function afterDateChangeHandler( data ) {
-    alert("Success!");
     var newDate = data.newDate;
     currentGame.show_date = newDate;
     $showDateValue.val( newDate );
@@ -708,6 +737,11 @@ $( ".games-game" ).ready( function() {
     if ( data.readyState === 0 || data.responseText === "" ) {
       alert( "Oops! It looks like the request was not sent successfully.\n\n" +
              "Please check your Internet connection and try again." );
+    } else if ( data.status === 503 ) {
+      alert( 'Oops! The database is currently unavailable. This usually ' +
+             'means that a new version of the J! Scorer is in the process of ' +
+             'going live. This rarely lasts more than a minute or two. ' +
+             'Please try again shortly.' );
     } else {
       switch ( JSON.parse( data.responseText ).errors[0] ) {
         case "occupied":
@@ -870,19 +904,23 @@ $( ".games-game" ).ready( function() {
 
 
   $buttonFJRight.on( "click", function() {
-    if ( currentGame["final"]["result"] !== 3 ) {
+    if ( currentGame["final"]["result"] === 3 ) {
+      currentGame["final"]["result"] = 0;
+    } else {
       currentGame["final"]["result"] = 3;
-      updateCookies();
-      updateFinalSymbol();
     }
+    updateCookies();
+    updateFinalSymbol();
   });
 
   $buttonFJWrong.on( "click", function() {
-    if ( currentGame["final"]["result"] !== 1 ) {
+    if ( currentGame["final"]["result"] === 1 ) {
+      currentGame["final"]["result"] = 0;
+    } else {
       currentGame["final"]["result"] = 1;
-      updateCookies();
-      updateFinalSymbol();
     }
+    updateCookies();
+    updateFinalSymbol();
   });
 
   // Updating the status of a contestant Final response:
@@ -896,7 +934,25 @@ $( ".games-game" ).ready( function() {
   });
 
   $deleteGameLink.on( "click", function() {
-    initializeNewGame();
+    if ( $( this ).text() === 'Undo' ) {
+      currentGame = getCookie( "oldGame" );
+      currentGameData = getCookie( "oldGameData" );
+      initializeFromCookie();
+      $( this ).text( 'New game' );
+    } else {
+      setCookie( "oldGame", currentGame );
+      setCookie( "oldGameData", currentGameData );
+      initializeNewGame();
+      $( this ).text( 'Undo' );
+
+      // Also clear the date from the query string, if any. This code from
+      // http://atodorov.org/blog/2013/01/28/remove-query-string-with-javascript-and-html5/
+      var uri = window.location.toString();
+      if ( uri.indexOf( "?" ) > 0 ) {
+        var clean_uri = uri.substring( 0, uri.indexOf( "?" ) );
+        window.history.replaceState( {}, document.title, clean_uri );
+      }
+    }
   });
 
   $showDatePicker.on( "dp.change", function( e ) {
@@ -918,7 +974,7 @@ $( ".games-game" ).ready( function() {
 
       // If the conflict (between cookie and database) flag was set when
       // the page was loaded, remove the category IDs from currentGame.
-      if (currentGameData["conflict"]) {
+      if ( currentGameData["conflict"] ) {
         updateCategoryIds( { ids: [ null, null, null, null, null, null, null,
                                     null, null, null, null, null, null ] } );
       }
@@ -965,17 +1021,21 @@ $( ".games-game" ).ready( function() {
   });
 
   $showDatePicker.datetimepicker({
-    format: "YYYY-MM-DD"
+    format: "YYYY-MM-DD",
+    focusOnShow: false
   });
   $showDatePicker.data( "DateTimePicker" ).timeZone(undefined);
 
   $datePlayedPicker.datetimepicker({
-    format: "YYYY-MM-DD h:mma"
+    format: "YYYY-MM-DD h:mma",
+    showClose: true,
+    focusOnShow: false
   });
   $datePlayedPicker.data( "DateTimePicker" ).timeZone(undefined);
 
   $changeShowDatePicker.datetimepicker({
-    format: "YYYY-MM-DD"
+    format: "YYYY-MM-DD",
+    focusOnShow: false
   });
   $changeShowDatePicker.data( "DateTimePicker" ).timeZone(undefined);
 
@@ -1062,9 +1122,7 @@ $( ".games-game" ).ready( function() {
     getScoresFromCookie();
     populateBoard();
   } else if ( currentGame ) {
-    populateSaveAreaFromCookie( true );
-    getScoresFromCookie();
-    populateBoard();
+    initializeFromCookie();
   } else {
     initializeNewGame();
     getScoresFromCookie();

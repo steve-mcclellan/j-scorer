@@ -1,0 +1,50 @@
+<!-- Modal for changing show date -->
+<div id="date-change-modal" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="date-change-modal-label">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h3 class="modal-title" id="date-change-modal-label">
+          Change the airdate of this show...
+        </h3>
+      </div>
+
+      <div class="modal-body">
+        <p>from:</p>
+        <p class="padded-graf">
+          <span id="old-show-date">.</span>
+        </p>
+        <p>to:</p>
+        <div class="row">
+          <div class='col-xs-12 col-compact'>
+            <div class="form-group">
+              <div class='input-group date' id='change-show-date-picker'>
+                <input type='text'
+                       class="form-control"
+                       tabindex="0"
+                       spellcheck="false" />
+                <span class="input-group-addon">
+                  <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> <!-- modal-body -->
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">
+          Close
+        </button>
+        <button id="change-show-date-button" type="button" class="btn btn-primary">
+          Change show date
+        </button>
+      </div>
+
+    </div> <!-- modal-content -->
+  </div> <!-- modal-dialog -->
+</div> <!-- date-change-modal -->

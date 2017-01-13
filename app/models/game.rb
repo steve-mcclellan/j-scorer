@@ -34,17 +34,6 @@ class Game < ApplicationRecord
     adjusted_round_one_score + adjusted_round_two_score
   end
 
-  def all_category_summary
-    stats = { round_one: { right: 0, wrong: 0, pass: 0, dd: [],
-                           score: 0, possible_score: 0 },
-              round_two: { right: 0, wrong: 0, pass: 0, dd: [],
-                           score: 0, possible_score: 0 },
-              final_status: final_result }
-    round_one_categories.each { |cat| update_stats(stats, cat.summary, 1) }
-    round_two_categories.each { |cat| update_stats(stats, cat.summary, 2) }
-    stats
-  end
-
   def final_symbol
     case final_result
     when 0 then ''
@@ -52,10 +41,6 @@ class Game < ApplicationRecord
     when 3 then '✓'
     else '?'
     end
-  end
-
-  def all_dd_results
-    [dd1_result, dd2a_result, dd2b_result]
   end
 
   def dds_right
@@ -67,6 +52,10 @@ class Game < ApplicationRecord
   end
 
   private
+
+  def all_dd_results
+    [dd1_result, dd2a_result, dd2b_result]
+  end
 
   def set_dd_results
     summary = all_category_summary
@@ -80,6 +69,20 @@ class Game < ApplicationRecord
       dd2a_result: dd2a ? dd2a[1] : 0,
       dd2b_result: dd2b ? dd2b[1] : 0
     )
+  end
+
+  # all_category_summary (along with its helper, update_stats) is only used
+  # to populate an array of the three DD results.
+  # TODO: Simplify this.
+  def all_category_summary
+    stats = { round_one: { right: 0, wrong: 0, pass: 0, dd: [],
+                           score: 0, possible_score: 0 },
+              round_two: { right: 0, wrong: 0, pass: 0, dd: [],
+                           score: 0, possible_score: 0 },
+              final_status: final_result }
+    round_one_categories.each { |cat| update_stats(stats, cat.summary, 1) }
+    round_two_categories.each { |cat| update_stats(stats, cat.summary, 2) }
+    stats
   end
 
   def update_stats(stats, category_summary, round)

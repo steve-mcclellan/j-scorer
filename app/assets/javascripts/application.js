@@ -12,7 +12,8 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require jquery-ui
+//= require jquery-ui/widgets/tabs
+//= require jquery-ui/effects/effect-scale
 //= require jquery.tablesorter.min
 //= require jquery.stickytableheaders.min
 //= require jquery-readyselector
@@ -20,4 +21,6 @@
 //= require bootstrap
 //= require moment
 //= require bootstrap-datetimepicker
+//= require mobile_friendly_tooltip
+//= require modernizr-custom
 //= require_tree .

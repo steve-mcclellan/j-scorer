@@ -12,13 +12,16 @@
       <%= hidden_field_tag :email, @user.email %>
 
       <%= f.label :password, 'Choose a new password' %>
-      <%= f.password_field :password, class: 'form-control' %>
+      <%= f.password_field :password, class: 'form-control', tabindex: 1 %>
 
       <%= f.label :password_confirmation, 'Confirm new password' %>
-      <%= f.password_field :password_confirmation, class: 'form-control' %>
+      <%= f.password_field :password_confirmation, class: 'form-control',
+                                                   tabindex: 2 %>
       <br />
 
-      <%= f.submit "Update password", class: 'btn btn-primary' %>
+      <%= f.submit "Update password", class: 'btn btn-primary submit-button',
+                                      data: { disable_with: 'Updating...' },
+                                      tabindex: 3 %>
     <% end %>
   </div>
 </div>
