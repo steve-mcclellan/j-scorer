@@ -1,4 +1,4 @@
-const topRowValues = <%= CURRENT_TOP_ROW_VALUES %>;
+var topRowValues = <%= CURRENT_TOP_ROW_VALUES %>;
 
 function setCookie( name, value ) {
   Cookies.set( name, value, { expires: 7305, path: '/game',
@@ -16,7 +16,7 @@ function destroyCookie( name ) {
   Cookies.remove( name, { path: '/game', secure: <%= Rails.env.production? %> } );
 }
 
-const NEW_CATEGORY = {
+var NEW_CATEGORY = {
   "id":null,
   "board_position":null,
   "title":"",
@@ -34,7 +34,7 @@ function newCategory( position ) {
   return cat;
 }
 
-const NEW_GAME_COOKIE = {
+var NEW_GAME_COOKIE = {
   "show_date":"",
   "date_played":"",
   "play_type":"",
@@ -70,7 +70,7 @@ function newCookie() {
   return JSON.parse( JSON.stringify( NEW_GAME_COOKIE ) );
 }
 
-const NEW_DATA_COOKIE = {
+var NEW_DATA_COOKIE = {
   "modified":false,
   "conflict":false,
   "activeRound":"round_one_categories"
@@ -290,9 +290,9 @@ $( ".games-game" ).ready( function() {
   }
 
   function updateRoundLinks( currentRound ) {
-    const r1link = '<a id="round-one-link" tabindex=100>Round One</a>';
-    const r2link = '<a id="round-two-link" tabindex=100>Round Two</a>';
-    const fjlink = '<a id="final-round-link" tabindex=100>Final Round</a>';
+    var r1link = '<a id="round-one-link" tabindex=100>Round One</a>';
+    var r2link = '<a id="round-two-link" tabindex=100>Round Two</a>';
+    var fjlink = '<a id="final-round-link" tabindex=100>Final Round</a>';
     switch ( currentRound ) {
       case "round_one_categories":
         $r1slot.html( "<b>Round One</b>" );
