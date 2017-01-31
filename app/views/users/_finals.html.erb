@@ -51,4 +51,107 @@
     <% end %>
   </div>
 
+  <hr>
+
+  <h2>Wagering: Food for Thought</h2>
+
+  <hr>
+
+  <h3 class="text-center">From the lead</h3>
+
+  <p>
+  If you bet for the shutout, your chance of a big payday is about
+  <abbr title="Percent of finals where you are right." rel="tooltip">
+    <%= '--%' %></abbr>.
+  You may also have a chance to win on a miss:
+  </p>
+  <ul>
+    <li>
+      If both of your opponents would need to miss, your total chance of winning is about
+      <abbr title="Percent of finals where you are right OR you, second, and third are all wrong." rel="tooltip">
+        <%= '--%' %></abbr>.
+    </li>
+    <li>
+      If you only need second place to miss, your total chance of winning is about
+      <abbr title="Percent of finals where you are right OR you and second are both wrong." rel="tooltip">
+        <%= '--%' %></abbr>.
+    </li>
+  </ul>
+  <p>If you're considering an unorthodox (say, $0) wager, bear in mind that:</p>
+  <ul>
+    <li>
+      The chance of second place missing is about
+      <abbr title="Percent of finals where second is wrong." rel="tooltip">
+        <%= '--%' %></abbr>.
+    </li>
+    <li>
+      The chance of third place missing is about
+      <abbr title="Percent of finals where third is wrong." rel="tooltip">
+        <%= '--%' %></abbr>.
+    </li>
+    <li>
+      The chance they both miss is about
+      <abbr title="Percent of finals where second and third are both wrong." rel="tooltip">
+        <%= '--%' %></abbr>.
+    </li>
+  </ul>
+
+  <hr>
+
+  <h3 class="text-center">From second place</h3>
+
+  <p>
+  If you bet everything, you definitely need to be right, and you probably need the leader to miss. (This is your only hope if you have less than 2/3 of the leader's score.)
+  </p>
+  <ul><li>
+      Result: a big payday and another game. Success rate: about
+      <abbr title="Percent of finals where you are right AND first is wrong." rel="tooltip">
+        <%= '--%' %></abbr>.
+  </li></ul>
+
+  <p>
+  If you have at least 2/3 of the leader's score and more than twice third's score, a $0 bet would likely give you the win if the leader misses.
+  </p>
+  <ul><li>
+      Result: a smaller payday and another game. Success rate: about
+      <abbr title="Percent of finals where first is wrong." rel="tooltip">
+        <%= '--%' %></abbr>.
+  </li></ul>
+
+  <p>
+  If you have at least 2/3 of the leader's score but third could overtake you, you'd still win with a $0 bet if they both miss.
+  </p>
+  <ul><li>
+      Result: a smaller payday and another game. Success rate: about
+      <abbr title="Percent of finals where first and third are both wrong." rel="tooltip">
+        <%= '--%' %></abbr>.
+  </li></ul>
+
+  <hr>
+
+  <h3 class="text-center">From third place</h3>
+
+  <p>
+  If you have a path to victory, it probably requires you to be the only one to respond correctly, or a triple stumper plus a big bet from second.
+  </p>
+  <ul>
+    <li>
+      If you need to be right and have first and second miss, your chance is about
+      <abbr title="Percent of finals where you are right AND first and second are both wrong." rel="tooltip">
+        <%= '--%' %></abbr>.
+    </li>
+    <li>
+      If you only need first and second to miss, your chance is about
+      <abbr title="Percent of finals where first and second are both wrong." rel="tooltip">
+        <%= '--%' %></abbr>.
+    </li>
+  </ul>
+
+  <hr>
+
+  <h3 class="text-center">Notes</h3>
+  <ul>
+    <li>I wouldn't put much stock in the exact numbers until you have at least a few dozen Finals entered (fully, including contestant results). Over a hundred is better.</li>
+    <li>All percentages include only those Finals for which both your result and all relevant contestant data are present.</li>
+  </ul>
 </div>
