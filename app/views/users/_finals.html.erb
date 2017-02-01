@@ -61,8 +61,8 @@
 
   <p>
   If you bet for the shutout, your chance of a big payday is about
-  <abbr title="Percent of Finals where you are right." rel="tooltip">
-    <%= '--%' %></abbr>.
+  <abbr title="Percent of Finals where you are right. (Sample size: <%= sample_size(stats[:user]) %>)" rel="tooltip">
+    <%= display_percentage(stats[:user]) %></abbr>.
   You may also have a chance to win on a miss:
   </p>
   <ul>
@@ -81,13 +81,13 @@
   <ul>
     <li>
       The chance of second place missing is about
-      <abbr title="Percent of Finals where second is wrong." rel="tooltip">
-        <%= '--%' %></abbr>.
+      <abbr title="Percent of Finals where second is wrong. (Sample size: <%= sample_size(stats[:contestants][2]) %>)" rel="tooltip">
+        <%= display_percentage(stats[:contestants][2], 'wrong') %></abbr>.
     </li>
     <li>
       The chance of third place missing is about
-      <abbr title="Percent of Finals where third is wrong." rel="tooltip">
-        <%= '--%' %></abbr>.
+      <abbr title="Percent of Finals where third is wrong. (Sample size: <%= sample_size(stats[:contestants][3]) %>)" rel="tooltip">
+        <%= display_percentage(stats[:contestants][3], 'wrong') %></abbr>.
     </li>
     <li>
       The chance they both miss is about
@@ -114,8 +114,8 @@
   </p>
   <ul><li>
       Result: a smaller payday and another game. Success rate: about
-      <abbr title="Percent of Finals where first is wrong." rel="tooltip">
-        <%= '--%' %></abbr>.
+      <abbr title="Percent of Finals where first is wrong. (Sample size: <%= sample_size(stats[:contestants][1]) %>)" rel="tooltip">
+        <%= display_percentage(stats[:contestants][1], 'wrong') %></abbr>.
   </li></ul>
 
   <p>
@@ -151,7 +151,7 @@
 
   <h3 class="text-center">Notes</h3>
   <ul>
-    <li>I wouldn't put much stock in the exact numbers until you have at least a few dozen Finals entered (fully, including contestant results). Over a hundred is better.</li>
+    <li>I wouldn't put much stock in the exact numbers until you have sample sizes of at least a few dozen Finals. Over a hundred is better.</li>
     <li>All percentages include only those Finals for which both your result and all relevant contestant data are present.</li>
   </ul>
 </div>
