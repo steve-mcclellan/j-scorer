@@ -43,13 +43,21 @@ module FinalAdviceNumbers
   # (Correct rate - easily grabbable from main portion of report.)
 
   # 1.1a - From first: chance of winning a 3-way crush.
+  # (This equals the chance the player is right PLUS the chance
+  #  the player, second, and third are all wrong.)
   def add_3_way_crush(results)
-    # TODO
+    return if results[0].nil? || results[2].nil? || results[3].nil?
+    n = results[0] || (!results[2] && !results[3]) ? 0 : 1
+    @advice[:crush_3p_win][n] += 1
   end
 
   # 1.1b - From first: chance of winning a 2-way crush.
+  # (This equals the chance the player is right PLUS the chance
+  #  the player and second are both wrong.)
   def add_2_way_crush(results)
-    # TODO
+    return if results[0].nil? || results[2].nil?
+    n = results[0] || !results[2] ? 0 : 1
+    @advice[:crush_2p_win][n] += 1
   end
 
   # 1.2a - Chance of second missing.
@@ -67,7 +75,9 @@ module FinalAdviceNumbers
 
   # 2.1 - From second: chance player is right and leader misses.
   def add_player_right_first_miss(results)
-    # TODO
+    return if results[0].nil? || results[1].nil?
+    n = results[0] && !results[1] ? 0 : 1
+    @advice[:player_right_first_wrong][n] += 1
   end
 
   # 2.2 - From second: chance leader misses.
@@ -82,7 +92,9 @@ module FinalAdviceNumbers
 
   # 3a - From third: chance player is right and first and second both miss.
   def add_player_right_first_second_miss(results)
-    # TODO
+    return if results[0].nil? || results[1].nil? || results[2].nil?
+    n = results[0] && !results[1] && !results[2] ? 0 : 1
+    @advice[:player_right_first_second_wrong][n] += 1
   end
 
   # 3b - From third: chance first and second miss.

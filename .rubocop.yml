@@ -22,6 +22,9 @@ Metrics/BlockLength:
 Metrics/AbcSize:
   Max: 20
 
+Metrics/CyclomaticComplexity:
+  Max: 10
+
 Style/FrozenStringLiteralComment:
   Enabled: false
 

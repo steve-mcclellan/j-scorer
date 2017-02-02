@@ -54,7 +54,7 @@
   <hr>
 
   <h2>Wagering: Food for Thought</h2>
-  <%= stats.inspect %>
+
   <hr>
 
   <h3 class="text-center">From the lead</h3>
@@ -68,13 +68,13 @@
   <ul>
     <li>
       If both of your opponents would need to miss, your total chance of winning is about
-      <abbr title="Percent of Finals where you are right OR you, second, and third are all wrong." rel="tooltip">
-        <%= '--%' %></abbr>.
+      <abbr title="Percent of Finals where you are right OR you, second, and third are all wrong. (Sample size: <%= sample_size(stats[:advice][:crush_3p_win]) %>)" rel="tooltip">
+        <%= display_percentage(stats[:advice][:crush_3p_win]) %></abbr>.
     </li>
     <li>
       If you'd only need second place to miss, your total chance of winning is about
-      <abbr title="Percent of Finals where you are right OR you and second are both wrong." rel="tooltip">
-        <%= '--%' %></abbr>.
+      <abbr title="Percent of Finals where you are right OR you and second are both wrong. (Sample size: <%= sample_size(stats[:advice][:crush_2p_win]) %>)" rel="tooltip">
+        <%= display_percentage(stats[:advice][:crush_2p_win]) %></abbr>.
     </li>
   </ul>
   <p>If you're considering an unorthodox (say, $0) wager, bear in mind that:</p>
@@ -91,8 +91,8 @@
     </li>
     <li>
       The chance they both miss is about
-      <abbr title="Percent of Finals where second and third are both wrong." rel="tooltip">
-        <%= '--%' %></abbr>.
+      <abbr title="Percent of Finals where second and third are both wrong. (Sample size: <%= sample_size(stats[:advice][:second_third_wrong]) %>)" rel="tooltip">
+        <%= display_percentage(stats[:advice][:second_third_wrong]) %></abbr>.
     </li>
   </ul>
 
@@ -105,8 +105,8 @@
   </p>
   <ul><li>
       Result: a big payday and another game. Success rate: about
-      <abbr title="Percent of Finals where you are right AND first is wrong." rel="tooltip">
-        <%= '--%' %></abbr>.
+      <abbr title="Percent of Finals where you are right AND first is wrong. (Sample size: <%= sample_size(stats[:advice][:player_right_first_wrong]) %>)" rel="tooltip">
+        <%= display_percentage(stats[:advice][:player_right_first_wrong]) %></abbr>.
   </li></ul>
 
   <p>
@@ -123,8 +123,8 @@
   </p>
   <ul><li>
       Result: a smaller payday and another game. Success rate: about
-      <abbr title="Percent of Finals where first and third are both wrong." rel="tooltip">
-        <%= '--%' %></abbr>.
+      <abbr title="Percent of Finals where first and third are both wrong. (Sample size: <%= sample_size(stats[:advice][:first_third_wrong]) %>)" rel="tooltip">
+        <%= display_percentage(stats[:advice][:first_third_wrong]) %></abbr>.
   </li></ul>
 
   <hr>
@@ -137,13 +137,13 @@
   <ul>
     <li>
       If you need to be right and have first and second miss, your chance is about
-      <abbr title="Percent of Finals where you are right AND first and second are both wrong." rel="tooltip">
-        <%= '--%' %></abbr>.
+      <abbr title="Percent of Finals where you are right AND first and second are both wrong. (Sample size: <%= sample_size(stats[:advice][:player_right_first_second_wrong]) %>)" rel="tooltip">
+        <%= display_percentage(stats[:advice][:player_right_first_second_wrong]) %></abbr>.
     </li>
     <li>
       If you only need first and second to miss, your chance is about
-      <abbr title="Percent of Finals where first and second are both wrong." rel="tooltip">
-        <%= '--%' %></abbr>.
+      <abbr title="Percent of Finals where first and second are both wrong. (Sample size: <%= sample_size(stats[:advice][:first_second_wrong]) %>)" rel="tooltip">
+        <%= display_percentage(stats[:advice][:first_second_wrong]) %></abbr>.
     </li>
   </ul>
 
