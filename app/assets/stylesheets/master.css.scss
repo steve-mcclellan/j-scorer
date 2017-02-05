@@ -404,7 +404,20 @@ input {
   }
 
   .ui-tabs-panel a {
+    color: $j-light-blue;
+
+    &:hover {
+      color: $j-lighter-blue;
+    }
+  }
+
+  #games-headline a {
     color: $j-blue;
+
+    &:hover {
+      color: $j-lighter-blue;
+      text-decoration: none;
+    }
   }
 
   p.aside {
@@ -585,6 +598,17 @@ input {
 
     #wagering-thoughts {
       font-size: medium;
+
+      .caution-box {
+        border: 1px solid #aa0;
+        background-color: #ff9;
+        padding: 2vh 2vw;
+        margin-bottom: 3vh;
+      }
+
+      .sss {
+        background-color: #ff9;
+      }
 
       h3 {
         font-weight: bold;
