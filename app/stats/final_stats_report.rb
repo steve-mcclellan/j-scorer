@@ -1,5 +1,5 @@
 class FinalStatsReport
-  include FinalQueries, SharedStatsMethods
+  include FinalQueries, FinalAdviceNumbers, SharedStatsMethods
 
   attr_reader :stats
 
@@ -32,6 +32,8 @@ class FinalStatsReport
                when_right: [nil, [0, 0], [0, 0], [0, 0]],
                when_wrong: [nil, [0, 0], [0, 0], [0, 0]] }
 
+    initialize_advice_numbers
+
     process_finals(finals)
     post_processing
   end
@@ -41,6 +43,7 @@ class FinalStatsReport
       add_raw_results(final)
       add_by_get_rate(final)
       add_by_contestant_result(final)
+      add_advice_numbers(final)
     end
   end
 
@@ -85,13 +88,13 @@ class FinalStatsReport
     sc[0] = sc[1..3].transpose.map { |arr| arr.reduce(:+) }
 
     add_averages
+
+    @stats[:advice] = @advice
   end
 
   def add_averages
     # Assemble the arrays that contain get rates.
-    arrs = ([@stats[:user]] + @stats[:contestants] +
-            @stats[:by_get_rate].flatten(1) +
-            @stats[:when_right] + @stats[:when_wrong]).compact
+    arrs = assemble_arrays
 
     # Change the format of each array from [right, wrong] to [right, total]
     # and tack on the get rate as a float between 0 and 1.
@@ -99,5 +102,14 @@ class FinalStatsReport
       arr[1] += arr[0]
       arr << quotient(arr[0], arr[1])
     end
+  end
+
+  def assemble_arrays
+    ([@stats[:user]] +
+     @stats[:contestants] +
+     @stats[:by_get_rate].flatten(1) +
+     @stats[:when_right] +
+     @stats[:when_wrong] +
+     @advice.values).compact
   end
 end
