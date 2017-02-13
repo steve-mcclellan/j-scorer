@@ -1,11 +1,11 @@
 CURRENT_TOP_ROW_VALUES = [200, 400].freeze
 
 PLAY_TYPES = {
+        "college"      => "College Championship",
         "regular"      => "regular play",
         "teen"         => "Teen Tournament",
         "power"        => "Power Players Week",
         "teachers"     => "Teachers Tournament",
-        "college"      => "College Championship",
         "toc"          => "Tournament of Champions",
         "celebrity"    => "Celebrity",
         "kids"         => "Kids Week / Back to School Week",
