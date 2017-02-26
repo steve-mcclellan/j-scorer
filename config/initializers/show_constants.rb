@@ -1,8 +1,8 @@
 CURRENT_TOP_ROW_VALUES = [200, 400].freeze
 
 PLAY_TYPES = {
-        "college"      => "College Championship",
         "regular"      => "regular play",
+        "college"      => "College Championship",
         "teen"         => "Teen Tournament",
         "power"        => "Power Players Week",
         "teachers"     => "Teachers Tournament",
@@ -26,4 +26,4 @@ PLAY_TYPES = {
         "other"        => "other"
 }.freeze
 
-VALID_TYPE_INPUTS = PLAY_TYPES.keys + ['all', 'none']
+VALID_TYPE_INPUTS = (PLAY_TYPES.keys + ["all", "none"]).freeze
