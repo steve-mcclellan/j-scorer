@@ -217,7 +217,8 @@ input {
   display: none;
 }
 
-.no-flexbox #old-browser-warning, .no-cssvminunit #old-browser-warning {
+/* TODO: Determine what to do about mobile Chrome's .no-cssvminunit class. */
+.no-flexbox #old-browser-warning/*, .no-cssvminunit #old-browser-warning*/ {
   display: block;
 }
 
