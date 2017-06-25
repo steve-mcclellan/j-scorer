@@ -54,24 +54,24 @@
       </tr>
 
       <!-- Individual Topics -->
-      <% stats.each do |topic, results| %>
+      <% stats.each do |topic| %>
         <tr>
-          <td><%= topic %></td>
-          <td><%= results[:sixths_count] %></td>
-          <td><%= results[:right] %></td>
-          <td><%= results[:wrong] %></td>
-          <td><%= results[:pass] %></td>
-          <td><%= number_to_currency(results[:score], precision: 0) %></td>
-          <td><%= number_to_currency(results[:possible_score], precision: 0) %></td>
+          <td><%= topic["topic_name"] %></td>
+          <td><%= topic["sixths_count"] %></td>
+          <td><%= topic["right"] %></td>
+          <td><%= topic["wrong"] %></td>
+          <td><%= topic["pass"] %></td>
+          <td><%= number_to_currency(topic["score"], precision: 0) %></td>
+          <td><%= number_to_currency(topic["possible_score"], precision: 0) %></td>
           <td class="end-of-group">
-            <%= number_with_precision(results[:efficiency], precision: 5) %>
+            <%= number_with_precision(topic["efficiency"], precision: 5) %>
           </td>
-          <td><%= results[:dds] %></td>
-          <td><%= results[:dd_right] %></td>
-          <td class="end-of-group"><%= results[:dd_wrong] %></td>
-          <td><%= results[:finals_count] %></td>
-          <td><%= results[:finals_right] %></td>
-          <td class="end-of-group"><%= results[:finals_wrong] %></td>
+          <td><%= topic["dds"] %></td>
+          <td><%= topic["dd_right"] %></td>
+          <td class="end-of-group"><%= topic["dd_wrong"] %></td>
+          <td><%= topic["finals_count"] %></td>
+          <td><%= topic["finals_right"] %></td>
+          <td class="end-of-group"><%= topic["finals_wrong"] %></td>
         </tr>
       <% end %>
     </tbody>

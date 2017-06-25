@@ -8,9 +8,9 @@ module MultiGameQueries
     "
     SELECT
       (
-        CASE
-          WHEN c.type = 'RoundOneCategory' THEN 1
-          WHEN c.type = 'RoundTwoCategory' THEN 2
+        CASE c.type
+          WHEN 'RoundOneCategory' THEN 1
+          WHEN 'RoundTwoCategory' THEN 2
         END
       ) AS round_number,
       (
@@ -79,7 +79,7 @@ module MultiGameQueries
   end
   # rubocop:enable MethodLength
 
-  def count_query(user, play_types)
+  def finals_query(user, play_types)
     raise ArgumentError unless user.is_a?(User) && valid_types?(play_types)
     play_types_list = play_types.map { |x| "'#{x}'" }.join(', ')
 

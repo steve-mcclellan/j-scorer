@@ -9,7 +9,7 @@ class MultiGameSummary
                                    .to_hash
 
     count = ActiveRecord::Base.connection
-                              .select_all(count_query(user, play_types))
+                              .select_all(finals_query(user, play_types))
                               .to_hash[0]
 
     initialize_stats
