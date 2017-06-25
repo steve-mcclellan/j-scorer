@@ -1,4 +1,3 @@
-# rubocop:disable ClassLength
 class TopicsSummary
   include SharedStatsMethods
 
@@ -16,8 +15,8 @@ class TopicsSummary
 
   # rubocop:disable MethodLength
   def topics_query(user, play_types)
-    raise ArgumentError unless user.is_a?(User) && valid_types?(play_types)
-    play_types_list = play_types.map { |x| "'#{x}'" }.join(', ')
+    validate_query_inputs(user, play_types)
+    play_types_list = format_play_types_for_sql(play_types)
     "
     SELECT
       q.topic_name,
@@ -43,60 +42,18 @@ class TopicsSummary
       SELECT
         i.topic_name,
         i.sixth_type,
+        #{count_results('i', 3)} AS right,
+        #{count_results('i', 1)} AS wrong,
+        #{count_results('i', 2)} AS pass,
         (
-          (CASE WHEN i.result1 = 3 THEN 1 ELSE 0 END) +
-          (CASE WHEN i.result2 = 3 THEN 1 ELSE 0 END) +
-          (CASE WHEN i.result3 = 3 THEN 1 ELSE 0 END) +
-          (CASE WHEN i.result4 = 3 THEN 1 ELSE 0 END) +
-          (CASE WHEN i.result5 = 3 THEN 1 ELSE 0 END)
-        ) AS right,
-        (
-          (CASE WHEN i.result1 = 1 THEN 1 ELSE 0 END) +
-          (CASE WHEN i.result2 = 1 THEN 1 ELSE 0 END) +
-          (CASE WHEN i.result3 = 1 THEN 1 ELSE 0 END) +
-          (CASE WHEN i.result4 = 1 THEN 1 ELSE 0 END) +
-          (CASE WHEN i.result5 = 1 THEN 1 ELSE 0 END)
-        ) AS wrong,
-        (
-          (CASE WHEN i.result1 = 2 THEN 1 ELSE 0 END) +
-          (CASE WHEN i.result2 = 2 THEN 1 ELSE 0 END) +
-          (CASE WHEN i.result3 = 2 THEN 1 ELSE 0 END) +
-          (CASE WHEN i.result4 = 2 THEN 1 ELSE 0 END) +
-          (CASE WHEN i.result5 = 2 THEN 1 ELSE 0 END)
-        ) AS pass,
-        (
-          (CASE WHEN i.result1 IN (3, 7) THEN 1 ELSE 0 END) +
-          (CASE WHEN i.result2 IN (3, 7) THEN 2 ELSE 0 END) +
-          (CASE WHEN i.result3 IN (3, 7) THEN 3 ELSE 0 END) +
-          (CASE WHEN i.result4 IN (3, 7) THEN 4 ELSE 0 END) +
-          (CASE WHEN i.result5 IN (3, 7) THEN 5 ELSE 0 END) +
-          (CASE WHEN i.result1 = 1 THEN -1 ELSE 0 END) +
-          (CASE WHEN i.result2 = 1 THEN -2 ELSE 0 END) +
-          (CASE WHEN i.result3 = 1 THEN -3 ELSE 0 END) +
-          (CASE WHEN i.result4 = 1 THEN -4 ELSE 0 END) +
-          (CASE WHEN i.result5 = 1 THEN -5 ELSE 0 END)
+          (#{count_results('i', [3, 7], true)}) -
+          (#{count_results('i', 1, true)})
         ) * i.top_row_value AS score,
         (
-          (CASE WHEN i.result1 IN (1, 2, 3, 5, 6, 7) THEN 1 ELSE 0 END) +
-          (CASE WHEN i.result2 IN (1, 2, 3, 5, 6, 7) THEN 2 ELSE 0 END) +
-          (CASE WHEN i.result3 IN (1, 2, 3, 5, 6, 7) THEN 3 ELSE 0 END) +
-          (CASE WHEN i.result4 IN (1, 2, 3, 5, 6, 7) THEN 4 ELSE 0 END) +
-          (CASE WHEN i.result5 IN (1, 2, 3, 5, 6, 7) THEN 5 ELSE 0 END)
+          #{count_results('i', [1, 2, 3, 5, 6, 7], true)}
         ) * i.top_row_value AS possible_score,
-        (
-          (CASE WHEN i.result1 = 7 THEN 1 ELSE 0 END) +
-          (CASE WHEN i.result2 = 7 THEN 1 ELSE 0 END) +
-          (CASE WHEN i.result3 = 7 THEN 1 ELSE 0 END) +
-          (CASE WHEN i.result4 = 7 THEN 1 ELSE 0 END) +
-          (CASE WHEN i.result5 = 7 THEN 1 ELSE 0 END)
-        ) AS dd_right,
-        (
-          (CASE WHEN i.result1 IN (5, 6) THEN 1 ELSE 0 END) +
-          (CASE WHEN i.result2 IN (5, 6) THEN 1 ELSE 0 END) +
-          (CASE WHEN i.result3 IN (5, 6) THEN 1 ELSE 0 END) +
-          (CASE WHEN i.result4 IN (5, 6) THEN 1 ELSE 0 END) +
-          (CASE WHEN i.result5 IN (5, 6) THEN 1 ELSE 0 END)
-        ) AS dd_wrong,
+        #{count_results('i', 7)} AS dd_right,
+        #{count_results('i', [5, 6])} AS dd_wrong,
         CASE WHEN i.final_result = 3 THEN 1 ELSE 0 END AS finals_right,
         CASE WHEN i.final_result = 1 THEN 1 ELSE 0 END AS finals_wrong
       FROM (
@@ -138,6 +95,18 @@ class TopicsSummary
   end
   # rubocop:enable MethodLength
 
+  # rubocop:disable IdenticalConditionalBranches
+  def count_results(table, value, weight = false)
+    cond = value.is_a?(Array) ? "IN (#{value.join(', ')})" : "= #{value}"
+    "
+    (CASE WHEN #{table}.result1 #{cond} THEN #{weight ? 1 : 1} ELSE 0 END) +
+    (CASE WHEN #{table}.result2 #{cond} THEN #{weight ? 2 : 1} ELSE 0 END) +
+    (CASE WHEN #{table}.result3 #{cond} THEN #{weight ? 3 : 1} ELSE 0 END) +
+    (CASE WHEN #{table}.result4 #{cond} THEN #{weight ? 4 : 1} ELSE 0 END) +
+    (CASE WHEN #{table}.result5 #{cond} THEN #{weight ? 5 : 1} ELSE 0 END)
+    "
+  end
+  # rubocop:enable IdenticalConditionalBranches
 
   # def crunch_numbers(data)
   #   @stats = Hash.new { |hash, key| hash[key] = Hash.new(0) }
@@ -190,4 +159,3 @@ class TopicsSummary
   #   end
   # end
 end
-# rubocop:enable ClassLength

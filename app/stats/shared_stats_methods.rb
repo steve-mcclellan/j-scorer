@@ -10,7 +10,14 @@ module SharedStatsMethods
     numerator.fdiv(denominator)
   end
 
-  # rubocop:disable MethodLength
+  def validate_query_inputs(user, play_types)
+    raise ArgumentError unless user.is_a?(User) && valid_types?(play_types)
+  end
+
+  def format_play_types_for_sql(play_types)
+    play_types.map { |x| "'#{x}'" }.join(', ')
+  end
+
   # def add_clue_to_stats(stats_hash, result_code, clue_value)
   #   case result_code.to_i
   #   when 1
@@ -33,5 +40,4 @@ module SharedStatsMethods
   #     stats_hash[:possible_score] += clue_value
   #   end
   # end
-  # # rubocop:enable MethodLength
 end

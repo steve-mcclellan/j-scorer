@@ -7,34 +7,34 @@
             $<%= CURRENT_TOP_ROW_VALUES[round_index] * row_number %>:
           </div>
           <div class="by-row-regular-box"
-               style="background-color: <%= stats[round][row_number][:regular_color] %>;">
+               style="background-color: <%= stats[round][row_number]['regular_color'] %>;">
             <div class="counting-stats three-liner">
               <div>
                 <span class="check"><abbr title="Clues right" rel="tooltip">&#x2713;</abbr></span>
-                <%= stats[round][row_number][:right] %>
+                <%= stats[round][row_number]['right'] %>
               </div>
               <div>
                 <span class="ecks"><abbr title="Clues wrong" rel="tooltip">&#x2718;</abbr></span>
-                <%= stats[round][row_number][:wrong] %>
+                <%= stats[round][row_number]['wrong'] %>
               </div>
               <div>
                 <span class="dot"><abbr title="Clues passed" rel="tooltip">&#x2022;</abbr></span>
-                <%= stats[round][row_number][:pass] %>
+                <%= stats[round][row_number]['pass'] %>
               </div>
             </div> <!-- counting-stats -->
             <div class="rate-stats three-liner">
               <div><abbr title="Your score as a percentage of the total possible. For a single row, this is equal to ((clues right) - (clues wrong)) / (total clues revealed)" rel="tooltip">Efficiency</abbr>:</div>
-              <div><%= stats[round][row_number][:eff_num] %>/<%= stats[round][row_number][:eff_den] %></div>
-              <% unless (eff = stats[round][row_number][:efficiency]).nil? %>
+              <div><%= stats[round][row_number]['eff_num'] %>/<%= stats[round][row_number]['eff_den'] %></div>
+              <% unless (eff = stats[round][row_number]['efficiency']).nil? %>
                 <div>(<%= number_to_percentage(eff * 100, precision: 1) %>)</div>
               <% end %>
             </div>
           </div> <!-- by-row-regular-box -->
           <div class="by-row-dd-box three-liner"
-               style="background-color: <%= stats[round][row_number][:dd_color] %>;">
+               style="background-color: <%= stats[round][row_number]['dd_color'] %>;">
             <div><abbr title="Daily Doubles. These are not included in the main stats" rel="tooltip">DDs</abbr>:</div>
-            <div><%= (ddr = stats[round][row_number][:dd_right]) %>/<%= stats[round][row_number][:dd_wrong] + ddr %></div>
-            <% unless (dd_eff = stats[round][row_number][:dd_eff]).nil? %>
+            <div><%= (ddr = stats[round][row_number]['dd_right']) %>/<%= stats[round][row_number]['dd_wrong'] + ddr %></div>
+            <% unless (dd_eff = stats[round][row_number]['dd_eff']).nil? %>
               <div>(<%= number_to_percentage(dd_eff * 100, precision: 1) %>)</div>
             <% end %>
           </div> <!-- by-row-dd-box -->
