@@ -1,10 +1,10 @@
-# This module relies on validate_query_inputs from SharedStatsMethods.
+# This module relies on methods from the SharedStatsMethods module.
 # rubocop:disable ModuleLength
 module FinalQueries
   # rubocop:disable MethodLength
   def final_query(user, play_types)
     validate_query_inputs(user, play_types)
-    play_types_list = play_types.map { |x| "'#{x}'" }.join(', ')
+    play_types_list = format_play_types_for_sql(play_types)
 
     "
     SELECT

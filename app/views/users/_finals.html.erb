@@ -65,7 +65,7 @@
       <br>
       <p>
         With your current sample size, the margin of error on these numbers is about
-        <strong class="nowrap"><abbr title="This is an approximation of a 95% confidence interval. If you'd prefer a looser constraint, an 80% confidence interval is about 2/3 of this number, and a 50% confidence interval is about 1/3 of this number." rel="tooltip"><%= moe_display %></abbr></strong>.
+        <strong class="nowrap"><abbr title="This is an approximation of a 95% confidence interval. If you'd prefer a looser constraint, an 80% confidence interval is about 2/3 of this number, and a 50% confidence interval is about 1/3 of this number." rel="tooltip"><%= "±" + number_to_percentage(stats[:advice][:moe_pct], precision: 0)%></abbr></strong>.
       </p>
     </div>
 

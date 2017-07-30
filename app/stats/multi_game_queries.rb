@@ -1,4 +1,4 @@
-# These queries use the valid_types? method from the SharedStatsMethods module.
+# This module relies on methods from the SharedStatsMethods module.
 module MultiGameQueries
   # rubocop:disable MethodLength
   def sixths_query(user, play_types)

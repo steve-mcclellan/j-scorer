@@ -56,29 +56,29 @@
       <!-- Individual Topics -->
       <% stats.each do |topic| %>
         <tr>
-          <td><%= topic["topic_name"] %></td>
-          <td><%= topic["sixths_count"] %></td>
-          <td><%= topic["right"] %></td>
-          <td><%= topic["wrong"] %></td>
-          <td><%= topic["pass"] %></td>
-          <td><%= number_to_currency(topic["score"], precision: 0) %></td>
-          <td><%= number_to_currency(topic["possible_score"], precision: 0) %></td>
+          <td><%= topic['topic_name'] %></td>
+          <td><%= topic['sixths_count'] %></td>
+          <td><%= topic['right'] %></td>
+          <td><%= topic['wrong'] %></td>
+          <td><%= topic['pass'] %></td>
+          <td><%= number_to_currency(topic['score'], precision: 0) %></td>
+          <td><%= number_to_currency(topic['possible_score'], precision: 0) %></td>
           <td class="end-of-group">
-            <%= number_with_precision(topic["efficiency"], precision: 5) %>
+            <%= number_with_precision(topic['efficiency'], precision: 5) %>
           </td>
-          <td><%= topic["dds"] %></td>
-          <td><%= topic["dd_right"] %></td>
-          <td class="end-of-group"><%= topic["dd_wrong"] %></td>
-          <td><%= topic["finals_count"] %></td>
-          <td><%= topic["finals_right"] %></td>
-          <td class="end-of-group"><%= topic["finals_wrong"] %></td>
+          <td><%= topic['dds'] %></td>
+          <td><%= topic['dd_right'] %></td>
+          <td class="end-of-group"><%= topic['dd_wrong'] %></td>
+          <td><%= topic['finals_count'] %></td>
+          <td><%= topic['finals_right'] %></td>
+          <td class="end-of-group"><%= topic['finals_wrong'] %></td>
         </tr>
       <% end %>
     </tbody>
   </table>
 
   <div id="topics-notes">
-    <p id= "notes-title">Notes:</p>
+    <p id="notes-title">Notes:</p>
     <p><strong>Categories</strong> counts do not include Finals.</p>
     <p>
     <strong>Right</strong>, <strong>Wrong</strong>, and <strong>Pass</strong>

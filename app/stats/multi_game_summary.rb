@@ -30,8 +30,6 @@ class MultiGameSummary
                             score: 0, possible_score: 0 },
                finals: { right: 0, wrong: 0 },
                all: {} }
-
-    # data.each { |sixth_hash| add_sixth_to_stats(sixth_hash) }
   end
 
   def reformat_data(round_info)
@@ -54,18 +52,6 @@ class MultiGameSummary
       score: round_hash['raw_score'] * top_row_value,
       possible_score: round_hash['raw_possible_score'] * top_row_value }
   end
-
-  # def add_sixth_to_stats(sixth_hash)
-  #   round = sixth_hash['type'] == 'RoundOneCategory' ? 0 : 1
-  #   top_row_value = CURRENT_TOP_ROW_VALUES[round]
-  #   round_symbol = [:round_one, :round_two][round]
-
-  #   1.upto(5) do |row|
-  #     add_clue_to_stats(@stats[round_symbol],
-  #                       sixth_hash['result' + row.to_s],
-  #                       top_row_value * row)
-  #   end
-  # end
 
   def add_calculated_stats(count)
     @stats[:all][:game_count] = count['games'].to_i

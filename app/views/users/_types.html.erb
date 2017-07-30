@@ -1,7 +1,7 @@
 <div id="types">
   <h2>Play types for <%= @email %>:</h2>
 
-  <button id="<%= @sample ? "update-sample-types" : "update-displayed-types" %>">
+  <button id="<%= @sample ? 'update-sample-types' : 'update-displayed-types' %>">
     Update stats
   </button>
 
@@ -19,18 +19,18 @@
     </thead>
     <tbody>
       <% @play_type_summary.each do |type_stats| %>
-        <% type_abbr = type_stats["play_type"] %>
+        <% type_abbr = type_stats['play_type'] %>
         <tr class="<%= type_abbr %>">
           <td>
             <input id="<%= type_abbr %>-box" type="checkbox"
                    <%= 'checked="true"' if @play_types.include?(type_abbr) %>>
           </td>
           <td><%= PLAY_TYPES[type_abbr] %></td>
-          <td><%= type_stats["games_count"] %></td>
-          <td><%= number_to_currency(type_stats["average_score"]) %></td>
-          <td><%= number_to_currency(type_stats["max"], precision: 0) %></td>
-          <td><%= number_to_currency(type_stats["min"], precision: 0) %></td>
-          <% if (fr = type_stats["final_rate"]).nil? %>
+          <td><%= type_stats['games_count'] %></td>
+          <td><%= number_to_currency(type_stats['average_score']) %></td>
+          <td><%= number_to_currency(type_stats['max'], precision: 0) %></td>
+          <td><%= number_to_currency(type_stats['min'], precision: 0) %></td>
+          <% if (fr = type_stats['final_rate']).nil? %>
             <td></td>
           <% else %>
             <td><%= number_to_percentage(fr.to_f * 100, precision: 1) %></td>

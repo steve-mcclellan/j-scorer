@@ -4,25 +4,6 @@ class ResultsByRow
   attr_reader :stats
 
   def initialize(user, play_types)
-    # @stats = { round_one:
-    #            [0,
-    #             { right: 0, wrong: 0, pass: 0, dd_right: 0, dd_wrong: 0 },
-    #             { right: 0, wrong: 0, pass: 0, dd_right: 0, dd_wrong: 0 },
-    #             { right: 0, wrong: 0, pass: 0, dd_right: 0, dd_wrong: 0 },
-    #             { right: 0, wrong: 0, pass: 0, dd_right: 0, dd_wrong: 0 },
-    #             { right: 0, wrong: 0, pass: 0, dd_right: 0, dd_wrong: 0 }],
-    #            round_two:
-    #            [0,
-    #             { right: 0, wrong: 0, pass: 0, dd_right: 0, dd_wrong: 0 },
-    #             { right: 0, wrong: 0, pass: 0, dd_right: 0, dd_wrong: 0 },
-    #             { right: 0, wrong: 0, pass: 0, dd_right: 0, dd_wrong: 0 },
-    #             { right: 0, wrong: 0, pass: 0, dd_right: 0, dd_wrong: 0 },
-    #             { right: 0, wrong: 0, pass: 0, dd_right: 0, dd_wrong: 0 }] }
-
-    # cats = user.sixths.joins(:game).where(games: { play_type: play_types })
-    # cats.each { |cat| add_category_to_stats(cat) }
-
-    # add_efficiencies
     row_results = ActiveRecord::Base.connection
                                     .select_all(by_row_query(user, play_types))
                                     .to_hash
@@ -88,48 +69,6 @@ class ResultsByRow
     "
   end
   # rubocop:enable MethodLength
-
-  # def add_category_to_stats(cat)
-  #   round = cat.is_a?(RoundOneCategory) ? :round_one : :round_two
-
-  #   1.upto(5) do |row|
-  #     add_clue_to_stats(cat.send('result' + row.to_s), @stats[round][row])
-  #   end
-  # end
-
-  # def add_clue_to_stats(result_code, row_stats)
-  #   case result_code
-  #   when 1 then row_stats[:wrong] += 1
-  #   when 2 then row_stats[:pass] += 1
-  #   when 3 then row_stats[:right] += 1
-  #   when 5..6 then row_stats[:dd_wrong] += 1
-  #   when 7 then row_stats[:dd_right] += 1
-  #   end
-  # end
-
-  # def add_efficiencies
-  #   [:round_one, :round_two].each do |round|
-  #     1.upto(5) do |row_number|
-  #       row = @stats[round][row_number]
-  #       row[:eff_num] = row[:right] - row[:wrong]
-  #       row[:eff_den] = row[:right] + row[:wrong] + row[:pass]
-  #       row[:efficiency] = calculate_efficiency(row)
-  #       row[:dd_eff] = calculate_dd_efficiency(row)
-
-  #       assign_colors(row)
-  #     end
-  #   end
-  # end
-
-  # def calculate_efficiency(row)
-  #   return nil if row[:eff_den].zero?
-  #   row[:eff_num].fdiv(row[:eff_den])
-  # end
-
-  # def calculate_dd_efficiency(row)
-  #   return nil if row[:dd_right].zero? && row[:dd_wrong].zero?
-  #   row[:dd_right].fdiv(row[:dd_right] + row[:dd_wrong])
-  # end
 
   def assign_colors
     [:round_one, :round_two].each do |round|
