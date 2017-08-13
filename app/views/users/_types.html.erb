@@ -1,11 +1,13 @@
 <div id="types">
   <h2>Play types for <%= @email %>:</h2>
 
-  <button id="<%= @sample ? 'update-sample-types' : 'update-displayed-types' %>">
+  <button <%= 'class="disabled"'.html_safe if no_games %>
+          id="<%= @sample ? 'update-sample-types' : 'update-displayed-types' %>">
     Update stats
   </button>
 
-  <table id="typeTable" class="tablesorter tablesorter-blue<%= ' empty' if user_games_count.zero? %>">
+  <table id="typeTable"
+         class="tablesorter tablesorter-blue<%= ' empty' if no_games %>">
     <thead>
       <tr>
         <th>Include in stats?</th>
@@ -23,7 +25,7 @@
         <tr class="<%= type_abbr %>">
           <td>
             <input id="<%= type_abbr %>-box" type="checkbox"
-                   <%= 'checked="true"' if @play_types.include?(type_abbr) %>>
+                   <%= 'checked="checked"'.html_safe if @play_types.include?(type_abbr) %>>
           </td>
           <td><%= PLAY_TYPES[type_abbr] %></td>
           <td><%= type_stats['games_count'] %></td>

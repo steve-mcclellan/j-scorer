@@ -622,6 +622,10 @@ input {
     font-size: large;
   }
 
+  #types button.disabled {
+    pointer-events: none;
+  }
+
   #typeTable tbody td {
     vertical-align: middle;
   }

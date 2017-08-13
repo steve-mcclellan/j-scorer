@@ -18,6 +18,7 @@ $( ".users-show, .users-sample" ).ready( function() {
   $( "#stats-area" ).tabs();
 
   var $gameTable = $( "#gameTable" );
+  var $topicTable = $( "#topicTable" );
   var $typeTable = $( "#typeTable" );
 
   // Remove these before Tablesorter can get its grubby mitts on them.
@@ -46,7 +47,7 @@ $( ".users-show, .users-sample" ).ready( function() {
   // Similar for the "Topics" table.
   // Default sort: [ topic name, ascending ].
   // Make everything else sort descending on first click.
-  $( "#topicTable" ).tablesorter({
+  $topicTable.tablesorter({
     sortList: [[0,0]],
     sortInitialOrder: "desc",
     headers: {
@@ -54,7 +55,7 @@ $( ".users-show, .users-sample" ).ready( function() {
     }
   });
 
-  $( "#topicTable" ).stickyTableHeaders({
+  $topicTable.stickyTableHeaders({
     scrollableArea: $( '#stats-area' )
   });
 
@@ -62,7 +63,7 @@ $( ".users-show, .users-sample" ).ready( function() {
   // [ Games played, descending ]. Prevent meaningless attempts
   // to sort by checkbox column (currently in position 0).
   // To prevent a JS error, skip this if the table is empty.
-  if ( !$typeTable.hasClass( 'empty' ) ) {
+  if ( !$typeTable.hasClass( "empty" ) ) {
     $typeTable.tablesorter({
       sortList: [[2,1]],
       sortInitialOrder: "desc",
@@ -94,17 +95,17 @@ $( ".users-show, .users-sample" ).ready( function() {
 
   $( "#update-displayed-types" ).on( "click", function() {
     if ( !$( this ).hasClass( "disabled" ) ) {
-      $( this ).addClass( "disabled" ).html( 'Updating...' );
+      $( this ).addClass( "disabled" ).html( "Updating..." );
       $.ajax({
-        url: '/types',
-        method: 'PATCH',
+        url: "/types",
+        method: "PATCH",
         data: { play_types: getCheckedBoxes() },
-        dataType: 'json',
-        success: function() { window.location.replace( '/stats' ); },
+        dataType: "json",
+        success: function() { window.location.replace( "/stats" ); },
         error: function() {
-          alert('Oops. Something went wrong.');
+          alert("Oops. Something went wrong.");
           $( "#update-displayed-types" ).removeClass( "disabled" )
-                                        .html( 'Update stats' );
+                                        .html( "Update stats" );
         }
       });
     }
@@ -112,7 +113,7 @@ $( ".users-show, .users-sample" ).ready( function() {
 
   $( "#update-sample-types" ).on( "click", function() {
     if ( !$( this ).hasClass( "disabled" ) ) {
-      $( this ).addClass( "disabled" ).html( 'Updating...' );
+      $( this ).addClass( "disabled" ).html( "Updating..." );
       var url = "/sample?types=" + getCheckedBoxes().join();
       window.location.replace( url );
     }

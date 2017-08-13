@@ -47,6 +47,6 @@
 
   <%= render 'finals', stats: @final_stats %>
 
-  <%= render 'types', user_games_count: user_games_count %>
+  <%= render 'types', no_games: user_games_count.zero? %>
 
 </div>
