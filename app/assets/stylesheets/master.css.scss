@@ -381,6 +381,22 @@ input {
   }
 }
 
+html.js #stats-area {
+  display: none;
+}
+
+html.js #stats-loading-message {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+html.no-js #stats-loading-message {
+  display: none;
+}
+
 #stats-area {
   height: 100%;
   overflow: auto;
@@ -620,6 +636,10 @@ input {
 
   #types button {
     font-size: large;
+  }
+
+  #types button.disabled {
+    pointer-events: none;
   }
 
   #typeTable tbody td {

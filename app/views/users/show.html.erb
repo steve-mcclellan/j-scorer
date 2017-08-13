@@ -5,13 +5,17 @@
   <% provide(:tags, 'description: Your up-to-the-minute stats, broken down by game, topic, row, play type, and more.') %>
 <% end %>
 
+<div id="stats-loading-message">
+  Loading stats page. One moment please.
+</div>
+
 <div id="stats-area">
 
   <div class="k-box">
     <p>
-    <%= random_partial_greeting %>, and happy summer hiatus!
+    <%= random_full_greeting %>
 
-    I'm back at the J! Scorer in my (small amount of) free time, and I've just overhauled the way stats are retrieved from the database for this page, in preparation for adding some new features. If anything seems off, <em>please</em> let me know:
+    I've just made a few tweaks to the appearance of the stats page. Next up: adding on-air contestants' Final results to the Topics tab. Then: enabling date-based filtering of stats. Feedback:
 
     <a class="nowrap" href="mailto:<%= ENV['SUPPORT_ADDRESS'] %>"><%= ENV['SUPPORT_ADDRESS'] %></a>.
     </p>
@@ -47,6 +51,6 @@
 
   <%= render 'finals', stats: @final_stats %>
 
-  <%= render 'types', user_games_count: user_games_count %>
+  <%= render 'types', no_games: user_games_count.zero? %>
 
 </div>
