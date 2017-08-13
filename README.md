@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/steve-mcclellan/j-scorer.svg?branch=master)](https://travis-ci.org/steve-mcclellan/j-scorer)
+
 The J! Scorer is a web app that makes it easy for prospective _Jeopardy!_
 contestants to keep score along with the show, and track their training
 progress via a bunch of different stats.
