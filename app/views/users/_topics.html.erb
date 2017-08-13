@@ -23,10 +23,15 @@
         </th>
         <th>DDs</th>
         <th>Right</th>
-        <th class="end-of-group">Wrong</th>
+        <th>Wrong</th>
+        <th class="end-of-group">%</th>
         <th>Finals</th>
         <th>Right</th>
-        <th class="end-of-group">Wrong</th>
+        <th>Wrong</th>
+        <th>%</th>
+        <th class="end-of-group">
+          <abbr title="Get rate of contestants on the show.">On-air %</abbr>
+        </th>
       </tr>
     </thead>
     <tbody>
@@ -47,10 +52,13 @@
         </td>
         <td><%= @summary[:all][:dds] %></td>
         <td><%= @summary[:all][:dd_right] %></td>
-        <td class="end-of-group"><%= @summary[:all][:dd_wrong] %></td>
+        <td><%= @summary[:all][:dd_wrong] %></td>
+        <td class="end-of-group"></td>
         <td><%= @summary[:finals][:count] %></td>
         <td><%= @summary[:finals][:right] %></td>
-        <td class="end-of-group"><%= @summary[:finals][:wrong] %></td>
+        <td><%= @summary[:finals][:wrong] %></td>
+        <td></td>
+        <td class="end-of-group"></td>
       </tr>
 
       <!-- Individual Topics -->
@@ -68,10 +76,13 @@
           </td>
           <td><%= topic['dds'] %></td>
           <td><%= topic['dd_right'] %></td>
-          <td class="end-of-group"><%= topic['dd_wrong'] %></td>
+          <td><%= topic['dd_wrong'] %></td>
+          <td class="end-of-group"></td>
           <td><%= topic['finals_count'] %></td>
           <td><%= topic['finals_right'] %></td>
-          <td class="end-of-group"><%= topic['finals_wrong'] %></td>
+          <td><%= topic['finals_wrong'] %></td>
+          <td></td>
+          <td class="end-of-group"></td>
         </tr>
       <% end %>
     </tbody>
@@ -80,10 +91,9 @@
   <div id="topics-notes">
     <p id="notes-title">Notes:</p>
     <p><strong>Categories</strong> counts do not include Finals.</p>
-    <p>
-    <strong>Right</strong>, <strong>Wrong</strong>, and <strong>Pass</strong>
-    totals do not include Daily Doubles or Finals.
-    </p>
+    <p><strong>Right</strong>, <strong>Wrong</strong>, and <strong>Pass</strong>
+    totals do not include Daily Doubles or Finals.</p>
     <p><strong>Efficiency</strong> is total score divided by possible score.</p>
+    <p><strong>On-air %</strong> is the get rate of the contestants on the show for Finals with this topic.</p>
   </div>
 </div>
