@@ -118,4 +118,7 @@ $( ".users-show, .users-sample" ).ready( function() {
       window.location.replace( url );
     }
   });
+
+  $( "#stats-loading-message" ).remove();
+  $( "#stats-area" ).show();
 });
