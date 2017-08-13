@@ -32,11 +32,7 @@
           <td><%= number_to_currency(type_stats['average_score']) %></td>
           <td><%= number_to_currency(type_stats['max'], precision: 0) %></td>
           <td><%= number_to_currency(type_stats['min'], precision: 0) %></td>
-          <% if (fr = type_stats['final_rate']).nil? %>
-            <td></td>
-          <% else %>
-            <td><%= number_to_percentage(fr.to_f * 100, precision: 1) %></td>
-          <% end %>
+          <td><%= display_percentage_from_rate(type_stats['final_rate']) %></td>
         </tr>
       <% end %>
     </tbody>

@@ -53,11 +53,13 @@
         <td><%= @summary[:all][:dds] %></td>
         <td><%= @summary[:all][:dd_right] %></td>
         <td><%= @summary[:all][:dd_wrong] %></td>
-        <td class="end-of-group"></td>
+        <td class="end-of-group">
+          <%= display_percentage_from_rate(@summary[:all][:dd_rate]) %>
+        </td>
         <td><%= @summary[:finals][:count] %></td>
         <td><%= @summary[:finals][:right] %></td>
         <td><%= @summary[:finals][:wrong] %></td>
-        <td></td>
+        <td><%= display_percentage_from_rate(@summary[:finals][:rate]) %></td>
         <td class="end-of-group"></td>
       </tr>
 
@@ -77,11 +79,13 @@
           <td><%= topic['dds'] %></td>
           <td><%= topic['dd_right'] %></td>
           <td><%= topic['dd_wrong'] %></td>
-          <td class="end-of-group"></td>
+          <td class="end-of-group">
+            <%= display_percentage_from_rate(topic['dd_rate']) %>
+          </td>
           <td><%= topic['finals_count'] %></td>
           <td><%= topic['finals_right'] %></td>
           <td><%= topic['finals_wrong'] %></td>
-          <td></td>
+          <td><%= display_percentage_from_rate(topic['final_rate']) %></td>
           <td class="end-of-group"></td>
         </tr>
       <% end %>
