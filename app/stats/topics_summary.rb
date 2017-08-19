@@ -36,7 +36,13 @@ class TopicsSummary
           WHEN o.finals_count > 0
             THEN (1.0 * o.finals_right / o.finals_count)
         END
-      ) AS final_rate
+      ) AS final_rate,
+      (
+        CASE
+          WHEN o.final_onair_den > 0
+            THEN (1.0 * o.final_onair_right / o.final_onair_den)
+        END
+      ) AS final_onair_rate
     FROM (
       SELECT
         q.topic_name,
@@ -49,9 +55,11 @@ class TopicsSummary
         SUM(q.dd_right) + SUM(q.dd_wrong) AS dds,
         SUM(q.dd_right) AS dd_right,
         SUM(q.dd_wrong) AS dd_wrong,
-        SUM(q.finals_right) + SUM(q.finals_wrong) AS finals_count,
-        SUM(q.finals_right) AS finals_right,
-        SUM(q.finals_wrong) AS finals_wrong
+        SUM(q.final_right) + SUM(q.final_wrong) AS finals_count,
+        SUM(q.final_right) AS finals_right,
+        SUM(q.final_wrong) AS finals_wrong,
+        SUM(q.final_onair_right) + SUM(q.final_onair_wrong) AS final_onair_den,
+        SUM(q.final_onair_right) AS final_onair_right
       FROM (
         SELECT
           i.topic_name,
@@ -68,8 +76,10 @@ class TopicsSummary
           ) * i.top_row_value AS possible_score,
           #{count_results('i', 7)} AS dd_right,
           #{count_results('i', [5, 6])} AS dd_wrong,
-          CASE WHEN i.final_result = 3 THEN 1 ELSE 0 END AS finals_right,
-          CASE WHEN i.final_result = 1 THEN 1 ELSE 0 END AS finals_wrong
+          CASE WHEN i.final_result = 3 THEN 1 ELSE 0 END AS final_right,
+          CASE WHEN i.final_result = 1 THEN 1 ELSE 0 END AS final_wrong,
+          i.final_onair_right,
+          i.final_onair_wrong
         FROM (
           SELECT
             t.name AS topic_name,
@@ -85,7 +95,17 @@ class TopicsSummary
                 WHEN 'RoundTwoCategory' THEN #{CURRENT_TOP_ROW_VALUES[1]}
               END
             ) AS top_row_value,
-            f.result AS final_result
+            f.result AS final_result,
+            (
+              CASE WHEN f.first_right THEN 1 ELSE 0 END +
+              CASE WHEN f.second_right THEN 1 ELSE 0 END +
+              CASE WHEN f.third_right THEN 1 ELSE 0 END
+            ) AS final_onair_right,
+            (
+              CASE WHEN f.first_right IS FALSE THEN 1 ELSE 0 END +
+              CASE WHEN f.second_right IS FALSE THEN 1 ELSE 0 END +
+              CASE WHEN f.third_right IS FALSE THEN 1 ELSE 0 END
+            ) AS final_onair_wrong
           FROM
             topics t
             INNER JOIN category_topics c

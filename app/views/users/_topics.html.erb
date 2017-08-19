@@ -60,7 +60,9 @@
         <td><%= @summary[:finals][:right] %></td>
         <td><%= @summary[:finals][:wrong] %></td>
         <td><%= display_percentage_from_rate(@summary[:finals][:rate]) %></td>
-        <td class="end-of-group"></td>
+        <td class="end-of-group">
+          <%= display_percentage_from_rate(@final_stats[:contestants][0][2]) %>
+        </td>
       </tr>
 
       <!-- Individual Topics -->
@@ -86,7 +88,10 @@
           <td><%= topic['finals_right'] %></td>
           <td><%= topic['finals_wrong'] %></td>
           <td><%= display_percentage_from_rate(topic['final_rate']) %></td>
-          <td class="end-of-group"></td>
+          <td class="end-of-group">
+            <%= display_percentage_from_rate(topic['final_onair_rate']) %>
+            <!--<%= topic['final_onair_right'] %>/<%= topic['final_onair_den'] %>-->
+          </td>
         </tr>
       <% end %>
     </tbody>
