@@ -19,4 +19,8 @@ module UsersHelper
   def sample_size(arr)
     arr[1]
   end
+
+  def display_percentage_from_rate(rate, precision = 1)
+    number_to_percentage(rate.to_f * 100, precision: precision) if rate
+  end
 end
