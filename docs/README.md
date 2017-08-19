@@ -9,6 +9,18 @@ users can be found [there][1], via the Help link.
 
 See a sample stats page (and laugh at my actual stats!) [here][2].
 
+### Screenshots
+
+![Round in progress](screenshots/round_in_progress.png?raw=true)
+
+![Stats by topic](screenshots/stats_topics.png?raw=true)
+
+![Stats by row](screenshots/stats_by_row.png?raw=true)
+
+![Final stats](screenshots/stats_final.png?raw=true)
+
+![Final wagering thoughts](screenshots/stats_final_wagering.png?raw=true)
+
 ### Developer info
 
 The J! Scorer uses the following custom environment variables:
