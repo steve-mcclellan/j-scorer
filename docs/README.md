@@ -13,6 +13,12 @@ See a sample stats page (and laugh at my actual stats!) [here][2].
 
 ![Round in progress](screenshots/round_in_progress.png?raw=true)
 
+![Clue screen](screenshots/clue_overlay.png?raw=true)
+
+![Topic entry](screenshots/topic_and_round_links.png?raw=true)
+
+![Final screen](screenshots/final_overlay.png?raw=true)
+
 ![Stats by topic](screenshots/stats_topics.png?raw=true)
 
 ![Stats by row](screenshots/stats_by_row.png?raw=true)
