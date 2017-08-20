@@ -217,7 +217,6 @@ input {
   display: none;
 }
 
-/* TODO: Determine what to do about mobile Chrome's .no-cssvminunit class. */
 .no-flexbox #old-browser-warning/*, .no-cssvminunit #old-browser-warning*/ {
   display: block;
 }
@@ -426,6 +425,11 @@ html.no-js #stats-loading-message {
     &:hover {
       color: $j-lighter-blue;
     }
+  }
+
+  .spacer {
+    margin-top: 5vh;
+    margin-bottom: 5vh;
   }
 
   #games-headline a {

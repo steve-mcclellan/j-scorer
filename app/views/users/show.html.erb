@@ -15,7 +15,7 @@
     <p>
     <%= random_full_greeting %>
 
-    On-air contestants' Final results have just been added to the Topics tab. Next up: enabling date-based filtering of stats (which I hope to have done by the start of the new season). Feedback:
+    Percentiles have just been added to the Overview tab, and on-air contestants' Final results to the Topics tab. Next up: enabling date-based filtering of stats (which I hope to have done by the start of the new season). Feedback:
 
     <a class="nowrap" href="mailto:<%= ENV['SUPPORT_ADDRESS'] %>"><%= ENV['SUPPORT_ADDRESS'] %></a>.
     </p>
@@ -41,7 +41,9 @@
   <% user_games_count = @user.games.count %>
   <% tracked = @summary[:all][:game_count] %>
 
-  <%= render 'overview', user_games_count: user_games_count, tracked: tracked %>
+  <%= render 'overview', user_games_count: user_games_count,
+                         tracked: tracked,
+                         pctile: @percentile_stats %>
 
   <%= render 'games', user_games_count: user_games_count, tracked: tracked %>
 

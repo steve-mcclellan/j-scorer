@@ -65,6 +65,7 @@ class UsersController < ApplicationController
 
   def set_stats_vars
     @summary = @user.multi_game_summary(@play_types)
+    @percentile_stats = @user.percentile_report(@play_types)
     @stats_by_topic = @user.topics_summary(@play_types)
     @stats_by_row = @user.results_by_row(@play_types)
     @final_stats = @user.final_stats(@play_types)
