@@ -69,6 +69,10 @@ class User < ApplicationRecord
     @mgs ||= MultiGameSummary.new(self, play_types).stats
   end
 
+  def percentile_report(play_types)
+    @pr ||= PercentileReport.new(self, play_types).stats
+  end
+
   def topics_summary(play_types)
     @ts ||= TopicsSummary.new(self, play_types).stats
   end

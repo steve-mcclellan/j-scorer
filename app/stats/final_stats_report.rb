@@ -17,7 +17,7 @@ class FinalStatsReport
 
   private
 
-  # rubocop:disable MethodLength, AbcSize
+  # rubocop:disable MethodLength
   def format_data(d)
     { user: make_stat_array(d, 'user'),
       contestants: [make_stat_array(d, 'contestants'),
@@ -47,7 +47,7 @@ class FinalStatsReport
                    make_stat_array(d, 'when_third_wrong')],
       advice: make_advice_hash(d) }
   end
-  # rubocop:enable MethodLength, AbcSize
+  # rubocop:enable MethodLength
 
   def make_stat_array(data, attr)
     num = data[attr + '_num'] || 0
