@@ -456,7 +456,7 @@ html.no-js #stats-loading-message {
     padding-right: 20px;
   }
 
-  /* Color code non-regular play types in Games and Play types tabs */
+  /* Color code non-regular play types in Games and Filters tabs */
   table.tablesorter tbody {
     tr.teen td { background-color: #bed; }
     tr.toc td { background-color: #fbb; }
@@ -638,11 +638,11 @@ html.no-js #stats-loading-message {
     }
   }
 
-  #types button {
+  #filters button {
     font-size: large;
   }
 
-  #types button.disabled {
+  #filters button.disabled {
     pointer-events: none;
   }
 

@@ -5,7 +5,7 @@
   <div id="overall-stats" class="col-xs-12 col-lg-6 text-center">
     <p>Games played: <%= tracked %></p>
     <% unless tracked == user_games_count %>
-      <p class="aside">(plus <%= pluralize(user_games_count - tracked, 'untracked game') %> - visit the "Play types" tab to change)<br /><br /></p>
+      <p class="aside">(plus <%= pluralize(user_games_count - tracked, 'untracked game') %> - visit the Filters tab to change)<br /><br /></p>
     <% end %>
 
     <p>Total score: <%= number_to_currency(@summary[:all][:score], precision: 0) %></p>

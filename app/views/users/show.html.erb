@@ -27,8 +27,7 @@
     <li><a href="#topics">Topics</a></li>
     <li><a href="#by-row">By row</a></li>
     <li><a href="#finals">Finals</a></li>
-    <li><a href="#types">Play types</a></li>
-    <li><a href="#dates">Dates</a></li>
+    <li><a href="#filters">Filters</a></li>
   </ul>
 
   <noscript>
@@ -54,8 +53,6 @@
 
   <%= render 'finals', stats: @final_stats %>
 
-  <%= render 'types', no_games: user_games_count.zero? %>
-
-  <%= render 'dates' %>
+  <%= render 'filters', no_games: user_games_count.zero? %>
 
 </div>
