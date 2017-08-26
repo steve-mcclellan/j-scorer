@@ -18,9 +18,12 @@ $( ".users-show, .users-sample" ).ready( function() {
 
   $( "#stats-area" ).tabs();
 
-  var $gameTable = $( "#gameTable" );
-  var $topicTable = $( "#topicTable" );
-  var $typeTable = $( "#typeTable" );
+  var $gameTable = $( "#gameTable" ),
+      $topicTable = $( "#topicTable" ),
+      $typeTable = $( "#typeTable" ),
+      $showDateFromPicker = $( "#show-date-from-picker" ),
+      $showDateToPicker = $( "#show-date-to-picker" ),
+      storedToDates = { "show-date": undefined, "date-played": undefined };
 
   // Remove these before Tablesorter can get its grubby mitts on them.
   $untracked = $( "tr.untracked" ).detach();
@@ -120,6 +123,10 @@ $( ".users-show, .users-sample" ).ready( function() {
     }
   });
 
+  function laterDate( date1, date2 ) {
+    return date1 > date2 ? date1 : date2;
+  }
+
   function updateFilterSentence(dateType) {
     var preposition = $( "#" + dateType + "-dropdown-2" ).val();
     $( "." + dateType + "-filter-object" ).hide();
@@ -130,10 +137,24 @@ $( ".users-show, .users-sample" ).ready( function() {
       case "last":
         $( "#" + dateType + "-last-span" ).show();
         break;
-      case "from":
-        $( "#" + dateType + "-to" ).show();
       case "since":
+        if (!storedToDates[dateType]) {
+          var $toDatePicker = $( "#" + dateType + "-to-picker" );
+          storedToDates[dateType] = $toDatePicker.find( "input" ).val();
+          $toDatePicker.data( "DateTimePicker" ).date("9999-12-31");
+        }
         $( "#" + dateType + "-from" ).show();
+        break;
+      case "from":
+        if (storedToDates[dateType]) {
+          var $toDatePicker = $( "#" + dateType + "-to-picker" ),
+              fromDate = $( "#" + dateType + "-from-picker input" ).val(),
+              newToDate = laterDate( fromDate, storedToDates[dateType] );
+          $toDatePicker.data( "DateTimePicker" ).date( newToDate );
+          storedToDates[dateType] = undefined;
+        }
+        $( "#" + dateType + "-from" ).show();
+        $( "#" + dateType + "-to" ).show();
         break;
     }
   }
@@ -142,6 +163,27 @@ $( ".users-show, .users-sample" ).ready( function() {
   $( "#show-date-dropdown-2" ).on( "change", function() {
     updateFilterSentence("show-date");
   });
+
+  $showDateFromPicker.datetimepicker({
+    format: "YYYY-MM-DD",
+    focusOnShow: false
+  });
+  $showDateFromPicker.data( "DateTimePicker" ).timeZone( undefined );
+
+  $showDateToPicker.datetimepicker({
+    format: "YYYY-MM-DD",
+    focusOnShow: false
+  });
+  $showDateToPicker.data( "DateTimePicker" ).timeZone( undefined );
+
+  $showDateFromPicker.on( "dp.change", function( e ) {
+    $showDateToPicker.data( "DateTimePicker" ).minDate( e.date );
+  });
+
+  $showDateToPicker.on( "dp.change", function( e ) {
+    $showDateFromPicker.data( "DateTimePicker" ).maxDate( e.date );
+  });
+
   $( "#stats-loading-message" ).remove();
   $( "#stats-area" ).show();
 });
