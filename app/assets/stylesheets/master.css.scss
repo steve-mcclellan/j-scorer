@@ -638,16 +638,85 @@ html.no-js #stats-loading-message {
     }
   }
 
-  #filters button {
-    font-size: large;
-  }
+  #filters {
+    font-size: 3vh;
 
-  #filters button.disabled {
-    pointer-events: none;
-  }
+    button {
+      font-size: large;
+    }
 
-  #typeTable tbody td {
-    vertical-align: middle;
+    button.disabled {
+      pointer-events: none;
+    }
+
+    .filter-sentence {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: baseline;
+
+      select {
+        height: 4vh;
+        margin: 0;
+        box-sizing: border-box;
+      }
+
+      .display-or-hide {
+        width: 10vw;
+      }
+
+      .filter-preposition {
+        width: 18vw;
+      }
+
+      .filter-object {
+
+        input {
+          height: 4vh;
+          margin: 0;
+          box-sizing: border-box;
+        }
+
+        .beginning-dropdown {
+          width: 18vw;
+        }
+
+        .number-entry {
+          width: 4vw;
+        }
+
+        .unit-dropdown {
+          width: 10vw;
+        }
+
+        .filter-datepicker {
+          display: flex;
+          height: 4vh;
+          width: 11vw;
+
+          input {
+            width: 9vw;
+          }
+
+          .input-group-addon {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0 1vw;
+            box-sizing: border-box;
+          }
+        }
+      }
+
+      .filter-object.date-to {
+        display: flex;
+      }
+    }
+
+
+    #typeTable tbody td {
+      vertical-align: middle;
+    }
   }
 }
 

@@ -3,25 +3,56 @@
   <div class="clearfix">
     <h2>Filter by show date</h2>
     <br />
-    <div class="text-center">
-      <select style="width: 12vw;">
+    <div class="filter-sentence">
+      <select id="unused-show-date-dropdown-1" class="display-or-hide">
         <option>Display only</option>
         <option>Hide all</option>
       </select>
-      stats from shows aired
-      <select style="width: 20vw;">
-        <option>since the beginning of</option>
-        <option>in the last</option>
-        <option>since</option>
-        <option>between</option>
+      <span>&nbsp;</span>
+      <span>stats from shows aired</span>
+      <span>&nbsp;</span>
+      <select name="show-date-preposition" id="show-date-dropdown-2" class="filter-preposition">
+        <option value="sinceBeg">since the beginning of</option>
+        <option value="last">in the last</option>
+        <option value="since">since</option>
+        <option value="from">from</option>
       </select>
-      <select style="width: 22vw;">
-        <option>time</option>
-        <option>Season 34 (2017-09-11)</option>
-        <option>Season 33 (2016-09-12)</option>
-        <option>Season 32 (2015-09-14)</option>
-      </select>
-      .
+      <span>&nbsp;</span>
+      <span id="show-date-beginning-span" class="filter-object show-date-filter-object">
+        <select id="unused-show-date-beginning-dropdown" class="beginning-dropdown">
+          <option>time</option>
+          <option>Season 34 (2017-09-11)</option>
+          <option>Season 33 (2016-09-12)</option>
+          <option>Season 32 (2015-09-14)</option>
+        </select>
+      </span>
+      <span id="show-date-last-span" class="filter-object show-date-filter-object">
+        <input id="unused-show-date-last-number" class="number-entry" type="number" value="365" />
+        <select id="unused-show-date-last-unit" class="unit-dropdown">
+          <option>days</option>
+          <option>weeks</option>
+          <option>months</option>
+          <option>years</option>
+        </select>
+      </span>
+      <span id="show-date-from" class="filter-object show-date-filter-object">
+        <span class="input-group date filter-datepicker" id="unused-show-date-from-picker">
+          <input type="text" spellcheck="false" value="2016-08-26" />
+          <span class="input-group-addon">
+            <span class="glyphicon glyphicon-calendar"></span>
+          </span>
+        </span>
+      </span>
+      <span id="show-date-to" class="filter-object date-to show-date-filter-object">
+        <span>&nbsp;through&nbsp;</span>
+        <span class="input-group date filter-datepicker" id="unused-show-date-to-picker">
+          <input type="text" spellcheck="false" value="2017-08-26" />
+          <span class="input-group-addon">
+            <span class="glyphicon glyphicon-calendar"></span>
+          </span>
+        </span>
+      </span>
+      <span>.</span>
     </div>
     <div class="text-center">
       Apply a half-life?

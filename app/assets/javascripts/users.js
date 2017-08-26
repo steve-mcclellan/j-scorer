@@ -7,6 +7,7 @@ $( ".users-show, .users-sample" ).ready( function() {
   // to the checked boxes on the play types tab, or ['none']
   // if no boxes are checked.
   function getCheckedBoxes() {
+    // TODO: Update (or supplement) this to grab date filter info, as well.
     var types = $( "#typeTable :checked" ).map( function() {
       return this.id.slice(0, -4);
     }).get();
@@ -119,6 +120,28 @@ $( ".users-show, .users-sample" ).ready( function() {
     }
   });
 
+  function updateFilterSentence(dateType) {
+    var preposition = $( "#" + dateType + "-dropdown-2" ).val();
+    $( "." + dateType + "-filter-object" ).hide();
+    switch (preposition) {
+      case "sinceBeg":
+        $( "#" + dateType + "-beginning-span" ).show();
+        break;
+      case "last":
+        $( "#" + dateType + "-last-span" ).show();
+        break;
+      case "from":
+        $( "#" + dateType + "-to" ).show();
+      case "since":
+        $( "#" + dateType + "-from" ).show();
+        break;
+    }
+  }
+
+  updateFilterSentence("show-date");
+  $( "#show-date-dropdown-2" ).on( "change", function() {
+    updateFilterSentence("show-date");
+  });
   $( "#stats-loading-message" ).remove();
   $( "#stats-area" ).show();
 });
