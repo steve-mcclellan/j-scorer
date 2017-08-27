@@ -733,8 +733,19 @@ html.no-js #stats-loading-message {
     #typeTable tbody td {
       vertical-align: middle;
     }
-  }
-}
+
+    #weight-clarification-modal {
+
+      h4 {
+        font-size: x-large;
+      }
+
+      p {
+        font-size: medium;
+      }
+    }
+  }  /* end filters */
+}  /* end stats page */
 
 
 /* game page */

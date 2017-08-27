@@ -72,7 +72,33 @@
         </select>
       </span>
       <span>.</span>
-      <a class="aside weight-clarification">(What is this?)</a>
+      <a class="aside weight-clarification"
+         data-toggle="modal"
+         data-target="#weight-clarification-modal">
+        (What is this?)</a>
+    </div>
+  </div>
+
+  <div class="modal fade" id="weight-clarification-modal" tabindex="-1" role="dialog" aria-labelledby="weight-clarification-label">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h4 class="modal-title" id="weight-clarification-label">
+            Weighting and half-lives
+          </h4>
+        </div>
+        <div class="modal-body">
+          <p>Hi, I'm a modal body!</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">
+            Close
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 
