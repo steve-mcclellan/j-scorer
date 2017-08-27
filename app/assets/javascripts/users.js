@@ -100,8 +100,8 @@ $( ".users-show, .users-sample" ).ready( function() {
   });
 
   $( ".update-displayed-types" ).on( "click", function() {
-    var $bothButtons = $( ".update-displayed-types" );
     if ( !$( this ).hasClass( "disabled" ) ) {
+      if ( illegalHalfLife() ) { return; }
       $( ".update-displayed-types" ).addClass( "disabled" )
                                     .html( "Updating..." );
       $.ajax({
@@ -121,11 +121,26 @@ $( ".users-show, .users-sample" ).ready( function() {
 
   $( ".update-sample-types" ).on( "click", function() {
     if ( !$( this ).hasClass( "disabled" ) ) {
+      if ( illegalHalfLife() ) { return; }
       $( ".update-sample-types" ).addClass( "disabled" ).html( "Updating..." );
       var url = "/sample?types=" + getCheckedBoxes().join();
       window.location.replace( url );
     }
   });
+
+  function illegalHalfLife() {
+    if ( $( "#show-date-weight-adverb" ).val() === "half-life" &&
+          parseFloat( $( "#show-date-half-life-number" ).val() ) === 0 ) {
+      alert( "Half-life cannot be zero." );
+      return true;
+    }
+    if ( $( "#date-played-weight-adverb" ).val() === "half-life" &&
+        parseFloat( $( "#date-played-half-life-number" ).val() ) === 0 ) {
+      alert( "Half-life cannot be zero." );
+      return true;
+    }
+    return false;
+  }
 
   function laterDate( date1, date2 ) {
     return date1 > date2 ? date1 : date2;
