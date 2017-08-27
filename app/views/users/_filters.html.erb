@@ -4,14 +4,14 @@
     <h2>Filter by show date</h2>
     <br />
     <div class="filter-sentence">
-      <select id="unused-show-date-dropdown-1" class="display-or-hide">
+      <select id="unused-show-date-verb" class="display-or-hide">
         <option>Display only</option>
         <option>Hide all</option>
       </select>
       <span>&nbsp;</span>
       <span>stats from shows aired</span>
       <span>&nbsp;</span>
-      <select name="show-date-preposition" id="show-date-dropdown-2" class="filter-preposition">
+      <select name="show-date-preposition" id="show-date-preposition" class="filter-preposition">
         <option value="sinceBeg">since the beginning of</option>
         <option value="last">in the last</option>
         <option value="since">since</option>
@@ -54,8 +54,25 @@
       </span>
       <span>.</span>
     </div>
-    <div class="text-center">
-      Apply a half-life?
+    <br />
+    <div class="weight-sentence">
+      <span>Weight shows</span>
+      <span>&nbsp;</span>
+      <select id="show-date-weight-adverb" class="weight-adverb">
+        <option value="equal">equally</option>
+        <option value="half-life">by applying a half-life of</option>
+      </select>
+      <span id="show-date-half-life-span" class="unused-half-life-span weight-object show-date-weight-object">
+        &nbsp;<input id="unused-show-date-half-life-number" class="number-entry" type="number" value="365" />
+        <select id="unused-show-date-half-life-unit" class="unit-dropdown">
+          <option>days</option>
+          <option>weeks</option>
+          <option>months</option>
+          <option>years</option>
+        </select>
+      </span>
+      <span>.</span>
+      <a class="aside weight-clarification">(What is this?)</a>
     </div>
   </div>
 

@@ -649,7 +649,7 @@ html.no-js #stats-loading-message {
       pointer-events: none;
     }
 
-    .filter-sentence {
+    .filter-sentence, .weight-sentence {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
@@ -669,7 +669,7 @@ html.no-js #stats-loading-message {
         width: 18vw;
       }
 
-      .filter-object {
+      .filter-object, .weight-object {
 
         input {
           height: 4vh;
@@ -710,6 +710,22 @@ html.no-js #stats-loading-message {
 
       .filter-object.date-to {
         display: flex;
+      }
+
+      .weight-adverb {
+        width: 20vw;
+      }
+
+      a.aside {
+        font-size: 1.5vh;
+        font-style: italic;
+        margin-left: 1vh;
+        color: black;
+
+        &:hover {
+          color: $j-light-blue;
+          text-decoration: none;
+        }
       }
     }
 

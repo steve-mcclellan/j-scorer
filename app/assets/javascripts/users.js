@@ -127,8 +127,8 @@ $( ".users-show, .users-sample" ).ready( function() {
     return date1 > date2 ? date1 : date2;
   }
 
-  function updateFilterSentence(dateType) {
-    var preposition = $( "#" + dateType + "-dropdown-2" ).val();
+  function updateFilterSentence( dateType ) {
+    var preposition = $( "#" + dateType + "-preposition" ).val();
     $( "." + dateType + "-filter-object" ).hide();
     switch (preposition) {
       case "sinceBeg":
@@ -159,10 +159,25 @@ $( ".users-show, .users-sample" ).ready( function() {
     }
   }
 
-  updateFilterSentence("show-date");
-  $( "#show-date-dropdown-2" ).on( "change", function() {
-    updateFilterSentence("show-date");
+  function updateWeightSentence( dateType ) {
+    var adverb = $( "#" + dateType + "-weight-adverb" ).val();
+    $( "." + dateType + "-weight-object" ).hide();
+    switch (adverb) {
+      case "half-life":
+        $( "#" + dateType + "-half-life-span" ).show();
+        break;
+    }
+  }
+
+  updateFilterSentence( "show-date" );
+  $( "#show-date-preposition" ).on( "change", function() {
+    updateFilterSentence( "show-date" );
   });
+
+  updateWeightSentence( "show-date" );
+  $( "#show-date-weight-adverb" ).on( "change", function() {
+    updateWeightSentence( "show-date" );
+  })
 
   $showDateFromPicker.datetimepicker({
     format: "YYYY-MM-DD",
