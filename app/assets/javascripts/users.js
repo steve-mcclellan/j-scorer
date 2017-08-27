@@ -99,9 +99,11 @@ $( ".users-show, .users-sample" ).ready( function() {
     $gameTable.trigger( "update", true );
   });
 
-  $( "#update-displayed-types" ).on( "click", function() {
+  $( ".update-displayed-types" ).on( "click", function() {
+    var $bothButtons = $( ".update-displayed-types" );
     if ( !$( this ).hasClass( "disabled" ) ) {
-      $( this ).addClass( "disabled" ).html( "Updating..." );
+      $( ".update-displayed-types" ).addClass( "disabled" )
+                                    .html( "Updating..." );
       $.ajax({
         url: "/types",
         method: "PATCH",
@@ -117,9 +119,9 @@ $( ".users-show, .users-sample" ).ready( function() {
     }
   });
 
-  $( "#update-sample-types" ).on( "click", function() {
+  $( ".update-sample-types" ).on( "click", function() {
     if ( !$( this ).hasClass( "disabled" ) ) {
-      $( this ).addClass( "disabled" ).html( "Updating..." );
+      $( ".update-sample-types" ).addClass( "disabled" ).html( "Updating..." );
       var url = "/sample?types=" + getCheckedBoxes().join();
       window.location.replace( url );
     }

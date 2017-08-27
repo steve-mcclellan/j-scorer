@@ -2,7 +2,6 @@
 
   <div class="clearfix">
     <h2>By show date</h2>
-    <br />
     <div class="filter-sentence">
       <select id="unused-show-date-verb" class="display-or-hide">
         <option>Display only</option>
@@ -70,13 +69,13 @@
         (What is this?)
       </a>
     </div>
+    <br />
   </div>
 
-  <hr>
+  <hr />
 
   <div class="clearfix">
     <h2>By date played</h2>
-    <br />
     <div class="filter-sentence">
       <select id="unused-date-played-verb" class="display-or-hide">
         <option>Display only</option>
@@ -145,19 +144,21 @@
          data-target="#weight-clarification-modal">
         (What is this?)</a>
     </div>
+    <br />
   </div>
 
-  <hr>
+  <hr />
 
   <div class="text-center">
-    <button>Apply all filters</button>
+    <button class="update-<%= @sample ? 'sample' : 'displayed' %>-types">
+            Apply all filters
+    </button>
   </div>
 
-  <hr>
+  <hr />
 
   <div class="clearfix">
     <h2>By play type</h2>
-    <br />
     <table id="typeTable"
            class="tablesorter tablesorter-blue<%= ' empty' if no_games %>">
       <thead>
@@ -191,11 +192,10 @@
     </table>
   </div>
 
-  <hr>
+  <hr />
 
   <div class="text-center">
-    <button <%= 'class="disabled"'.html_safe if no_games %>
-            id="<%= @sample ? 'update-sample-types' : 'update-displayed-types' %>">
+    <button class="update-<%= @sample ? 'sample' : 'displayed' %>-types">
       Apply all filters
     </button>
   </div>

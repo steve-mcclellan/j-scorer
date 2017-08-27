@@ -32,7 +32,7 @@ class PlayTypeSummary
         ORDER BY play_type ASC
       ) q
       GROUP BY play_type
-      ORDER BY games_count DESC
+      ORDER BY games_count DESC, play_type DESC
     "
 
     @stats = ActiveRecord::Base.connection.select_all(query).to_hash

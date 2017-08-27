@@ -639,7 +639,12 @@ html.no-js #stats-loading-message {
   }
 
   #filters {
-    font-size: 3vh;
+    font-size: 1.25vw;
+
+    h2 {
+      font-size: 2vw;
+      margin-bottom: 5vh;
+    }
 
     button {
       font-size: large;
@@ -710,6 +715,7 @@ html.no-js #stats-loading-message {
 
       .filter-object.date-to {
         display: flex;
+        align-items: baseline;
       }
 
       .weight-adverb {
@@ -717,7 +723,7 @@ html.no-js #stats-loading-message {
       }
 
       a.aside {
-        font-size: 1.5vh;
+        font-size: 1.25vh;
         font-style: italic;
         margin-left: 1vh;
         color: black;
