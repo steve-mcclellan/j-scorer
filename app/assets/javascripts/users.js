@@ -23,6 +23,8 @@ $( ".users-show, .users-sample" ).ready( function() {
       $typeTable = $( "#typeTable" ),
       $showDateFromPicker = $( "#show-date-from-picker" ),
       $showDateToPicker = $( "#show-date-to-picker" ),
+      $datePlayedFromPicker = $( "#date-played-from-picker" ),
+      $datePlayedToPicker = $( "#date-played-to-picker" ),
       storedToDates = { "show-date": undefined, "date-played": undefined };
 
   // Remove these before Tablesorter can get its grubby mitts on them.
@@ -197,6 +199,36 @@ $( ".users-show, .users-sample" ).ready( function() {
 
   $showDateToPicker.on( "dp.change", function( e ) {
     $showDateFromPicker.data( "DateTimePicker" ).maxDate( e.date );
+  });
+
+  updateFilterSentence( "date-played" );
+  $( "#date-played-preposition" ).on( "change", function() {
+    updateFilterSentence( "date-played" );
+  });
+
+  updateWeightSentence( "date-played" );
+  $( "#date-played-weight-adverb" ).on( "change", function() {
+    updateWeightSentence( "date-played" );
+  })
+
+  $datePlayedFromPicker.datetimepicker({
+    format: "YYYY-MM-DD",
+    focusOnShow: false
+  });
+  $datePlayedFromPicker.data( "DateTimePicker" ).timeZone( undefined );
+
+  $datePlayedToPicker.datetimepicker({
+    format: "YYYY-MM-DD",
+    focusOnShow: false
+  });
+  $datePlayedToPicker.data( "DateTimePicker" ).timeZone( undefined );
+
+  $datePlayedFromPicker.on( "dp.change", function( e ) {
+    $datePlayedToPicker.data( "DateTimePicker" ).minDate( e.date );
+  });
+
+  $datePlayedToPicker.on( "dp.change", function( e ) {
+    $datePlayedFromPicker.data( "DateTimePicker" ).maxDate( e.date );
   });
 
   $( "#stats-loading-message" ).remove();
