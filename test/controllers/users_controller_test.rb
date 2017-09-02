@@ -34,35 +34,36 @@ class UsersControllerTest < ActionController::TestCase
     assert_response :success
   end
 
-  test 'should redirect update_user_types when not logged in' do
-    patch :update_user_types, params: { play_types: ['tenth'] }, xhr: true
+  test 'should redirect update_user_filters when not logged in' do
+    patch :update_user_filters, params: { play_types: ['tenth'] }, xhr: true
     assert_not flash.empty?
     assert_redirected_to login_url
   end
 
-  test 'should overwrite play_types on a valid request' do
+  test 'should overwrite play types on a valid update_user_filters request' do
     log_in_here(@user)
     assert_equal ['regular'], @user.play_types
-    patch :update_user_types, params: { play_types: ['tenth'] }, xhr: true
+    patch :update_user_filters, params: { play_types: ['tenth'] }, xhr: true
     assert_response :success
     assert_equal ['tenth'], @user.reload.play_types
   end
 
-  test 'should filter out invalid play_types' do
+  test 'should filter out invalid play types' do
     log_in_here(@user)
     assert_equal ['regular'], @user.play_types
     # rubocop:disable WordArray
-    patch :update_user_types, params: { play_types: ['not_a_type', 'kids'] },
-                              xhr: true
+    patch :update_user_filters, params: { play_types: ['not_a_type', 'kids'] },
+                                xhr: true
     # rubocop:enable WordArray
     assert_response :success
     assert_equal ['kids'], @user.reload.play_types
   end
 
-  test 'should fail gracefully when given invalid types' do
+  test 'should fail gracefully when update_user_filters given invalid types' do
     log_in_here(@user)
     assert_equal ['regular'], @user.play_types
-    patch :update_user_types, params: { play_types: 'not-an-array' }, xhr: true
+    patch :update_user_filters, params: { play_types: 'not-an-array' },
+                                xhr: true
     assert_response :bad_request
     assert_equal ['regular'], @user.reload.play_types
   end

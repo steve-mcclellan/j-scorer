@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :logged_in_user, only: [:show, :update_user_types]
+  before_action :logged_in_user, only: [:show, :update_user_filters]
 
   def new
     @user = User.new
@@ -35,7 +35,7 @@ class UsersController < ApplicationController
     render 'show'
   end
 
-  def update_user_types
+  def update_user_filters
     @user = current_user
     new_types = params[:play_types]
     render json: {}, status: 400 and return unless new_types.is_a? Array
@@ -52,10 +52,10 @@ class UsersController < ApplicationController
   private
 
   def set_play_types
-    @play_types = if params[:types] == 'all'
+    @play_types = if params[:play_types] == 'all'
                     PLAY_TYPES.keys
-                  elsif params[:types]
-                    params[:types].split(',')
+                  elsif params[:play_types]
+                    params[:play_types].split(',')
                   elsif !@sample
                     current_user.play_types
                   else

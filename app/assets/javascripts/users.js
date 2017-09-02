@@ -6,14 +6,21 @@ $( ".users-show, .users-sample" ).ready( function() {
   // Returns an array of play type abbreviations corresponding
   // to the checked boxes on the play types tab, or ['none']
   // if no boxes are checked.
-  function getCheckedBoxes() {
-    // TODO: Update (or supplement) this to grab date filter info, as well.
+  function getCheckedPlayTypeBoxes() {
     var types = $( "#typeTable :checked" ).map( function() {
       return this.id.slice(0, -4);
     }).get();
 
     if (types.length === 0) { return ['none']; }
     return types;
+  }
+
+  function makeFilterObject() {
+    return { play_types: getCheckedPlayTypeBoxes() };
+  }
+
+  function makeFilterQueryString() {
+    return "play_types=" + getCheckedPlayTypeBoxes().join(',');
   }
 
   $( "#stats-area" ).tabs();
@@ -99,36 +106,37 @@ $( ".users-show, .users-sample" ).ready( function() {
     $gameTable.trigger( "update", true );
   });
 
-  $( ".update-displayed-types" ).on( "click", function() {
+  $( ".update-user-filters" ).on( "click", function() {
     if ( !$( this ).hasClass( "disabled" ) ) {
-      if ( illegalHalfLife() ) { return; }
-      $( ".update-displayed-types" ).addClass( "disabled" )
-                                    .html( "Updating..." );
+      if ( illegalValue() ) { return; }
+      $( ".update-user-filters" ).addClass( "disabled" )
+                                 .html( "Updating..." );
       $.ajax({
-        url: "/types",
+        url: "/filters",
         method: "PATCH",
-        data: { play_types: getCheckedBoxes() },
+        data: makeFilterObject(),
         dataType: "json",
         success: function() { window.location.replace( "/stats" ); },
         error: function() {
-          alert("Oops. Something went wrong.");
-          $( "#update-displayed-types" ).removeClass( "disabled" )
-                                        .html( "Update stats" );
+          alert( "Oops. Something went wrong." );
+          $( "#update-user-filters" ).removeClass( "disabled" )
+                                     .html( "Update stats" );
         }
       });
     }
   });
 
-  $( ".update-sample-types" ).on( "click", function() {
+  $( ".update-sample-filters" ).on( "click", function() {
     if ( !$( this ).hasClass( "disabled" ) ) {
-      if ( illegalHalfLife() ) { return; }
-      $( ".update-sample-types" ).addClass( "disabled" ).html( "Updating..." );
-      var url = "/sample?types=" + getCheckedBoxes().join();
+      if ( illegalValue() ) { return; }
+      $( ".update-sample-filters" ).addClass( "disabled" )
+                                   .html( "Updating..." );
+      var url = "/sample?" + makeFilterQueryString();
       window.location.replace( url );
     }
   });
 
-  function illegalHalfLife() {
+  function illegalValue() {
     if ( $( "#show-date-adverb" ).val() === "half-life" &&
           parseFloat( $( "#show-date-half-life-days" ).val() ) === 0 ) {
       alert( "Half-life cannot be zero." );
