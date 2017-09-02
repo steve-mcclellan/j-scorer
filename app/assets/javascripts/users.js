@@ -129,13 +129,13 @@ $( ".users-show, .users-sample" ).ready( function() {
   });
 
   function illegalHalfLife() {
-    if ( $( "#show-date-weight-adverb" ).val() === "half-life" &&
-          parseFloat( $( "#show-date-half-life-number" ).val() ) === 0 ) {
+    if ( $( "#show-date-adverb" ).val() === "half-life" &&
+          parseFloat( $( "#show-date-half-life-days" ).val() ) === 0 ) {
       alert( "Half-life cannot be zero." );
       return true;
     }
-    if ( $( "#date-played-weight-adverb" ).val() === "half-life" &&
-        parseFloat( $( "#date-played-half-life-number" ).val() ) === 0 ) {
+    if ( $( "#date-played-adverb" ).val() === "half-life" &&
+        parseFloat( $( "#date-played-half-life-days" ).val() ) === 0 ) {
       alert( "Half-life cannot be zero." );
       return true;
     }
@@ -154,6 +154,17 @@ $( ".users-show, .users-sample" ).ready( function() {
         $( "#" + dateType + "-beginning-span" ).show();
         break;
       case "last":
+        var $options = $( "#" + dateType + "-last-unit option" ),
+            num = parseFloat( $( "#" + dateType + "-last-number" ).val() );
+        if ( num === 1 && $options.text().slice(-1) === "s" ) {
+          $options.text( function( _, prevText ) {
+            return prevText.slice(0, -1);
+          });
+        } else if ( num !== 1 && $options.text().slice(-1) !== "s" ) {
+          $options.text( function( _, prevText ) {
+            return prevText + "s";
+          });
+        }
         $( "#" + dateType + "-last-span" ).show();
         break;
       case "since":
@@ -179,22 +190,25 @@ $( ".users-show, .users-sample" ).ready( function() {
   }
 
   function updateWeightSentence( dateType ) {
-    var adverb = $( "#" + dateType + "-weight-adverb" ).val();
+    var adverb = $( "#" + dateType + "-adverb" ).val();
     $( "." + dateType + "-weight-object" ).hide();
     switch (adverb) {
       case "half-life":
+        var num = parseFloat( $( "#" + dateType + "-half-life-days" ).val() ),
+            pluralizedDay = ( num === 1 ? "day" : "days" );
+        $( "#" + dateType + "-half-life-unit" ).text( pluralizedDay );
         $( "#" + dateType + "-half-life-span" ).show();
         break;
     }
   }
 
   updateFilterSentence( "show-date" );
-  $( "#show-date-preposition" ).on( "change", function() {
+  $( "#show-date-preposition, #show-date-last-number" ).change( function() {
     updateFilterSentence( "show-date" );
   });
 
   updateWeightSentence( "show-date" );
-  $( "#show-date-weight-adverb" ).on( "change", function() {
+  $( "#show-date-adverb, #show-date-half-life-days" ).change( function() {
     updateWeightSentence( "show-date" );
   })
 
@@ -219,14 +233,14 @@ $( ".users-show, .users-sample" ).ready( function() {
   });
 
   updateFilterSentence( "date-played" );
-  $( "#date-played-preposition" ).on( "change", function() {
+  $( "#date-played-preposition, #date-played-last-number" ).change( function() {
     updateFilterSentence( "date-played" );
   });
 
   updateWeightSentence( "date-played" );
-  $( "#date-played-weight-adverb" ).on( "change", function() {
+  $( "#date-played-adverb, #date-played-half-life-days" ).change( function() {
     updateWeightSentence( "date-played" );
-  })
+  });
 
   $datePlayedFromPicker.datetimepicker({
     format: "YYYY-MM-DD",
