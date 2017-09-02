@@ -45,7 +45,7 @@ class UsersController < ApplicationController
     if @user.update(play_types: new_types)
       render json: { success: true }
     else
-      render json: @user.errors, status: 400
+      render json: @user.errors, status: 500
     end
   end
 
