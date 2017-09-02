@@ -53,7 +53,7 @@ entirely, fantastic!
 
 #### If you're an experienced open-source contributor
 
-You know the drill. Fork, branch, pull request, ???, profit!.
+You know the drill. Fork, branch, pull request, ???, profit!
 
 #### If you're new to this sort of thing
 
