@@ -15,12 +15,139 @@ $( ".users-show, .users-sample" ).ready( function() {
     return types;
   }
 
+  function getObjectFromSentences( dateType ) {
+    var result = {};
+    if ( $( "#" + dateType + "-verb" ).val() === "hide" ) {
+      result.reverse = true;
+    }
+    result.preposition = $( "#" + dateType + "-preposition" ).val();
+    switch (result.preposition) {
+      case "sinceBeg":
+        var beginDate = $( "#" + dateType + "-beginning-dropdown" ).val();
+        if ( beginDate ) { result.beginning = beginDate; }
+        break;
+      case "inLast":
+        result.last_number = $( "#" + dateType + "-last-number" ).val();
+        result.last_unit = $( "#" + dateType + "-last-unit" ).val();
+        break;
+      case "since":
+        result.from = $( "#" + dateType + "-from input" ).val();
+        break;
+      case "from":
+        result.from = $( "#" + dateType + "-from input" ).val();
+        result.to = $( "#" + dateType + "-to input" ).val();
+        break;
+    }
+    var weight = $( "#" + dateType + "-adverb" ).val();
+    if ( weight ) {
+      result.weight = weight;
+      result.half_life = $( "#" + dateType + "-half-life-days" ).val();
+    }
+    return result;
+  }
+
+  function makeDateFilterObject() {
+    result = {};
+    var showDateObject = getObjectFromSentences( "show-date" ),
+        datePlayedObject = getObjectFromSentences( "date-played" );
+    for ( var key in showDateObject ) {
+      result["show_date_" + key] = showDateObject[key];
+    }
+    for ( key in datePlayedObject ) {
+      result["date_played_" + key] = datePlayedObject[key];
+    }
+    return result
+  }
+
   function makeFilterObject() {
-    return { play_types: getCheckedPlayTypeBoxes() };
+    var result = $.extend( makeDateFilterObject(),
+                           { play_types: getCheckedPlayTypeBoxes() } );
+
+    // console.log( "Filter object: ");
+    // for (var k in result) {
+    //   console.log("    " + k + ": " + result[k]);
+    // }
+    // alert('hi');
+    return result;
   }
 
   function makeFilterQueryString() {
-    return "play_types=" + getCheckedPlayTypeBoxes().join(',');
+    return $.param( makeDateFilterObject() ) +
+           "&play_types=" + getCheckedPlayTypeBoxes().join( ',' );
+  }
+
+  function illegalValue() {
+    if ( $( "#show-date-adverb" ).val() === "half-life" &&
+          parseFloat( $( "#show-date-half-life-days" ).val() ) === 0 ) {
+      alert( "Half-life cannot be zero." );
+      return true;
+    }
+    if ( $( "#date-played-adverb" ).val() === "half-life" &&
+        parseFloat( $( "#date-played-half-life-days" ).val() ) === 0 ) {
+      alert( "Half-life cannot be zero." );
+      return true;
+    }
+    return false;
+  }
+
+  function laterDate( date1, date2 ) {
+    return date1 > date2 ? date1 : date2;
+  }
+
+  function updateFilterSentence( dateType ) {
+    var preposition = $( "#" + dateType + "-preposition" ).val();
+    $( "." + dateType + "-filter-object" ).hide();
+    switch (preposition) {
+      case "sinceBeg":
+        $( "#" + dateType + "-beginning-span" ).show();
+        break;
+      case "inLast":
+        var $options = $( "#" + dateType + "-last-unit option" ),
+            num = parseFloat( $( "#" + dateType + "-last-number" ).val() );
+        if ( num === 1 && $options.text().slice(-1) === "s" ) {
+          $options.text( function( _, prevText ) {
+            return prevText.slice(0, -1);
+          });
+        } else if ( num !== 1 && $options.text().slice(-1) !== "s" ) {
+          $options.text( function( _, prevText ) {
+            return prevText + "s";
+          });
+        }
+        $( "#" + dateType + "-last-span" ).show();
+        break;
+      case "since":
+        if (!storedToDates[dateType]) {
+          var $toDatePicker = $( "#" + dateType + "-to-picker" );
+          storedToDates[dateType] = $toDatePicker.find( "input" ).val();
+          $toDatePicker.data( "DateTimePicker" ).date("9999-12-31");
+        }
+        $( "#" + dateType + "-from" ).show();
+        break;
+      case "from":
+        if (storedToDates[dateType]) {
+          var $toDatePicker = $( "#" + dateType + "-to-picker" ),
+              fromDate = $( "#" + dateType + "-from-picker input" ).val(),
+              newToDate = laterDate( fromDate, storedToDates[dateType] );
+          $toDatePicker.data( "DateTimePicker" ).date( newToDate );
+          storedToDates[dateType] = undefined;
+        }
+        $( "#" + dateType + "-from" ).show();
+        $( "#" + dateType + "-to" ).show();
+        break;
+    }
+  }
+
+  function updateWeightSentence( dateType ) {
+    var adverb = $( "#" + dateType + "-adverb" ).val();
+    $( "." + dateType + "-weight-object" ).hide();
+    switch (adverb) {
+      case "half_life":
+        var num = parseFloat( $( "#" + dateType + "-half-life-days" ).val() ),
+            pluralizedDay = ( num === 1 ? "day" : "days" );
+        $( "#" + dateType + "-half-life-unit" ).text( pluralizedDay );
+        $( "#" + dateType + "-half-life-span" ).show();
+        break;
+    }
   }
 
   $( "#stats-area" ).tabs();
@@ -135,80 +262,6 @@ $( ".users-show, .users-sample" ).ready( function() {
       window.location.replace( url );
     }
   });
-
-  function illegalValue() {
-    if ( $( "#show-date-adverb" ).val() === "half-life" &&
-          parseFloat( $( "#show-date-half-life-days" ).val() ) === 0 ) {
-      alert( "Half-life cannot be zero." );
-      return true;
-    }
-    if ( $( "#date-played-adverb" ).val() === "half-life" &&
-        parseFloat( $( "#date-played-half-life-days" ).val() ) === 0 ) {
-      alert( "Half-life cannot be zero." );
-      return true;
-    }
-    return false;
-  }
-
-  function laterDate( date1, date2 ) {
-    return date1 > date2 ? date1 : date2;
-  }
-
-  function updateFilterSentence( dateType ) {
-    var preposition = $( "#" + dateType + "-preposition" ).val();
-    $( "." + dateType + "-filter-object" ).hide();
-    switch (preposition) {
-      case "sinceBeg":
-        $( "#" + dateType + "-beginning-span" ).show();
-        break;
-      case "last":
-        var $options = $( "#" + dateType + "-last-unit option" ),
-            num = parseFloat( $( "#" + dateType + "-last-number" ).val() );
-        if ( num === 1 && $options.text().slice(-1) === "s" ) {
-          $options.text( function( _, prevText ) {
-            return prevText.slice(0, -1);
-          });
-        } else if ( num !== 1 && $options.text().slice(-1) !== "s" ) {
-          $options.text( function( _, prevText ) {
-            return prevText + "s";
-          });
-        }
-        $( "#" + dateType + "-last-span" ).show();
-        break;
-      case "since":
-        if (!storedToDates[dateType]) {
-          var $toDatePicker = $( "#" + dateType + "-to-picker" );
-          storedToDates[dateType] = $toDatePicker.find( "input" ).val();
-          $toDatePicker.data( "DateTimePicker" ).date("9999-12-31");
-        }
-        $( "#" + dateType + "-from" ).show();
-        break;
-      case "from":
-        if (storedToDates[dateType]) {
-          var $toDatePicker = $( "#" + dateType + "-to-picker" ),
-              fromDate = $( "#" + dateType + "-from-picker input" ).val(),
-              newToDate = laterDate( fromDate, storedToDates[dateType] );
-          $toDatePicker.data( "DateTimePicker" ).date( newToDate );
-          storedToDates[dateType] = undefined;
-        }
-        $( "#" + dateType + "-from" ).show();
-        $( "#" + dateType + "-to" ).show();
-        break;
-    }
-  }
-
-  function updateWeightSentence( dateType ) {
-    var adverb = $( "#" + dateType + "-adverb" ).val();
-    $( "." + dateType + "-weight-object" ).hide();
-    switch (adverb) {
-      case "half-life":
-        var num = parseFloat( $( "#" + dateType + "-half-life-days" ).val() ),
-            pluralizedDay = ( num === 1 ? "day" : "days" );
-        $( "#" + dateType + "-half-life-unit" ).text( pluralizedDay );
-        $( "#" + dateType + "-half-life-span" ).show();
-        break;
-    }
-  }
 
   updateFilterSentence( "show-date" );
   $( "#show-date-preposition, #show-date-last-number" ).change( function() {

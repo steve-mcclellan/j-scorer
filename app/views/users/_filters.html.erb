@@ -3,37 +3,37 @@
   <div class="clearfix">
     <h2>By show date</h2>
     <div class="filter-sentence">
-      <select id="unused-show-date-verb" class="display-or-hide">
-        <option>Display only</option>
-        <option>Hide all</option>
+      <select id="show-date-verb" class="display-or-hide">
+        <option value="show">Display only</option>
+        <option value="hide">Hide all</option>
       </select>
       <span>&nbsp;</span>
       <span>stats from shows aired</span>
       <span>&nbsp;</span>
       <select name="show-date-preposition" id="show-date-preposition" class="filter-preposition">
         <option value="sinceBeg">since the beginning of</option>
-        <option value="last">in the last</option>
+        <option value="inLast">in the last</option>
         <option value="since">since</option>
         <option value="from">from</option>
       </select>
       <span>&nbsp;</span>
       <span id="show-date-beginning-span" class="filter-object show-date-filter-object">
-        <select id="unused-show-date-beginning-dropdown" class="beginning-dropdown">
-          <option>time</option>
-          <option>Season 34 (2017-09-11)</option>
-          <option>Season 33 (2016-09-12)</option>
-          <option>Season 32 (2015-09-14)</option>
-          <option>Season 31 (2014-09-15)</option>
-          <option>Season 30 (2013-09-16)</option>
+        <select id="show-date-beginning-dropdown" class="beginning-dropdown">
+          <option value="">time</option>
+          <option value="2017-09-11">Season 34 (2017-09-11)</option>
+          <option value="2016-09-12">Season 33 (2016-09-12)</option>
+          <option value="2015-09-14">Season 32 (2015-09-14)</option>
+          <option value="2014-09-15">Season 31 (2014-09-15)</option>
+          <option value="2013-09-16">Season 30 (2013-09-16)</option>
         </select>
       </span>
       <span id="show-date-last-span" class="filter-object show-date-filter-object">
         <input id="show-date-last-number" class="number-entry" type="number" value="365" />
         <select id="show-date-last-unit" class="unit-dropdown">
-          <option>days</option>
-          <option>weeks</option>
-          <option>months</option>
-          <option>years</option>
+          <option value="d">days</option>
+          <option value="w">weeks</option>
+          <option value="m">months</option>
+          <option value="y">years</option>
         </select>
       </span>
       <span id="show-date-from" class="filter-object show-date-filter-object">
@@ -60,8 +60,8 @@
       <span>Weight shows</span>
       <span>&nbsp;</span>
       <select id="show-date-adverb" class="weight-adverb">
-        <option value="equal">equally</option>
-        <option value="half-life">by applying a half-life of</option>
+        <option value="">equally</option>
+        <option value="half_life">by applying a half-life of</option>
       </select>
       <span id="show-date-half-life-span" class="unused-half-life-span weight-object show-date-weight-object">
         &nbsp;<input id="show-date-half-life-days" class="number-entry" type="number" value="365" />
@@ -80,37 +80,37 @@
   <div class="clearfix">
     <h2>By date played</h2>
     <div class="filter-sentence">
-      <select id="unused-date-played-verb" class="display-or-hide">
-        <option>Display only</option>
-        <option>Hide all</option>
+      <select id="date-played-verb" class="display-or-hide">
+        <option value="show">Display only</option>
+        <option value="hide">Hide all</option>
       </select>
       <span>&nbsp;</span>
       <span>stats from games played</span>
       <span>&nbsp;</span>
       <select name="date-played-preposition" id="date-played-preposition" class="filter-preposition">
         <option value="sinceBeg">since the beginning of</option>
-        <option value="last">in the last</option>
+        <option value="inLast">in the last</option>
         <option value="since">since</option>
         <option value="from">from</option>
       </select>
       <span>&nbsp;</span>
       <span id="date-played-beginning-span" class="filter-object date-played-filter-object">
-        <select id="unused-date-played-beginning-dropdown" class="beginning-dropdown">
-          <option>time</option>
-          <option>Season 34 (2017-09-11)</option>
-          <option>Season 33 (2016-09-12)</option>
-          <option>Season 32 (2015-09-14)</option>
-          <option>Season 31 (2014-09-15)</option>
-          <option>Season 30 (2013-09-16)</option>
+        <select id="date-played-beginning-dropdown" class="beginning-dropdown">
+          <option value="">time</option>
+          <option value="2017-09-11">Season 34 (2017-09-11)</option>
+          <option value="2016-09-12">Season 33 (2016-09-12)</option>
+          <option value="2015-09-14">Season 32 (2015-09-14)</option>
+          <option value="2014-09-15">Season 31 (2014-09-15)</option>
+          <option value="2013-09-16">Season 30 (2013-09-16)</option>
         </select>
       </span>
       <span id="date-played-last-span" class="filter-object date-played-filter-object">
         <input id="date-played-last-number" class="number-entry" type="number" value="365" />
         <select id="date-played-last-unit" class="unit-dropdown">
-          <option>days</option>
-          <option>weeks</option>
-          <option>months</option>
-          <option>years</option>
+          <option value="d">days</option>
+          <option value="w">weeks</option>
+          <option value="m">months</option>
+          <option value="y">years</option>
         </select>
       </span>
       <span id="date-played-from" class="filter-object date-played-filter-object">
@@ -137,8 +137,8 @@
       <span>Weight games</span>
       <span>&nbsp;</span>
       <select id="date-played-adverb" class="weight-adverb">
-        <option value="equal">equally</option>
-        <option value="half-life">by applying a half-life of</option>
+        <option value="">equally</option>
+        <option value="half_life">by applying a half-life of</option>
       </select>
       <span id="date-played-half-life-span" class="unused-half-life-span weight-object date-played-weight-object">
         &nbsp;<input id="date-played-half-life-days" class="number-entry" type="number" value="365" />
@@ -156,8 +156,8 @@
   <hr />
 
   <div class="text-center">
-    <button class="update-<%= @sample ? 'sample' : 'user' %>-filters">
-            Apply all filters
+    <button type="button" class="update-<%= @sample ? 'sample' : 'user' %>-filters">
+      Apply all filters
     </button>
   </div>
 
@@ -201,7 +201,7 @@
   <hr />
 
   <div class="text-center">
-    <button class="update-<%= @sample ? 'sample' : 'displayed' %>-types">
+    <button type="button" class="update-<%= @sample ? 'sample' : 'user' %>-filters">
       Apply all filters
     </button>
   </div>
