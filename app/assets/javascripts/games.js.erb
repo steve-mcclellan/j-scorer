@@ -1023,12 +1023,16 @@ $( ".games-game" ).ready( function() {
 
   $showDatePicker.datetimepicker({
     format: "YYYY-MM-DD",
+    minDate: "0001-01-01",
+    maxDate: "9999-12-31",
     focusOnShow: false
   });
   $showDatePicker.data( "DateTimePicker" ).timeZone( undefined );
 
   $datePlayedPicker.datetimepicker({
     format: "YYYY-MM-DD h:mma",
+    minDate: "0001-01-01 00:00",
+    maxDate: "9999-12-31 23:59",
     showClose: true,
     focusOnShow: false
   });
@@ -1036,6 +1040,8 @@ $( ".games-game" ).ready( function() {
 
   $changeShowDatePicker.datetimepicker({
     format: "YYYY-MM-DD",
+    minDate: "0001-01-01",
+    maxDate: "9999-12-31",
     focusOnShow: false
   });
   $changeShowDatePicker.data( "DateTimePicker" ).timeZone( undefined );

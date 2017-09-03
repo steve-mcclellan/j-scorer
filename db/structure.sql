@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.5.5
--- Dumped by pg_dump version 9.5.5
+-- Dumped from database version 9.5.8
+-- Dumped by pg_dump version 9.5.8
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -27,11 +27,37 @@ CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 
+--
+-- Name: tablefunc; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS tablefunc WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION tablefunc; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION tablefunc IS 'functions that manipulate whole tables, including crosstab';
+
+
 SET search_path = public, pg_catalog;
 
 SET default_tablespace = '';
 
 SET default_with_oids = false;
+
+--
+-- Name: ar_internal_metadata; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE ar_internal_metadata (
+    key character varying NOT NULL,
+    value character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
 
 --
 -- Name: category_topics; Type: TABLE; Schema: public; Owner: -
@@ -237,7 +263,25 @@ CREATE TABLE users (
     remember_digest character varying,
     reset_digest character varying,
     reset_sent_at timestamp without time zone,
-    play_types character varying[] DEFAULT '{regular}'::character varying[]
+    play_types character varying[] DEFAULT '{regular}'::character varying[],
+    show_date_reverse boolean,
+    show_date_preposition character varying(10),
+    show_date_beginning date,
+    show_date_last_number double precision,
+    show_date_last_unit character varying(1),
+    show_date_from date,
+    show_date_to date,
+    show_date_weight character varying(10),
+    show_date_half_life double precision,
+    date_played_reverse boolean,
+    date_played_preposition character varying(10),
+    date_played_beginning date,
+    date_played_last_number double precision,
+    date_played_last_unit character varying(1),
+    date_played_from date,
+    date_played_to date,
+    date_played_weight character varying(10),
+    date_played_half_life double precision
 );
 
 
@@ -300,6 +344,14 @@ ALTER TABLE ONLY topics ALTER COLUMN id SET DEFAULT nextval('topics_id_seq'::reg
 --
 
 ALTER TABLE ONLY users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regclass);
+
+
+--
+-- Name: ar_internal_metadata_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY ar_internal_metadata
+    ADD CONSTRAINT ar_internal_metadata_pkey PRIMARY KEY (key);
 
 
 --
@@ -486,67 +538,39 @@ ALTER TABLE ONLY finals
 
 SET search_path TO "$user", public;
 
-INSERT INTO schema_migrations (version) VALUES ('20160507203334');
+INSERT INTO schema_migrations (version) VALUES
+('20160507203334'),
+('20160507212032'),
+('20160507212809'),
+('20160508154744'),
+('20160509215159'),
+('20160510211659'),
+('20160510212934'),
+('20160512183448'),
+('20160512191708'),
+('20160512192635'),
+('20160512193040'),
+('20160512193858'),
+('20160512194133'),
+('20160512195133'),
+('20160513120011'),
+('20160601141915'),
+('20160601144446'),
+('20160601170600'),
+('20160601170801'),
+('20160601194120'),
+('20160601194627'),
+('20160601194754'),
+('20160623193817'),
+('20160701212322'),
+('20160701212342'),
+('20160703132507'),
+('20160705211103'),
+('20160709133813'),
+('20161031155918'),
+('20161116170851'),
+('20161116205246'),
+('20161116222030'),
+('20170903154919');
 
-INSERT INTO schema_migrations (version) VALUES ('20160507212032');
-
-INSERT INTO schema_migrations (version) VALUES ('20160507212809');
-
-INSERT INTO schema_migrations (version) VALUES ('20160508154744');
-
-INSERT INTO schema_migrations (version) VALUES ('20160509215159');
-
-INSERT INTO schema_migrations (version) VALUES ('20160510211659');
-
-INSERT INTO schema_migrations (version) VALUES ('20160510212934');
-
-INSERT INTO schema_migrations (version) VALUES ('20160512183448');
-
-INSERT INTO schema_migrations (version) VALUES ('20160512191708');
-
-INSERT INTO schema_migrations (version) VALUES ('20160512192635');
-
-INSERT INTO schema_migrations (version) VALUES ('20160512193040');
-
-INSERT INTO schema_migrations (version) VALUES ('20160512193858');
-
-INSERT INTO schema_migrations (version) VALUES ('20160512194133');
-
-INSERT INTO schema_migrations (version) VALUES ('20160512195133');
-
-INSERT INTO schema_migrations (version) VALUES ('20160513120011');
-
-INSERT INTO schema_migrations (version) VALUES ('20160601141915');
-
-INSERT INTO schema_migrations (version) VALUES ('20160601144446');
-
-INSERT INTO schema_migrations (version) VALUES ('20160601170600');
-
-INSERT INTO schema_migrations (version) VALUES ('20160601170801');
-
-INSERT INTO schema_migrations (version) VALUES ('20160601194120');
-
-INSERT INTO schema_migrations (version) VALUES ('20160601194627');
-
-INSERT INTO schema_migrations (version) VALUES ('20160601194754');
-
-INSERT INTO schema_migrations (version) VALUES ('20160623193817');
-
-INSERT INTO schema_migrations (version) VALUES ('20160701212322');
-
-INSERT INTO schema_migrations (version) VALUES ('20160701212342');
-
-INSERT INTO schema_migrations (version) VALUES ('20160703132507');
-
-INSERT INTO schema_migrations (version) VALUES ('20160705211103');
-
-INSERT INTO schema_migrations (version) VALUES ('20160709133813');
-
-INSERT INTO schema_migrations (version) VALUES ('20161031155918');
-
-INSERT INTO schema_migrations (version) VALUES ('20161116170851');
-
-INSERT INTO schema_migrations (version) VALUES ('20161116205246');
-
-INSERT INTO schema_migrations (version) VALUES ('20161116222030');
 

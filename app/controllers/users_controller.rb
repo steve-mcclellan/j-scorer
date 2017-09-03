@@ -42,7 +42,7 @@ class UsersController < ApplicationController
 
     new_types.select! { |type| VALID_TYPE_INPUTS.include?(type) }
 
-    if @user.update(play_types: new_types)
+    if @user.update(user_filter_params)
       render json: { success: true }
     else
       render json: @user.errors, status: 500
@@ -52,12 +52,12 @@ class UsersController < ApplicationController
   private
 
   def set_play_types
-    @play_types = if params[:play_types] == 'all'
+    @play_types = if !@sample
+                    current_user.play_types
+                  elsif params[:play_types] == 'all'
                     PLAY_TYPES.keys
                   elsif params[:play_types]
                     params[:play_types].split(',')
-                  elsif !@sample
-                    current_user.play_types
                   else
                     ['regular']
                   end.select { |type| VALID_TYPE_INPUTS.include?(type) }
@@ -74,5 +74,17 @@ class UsersController < ApplicationController
 
   def user_params
     params.require(:user).permit(:email, :password, :password_confirmation)
+  end
+
+  def user_filter_params
+    params.permit(
+      :show_date_reverse, :show_date_preposition, :show_date_beginning,
+      :show_date_last_number, :show_date_last_unit, :show_date_from,
+      :show_date_to, :show_date_weight, :show_date_half_life,
+      :date_played_reverse, :date_played_preposition, :date_played_beginning,
+      :date_played_last_number, :date_played_last_unit, :date_played_from,
+      :date_played_to, :date_played_weight, :date_played_half_life,
+      play_types: []
+    )
   end
 end

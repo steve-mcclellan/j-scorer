@@ -17,14 +17,12 @@ $( ".users-show, .users-sample" ).ready( function() {
 
   function getObjectFromSentences( dateType ) {
     var result = {};
-    if ( $( "#" + dateType + "-verb" ).val() === "hide" ) {
-      result.reverse = true;
-    }
+    result.reverse = ( $( "#" + dateType + "-verb" ).val() === "hide" );
     result.preposition = $( "#" + dateType + "-preposition" ).val();
     switch (result.preposition) {
       case "sinceBeg":
         var beginDate = $( "#" + dateType + "-beginning-dropdown" ).val();
-        if ( beginDate ) { result.beginning = beginDate; }
+        result.beginning = ( beginDate || null );
         break;
       case "inLast":
         result.last_number = $( "#" + dateType + "-last-number" ).val();
@@ -38,9 +36,8 @@ $( ".users-show, .users-sample" ).ready( function() {
         result.to = $( "#" + dateType + "-to input" ).val();
         break;
     }
-    var weight = $( "#" + dateType + "-adverb" ).val();
-    if ( weight ) {
-      result.weight = weight;
+    result.weight = $( "#" + dateType + "-adverb" ).val();
+    if ( result.weight === "half-life" ) {
       result.half_life = $( "#" + dateType + "-half-life-days" ).val();
     }
     return result;
@@ -60,15 +57,8 @@ $( ".users-show, .users-sample" ).ready( function() {
   }
 
   function makeFilterObject() {
-    var result = $.extend( makeDateFilterObject(),
-                           { play_types: getCheckedPlayTypeBoxes() } );
-
-    // console.log( "Filter object: ");
-    // for (var k in result) {
-    //   console.log("    " + k + ": " + result[k]);
-    // }
-    // alert('hi');
-    return result;
+    return $.extend( makeDateFilterObject(),
+                     { play_types: getCheckedPlayTypeBoxes() } );
   }
 
   function makeFilterQueryString() {
@@ -141,7 +131,7 @@ $( ".users-show, .users-sample" ).ready( function() {
     var adverb = $( "#" + dateType + "-adverb" ).val();
     $( "." + dateType + "-weight-object" ).hide();
     switch (adverb) {
-      case "half_life":
+      case "half-life":
         var num = parseFloat( $( "#" + dateType + "-half-life-days" ).val() ),
             pluralizedDay = ( num === 1 ? "day" : "days" );
         $( "#" + dateType + "-half-life-unit" ).text( pluralizedDay );
@@ -244,9 +234,12 @@ $( ".users-show, .users-sample" ).ready( function() {
         data: makeFilterObject(),
         dataType: "json",
         success: function() { window.location.replace( "/stats" ); },
-        error: function() {
-          alert( "Oops. Something went wrong." );
-          $( "#update-user-filters" ).removeClass( "disabled" )
+        error: function( data ) {
+          console.log( "Error details:" );
+          console.log( data.responseJSON );
+          alert( "Oops. Something went wrong. If this persists, please " +
+                 "email <%= ENV['SUPPORT_ADDRESS'] %>." );
+          $( ".update-user-filters" ).removeClass( "disabled" )
                                      .html( "Update stats" );
         }
       });
@@ -275,12 +268,14 @@ $( ".users-show, .users-sample" ).ready( function() {
 
   $showDateFromPicker.datetimepicker({
     format: "YYYY-MM-DD",
+    minDate: "0001-01-01",
     focusOnShow: false
   });
   $showDateFromPicker.data( "DateTimePicker" ).timeZone( undefined );
 
   $showDateToPicker.datetimepicker({
     format: "YYYY-MM-DD",
+    maxDate: "9999-12-31",
     focusOnShow: false
   });
   $showDateToPicker.data( "DateTimePicker" ).timeZone( undefined );
@@ -305,12 +300,14 @@ $( ".users-show, .users-sample" ).ready( function() {
 
   $datePlayedFromPicker.datetimepicker({
     format: "YYYY-MM-DD",
+    minDate: "0001-01-01",
     focusOnShow: false
   });
   $datePlayedFromPicker.data( "DateTimePicker" ).timeZone( undefined );
 
   $datePlayedToPicker.datetimepicker({
     format: "YYYY-MM-DD",
+    maxDate: "9999-12-31",
     focusOnShow: false
   });
   $datePlayedToPicker.data( "DateTimePicker" ).timeZone( undefined );
