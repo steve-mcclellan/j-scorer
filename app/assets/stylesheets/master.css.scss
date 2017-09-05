@@ -842,7 +842,8 @@ html.no-js #stats-loading-message {
             width: 5vh;
             height: 5vh;
             cursor: pointer;
-            -moz-appearance: none;
+            /* TODO: Find a better fix for the tiny checkbox in Firefox */
+            /* -moz-appearance: none; */
             margin: 0;
           }
 
