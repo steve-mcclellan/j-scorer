@@ -147,7 +147,8 @@ CREATE TABLE games (
     dd1_result integer,
     dd2a_result integer,
     dd2b_result integer,
-    rerun boolean DEFAULT false NOT NULL
+    rerun boolean DEFAULT false NOT NULL,
+    game_id character varying NOT NULL
 );
 
 
@@ -428,6 +429,13 @@ CREATE INDEX index_games_on_user_id_and_date_played ON games USING btree (user_i
 
 
 --
+-- Name: index_games_on_user_id_and_game_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_games_on_user_id_and_game_id ON games USING btree (user_id, game_id);
+
+
+--
 -- Name: index_games_on_user_id_and_play_type; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -556,6 +564,7 @@ INSERT INTO schema_migrations (version) VALUES
 ('20161116222030'),
 ('20170909161948'),
 ('20170909163110'),
-('20170909163655');
+('20170909163655'),
+('20170909171911');
 
 

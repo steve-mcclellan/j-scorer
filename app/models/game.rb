@@ -10,9 +10,11 @@ class Game < ApplicationRecord
   default_scope { order(date_played: :desc) }
 
   validates :user, presence: true
-  validates :show_date, presence: true, uniqueness: { scope: :user_id }
+  validates :show_date, presence: true
+  validates :game_id, presence: true, uniqueness: { scope: :user_id }
   validates :play_type, presence: true, inclusion: { in: PLAY_TYPES.keys }
 
+  before_validation :set_game_id
   after_save :set_dd_results
 
   default_values show_date:   -> { Time.zone.today },
@@ -66,5 +68,16 @@ class Game < ApplicationRecord
       dd2a_result: dd_summary[:round_two][0] || 0,
       dd2b_result: dd_summary[:round_two][1] || 0
     )
+  end
+
+  # If the show date is unused as a game_id, use that. Otherwise, try the show
+  # date with "-1" appended. If that's taken, try "-2", ad infinitum.
+  def set_game_id
+    return if game_id
+
+    0.upto(Float::INFINITY) do |num|
+      g_id = (num.zero? ? show_date.to_s : "#{show_date}-#{num}")
+      self.game_id = g_id and break if user.games.find_by(game_id: g_id).nil?
+    end
   end
 end
