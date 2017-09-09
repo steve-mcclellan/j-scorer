@@ -65,6 +65,10 @@ class User < ApplicationRecord
     games.find_by(show_date: date).present?
   end
 
+  def date_filter_preferences
+    @dfp ||= Hash[DATE_FILTER_FIELDS.map { |field| [field, send(field)] }]
+  end
+
   def multi_game_summary(play_types)
     @mgs ||= MultiGameSummary.new(self, play_types).stats
   end

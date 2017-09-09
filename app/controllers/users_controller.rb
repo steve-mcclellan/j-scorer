@@ -22,6 +22,7 @@ class UsersController < ApplicationController
     @sample = false
 
     set_play_types
+    set_date_filters
     set_stats_vars
   end
 
@@ -31,6 +32,7 @@ class UsersController < ApplicationController
     @sample = true
 
     set_play_types
+    set_date_filters
     set_stats_vars
     render 'show'
   end
@@ -42,7 +44,7 @@ class UsersController < ApplicationController
 
     new_types.select! { |type| VALID_TYPE_INPUTS.include?(type) }
 
-    if @user.update(user_filter_params)
+    if @user.update(params.permit(*DATE_FILTER_FIELDS, play_types: []))
       render json: { success: true }
     else
       render json: @user.errors, status: 500
@@ -63,6 +65,12 @@ class UsersController < ApplicationController
                   end.select { |type| VALID_TYPE_INPUTS.include?(type) }
   end
 
+  def set_date_filters
+    @date_filters = if !@sample
+                      current_user.date_filter_preferences
+                    end
+  end
+
   def set_stats_vars
     @summary = @user.multi_game_summary(@play_types)
     @percentile_stats = @user.percentile_report(@play_types)
@@ -74,17 +82,5 @@ class UsersController < ApplicationController
 
   def user_params
     params.require(:user).permit(:email, :password, :password_confirmation)
-  end
-
-  def user_filter_params
-    params.permit(
-      :show_date_reverse, :show_date_preposition, :show_date_beginning,
-      :show_date_last_number, :show_date_last_unit, :show_date_from,
-      :show_date_to, :show_date_weight, :show_date_half_life,
-      :date_played_reverse, :date_played_preposition, :date_played_beginning,
-      :date_played_last_number, :date_played_last_unit, :date_played_from,
-      :date_played_to, :date_played_weight, :date_played_half_life,
-      play_types: []
-    )
   end
 end
