@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.5.5
--- Dumped by pg_dump version 9.5.5
+-- Dumped from database version 9.5.8
+-- Dumped by pg_dump version 9.5.8
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -27,11 +27,37 @@ CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 
+--
+-- Name: tablefunc; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS tablefunc WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION tablefunc; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION tablefunc IS 'functions that manipulate whole tables, including crosstab';
+
+
 SET search_path = public, pg_catalog;
 
 SET default_tablespace = '';
 
 SET default_with_oids = false;
+
+--
+-- Name: ar_internal_metadata; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE ar_internal_metadata (
+    key character varying NOT NULL,
+    value character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
 
 --
 -- Name: category_topics; Type: TABLE; Schema: public; Owner: -
@@ -120,7 +146,8 @@ CREATE TABLE games (
     final_result integer,
     dd1_result integer,
     dd2a_result integer,
-    dd2b_result integer
+    dd2b_result integer,
+    rerun boolean DEFAULT false NOT NULL
 );
 
 
@@ -303,6 +330,14 @@ ALTER TABLE ONLY users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regcl
 
 
 --
+-- Name: ar_internal_metadata_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY ar_internal_metadata
+    ADD CONSTRAINT ar_internal_metadata_pkey PRIMARY KEY (key);
+
+
+--
 -- Name: category_topics_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -379,13 +414,6 @@ CREATE INDEX index_finals_on_game_id ON finals USING btree (game_id);
 
 
 --
--- Name: index_games_on_play_type; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_games_on_play_type ON games USING btree (play_type);
-
-
---
 -- Name: index_games_on_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -407,10 +435,17 @@ CREATE INDEX index_games_on_user_id_and_play_type ON games USING btree (user_id,
 
 
 --
+-- Name: index_games_on_user_id_and_rerun; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_games_on_user_id_and_rerun ON games USING btree (user_id, rerun);
+
+
+--
 -- Name: index_games_on_user_id_and_show_date; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_games_on_user_id_and_show_date ON games USING btree (user_id, show_date);
+CREATE INDEX index_games_on_user_id_and_show_date ON games USING btree (user_id, show_date);
 
 
 --
@@ -486,67 +521,41 @@ ALTER TABLE ONLY finals
 
 SET search_path TO "$user", public;
 
-INSERT INTO schema_migrations (version) VALUES ('20160507203334');
+INSERT INTO schema_migrations (version) VALUES
+('20160507203334'),
+('20160507212032'),
+('20160507212809'),
+('20160508154744'),
+('20160509215159'),
+('20160510211659'),
+('20160510212934'),
+('20160512183448'),
+('20160512191708'),
+('20160512192635'),
+('20160512193040'),
+('20160512193858'),
+('20160512194133'),
+('20160512195133'),
+('20160513120011'),
+('20160601141915'),
+('20160601144446'),
+('20160601170600'),
+('20160601170801'),
+('20160601194120'),
+('20160601194627'),
+('20160601194754'),
+('20160623193817'),
+('20160701212322'),
+('20160701212342'),
+('20160703132507'),
+('20160705211103'),
+('20160709133813'),
+('20161031155918'),
+('20161116170851'),
+('20161116205246'),
+('20161116222030'),
+('20170909161948'),
+('20170909163110'),
+('20170909163655');
 
-INSERT INTO schema_migrations (version) VALUES ('20160507212032');
-
-INSERT INTO schema_migrations (version) VALUES ('20160507212809');
-
-INSERT INTO schema_migrations (version) VALUES ('20160508154744');
-
-INSERT INTO schema_migrations (version) VALUES ('20160509215159');
-
-INSERT INTO schema_migrations (version) VALUES ('20160510211659');
-
-INSERT INTO schema_migrations (version) VALUES ('20160510212934');
-
-INSERT INTO schema_migrations (version) VALUES ('20160512183448');
-
-INSERT INTO schema_migrations (version) VALUES ('20160512191708');
-
-INSERT INTO schema_migrations (version) VALUES ('20160512192635');
-
-INSERT INTO schema_migrations (version) VALUES ('20160512193040');
-
-INSERT INTO schema_migrations (version) VALUES ('20160512193858');
-
-INSERT INTO schema_migrations (version) VALUES ('20160512194133');
-
-INSERT INTO schema_migrations (version) VALUES ('20160512195133');
-
-INSERT INTO schema_migrations (version) VALUES ('20160513120011');
-
-INSERT INTO schema_migrations (version) VALUES ('20160601141915');
-
-INSERT INTO schema_migrations (version) VALUES ('20160601144446');
-
-INSERT INTO schema_migrations (version) VALUES ('20160601170600');
-
-INSERT INTO schema_migrations (version) VALUES ('20160601170801');
-
-INSERT INTO schema_migrations (version) VALUES ('20160601194120');
-
-INSERT INTO schema_migrations (version) VALUES ('20160601194627');
-
-INSERT INTO schema_migrations (version) VALUES ('20160601194754');
-
-INSERT INTO schema_migrations (version) VALUES ('20160623193817');
-
-INSERT INTO schema_migrations (version) VALUES ('20160701212322');
-
-INSERT INTO schema_migrations (version) VALUES ('20160701212342');
-
-INSERT INTO schema_migrations (version) VALUES ('20160703132507');
-
-INSERT INTO schema_migrations (version) VALUES ('20160705211103');
-
-INSERT INTO schema_migrations (version) VALUES ('20160709133813');
-
-INSERT INTO schema_migrations (version) VALUES ('20161031155918');
-
-INSERT INTO schema_migrations (version) VALUES ('20161116170851');
-
-INSERT INTO schema_migrations (version) VALUES ('20161116205246');
-
-INSERT INTO schema_migrations (version) VALUES ('20161116222030');
 
