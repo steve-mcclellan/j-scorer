@@ -58,46 +58,13 @@ class Game < ApplicationRecord
   end
 
   def set_dd_results
-    summary = all_category_summary
-
-    dd1 = summary[:round_one][:dd][0]
-    dd2a = summary[:round_two][:dd][0]
-    dd2b = summary[:round_two][:dd][1]
+    dd_summary = { round_one: round_one_categories.map(&:dd_result).compact,
+                   round_two: round_two_categories.map(&:dd_result).compact }
 
     update_columns(
-      dd1_result: dd1 ? dd1[1] : 0,
-      dd2a_result: dd2a ? dd2a[1] : 0,
-      dd2b_result: dd2b ? dd2b[1] : 0
+      dd1_result: dd_summary[:round_one][0] || 0,
+      dd2a_result: dd_summary[:round_two][0] || 0,
+      dd2b_result: dd_summary[:round_two][1] || 0
     )
-  end
-
-  # all_category_summary (along with its helper, update_stats) is only used
-  # to populate an array of the three DD results.
-  # TODO: Simplify this.
-  def all_category_summary
-    stats = { round_one: { right: 0, wrong: 0, pass: 0, dd: [],
-                           score: 0, possible_score: 0 },
-              round_two: { right: 0, wrong: 0, pass: 0, dd: [],
-                           score: 0, possible_score: 0 },
-              final_status: final_result }
-    round_one_categories.each { |cat| update_stats(stats, cat.summary, 1) }
-    round_two_categories.each { |cat| update_stats(stats, cat.summary, 2) }
-    stats
-  end
-
-  def update_stats(stats, category_summary, round)
-    current_round = [0, :round_one, :round_two][round]
-
-    [:right, :wrong, :pass].each do |stat|
-      stats[current_round][stat] += category_summary[stat]
-    end
-
-    if category_summary[:dd_position]
-      stats[current_round][:dd] << [category_summary[:dd_position],
-                                    category_summary[:dd_result]]
-    end
-
-    stats[current_round][:score] += category_summary[:score]
-    stats[current_round][:possible_score] += category_summary[:possible_score]
   end
 end
