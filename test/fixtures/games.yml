@@ -10,6 +10,8 @@ debut:
   dd1_result: 0
   dd2a_result: 0
   dd2b_result: 0
+  rerun: false
+  game_id: '1984-09-10'
 
 two:
   user: dave
@@ -21,6 +23,8 @@ two:
   dd1_result: 0
   dd2a_result: 0
   dd2b_result: 0
+  rerun: false
+  game_id: '1984-09-11'
 
 most_recent:
   user: dave
@@ -32,6 +36,8 @@ most_recent:
   dd1_result: 0
   dd2a_result: 0
   dd2b_result: 0
+  rerun: false
+  game_id: '2005-05-25'
 
 victoria:
   user: dave
@@ -44,6 +50,8 @@ victoria:
   dd1_result: 0
   dd2a_result: 0
   dd2b_result: 0
+  rerun: false
+  game_id: '2005-09-19'
 
 steve:
   user: steve
@@ -55,3 +63,5 @@ steve:
   dd1_result: 0
   dd2a_result: 0
   dd2b_result: 0
+  rerun: false
+  game_id: '1964-03-30'

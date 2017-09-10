@@ -35,7 +35,6 @@ class Sixth < ApplicationRecord
   def summary
     stats = { right: 0, wrong: 0, pass: 0, score: 0, possible_score: 0,
               dd_position: nil, dd_result: nil }
-    results = [result1, result2, result3, result4, result5]
 
     results.each_with_index do |result_code, index|
       add_clue_stats(stats, result_code, index + 1)
@@ -46,7 +45,16 @@ class Sixth < ApplicationRecord
     stats
   end
 
+  def dd_result
+    results.each { |r| return r if r > 4 }
+    nil
+  end
+
   private
+
+  def results
+    [result1, result2, result3, result4, result5]
+  end
 
   def add_clue_stats(stats, result_code, row_number)
     update_stats(stats, result_code, row_number)

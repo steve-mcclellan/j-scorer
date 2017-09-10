@@ -18,88 +18,73 @@ class GamesControllerTest < ActionController::TestCase
     assert_response :success
   end
 
-  test 'should get game page when a valid date is given' do
+  test 'should get game page when a valid game_id is given' do
     # When not logged in...
-    get :game, params: { d: '2005-05-25' }
+    get :game, params: { g: '2005-05-25' }
     assert_response :success
 
-    # ...when logged in and the date matches an existing game...
+    # ...when logged in and the game_id matches an existing game...
     log_in_here(@user)
-    get :game, params: { d: '2005-05-25' }
+    get :game, params: { g: '2005-05-25' }
     assert_response :success
 
-    # ...and when there's no game for that date.
-    get :game, params: { d: '1776-07-04' }
+    # ...and when there's no game for that game_id.
+    get :game, params: { g: '1776-07-04' }
     assert_response :success
   end
 
-  test 'should get game page when an invalid date is given' do
+  test 'should get game page when an invalid game_id is given' do
     # When not logged in...
-    get :game, params: { d: 'ThisIsNotADate' }
+    get :game, params: { g: 'ThisIsNotAGameId' }
     assert_response :success
 
     # ...or when logged in.
     log_in_here(@user)
-    get :game, params: { d: 'NeitherIsThis' }
+    get :game, params: { g: 'NeitherIsThis' }
     assert_response :success
   end
 
   test "should successfully destroy the correct user's game" do
     log_in_here(@user)
     assert_difference '@user.games.count', -1 do
-      delete :destroy, params: { show_date: '1984-09-11' }
+      delete :destroy, params: { game_id: '1984-09-11' }
     end
     assert_redirected_to stats_url
   end
 
   test 'should redirect destroy when not logged in' do
     assert_no_difference 'Game.count' do
-      delete :destroy, params: { show_date: '2005-05-25' }
+      delete :destroy, params: { game_id: '2005-05-25' }
     end
     assert_redirected_to login_url
   end
 
-  test 'should redirect destroy for invalid date format' do
-    log_in_here(@user)
-    assert_no_difference 'Game.count' do
-      delete :destroy, params: { show_date: 'ceciNestPasUneDate' }
-    end
-    assert_redirected_to root_url
-  end
-
-  test "should redirect destroy if date doesn't correspond to a game by user" do
+  test "should redirect destroy if id doesn't correspond to a game by user" do
     log_in_here(@user)
     game = games(:steve)
     assert_no_difference 'Game.count' do
-      delete :destroy, params: { show_date: game.show_date }
+      delete :destroy, params: { game_id: game.game_id }
     end
     assert_redirected_to root_url
   end
 
-  test 'should get json for valid date' do
+  test 'should get json for valid game_id' do
     log_in_here(@user)
-    get :json, params: { show_date: games(:victoria) }
+    get :json, params: { game_id: games(:victoria) }
     assert_response :success
     body = JSON.parse(response.body)
     assert_equal 6, body['round_one_categories'][0]['result3']
   end
 
-  test 'json action should throw 404 for invalid date format' do
+  test 'json action should throw 404 for game_id with no game' do
     log_in_here(@user)
-    get :json, params: { show_date: 'thisIsNotADate' }
-    assert_response :not_found
-    assert_equal '{}', response.body
-  end
-
-  test 'json action should throw 404 for date with no game' do
-    log_in_here(@user)
-    get :json, params: { show_date: '1956-11-26' }
+    get :json, params: { game_id: '1956-11-26' }
     assert_response :not_found
     assert_equal '{}', response.body
   end
 
   test 'should redirect json action when not logged in' do
-    get :json, params: { show_date: games(:victoria) }
+    get :json, params: { game_id: games(:victoria) }
     assert_redirected_to login_url
   end
 
@@ -175,7 +160,8 @@ class GamesControllerTest < ActionController::TestCase
 
   test 'should redirect redate action when not logged in' do
     patch :redate,
-          params: { oldDate: '2005-05-25',
+          params: { finalID: 470,
+                    oldDate: '2005-05-25',
                     newDate: '2222-02-22' }
     assert_redirected_to login_url
   end
@@ -183,58 +169,74 @@ class GamesControllerTest < ActionController::TestCase
   test 'redate action should return error for invalid date format' do
     log_in_here(@user)
     patch :redate,
-          params: { oldDate: 'notADate',
+          params: { finalID: 470,
+                    oldDate: 'notADate',
                     newDate: 'notADateEither' }
     assert_response :bad_request
     body = JSON.parse(response.body)
     assert_equal 'bad_date', body['errors'][0]
 
     patch :redate,
-          params: { oldDate: 'notADate',
+          params: { finalID: 470,
+                    oldDate: 'notADate',
                     newDate: '2016-09-22' }
     assert_response :bad_request
     body = JSON.parse(response.body)
     assert_equal 'bad_date', body['errors'][0]
 
     patch :redate,
-          params: { oldDate: '2005-05-25',
+          params: { finalID: 470,
+                    oldDate: '2005-05-25',
                     newDate: 'notADate' }
     assert_response :bad_request
     body = JSON.parse(response.body)
     assert_equal 'bad_date', body['errors'][0]
-    assert_not_nil @user.reload.games.find_by(show_date: '2005-05-25')
+    assert_not_nil @user.reload.games.find_by(game_id: '2005-05-25')
   end
 
-  test 'redate action should return error for oldDate with no game' do
+  test 'redate action should return error for bad oldDate/finalID combo' do
     log_in_here(@user)
     patch :redate,
-          params: { oldDate: '1983-07-18',
+          params: { finalID: 470,
+                    oldDate: '1983-07-18',
                     newDate: '2083-07-18' }
+    assert_response :not_found
+    body = JSON.parse(response.body)
+    assert_equal 'no_show', body['errors'][0]
+
+    patch :redate,
+          params: { finalID: 525,
+                    oldDate: '2005-05-25',
+                    newDate: '2250-05-25' }
     assert_response :not_found
     body = JSON.parse(response.body)
     assert_equal 'no_show', body['errors'][0]
   end
 
-  test 'redate action should return error if newDate already has a game' do
-    log_in_here(@user)
-    patch :redate,
-          params: { oldDate: '2005-05-25',
-                    newDate: '1984-09-10' }
-    assert_response :conflict
-    body = JSON.parse(response.body)
-    assert_equal 'occupied', body['errors'][0]
-  end
-
   test 'redate action should work when given valid data' do
     log_in_here(@user)
     patch :redate,
-          params: { oldDate: '2005-05-25',
+          params: { finalID: 470,
+                    oldDate: '2005-05-25',
                     newDate: '2345-01-23' }
     assert_response :success
     body = JSON.parse(response.body)
     assert_equal true, body['success']
-    assert_nil @user.reload.games.find_by(show_date: '2005-05-25')
-    assert_not_nil @user.reload.games.find_by(show_date: '2345-01-23')
+    assert_nil @user.reload.games.find_by(game_id: '2005-05-25')
+    assert_not_nil @user.reload.games.find_by(game_id: '2345-01-23')
+  end
+
+  test 'redate action should work even if newDate already has a game' do
+    log_in_here(@user)
+    patch :redate,
+          params: { finalID: 470,
+                    oldDate: '2005-05-25',
+                    newDate: '1984-09-10' }
+    assert_response :success
+    body = JSON.parse(response.body)
+    assert_equal true, body['success']
+    assert_nil @user.reload.games.find_by(game_id: '2005-05-25')
+    assert_not_nil @user.reload.games.find_by(game_id: '1984-09-10-1')
   end
 
   test 'check action should return empty string when not logged in' do
