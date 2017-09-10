@@ -21,7 +21,7 @@ class Game < ApplicationRecord
                  date_played: -> { Time.zone.now }
 
   def to_param
-    show_date.to_s.parameterize
+    game_id.to_s.parameterize
   end
 
   def adjusted_round_one_score

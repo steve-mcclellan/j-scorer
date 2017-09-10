@@ -61,8 +61,8 @@ class User < ApplicationRecord
     reset_sent_at < 1.hour.ago
   end
 
-  def existing_game_date?(date)
-    games.find_by(show_date: date).present?
+  def existing_game_id?(game_id)
+    games.find_by(game_id: game_id).present?
   end
 
   def multi_game_summary(play_types)
