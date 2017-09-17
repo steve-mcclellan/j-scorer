@@ -33,7 +33,7 @@
     <tbody>
       <% @user.games.each do |game| %>
         <tr class="<%= game.play_type %><%= ' untracked' unless @play_types.include?(game.play_type) %>">
-          <td><%= game.date_played.in_time_zone.to_s %></td>
+          <td><%= game.date_played.in_time_zone.to_s if game.date_played.year > 0 %></td>
           <td><%= game.show_date %></td>
           <td><%= PLAY_TYPES[game.play_type] %></td>
           <td><%= number_to_currency(game.adjusted_game_score, precision: 0) %></td>

@@ -120,7 +120,7 @@ class GamesControllerTest < ActionController::TestCase
     # Verify that the ids are present and non-nil.
     assert_equal 13, body['ids'].length
     assert body['ids'].all?
-    this_game = @user.games.find_by(show_date: '1016-08-12')
+    this_game = @user.games.find_by(game_id: '1016-08-12')
     assert_equal(-3, this_game.round_one_score)
 
     # Grab data for future requests.
@@ -138,7 +138,7 @@ class GamesControllerTest < ActionController::TestCase
     # Verify that the ids are present and non-nil.
     assert_equal 13, body['ids'].length
     assert body['ids'].all?
-    this_game = @user.games.reload.find_by(show_date: '1016-08-12')
+    this_game = @user.games.reload.find_by(game_id: '1016-08-12')
     assert_equal 2, this_game.round_one_score
 
     # Third, try to resave the game with a different show date.
@@ -152,8 +152,44 @@ class GamesControllerTest < ActionController::TestCase
     body = JSON.parse(response.body)
     assert_response :bad_request
     assert_equal 'Invalid change', body['date'][0]
-    this_game = @user.games.reload.find_by(show_date: '1016-08-12')
+    this_game = @user.games.reload.find_by(game_id: '1016-08-12')
     assert_equal 2, this_game.round_one_score
+  end
+
+  test 'should behave properly when given an invalid date played' do
+    log_in_here(@user)
+    assert_difference 'Game.count', 1 do
+      post :save,
+           params: { game: {"show_date"=>"1017-09-17", "date_played"=>"", "play_type"=>"regular", "round_one_score"=>-4, "round_two_score"=>0, "final_result"=>0, "sixths_attributes"=>[{"id"=>nil, "board_position"=>1, "title"=>"", "topics_string"=>"", "result1"=>0, "result2"=>0, "result3"=>0, "result4"=>0, "result5"=>0, "type"=>"RoundOneCategory"}, {"id"=>nil, "board_position"=>2, "title"=>"", "topics_string"=>"", "result1"=>0, "result2"=>0, "result3"=>0, "result4"=>0, "result5"=>0, "type"=>"RoundOneCategory"}, {"id"=>nil, "board_position"=>3, "title"=>"", "topics_string"=>"", "result1"=>0, "result2"=>0, "result3"=>0, "result4"=>0, "result5"=>6, "type"=>"RoundOneCategory"}, {"id"=>nil, "board_position"=>4, "title"=>"", "topics_string"=>"", "result1"=>0, "result2"=>0, "result3"=>0, "result4"=>1, "result5"=>0, "type"=>"RoundOneCategory"}, {"id"=>nil, "board_position"=>5, "title"=>"", "topics_string"=>"", "result1"=>0, "result2"=>0, "result3"=>0, "result4"=>0, "result5"=>0, "type"=>"RoundOneCategory"}, {"id"=>nil, "board_position"=>6, "title"=>"", "topics_string"=>"", "result1"=>0, "result2"=>0, "result3"=>0, "result4"=>0, "result5"=>0, "type"=>"RoundOneCategory"}, {"id"=>nil, "board_position"=>1, "title"=>"", "topics_string"=>"", "result1"=>0, "result2"=>0, "result3"=>0, "result4"=>0, "result5"=>0, "type"=>"RoundTwoCategory"}, {"id"=>nil, "board_position"=>2, "title"=>"", "topics_string"=>"", "result1"=>0, "result2"=>0, "result3"=>0, "result4"=>0, "result5"=>0, "type"=>"RoundTwoCategory"}, {"id"=>nil, "board_position"=>3, "title"=>"", "topics_string"=>"", "result1"=>0, "result2"=>0, "result3"=>0, "result4"=>0, "result5"=>0, "type"=>"RoundTwoCategory"}, {"id"=>nil, "board_position"=>4, "title"=>"", "topics_string"=>"", "result1"=>0, "result2"=>0, "result3"=>0, "result4"=>0, "result5"=>0, "type"=>"RoundTwoCategory"}, {"id"=>nil, "board_position"=>5, "title"=>"", "topics_string"=>"", "result1"=>0, "result2"=>0, "result3"=>0, "result4"=>0, "result5"=>0, "type"=>"RoundTwoCategory"}, {"id"=>nil, "board_position"=>6, "title"=>"", "topics_string"=>"", "result1"=>0, "result2"=>0, "result3"=>0, "result4"=>0, "result5"=>0, "type"=>"RoundTwoCategory"}], "final_attributes"=>{"id"=>nil, "category_title"=>"", "topics_string"=>"", "result"=>0, "third_right"=>nil, "second_right"=>nil, "first_right"=>nil}} }
+    end
+    body = JSON.parse(response.body)
+    assert_nil body['errors']
+    assert_nil body['date_played']
+    # Verify that the ids are present and non-nil.
+    assert_equal 13, body['ids'].length
+    assert body['ids'].all?
+    this_game = @user.games.find_by(game_id: '1017-09-17')
+    assert_equal -4, this_game.round_one_score
+    refute this_game.date_played.nil?
+    assert_operator this_game.date_played, :<, DateTime.new(1, 1, 1, 0, 0, 0)
+
+    assert_difference 'Game.count', 1 do
+      post :save,
+           params: { game: {"show_date"=>"1017-09-17", "date_played"=>"NotADate", "play_type"=>"regular", "round_one_score"=>0, "round_two_score"=>5, "final_result"=>0, "sixths_attributes"=>[{"id"=>nil, "board_position"=>1, "title"=>"", "topics_string"=>"", "result1"=>0, "result2"=>0, "result3"=>0, "result4"=>0, "result5"=>0, "type"=>"RoundOneCategory"}, {"id"=>nil, "board_position"=>2, "title"=>"", "topics_string"=>"", "result1"=>0, "result2"=>0, "result3"=>0, "result4"=>0, "result5"=>0, "type"=>"RoundOneCategory"}, {"id"=>nil, "board_position"=>3, "title"=>"", "topics_string"=>"", "result1"=>0, "result2"=>0, "result3"=>0, "result4"=>0, "result5"=>6, "type"=>"RoundOneCategory"}, {"id"=>nil, "board_position"=>4, "title"=>"", "topics_string"=>"", "result1"=>0, "result2"=>0, "result3"=>0, "result4"=>0, "result5"=>0, "type"=>"RoundOneCategory"}, {"id"=>nil, "board_position"=>5, "title"=>"", "topics_string"=>"", "result1"=>0, "result2"=>0, "result3"=>0, "result4"=>0, "result5"=>0, "type"=>"RoundOneCategory"}, {"id"=>nil, "board_position"=>6, "title"=>"", "topics_string"=>"", "result1"=>0, "result2"=>0, "result3"=>0, "result4"=>0, "result5"=>0, "type"=>"RoundOneCategory"}, {"id"=>nil, "board_position"=>1, "title"=>"", "topics_string"=>"", "result1"=>0, "result2"=>0, "result3"=>0, "result4"=>0, "result5"=>0, "type"=>"RoundTwoCategory"}, {"id"=>nil, "board_position"=>2, "title"=>"", "topics_string"=>"", "result1"=>0, "result2"=>0, "result3"=>0, "result4"=>0, "result5"=>0, "type"=>"RoundTwoCategory"}, {"id"=>nil, "board_position"=>3, "title"=>"", "topics_string"=>"", "result1"=>0, "result2"=>0, "result3"=>0, "result4"=>0, "result5"=>0, "type"=>"RoundTwoCategory"}, {"id"=>nil, "board_position"=>4, "title"=>"", "topics_string"=>"", "result1"=>0, "result2"=>0, "result3"=>0, "result4"=>0, "result5"=>0, "type"=>"RoundTwoCategory"}, {"id"=>nil, "board_position"=>5, "title"=>"", "topics_string"=>"", "result1"=>0, "result2"=>0, "result3"=>0, "result4"=>0, "result5"=>3, "type"=>"RoundTwoCategory"}, {"id"=>nil, "board_position"=>6, "title"=>"", "topics_string"=>"", "result1"=>0, "result2"=>0, "result3"=>0, "result4"=>0, "result5"=>0, "type"=>"RoundTwoCategory"}], "final_attributes"=>{"id"=>nil, "category_title"=>"", "topics_string"=>"", "result"=>0, "third_right"=>nil, "second_right"=>nil, "first_right"=>nil}} }
+    end
+    body = JSON.parse(response.body)
+    assert_nil body['errors']
+    assert_nil body['date_played']
+    # Verify that the ids are present and non-nil.
+    assert_equal 13, body['ids'].length
+    assert body['ids'].all?
+    this_game = @user.games.find_by(game_id: '1017-09-17-1')
+    assert_equal 5, this_game.round_two_score
+    refute this_game.date_played.nil?
+    assert_operator this_game.date_played, :<, DateTime.new(1, 1, 1, 0, 0, 0)
+
+    previous_game = @user.games.find_by(game_id: '1017-09-17')
+    assert_equal(-4, previous_game.round_one_score)
   end
 
   # rubocop:enable all
