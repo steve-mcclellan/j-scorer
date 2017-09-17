@@ -557,6 +557,10 @@ $( ".games-game" ).ready( function() {
         currentGame.date_played = moment.utc( currentGame.date_played )
                                         .subtract( datePlayedOffset, "hours" )
                                         .format( "YYYY-MM-DD h:mma" );
+        if ( currentGame.date_played.slice( 0, 4 ) === "0000"
+            || currentGame.date_played.slice( 0, 1 ) === "-" ) {
+          currentGame.date_played = "";
+        }
         setCookie( "game", currentGame );
         currentGameData = newDataCookie();
         setCookie( "gameData", currentGameData );

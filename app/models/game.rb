@@ -9,12 +9,14 @@ class Game < ApplicationRecord
 
   default_scope { order(date_played: :desc) }
 
+  before_validation :set_game_id, :add_default_date_played
+
   validates :user, presence: true
   validates :show_date, presence: true
+  validates :date_played, presence: true
   validates :game_id, presence: true, uniqueness: { scope: :user_id }
   validates :play_type, presence: true, inclusion: { in: PLAY_TYPES.keys }
 
-  before_validation :set_game_id
   after_save :set_dd_results
 
   default_values show_date:   -> { Time.zone.today },
@@ -79,5 +81,9 @@ class Game < ApplicationRecord
       g_id = (num.zero? ? show_date.to_s : "#{show_date}-#{num}")
       self.game_id = g_id and break if user.games.find_by(game_id: g_id).nil?
     end
+  end
+
+  def add_default_date_played
+    self.date_played = Time.new(0, 12, 31, 12, 0, 0, 0) if date_played.nil?
   end
 end
