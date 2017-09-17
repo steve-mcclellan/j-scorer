@@ -18,10 +18,9 @@ module ApplicationHelper
     end.join("\n").html_safe
   end
 
-  # "Welcome" temporarily removed to avoid redundancy.
   def random_partial_greeting
     ['Hello there', 'Greetings', 'Hi', 'Salutations', 'Hi there',
-     'Howdy', 'Hey there', 'Hello', 'Yo', '<i>¡Hola</i>',
+     'Howdy', 'Hey there', 'Welcome', 'Hello', 'Yo', '<i>¡Hola</i>',
      '<i>Salut</i>', '<i>Ciao</i>', '<i>Γεια</i>', '<i>Konnichiwa</i>',
      '<i>Salve</i>', '<i>Saluton</i>'].sample.html_safe
   end
