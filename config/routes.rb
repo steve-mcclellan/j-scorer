@@ -20,11 +20,11 @@ Rails.application.routes.draw do
   patch 'reset/:id' => 'password_resets#update'
 
   get 'game' => 'games#game', as: :game
-  delete 'delete/:show_date' => 'games#destroy', as: :delete
+  delete 'delete/:game_id' => 'games#destroy', as: :delete
 
   # Allow only Ajax requests to the following routes:
   constraints(->(req) { req.xhr? }) do
-    get 'json/:show_date' => 'games#json', as: :json
+    get 'json/:game_id' => 'games#json', as: :json
     post 'save' => 'games#save', as: :save
     patch 'redate' => 'games#redate', as: :redate
     get 'check/:final_id' => 'games#check', as: :check

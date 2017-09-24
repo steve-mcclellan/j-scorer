@@ -2,9 +2,19 @@
 
 fone:
   game: victoria
-  category_title: Ranks & Titles
+  category_title: RANKS & TITLES
   result: 3
   third_right: true
   second_right: false
   first_right: true
   topics_string: People, Titles
+
+fmost_recent:
+  id: 470
+  game: most_recent
+  category_title: 20th CENTURY AMERICANS
+  result: 3
+  third_right: false
+  second_right: false
+  first_right: true
+  topics_string: ''

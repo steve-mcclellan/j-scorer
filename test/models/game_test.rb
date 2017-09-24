@@ -30,18 +30,24 @@ class GameTest < ActiveSupport::TestCase
     assert_not @game.valid?
   end
 
-  test 'show date should be present and unique on a per-user basis' do
+  test 'show date should be present' do
     @game.show_date = nil
     assert_not @game.valid?
-    game2 = @user.games.build(show_date: Time.zone.today,
-                              date_played: Time.zone.today)
-    assert game2.valid?
-    game2.show_date = Date.new(1984, 9, 12)
-    assert_not game2.valid?
-    # A different user should be able to have the same day's game.
-    other_users_game = users(:steve).games.build(show_date: Date.new(1984, 9, 12),
-                                                 date_played: Time.zone.today)
-    assert other_users_game.valid?
+  end
+
+  test 'game_id should auto-set to the appropriate value' do
+    new_game = @user.games.build(show_date: Date.new(1984, 9, 12),
+                                 date_played: Time.zone.today)
+    assert_nil new_game.game_id
+    assert new_game.valid?
+    assert_equal '1984-09-12-1', new_game.game_id
+
+    # A different user should be able to have an independent game_id.
+    other_game = users(:steve).games.build(show_date: Date.new(1984, 9, 12),
+                                           date_played: Time.zone.today)
+    assert_nil other_game.game_id
+    assert other_game.valid?
+    assert_equal '1984-09-12', other_game.game_id
   end
 
   test 'default order should be most-recently-played first' do

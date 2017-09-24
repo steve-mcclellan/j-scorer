@@ -9,8 +9,12 @@ class Game < ApplicationRecord
 
   default_scope { order(date_played: :desc) }
 
+  before_validation :set_game_id, :add_default_date_played
+
   validates :user, presence: true
-  validates :show_date, presence: true, uniqueness: { scope: :user_id }
+  validates :show_date, presence: true
+  validates :date_played, presence: true
+  validates :game_id, presence: true, uniqueness: { scope: :user_id }
   validates :play_type, presence: true, inclusion: { in: PLAY_TYPES.keys }
 
   after_save :set_dd_results
@@ -19,7 +23,7 @@ class Game < ApplicationRecord
                  date_played: -> { Time.zone.now }
 
   def to_param
-    show_date.to_s.parameterize
+    game_id.to_s.parameterize
   end
 
   def adjusted_round_one_score
@@ -58,46 +62,28 @@ class Game < ApplicationRecord
   end
 
   def set_dd_results
-    summary = all_category_summary
-
-    dd1 = summary[:round_one][:dd][0]
-    dd2a = summary[:round_two][:dd][0]
-    dd2b = summary[:round_two][:dd][1]
+    dd_summary = { round_one: round_one_categories.map(&:dd_result).compact,
+                   round_two: round_two_categories.map(&:dd_result).compact }
 
     update_columns(
-      dd1_result: dd1 ? dd1[1] : 0,
-      dd2a_result: dd2a ? dd2a[1] : 0,
-      dd2b_result: dd2b ? dd2b[1] : 0
+      dd1_result: dd_summary[:round_one][0] || 0,
+      dd2a_result: dd_summary[:round_two][0] || 0,
+      dd2b_result: dd_summary[:round_two][1] || 0
     )
   end
 
-  # all_category_summary (along with its helper, update_stats) is only used
-  # to populate an array of the three DD results.
-  # TODO: Simplify this.
-  def all_category_summary
-    stats = { round_one: { right: 0, wrong: 0, pass: 0, dd: [],
-                           score: 0, possible_score: 0 },
-              round_two: { right: 0, wrong: 0, pass: 0, dd: [],
-                           score: 0, possible_score: 0 },
-              final_status: final_result }
-    round_one_categories.each { |cat| update_stats(stats, cat.summary, 1) }
-    round_two_categories.each { |cat| update_stats(stats, cat.summary, 2) }
-    stats
+  # If the show date is unused as a game_id, use that. Otherwise, try the show
+  # date with "-1" appended. If that's taken, try "-2", ad infinitum.
+  def set_game_id
+    return if game_id
+
+    0.upto(Float::INFINITY) do |num|
+      g_id = (num.zero? ? show_date.to_s : "#{show_date}-#{num}")
+      self.game_id = g_id and break if user.games.find_by(game_id: g_id).nil?
+    end
   end
 
-  def update_stats(stats, category_summary, round)
-    current_round = [0, :round_one, :round_two][round]
-
-    [:right, :wrong, :pass].each do |stat|
-      stats[current_round][stat] += category_summary[stat]
-    end
-
-    if category_summary[:dd_position]
-      stats[current_round][:dd] << [category_summary[:dd_position],
-                                    category_summary[:dd_result]]
-    end
-
-    stats[current_round][:score] += category_summary[:score]
-    stats[current_round][:possible_score] += category_summary[:possible_score]
+  def add_default_date_played
+    self.date_played = Time.new(0, 12, 31, 12, 0, 0, 0) if date_played.nil?
   end
 end

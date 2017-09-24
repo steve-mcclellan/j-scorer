@@ -146,7 +146,9 @@ CREATE TABLE games (
     final_result integer,
     dd1_result integer,
     dd2a_result integer,
-    dd2b_result integer
+    dd2b_result integer,
+    rerun boolean DEFAULT false NOT NULL,
+    game_id character varying NOT NULL
 );
 
 
@@ -431,13 +433,6 @@ CREATE INDEX index_finals_on_game_id ON finals USING btree (game_id);
 
 
 --
--- Name: index_games_on_play_type; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_games_on_play_type ON games USING btree (play_type);
-
-
---
 -- Name: index_games_on_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -452,6 +447,13 @@ CREATE INDEX index_games_on_user_id_and_date_played ON games USING btree (user_i
 
 
 --
+-- Name: index_games_on_user_id_and_game_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_games_on_user_id_and_game_id ON games USING btree (user_id, game_id);
+
+
+--
 -- Name: index_games_on_user_id_and_play_type; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -459,10 +461,17 @@ CREATE INDEX index_games_on_user_id_and_play_type ON games USING btree (user_id,
 
 
 --
+-- Name: index_games_on_user_id_and_rerun; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_games_on_user_id_and_rerun ON games USING btree (user_id, rerun);
+
+
+--
 -- Name: index_games_on_user_id_and_show_date; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_games_on_user_id_and_show_date ON games USING btree (user_id, show_date);
+CREATE INDEX index_games_on_user_id_and_show_date ON games USING btree (user_id, show_date);
 
 
 --
@@ -571,6 +580,10 @@ INSERT INTO schema_migrations (version) VALUES
 ('20161116170851'),
 ('20161116205246'),
 ('20161116222030'),
-('20170903154919');
+('20170909161948'),
+('20170909163110'),
+('20170909163655'),
+('20170909171911'),
+('20170924191436');
 
 

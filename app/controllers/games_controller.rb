@@ -1,17 +1,19 @@
 class GamesController < ApplicationController
   before_action :logged_in_user, except: [:game, :check]
-  before_action :parse_show_date, only: [:destroy, :json]
-  before_action :find_game, only: [:destroy]
-  before_action :find_or_create_game, only: [:save]
+  before_action :parse_show_date, only: [:save]
+  before_action :parse_old_and_new_dates, only: [:redate]
+  before_action :find_game_to_redate, only: [:redate]
+  before_action :find_game_to_destroy, only: [:destroy]
+  before_action :find_or_create_game_to_save, only: [:save]
 
   def game
-    @date = Date.parse(params[:d])
+    @game_id = params[:g]
     @existing_game = current_user &&
-                     current_user.existing_game_date?(@date)
+                     current_user.existing_game_id?(@game_id)
   rescue ArgumentError, TypeError
     # TypeError will be thrown if no date is given.
     # ArgumentError will be thrown if date cannot be parsed.
-    @date = nil
+    @game_id = nil
     @existing_game = false
   end
 
@@ -21,7 +23,7 @@ class GamesController < ApplicationController
   end
 
   def json
-    if (game = current_user.games.find_by(show_date: @show_date))
+    if (game = current_user.games.find_by(game_id: params[:game_id]))
       render json: game
     else
       render json: {}, status: 404
@@ -44,20 +46,10 @@ class GamesController < ApplicationController
   end
 
   def redate
-    old_date = Date.parse(params[:oldDate])
-    new_date = Date.parse(params[:newDate])
-
-    game = current_user.games.find_by(show_date: old_date)
-    return render json: { errors: ['no_show'] }, status: 404 if game.nil?
-
-    new_date_game = current_user.games.find_by(show_date: new_date)
-    return render json: { errors: ['occupied'] }, status: 409 if new_date_game
-
-    game.update_attribute(:show_date, new_date)
-    render json: { success: true, newDate: new_date.strftime('%F') }
-
-  rescue ArgumentError
-    render json: { errors: ['bad_date'] }, status: 400
+    @game.show_date = @new_date
+    @game.game_id = nil
+    @game.save!
+    render json: { success: true, newDate: @new_date.strftime('%F') }
   end
 
   def check
@@ -72,37 +64,49 @@ class GamesController < ApplicationController
 
   private
 
-  def parse_show_date
-    @show_date = Date.parse(params[:show_date])
-  rescue ArgumentError
-    @show_date = nil
-  end
-
   def category_ids(game)
     game.sixths.map(&:id) + [game.final.id]
   end
 
-  def find_game
-    @game = current_user.games.find_by(show_date: @show_date)
+  def parse_show_date
+    @show_date = Date.parse(params[:game][:show_date])
+  rescue ArgumentError
+    render json: { date: ['Could not parse show date'] }, status: 400
+  end
+
+  def parse_old_and_new_dates
+    @old_date = Date.parse(params[:oldDate])
+    @new_date = Date.parse(params[:newDate])
+  rescue ArgumentError
+    render json: { errors: ['bad_date'] }, status: 400
+  end
+
+  def find_game_to_redate
+    @game = find_game_from_final_id_and_date(params[:finalID], @old_date)
+    return render json: { errors: ['no_show'] }, status: 404 unless @game
+  end
+
+  def find_game_to_destroy
+    @game = current_user.games.find_by(game_id: params[:game_id])
     redirect_to request.referer || root_url if @game.nil?
   end
 
-  def find_or_create_game
-    unless date_matches_id?
-      return render json: { date: ['Invalid change'] }, status: 400
+  def find_or_create_game_to_save
+    if (final_id = params[:game][:final_attributes][:id]).blank?
+      @game = current_user.games.create!(show_date: @show_date)
+    else
+      @game = find_game_from_final_id_and_date(final_id, @show_date)
+      return render json: { date: ['Invalid change'] }, status: 400 unless @game
     end
-
-    show_date = Date.parse(params[:game][:show_date])
-    @game = current_user.games.find_or_create_by!(show_date: show_date)
-  rescue ArgumentError
-    redirect_to game_url
   end
 
-  def date_matches_id?
-    final_id = params[:game][:final_attributes][:id]
-    final_id.blank? ||
-      Final.find(final_id).game.show_date ==
-        Date.parse(params[:game][:show_date])
+  def find_game_from_final_id_and_date(final_id, show_date)
+    final = Final.find_by(id: final_id)
+    game = final.game if final
+    unless game && game.show_date == show_date && game.user == current_user
+      return nil
+    end
+    game
   end
 
   # rubocop:disable all

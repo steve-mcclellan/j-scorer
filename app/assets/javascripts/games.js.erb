@@ -544,10 +544,10 @@ $( ".games-game" ).ready( function() {
     }
   }
 
-  function getShowFromDatabase( showDate ) {
+  function getShowFromDatabase( gameID ) {
     $.ajax({
       method: "GET",
-      url: "/json/" + showDate,
+      url: "/json/" + gameID,
       success: function( data ) {
         currentGame = data;
         // Grab the number of hours of offset from the time string in the data.
@@ -557,6 +557,10 @@ $( ".games-game" ).ready( function() {
         currentGame.date_played = moment.utc( currentGame.date_played )
                                         .subtract( datePlayedOffset, "hours" )
                                         .format( "YYYY-MM-DD h:mma" );
+        if ( currentGame.date_played.slice( 0, 4 ) === "0000"
+            || currentGame.date_played.slice( 0, 1 ) === "-" ) {
+          currentGame.date_played = "";
+        }
         setCookie( "game", currentGame );
         currentGameData = newDataCookie();
         setCookie( "gameData", currentGameData );
@@ -681,42 +685,49 @@ $( ".games-game" ).ready( function() {
     } else if ( data.status === 503 ) {
       // 503: Service Unavailable is returned when the app is in
       // maintenance mode.
-      alert( 'Oops! The database is currently unavailable. This usually ' +
-             'means that a new version of the J! Scorer is in the process of ' +
-             'going live. This rarely lasts more than a minute or two. ' +
-             'Please try again shortly.' );
+      alert( "Oops! The database is currently unavailable. This usually " +
+             "means that a new version of the J! Scorer is in the process of " +
+             "going live. This rarely lasts more than a minute or two. " +
+             "Please try again shortly." );
     } else {
       var errors = JSON.parse( data.responseText );
       if ( errors["sixths.board_position"] &&
            errors["sixths.board_position"][0] === "already exists" ) {
-        alert( 'Cannot save. A different game with show date "' +
-               currentGame.show_date +
-               '" already exists. If you want to modify or delete that game, ' +
-               'you can do so via the Stats link above (click the Games ' +
-               'tab). To save this game, please enter a unique show date.' );
+        alert( "Cannot save due to an unexpected conflict with a category in " +
+               "the database. If you're seeing this in normal use, you've " +
+               "found a bug. Please let me know what you were doing that led " +
+               "to this error: <%= ENV['SUPPORT_ADDRESS'] %>. Thanks!" );
 
       } else if ( errors["date"] &&
                   errors["date"][0] === "Invalid change" ) {
-        alert( 'Cannot save. The show date has been changed in an ' +
-               'unsupported manner. To save the game, change the show date ' +
-               "back to its original value. To change a game's show date, " +
-               'use the "Change" link above the date field.' );
+        alert( "Cannot save. The game information has been changed in an " +
+               "unsupported manner. Please undo any changes and try again. " +
+               "To change a saved game's show date, use the \"change\" link " +
+               "above the date field." );
+
+      } else if ( errors["date"] &&
+                  errors["date"][0] === "Could not parse show date" ) {
+        alert( "Cannot save. The show date could not be parsed. Please enter " +
+               "a valid date in the show date field. (If you don't know the " +
+               "game's show date, take your best guess. If you don't care " +
+               "about sorting games or filtering/weighting stats by show " +
+               "date, enter any date.)" );
 
       } else if ( errors["final_id"] &&
                   errors["final_id"][0] === "No match" ) {
-        alert( 'Cannot save. There is a conflict between the data in your ' +
-               'browser and the data on the server. Reloading the page ' +
-               'might fix this.' );
+        alert( "Cannot save. There is a conflict between the data in your " +
+               "browser and the data on the server. Reloading the page " +
+               "might fix this." );
 
       } else {
         console.log( "Unexpected error:" );
         console.dir( errors );
         console.log( 'Please note the name of the array (to the left of "' +
                      'Array[x]"), and the contents of any "quoted strings" ' +
-                     'that are shown when you click on it. ' +
+                     "that are shown when you click on it. " +
                      '("length" and "__proto__" can be ignored.) ' +
-                     'Please email <%= ENV['SUPPORT_ADDRESS'] %> with this ' +
-                     'information. Thanks!' );
+                     "Please email <%= ENV['SUPPORT_ADDRESS'] %> with this " +
+                     "information. Thanks!" );
         alert( "An unexpected error has occurred; the game cannot be saved. " +
                "If you know how, please visit the JavaScript console in your " +
                "browser, and follow the instructions there to report the " +
@@ -1013,7 +1024,8 @@ $( ".games-game" ).ready( function() {
     $.ajax({
       method: "PATCH",
       url: "/redate",
-      data: { "oldDate": currentGame.show_date,
+      data: { "finalID": currentGame["final"]["id"],
+              "oldDate": currentGame.show_date,
               "newDate": $changeShowDateValue.val() },
       success: function( data ) { afterDateChangeHandler( data ) },
       error: function( data ) { dateChangeErrorHandler( data ) },
@@ -1119,13 +1131,14 @@ $( ".games-game" ).ready( function() {
 
   // Populate the game:
   // 1. Load from database, if applicable, overwriting the cookie.
-  // 2. Otherwise, load from the cookie, if applicable.
-  // 3. If neither of the above applies, initialize a new game.
-  var givenDate = $( ".data-passer" ).data( "showdate" );
+  // 2. Otherwise, if there's a date, initialize an empty game with that date.
+  // 3. Otherwise, load from the cookie, if available.
+  // 4. If none of the above applies, initialize a new, empty game.
+  var givenID = $( ".data-passer" ).data( "gameid" );
   if ( $( ".data-passer" ).data( "existinggame" ) ) {
-    getShowFromDatabase( givenDate );
-  } else if ( givenDate ) {
-    initializeNewGame( givenDate );
+    getShowFromDatabase( givenID );
+  } else if ( givenID ) {
+    initializeNewGame( givenID.slice( 0, 10 ) );
     getScoresFromCookie();
     populateBoard();
   } else if ( currentGame ) {
