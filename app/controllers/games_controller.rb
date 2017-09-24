@@ -71,7 +71,7 @@ class GamesController < ApplicationController
   def parse_show_date
     @show_date = Date.parse(params[:game][:show_date])
   rescue ArgumentError
-    redirect_to game_url
+    render json: { date: ['Could not parse show date'] }, status: 400
   end
 
   def parse_old_and_new_dates

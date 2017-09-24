@@ -685,42 +685,49 @@ $( ".games-game" ).ready( function() {
     } else if ( data.status === 503 ) {
       // 503: Service Unavailable is returned when the app is in
       // maintenance mode.
-      alert( 'Oops! The database is currently unavailable. This usually ' +
-             'means that a new version of the J! Scorer is in the process of ' +
-             'going live. This rarely lasts more than a minute or two. ' +
-             'Please try again shortly.' );
+      alert( "Oops! The database is currently unavailable. This usually " +
+             "means that a new version of the J! Scorer is in the process of " +
+             "going live. This rarely lasts more than a minute or two. " +
+             "Please try again shortly." );
     } else {
       var errors = JSON.parse( data.responseText );
       if ( errors["sixths.board_position"] &&
            errors["sixths.board_position"][0] === "already exists" ) {
-        alert( 'Cannot save. A different game with show date "' +
-               currentGame.show_date +
-               '" already exists. If you want to modify or delete that game, ' +
-               'you can do so via the Stats link above (click the Games ' +
-               'tab). To save this game, please enter a unique show date.' );
+        alert( "Cannot save due to an unexpected conflict with a category in " +
+               "the database. If you're seeing this in normal use, you've " +
+               "found a bug. Please let me know what you were doing that led " +
+               "to this error: <%= ENV['SUPPORT_ADDRESS'] %>. Thanks!" );
 
       } else if ( errors["date"] &&
                   errors["date"][0] === "Invalid change" ) {
-        alert( 'Cannot save. The game information has been changed in an ' +
-               'unsupported manner. To save the game, change the show date ' +
-               "back to its original value. To change a game's show date, " +
-               'use the "Change" link above the date field.' );
+        alert( "Cannot save. The game information has been changed in an " +
+               "unsupported manner. Please undo any changes and try again. " +
+               "To change a saved game's show date, use the \"change\" link " +
+               "above the date field." );
+
+      } else if ( errors["date"] &&
+                  errors["date"][0] === "Could not parse show date" ) {
+        alert( "Cannot save. The show date could not be parsed. Please enter " +
+               "a valid date in the show date field. (If you don't know the " +
+               "game's show date, take your best guess. If you don't care " +
+               "about sorting games or filtering/weighting stats by show " +
+               "date, enter any date.)" );
 
       } else if ( errors["final_id"] &&
                   errors["final_id"][0] === "No match" ) {
-        alert( 'Cannot save. There is a conflict between the data in your ' +
-               'browser and the data on the server. Reloading the page ' +
-               'might fix this.' );
+        alert( "Cannot save. There is a conflict between the data in your " +
+               "browser and the data on the server. Reloading the page " +
+               "might fix this." );
 
       } else {
         console.log( "Unexpected error:" );
         console.dir( errors );
         console.log( 'Please note the name of the array (to the left of "' +
                      'Array[x]"), and the contents of any "quoted strings" ' +
-                     'that are shown when you click on it. ' +
+                     "that are shown when you click on it. " +
                      '("length" and "__proto__" can be ignored.) ' +
-                     'Please email <%= ENV['SUPPORT_ADDRESS'] %> with this ' +
-                     'information. Thanks!' );
+                     "Please email <%= ENV['SUPPORT_ADDRESS'] %> with this " +
+                     "information. Thanks!" );
         alert( "An unexpected error has occurred; the game cannot be saved. " +
                "If you know how, please visit the JavaScript console in your " +
                "browser, and follow the instructions there to report the " +
