@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.5.8
--- Dumped by pg_dump version 9.5.8
+-- Dumped from database version 9.5.9
+-- Dumped by pg_dump version 9.5.9
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -269,7 +269,7 @@ CREATE TABLE users (
     show_date_reverse boolean,
     show_date_preposition character varying(10),
     show_date_beginning date,
-    show_date_last_number double precision,
+    show_date_last_number integer,
     show_date_last_unit character varying(1),
     show_date_from date,
     show_date_to date,
@@ -278,7 +278,7 @@ CREATE TABLE users (
     date_played_reverse boolean,
     date_played_preposition character varying(10),
     date_played_beginning date,
-    date_played_last_number double precision,
+    date_played_last_number integer,
     date_played_last_unit character varying(1),
     date_played_from date,
     date_played_to date,
@@ -584,6 +584,7 @@ INSERT INTO schema_migrations (version) VALUES
 ('20170909163110'),
 ('20170909163655'),
 ('20170909171911'),
-('20170924191436');
+('20170924191436'),
+('20171029185801');
 
 

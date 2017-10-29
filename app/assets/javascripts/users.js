@@ -256,12 +256,10 @@ $( ".users-show, .users-sample" ).ready( function() {
     }
   });
 
-  updateFilterSentence( "show-date" );
   $( "#show-date-preposition, #show-date-last-number" ).change( function() {
     updateFilterSentence( "show-date" );
   });
 
-  updateWeightSentence( "show-date" );
   $( "#show-date-adverb, #show-date-half-life-days" ).change( function() {
     updateWeightSentence( "show-date" );
   })
@@ -288,12 +286,10 @@ $( ".users-show, .users-sample" ).ready( function() {
     $showDateFromPicker.data( "DateTimePicker" ).maxDate( e.date );
   });
 
-  updateFilterSentence( "date-played" );
   $( "#date-played-preposition, #date-played-last-number" ).change( function() {
     updateFilterSentence( "date-played" );
   });
 
-  updateWeightSentence( "date-played" );
   $( "#date-played-adverb, #date-played-half-life-days" ).change( function() {
     updateWeightSentence( "date-played" );
   });
@@ -319,6 +315,11 @@ $( ".users-show, .users-sample" ).ready( function() {
   $datePlayedToPicker.on( "dp.change", function( e ) {
     $datePlayedFromPicker.data( "DateTimePicker" ).maxDate( e.date );
   });
+
+  updateFilterSentence( "show-date" );
+  updateWeightSentence( "show-date" );
+  updateFilterSentence( "date-played" );
+  updateWeightSentence( "date-played" );
 
   $( "#stats-loading-message" ).remove();
   $( "#stats-area" ).show();

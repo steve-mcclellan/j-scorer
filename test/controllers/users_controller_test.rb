@@ -67,4 +67,11 @@ class UsersControllerTest < ActionController::TestCase
     assert_response :bad_request
     assert_equal ['regular'], @user.reload.play_types
   end
+
+  test 'should display sample even when bad params are passed' do
+    get :sample, params: { play_types: 'utoc,xxx',
+                           show_date_preposition: 'since',
+                           show_date_from: 'not-a-date' }
+    assert_response :success
+  end
 end

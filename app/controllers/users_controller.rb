@@ -54,21 +54,42 @@ class UsersController < ApplicationController
   private
 
   def set_play_types
-    @play_types = if !@sample
-                    current_user.play_types
-                  elsif params[:play_types] == 'all'
+    @play_types = if params[:play_types] == 'all'
                     PLAY_TYPES.keys
                   elsif params[:play_types]
                     params[:play_types].split(',')
+                  elsif !@sample
+                    current_user.play_types
                   else
                     ['regular']
                   end.select { |type| VALID_TYPE_INPUTS.include?(type) }
   end
 
   def set_date_filters
-    @date_filters = if !@sample
+    @date_filters = if date_filters_from_params.values.any? || @sample
+                      date_filters_from_params
+                    else
                       current_user.date_filter_preferences
                     end
+  end
+
+  def date_filters_from_params
+    return @dffp if @dffp
+    @dffp = Hash[DATE_FILTER_FIELDS.map { |field| [field, params[field]] }]
+    sanitize_dates
+    @dffp
+  end
+
+  def sanitize_dates
+    [:show_date_beginning, :show_date_from, :show_date_to,
+     :date_played_beginning, :date_played_from, :date_played_to].each do |field|
+      next if @dffp[field].nil? || @dffp[field].empty?
+      begin
+        @dffp[field] = Date.parse(@dffp[field]).strftime('%F')
+      rescue ArgumentError
+        @dffp[field] = nil
+      end
+    end
   end
 
   def set_stats_vars

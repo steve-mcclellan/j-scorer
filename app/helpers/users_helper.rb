@@ -23,4 +23,12 @@ module UsersHelper
   def display_percentage_from_rate(rate, precision = 1)
     number_to_percentage(rate.to_f * 100, precision: precision) if rate
   end
+
+  # Displays a float without a trailing '.0', if applicable
+  def strip_float(num)
+    num_str = Float(num).to_s
+    num_str.end_with?('.0') ? num_str[0..-3] : num_str
+  rescue
+    nil
+  end
 end

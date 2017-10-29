@@ -3,42 +3,46 @@
   <div class="clearfix">
     <h2>By show date</h2>
     <div class="filter-sentence">
-      <select id="show-date-verb" class="display-or-hide">
-        <option value="show">Display only</option>
-        <option value="hide">Hide all</option>
-      </select>
+      <%= select_tag('show-date-verb', options_for_select({
+          'Display only' => 'show',
+          'Hide all' => 'hide'
+        }, @date_filters[:show_date_reverse] ? 'hide' : 'show'),
+        class: 'display-or-hide') %>
       <span>&nbsp;</span>
       <span>stats from shows aired</span>
       <span>&nbsp;</span>
-      <select name="show-date-preposition" id="show-date-preposition" class="filter-preposition">
-        <option value="sinceBeg">since the beginning of</option>
-        <option value="inLast">in the last</option>
-        <option value="since">since</option>
-        <option value="from">from</option>
-      </select>
+      <%= select_tag('show-date-preposition', options_for_select({
+          'since the beginning of' => 'sinceBeg',
+          'in the last' => 'inLast',
+          'since' => 'since',
+          'from' => 'from'
+        }, @date_filters[:show_date_preposition]),
+        class: 'filter-preposition') %>
       <span>&nbsp;</span>
       <span id="show-date-beginning-span" class="filter-object show-date-filter-object">
-        <select id="show-date-beginning-dropdown" class="beginning-dropdown">
-          <option value="">time</option>
-          <option value="2017-09-11">Season 34 (2017-09-11)</option>
-          <option value="2016-09-12">Season 33 (2016-09-12)</option>
-          <option value="2015-09-14">Season 32 (2015-09-14)</option>
-          <option value="2014-09-15">Season 31 (2014-09-15)</option>
-          <option value="2013-09-16">Season 30 (2013-09-16)</option>
-        </select>
+        <%= select_tag('show-date-beginning-dropdown', options_for_select({
+            'time' => '',
+            'Season 34 (2017-09-11)' => '2017-09-11',
+            'Season 33 (2016-09-12)' => '2016-09-12',
+            'Season 32 (2015-09-14)' => '2015-09-14',
+            'Season 31 (2014-09-15)' => '2014-09-15',
+            'Season 30 (2013-09-16)' => '2013-09-16'
+          }, @date_filters[:show_date_beginning]),
+          class: 'beginning-dropdown') %>
       </span>
       <span id="show-date-last-span" class="filter-object show-date-filter-object">
-        <input id="show-date-last-number" class="number-entry" type="number" value="365" />
-        <select id="show-date-last-unit" class="unit-dropdown">
-          <option value="d">days</option>
-          <option value="w">weeks</option>
-          <option value="m">months</option>
-          <option value="y">years</option>
-        </select>
+        <input id="show-date-last-number" class="number-entry" type="number" value="<%= @date_filters[:show_date_last_number] || 365 %>" />
+        <%= select_tag('show-date-last-unit', options_for_select({
+            'days' => 'd',
+            'weeks' => 'w',
+            'months' => 'm',
+            'years' => 'y'
+          }, @date_filters[:show_date_last_unit]),
+          class: 'unit-dropdown') %>
       </span>
       <span id="show-date-from" class="filter-object show-date-filter-object">
         <span class="input-group date filter-datepicker" id="show-date-from-picker">
-          <input type="text" spellcheck="false" value="2016-08-26" />
+          <input type="text" spellcheck="false" value="<%= @date_filters[:show_date_from] || 1.year.ago.strftime('%F') %>" />
           <span class="input-group-addon">
             <span class="glyphicon glyphicon-calendar"></span>
           </span>
@@ -47,7 +51,7 @@
       <span id="show-date-to" class="filter-object date-to show-date-filter-object">
         <span>&nbsp;through&nbsp;</span>
         <span class="input-group date filter-datepicker" id="show-date-to-picker">
-          <input type="text" spellcheck="false" value="2017-08-26" />
+          <input type="text" spellcheck="false" value="<%= @date_filters[:show_date_to] || Date.today.strftime('%F') %>" />
           <span class="input-group-addon">
             <span class="glyphicon glyphicon-calendar"></span>
           </span>
@@ -59,12 +63,13 @@
     <div class="weight-sentence">
       <span>Weight shows</span>
       <span>&nbsp;</span>
-      <select id="show-date-adverb" class="weight-adverb">
-        <option value="equal">equally</option>
-        <option value="half-life">by applying a half-life of</option>
-      </select>
+      <%= select_tag('show-date-adverb', options_for_select({
+          'equally' => 'equal',
+          'by applying a half-life of' => 'half-life'
+        }, @date_filters[:show_date_weight]),
+        class: 'weight-adverb') %>
       <span id="show-date-half-life-span" class="unused-half-life-span weight-object show-date-weight-object">
-        &nbsp;<input id="show-date-half-life-days" class="number-entry" type="number" value="365" />
+        &nbsp;<input id="show-date-half-life-days" class="number-entry" type="number" value="<%= strip_float(@date_filters[:show_date_half_life]) || 365 %>" />
         <span id="show-date-half-life-unit">days</span>
       </span>
       <span>.</span>
@@ -80,42 +85,46 @@
   <div class="clearfix">
     <h2>By date played</h2>
     <div class="filter-sentence">
-      <select id="date-played-verb" class="display-or-hide">
-        <option value="show">Display only</option>
-        <option value="hide">Hide all</option>
-      </select>
+      <%= select_tag('date-played-verb', options_for_select({
+          'Display only' => 'show',
+          'Hide all' => 'hide'
+        }, @date_filters[:date_played_reverse] ? 'hide' : 'show'),
+        class: 'display-or-hide') %>
       <span>&nbsp;</span>
       <span>stats from games played</span>
       <span>&nbsp;</span>
-      <select name="date-played-preposition" id="date-played-preposition" class="filter-preposition">
-        <option value="sinceBeg">since the beginning of</option>
-        <option value="inLast">in the last</option>
-        <option value="since">since</option>
-        <option value="from">from</option>
-      </select>
+      <%= select_tag('date-played-preposition', options_for_select({
+          'since the beginning of' => 'sinceBeg',
+          'in the last' => 'inLast',
+          'since' => 'since',
+          'from' => 'from'
+        }, @date_filters[:date_played_preposition]),
+        class: 'filter-preposition') %>
       <span>&nbsp;</span>
       <span id="date-played-beginning-span" class="filter-object date-played-filter-object">
-        <select id="date-played-beginning-dropdown" class="beginning-dropdown">
-          <option value="">time</option>
-          <option value="2017-09-11">Season 34 (2017-09-11)</option>
-          <option value="2016-09-12">Season 33 (2016-09-12)</option>
-          <option value="2015-09-14">Season 32 (2015-09-14)</option>
-          <option value="2014-09-15">Season 31 (2014-09-15)</option>
-          <option value="2013-09-16">Season 30 (2013-09-16)</option>
-        </select>
+        <%= select_tag('date-played-beginning-dropdown', options_for_select({
+            'time' => '',
+            'Season 34 (2017-09-11)' => '2017-09-11',
+            'Season 33 (2016-09-12)' => '2016-09-12',
+            'Season 32 (2015-09-14)' => '2015-09-14',
+            'Season 31 (2014-09-15)' => '2014-09-15',
+            'Season 30 (2013-09-16)' => '2013-09-16'
+          }, @date_filters[:date_played_beginning]),
+          class: 'beginning-dropdown') %>
       </span>
       <span id="date-played-last-span" class="filter-object date-played-filter-object">
-        <input id="date-played-last-number" class="number-entry" type="number" value="365" />
-        <select id="date-played-last-unit" class="unit-dropdown">
-          <option value="d">days</option>
-          <option value="w">weeks</option>
-          <option value="m">months</option>
-          <option value="y">years</option>
-        </select>
+        <input id="date-played-last-number" class="number-entry" type="number" value="<%= @date_filters[:date_played_last_number] || 365 %>" />
+        <%= select_tag('date-played-last-unit', options_for_select({
+            'days' => 'd',
+            'weeks' => 'w',
+            'months' => 'm',
+            'years' => 'y'
+          }, @date_filters[:date_played_last_unit]),
+          class: 'unit-dropdown') %>
       </span>
       <span id="date-played-from" class="filter-object date-played-filter-object">
         <span class="input-group date filter-datepicker" id="date-played-from-picker">
-          <input type="text" spellcheck="false" value="2016-08-26" />
+          <input type="text" spellcheck="false" value="<%= @date_filters[:date_played_from] || 1.year.ago.strftime('%F') %>" />
           <span class="input-group-addon">
             <span class="glyphicon glyphicon-calendar"></span>
           </span>
@@ -124,7 +133,7 @@
       <span id="date-played-to" class="filter-object date-to date-played-filter-object">
         <span>&nbsp;through&nbsp;</span>
         <span class="input-group date filter-datepicker" id="date-played-to-picker">
-          <input type="text" spellcheck="false" value="2017-08-26" />
+          <input type="text" spellcheck="false" value="<%= @date_filters[:date_played_to] || Date.today.strftime('%F') %>" />
           <span class="input-group-addon">
             <span class="glyphicon glyphicon-calendar"></span>
           </span>
@@ -136,12 +145,13 @@
     <div class="weight-sentence">
       <span>Weight games</span>
       <span>&nbsp;</span>
-      <select id="date-played-adverb" class="weight-adverb">
-        <option value="equal">equally</option>
-        <option value="half-life">by applying a half-life of</option>
-      </select>
+      <%= select_tag('date-played-adverb', options_for_select({
+          'equally' => 'equal',
+          'by applying a half-life of' => 'half-life'
+        }, @date_filters[:date_played_weight]),
+        class: 'weight-adverb') %>
       <span id="date-played-half-life-span" class="unused-half-life-span weight-object date-played-weight-object">
-        &nbsp;<input id="date-played-half-life-days" class="number-entry" type="number" value="365" />
+        &nbsp;<input id="date-played-half-life-days" class="number-entry" type="number" value="<%= strip_float(@date_filters[:date_played_half_life]) || 365 %>" />
         <span id="date-played-half-life-unit">days</span>
       </span>
       <span>.</span>
