@@ -462,7 +462,7 @@ $( ".games-game" ).ready( function() {
   // IMPORTANT: Due to precompilation of JavaScript, the app must be
   //            recompiled and redeployed to update currentOffset after
   //            a clock change due to daylight saving time.
-  // TODO: Next update: 2017-11-05.
+  // TODO: Next update: 2018-03-11.
   // utc_offset gives the difference in seconds between UTC and the app's
   // default time zone (Pacific): -25200 or -28800, depending on the season.
   var currentOffset = <%= Time.zone.now.utc_offset %>;
