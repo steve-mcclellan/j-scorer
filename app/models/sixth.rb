@@ -7,12 +7,12 @@ class Sixth < ApplicationRecord
   #       Does self.types, below, do the same thing?
   validates :type,
             presence: true,
-            inclusion: { in: %w(RoundOneCategory RoundTwoCategory) }
+            inclusion: { in: %w[RoundOneCategory RoundTwoCategory] }
 
   validates :board_position,
             presence: true,
             inclusion: { in: [1, 2, 3, 4, 5, 6] },
-            uniqueness: { scope: [:game_id, :type],
+            uniqueness: { scope: %i[game_id type],
                           message: 'already exists' }
 
   default_scope { order(type: :asc, board_position: :asc) }
@@ -20,7 +20,7 @@ class Sixth < ApplicationRecord
   include Topicable
 
   def self.types
-    %w(RoundOneCategory RoundTwoCategory)
+    %w[RoundOneCategory RoundTwoCategory]
   end
 
   scope :round_one_categories, -> { where(type: 'RoundOneCategory') }

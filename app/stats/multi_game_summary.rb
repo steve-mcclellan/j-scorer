@@ -1,5 +1,6 @@
 class MultiGameSummary
-  include MultiGameQueries, SharedStatsMethods
+  include MultiGameQueries
+  include SharedStatsMethods
 
   attr_reader :stats
 
@@ -56,12 +57,13 @@ class MultiGameSummary
   def add_calculated_stats(count)
     @stats[:all][:game_count] = count['games'].to_i
 
-    [:round_one, :round_two].each do |round|
+    %i[round_one round_two].each do |round|
       @stats[round][:dds] = @stats[round][:dd_right] + @stats[round][:dd_wrong]
     end
 
-    [:right, :wrong, :pass, :dds, :dd_right, :dd_wrong, :score,
-     :possible_score].each do |stat|
+    %i[
+      right wrong pass dds dd_right dd_wrong score possible_score
+    ].each do |stat|
       @stats[:all][stat] = @stats[:round_one][stat] + @stats[:round_two][stat]
     end
 
@@ -78,7 +80,7 @@ class MultiGameSummary
   end
 
   def add_rate_stats
-    [:round_one, :round_two, :all].each do |round|
+    %i[round_one round_two all].each do |round|
       @stats[round][:average_score] = quotient(@stats[round][:score],
                                                @stats[:all][:game_count])
       @stats[round][:efficiency] = quotient(@stats[round][:score],

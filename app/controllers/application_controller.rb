@@ -14,7 +14,7 @@ class ApplicationController < ActionController::Base
        request.host.casecmp(ENV['PROPER_DOMAIN']) != 0
 
       proper_url = "https://#{ENV['PROPER_DOMAIN']}#{request.fullpath}"
-      redirect_to proper_url, status: 301
+      redirect_to proper_url, status: :moved_permanently
     end
   end
 

@@ -59,7 +59,9 @@ class PasswordResetsTest < ActionDispatch::IntegrationTest
     post forgot_path, params: { password_reset: { email: @user.email } }
 
     @user = assigns(:user)
+    # rubocop:disable SkipsModelValidations
     @user.update_attribute(:reset_sent_at, 90.minutes.ago)
+    # rubocop:enable SkipsModelValidations
     patch reset_path(@user.reset_token),
           params: { email: @user.email,
                     user: { password: 'foobar',
