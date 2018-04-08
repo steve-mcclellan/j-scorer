@@ -9,6 +9,9 @@ rvm:
 addons:
   postgresql: "9.5"
 
+before_install:
+  - gem install bundler
+
 before_script:
   - cp config/database.yml.travis config/database.yml
   - psql -c 'create database travis_ci_test;' -U postgres
