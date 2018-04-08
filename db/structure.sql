@@ -2,13 +2,14 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.5.8
--- Dumped by pg_dump version 9.5.8
+-- Dumped from database version 9.5.12
+-- Dumped by pg_dump version 9.5.12
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
 SET check_function_bodies = false;
 SET client_min_messages = warning;
 SET row_security = off;
@@ -24,24 +25,10 @@ CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 -- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: -
 --
 
-COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+-- HACK: Manually commented out to resolve Heroku issue.
+-- TODO: Open support ticket with Heroku for a better resolution.
+-- COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
-
---
--- Name: tablefunc; Type: EXTENSION; Schema: -; Owner: -
---
-
-CREATE EXTENSION IF NOT EXISTS tablefunc WITH SCHEMA public;
-
-
---
--- Name: EXTENSION tablefunc; Type: COMMENT; Schema: -; Owner: -
---
-
-COMMENT ON EXTENSION tablefunc IS 'functions that manipulate whole tables, including crosstab';
-
-
-SET search_path = public, pg_catalog;
 
 SET default_tablespace = '';
 
@@ -51,7 +38,7 @@ SET default_with_oids = false;
 -- Name: ar_internal_metadata; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE ar_internal_metadata (
+CREATE TABLE public.ar_internal_metadata (
     key character varying NOT NULL,
     value character varying,
     created_at timestamp without time zone NOT NULL,
@@ -63,10 +50,10 @@ CREATE TABLE ar_internal_metadata (
 -- Name: category_topics; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE category_topics (
+CREATE TABLE public.category_topics (
     id integer NOT NULL,
-    category_id integer,
     category_type character varying,
+    category_id integer,
     topic_id integer,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
@@ -77,7 +64,7 @@ CREATE TABLE category_topics (
 -- Name: category_topics_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE category_topics_id_seq
+CREATE SEQUENCE public.category_topics_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -89,14 +76,14 @@ CREATE SEQUENCE category_topics_id_seq
 -- Name: category_topics_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE category_topics_id_seq OWNED BY category_topics.id;
+ALTER SEQUENCE public.category_topics_id_seq OWNED BY public.category_topics.id;
 
 
 --
 -- Name: finals; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE finals (
+CREATE TABLE public.finals (
     id integer NOT NULL,
     game_id integer,
     category_title character varying,
@@ -114,7 +101,7 @@ CREATE TABLE finals (
 -- Name: finals_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE finals_id_seq
+CREATE SEQUENCE public.finals_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -126,14 +113,14 @@ CREATE SEQUENCE finals_id_seq
 -- Name: finals_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE finals_id_seq OWNED BY finals.id;
+ALTER SEQUENCE public.finals_id_seq OWNED BY public.finals.id;
 
 
 --
 -- Name: games; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE games (
+CREATE TABLE public.games (
     id integer NOT NULL,
     user_id integer,
     show_date date,
@@ -156,7 +143,7 @@ CREATE TABLE games (
 -- Name: games_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE games_id_seq
+CREATE SEQUENCE public.games_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -168,14 +155,14 @@ CREATE SEQUENCE games_id_seq
 -- Name: games_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE games_id_seq OWNED BY games.id;
+ALTER SEQUENCE public.games_id_seq OWNED BY public.games.id;
 
 
 --
 -- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE schema_migrations (
+CREATE TABLE public.schema_migrations (
     version character varying NOT NULL
 );
 
@@ -184,7 +171,7 @@ CREATE TABLE schema_migrations (
 -- Name: sixths; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE sixths (
+CREATE TABLE public.sixths (
     id integer NOT NULL,
     game_id integer,
     type character varying,
@@ -205,7 +192,7 @@ CREATE TABLE sixths (
 -- Name: sixths_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE sixths_id_seq
+CREATE SEQUENCE public.sixths_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -217,14 +204,14 @@ CREATE SEQUENCE sixths_id_seq
 -- Name: sixths_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE sixths_id_seq OWNED BY sixths.id;
+ALTER SEQUENCE public.sixths_id_seq OWNED BY public.sixths.id;
 
 
 --
 -- Name: topics; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE topics (
+CREATE TABLE public.topics (
     id integer NOT NULL,
     user_id integer,
     name character varying,
@@ -237,7 +224,7 @@ CREATE TABLE topics (
 -- Name: topics_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE topics_id_seq
+CREATE SEQUENCE public.topics_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -249,14 +236,14 @@ CREATE SEQUENCE topics_id_seq
 -- Name: topics_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE topics_id_seq OWNED BY topics.id;
+ALTER SEQUENCE public.topics_id_seq OWNED BY public.topics.id;
 
 
 --
 -- Name: users; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE users (
+CREATE TABLE public.users (
     id integer NOT NULL,
     email character varying,
     created_at timestamp without time zone NOT NULL,
@@ -273,7 +260,7 @@ CREATE TABLE users (
 -- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE users_id_seq
+CREATE SEQUENCE public.users_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -285,56 +272,56 @@ CREATE SEQUENCE users_id_seq
 -- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE users_id_seq OWNED BY users.id;
+ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
 
 
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY category_topics ALTER COLUMN id SET DEFAULT nextval('category_topics_id_seq'::regclass);
+ALTER TABLE ONLY public.category_topics ALTER COLUMN id SET DEFAULT nextval('public.category_topics_id_seq'::regclass);
 
 
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY finals ALTER COLUMN id SET DEFAULT nextval('finals_id_seq'::regclass);
+ALTER TABLE ONLY public.finals ALTER COLUMN id SET DEFAULT nextval('public.finals_id_seq'::regclass);
 
 
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY games ALTER COLUMN id SET DEFAULT nextval('games_id_seq'::regclass);
+ALTER TABLE ONLY public.games ALTER COLUMN id SET DEFAULT nextval('public.games_id_seq'::regclass);
 
 
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY sixths ALTER COLUMN id SET DEFAULT nextval('sixths_id_seq'::regclass);
+ALTER TABLE ONLY public.sixths ALTER COLUMN id SET DEFAULT nextval('public.sixths_id_seq'::regclass);
 
 
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY topics ALTER COLUMN id SET DEFAULT nextval('topics_id_seq'::regclass);
+ALTER TABLE ONLY public.topics ALTER COLUMN id SET DEFAULT nextval('public.topics_id_seq'::regclass);
 
 
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regclass);
+ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_id_seq'::regclass);
 
 
 --
 -- Name: ar_internal_metadata_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY ar_internal_metadata
+ALTER TABLE ONLY public.ar_internal_metadata
     ADD CONSTRAINT ar_internal_metadata_pkey PRIMARY KEY (key);
 
 
@@ -342,7 +329,7 @@ ALTER TABLE ONLY ar_internal_metadata
 -- Name: category_topics_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY category_topics
+ALTER TABLE ONLY public.category_topics
     ADD CONSTRAINT category_topics_pkey PRIMARY KEY (id);
 
 
@@ -350,7 +337,7 @@ ALTER TABLE ONLY category_topics
 -- Name: finals_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY finals
+ALTER TABLE ONLY public.finals
     ADD CONSTRAINT finals_pkey PRIMARY KEY (id);
 
 
@@ -358,15 +345,23 @@ ALTER TABLE ONLY finals
 -- Name: games_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY games
+ALTER TABLE ONLY public.games
     ADD CONSTRAINT games_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: schema_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.schema_migrations
+    ADD CONSTRAINT schema_migrations_pkey PRIMARY KEY (version);
 
 
 --
 -- Name: sixths_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY sixths
+ALTER TABLE ONLY public.sixths
     ADD CONSTRAINT sixths_pkey PRIMARY KEY (id);
 
 
@@ -374,7 +369,7 @@ ALTER TABLE ONLY sixths
 -- Name: topics_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY topics
+ALTER TABLE ONLY public.topics
     ADD CONSTRAINT topics_pkey PRIMARY KEY (id);
 
 
@@ -382,7 +377,7 @@ ALTER TABLE ONLY topics
 -- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY users
+ALTER TABLE ONLY public.users
     ADD CONSTRAINT users_pkey PRIMARY KEY (id);
 
 
@@ -390,137 +385,130 @@ ALTER TABLE ONLY users
 -- Name: index_category_topics_on_category_type_and_category_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_category_topics_on_category_type_and_category_id ON category_topics USING btree (category_type, category_id);
+CREATE INDEX index_category_topics_on_category_type_and_category_id ON public.category_topics USING btree (category_type, category_id);
 
 
 --
 -- Name: index_category_topics_on_topic_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_category_topics_on_topic_id ON category_topics USING btree (topic_id);
+CREATE INDEX index_category_topics_on_topic_id ON public.category_topics USING btree (topic_id);
 
 
 --
 -- Name: index_category_topics_to_assure_uniqueness; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_category_topics_to_assure_uniqueness ON category_topics USING btree (topic_id, category_id, category_type);
+CREATE UNIQUE INDEX index_category_topics_to_assure_uniqueness ON public.category_topics USING btree (topic_id, category_id, category_type);
 
 
 --
 -- Name: index_finals_on_game_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_finals_on_game_id ON finals USING btree (game_id);
+CREATE INDEX index_finals_on_game_id ON public.finals USING btree (game_id);
 
 
 --
 -- Name: index_games_on_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_games_on_user_id ON games USING btree (user_id);
+CREATE INDEX index_games_on_user_id ON public.games USING btree (user_id);
 
 
 --
 -- Name: index_games_on_user_id_and_date_played; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_games_on_user_id_and_date_played ON games USING btree (user_id, date_played);
+CREATE INDEX index_games_on_user_id_and_date_played ON public.games USING btree (user_id, date_played);
 
 
 --
 -- Name: index_games_on_user_id_and_game_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_games_on_user_id_and_game_id ON games USING btree (user_id, game_id);
+CREATE UNIQUE INDEX index_games_on_user_id_and_game_id ON public.games USING btree (user_id, game_id);
 
 
 --
 -- Name: index_games_on_user_id_and_play_type; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_games_on_user_id_and_play_type ON games USING btree (user_id, play_type);
+CREATE INDEX index_games_on_user_id_and_play_type ON public.games USING btree (user_id, play_type);
 
 
 --
 -- Name: index_games_on_user_id_and_rerun; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_games_on_user_id_and_rerun ON games USING btree (user_id, rerun);
+CREATE INDEX index_games_on_user_id_and_rerun ON public.games USING btree (user_id, rerun);
 
 
 --
 -- Name: index_games_on_user_id_and_show_date; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_games_on_user_id_and_show_date ON games USING btree (user_id, show_date);
+CREATE INDEX index_games_on_user_id_and_show_date ON public.games USING btree (user_id, show_date);
 
 
 --
 -- Name: index_sixths_on_game_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_sixths_on_game_id ON sixths USING btree (game_id);
+CREATE INDEX index_sixths_on_game_id ON public.sixths USING btree (game_id);
 
 
 --
 -- Name: index_topics_on_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_topics_on_user_id ON topics USING btree (user_id);
+CREATE INDEX index_topics_on_user_id ON public.topics USING btree (user_id);
 
 
 --
 -- Name: index_topics_on_user_id_and_name; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_topics_on_user_id_and_name ON topics USING btree (user_id, name);
+CREATE UNIQUE INDEX index_topics_on_user_id_and_name ON public.topics USING btree (user_id, name);
 
 
 --
 -- Name: index_users_on_email; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_users_on_email ON users USING btree (email);
-
-
---
--- Name: unique_schema_migrations; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX unique_schema_migrations ON schema_migrations USING btree (version);
+CREATE UNIQUE INDEX index_users_on_email ON public.users USING btree (email);
 
 
 --
 -- Name: fk_rails_064f1dadb9; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY category_topics
-    ADD CONSTRAINT fk_rails_064f1dadb9 FOREIGN KEY (topic_id) REFERENCES topics(id);
+ALTER TABLE ONLY public.category_topics
+    ADD CONSTRAINT fk_rails_064f1dadb9 FOREIGN KEY (topic_id) REFERENCES public.topics(id);
 
 
 --
 -- Name: fk_rails_7b812cfb44; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY topics
-    ADD CONSTRAINT fk_rails_7b812cfb44 FOREIGN KEY (user_id) REFERENCES users(id);
+ALTER TABLE ONLY public.topics
+    ADD CONSTRAINT fk_rails_7b812cfb44 FOREIGN KEY (user_id) REFERENCES public.users(id);
 
 
 --
 -- Name: fk_rails_de9e6ea7f7; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY games
-    ADD CONSTRAINT fk_rails_de9e6ea7f7 FOREIGN KEY (user_id) REFERENCES users(id);
+ALTER TABLE ONLY public.games
+    ADD CONSTRAINT fk_rails_de9e6ea7f7 FOREIGN KEY (user_id) REFERENCES public.users(id);
 
 
 --
 -- Name: fk_rails_debebe87e0; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY finals
-    ADD CONSTRAINT fk_rails_debebe87e0 FOREIGN KEY (game_id) REFERENCES games(id);
+ALTER TABLE ONLY public.finals
+    ADD CONSTRAINT fk_rails_debebe87e0 FOREIGN KEY (game_id) REFERENCES public.games(id);
 
 
 --

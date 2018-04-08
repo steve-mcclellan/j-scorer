@@ -20,7 +20,7 @@ class ResultsByRow
     validate_query_inputs(user, play_types)
     play_types_list = format_play_types_for_sql(play_types)
     rows = []
-    %w(RoundOneCategory RoundTwoCategory).each do |round_type|
+    %w[RoundOneCategory RoundTwoCategory].each do |round_type|
       1.upto(5).each do |row_num|
         rows.push(single_row_sql(row_num, round_type, user, play_types_list))
       end
@@ -71,7 +71,7 @@ class ResultsByRow
   # rubocop:enable MethodLength
 
   def assign_colors
-    [:round_one, :round_two].each do |round|
+    %i[round_one round_two].each do |round|
       1.upto(5) do |row_number|
         row = @stats[round][row_number]
         row['regular_color'] = to_color_code(row['efficiency'], -1.0, 1.0)

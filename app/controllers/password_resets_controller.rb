@@ -1,8 +1,8 @@
 class PasswordResetsController < ApplicationController
-  before_action :find_user,        only: [:edit, :update]
-  before_action :valid_user,       only: [:edit, :update]
-  before_action :check_expiration, only: [:edit, :update]
-  before_action :password_present, only: [:update]
+  before_action :find_user,        only: %i[edit update]
+  before_action :valid_user,       only: %i[edit update]
+  before_action :check_expiration, only: %i[edit update]
+  before_action :password_present, only: %i[update]
 
   def new; end
 
@@ -23,7 +23,9 @@ class PasswordResetsController < ApplicationController
   def update
     if @user.update(user_params)
       log_in @user
+      # rubocop:disable SkipsModelValidations
       @user.update_attribute(:reset_digest, nil)
+      # rubocop:enable SkipsModelValidations
       flash[:success] = 'Password has been reset.'
       redirect_to root_url
     else
@@ -44,7 +46,7 @@ class PasswordResetsController < ApplicationController
   end
 
   def valid_user
-    return 'OK' if @user && @user.authenticated?(:reset, params[:id])
+    return 'OK' if @user&.authenticated?(:reset, params[:id])
     redirect_to root_url
   end
 

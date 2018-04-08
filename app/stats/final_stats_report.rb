@@ -1,5 +1,6 @@
 class FinalStatsReport
-  include FinalQueries, SharedStatsMethods
+  include FinalQueries
+  include SharedStatsMethods
 
   attr_reader :stats
 
@@ -18,34 +19,34 @@ class FinalStatsReport
   private
 
   # rubocop:disable MethodLength
-  def format_data(d)
-    { user: make_stat_array(d, 'user'),
-      contestants: [make_stat_array(d, 'contestants'),
-                    make_stat_array(d, 'first'),
-                    make_stat_array(d, 'second'),
-                    make_stat_array(d, 'third')],
-      by_get_rate: [[make_stat_array(d, 'zero_for_zero'),
-                     make_stat_array(d, 'zero_for_one'),
-                     make_stat_array(d, 'zero_for_two'),
-                     make_stat_array(d, 'zero_for_three')],
+  def format_data(data)
+    { user: make_stat_array(data, 'user'),
+      contestants: [make_stat_array(data, 'contestants'),
+                    make_stat_array(data, 'first'),
+                    make_stat_array(data, 'second'),
+                    make_stat_array(data, 'third')],
+      by_get_rate: [[make_stat_array(data, 'zero_for_zero'),
+                     make_stat_array(data, 'zero_for_one'),
+                     make_stat_array(data, 'zero_for_two'),
+                     make_stat_array(data, 'zero_for_three')],
                     [nil,
-                     make_stat_array(d, 'one_for_one'),
-                     make_stat_array(d, 'one_for_two'),
-                     make_stat_array(d, 'one_for_three')],
+                     make_stat_array(data, 'one_for_one'),
+                     make_stat_array(data, 'one_for_two'),
+                     make_stat_array(data, 'one_for_three')],
                     [nil, nil,
-                     make_stat_array(d, 'two_for_two'),
-                     make_stat_array(d, 'two_for_three')],
+                     make_stat_array(data, 'two_for_two'),
+                     make_stat_array(data, 'two_for_three')],
                     [nil, nil, nil,
-                     make_stat_array(d, 'three_for_three')]],
+                     make_stat_array(data, 'three_for_three')]],
       when_right: [nil,
-                   make_stat_array(d, 'when_first_right'),
-                   make_stat_array(d, 'when_second_right'),
-                   make_stat_array(d, 'when_third_right')],
+                   make_stat_array(data, 'when_first_right'),
+                   make_stat_array(data, 'when_second_right'),
+                   make_stat_array(data, 'when_third_right')],
       when_wrong: [nil,
-                   make_stat_array(d, 'when_first_wrong'),
-                   make_stat_array(d, 'when_second_wrong'),
-                   make_stat_array(d, 'when_third_wrong')],
-      advice: make_advice_hash(d) }
+                   make_stat_array(data, 'when_first_wrong'),
+                   make_stat_array(data, 'when_second_wrong'),
+                   make_stat_array(data, 'when_third_wrong')],
+      advice: make_advice_hash(data) }
   end
   # rubocop:enable MethodLength
 
@@ -55,13 +56,13 @@ class FinalStatsReport
     [num, den, quotient(num, den)]
   end
 
-  def make_advice_hash(d)
+  def make_advice_hash(data)
     advice = {}
-    %w(
+    %w[
       crush_3p_win crush_2p_win second_third_wrong player_right_first_wrong
       first_third_wrong player_right_first_second_wrong first_second_wrong
-    ).each do |situation|
-      advice[situation.to_sym] = make_stat_array(d, situation)
+    ].each do |situation|
+      advice[situation.to_sym] = make_stat_array(data, situation)
     end
     advice
   end
