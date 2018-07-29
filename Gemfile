@@ -2,7 +2,7 @@
 source 'https://rubygems.org'
 
 ruby '2.5.1'
-gem 'rails', '~> 5.2.0.rc2'
+gem 'rails', '~> 5.2.0'
 
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 0.15'
@@ -70,7 +70,7 @@ gem 'momentjs-rails', '>= 2.9.0'
 
 # Allow for dynamic default values, like setting show_date and date_played
 # to the date/time the game is created.
-gem 'default_value_for', '~> 3.0.0'
+gem 'default_value_for', '~> 3.1.0'
 
 # Allow for convenient(-ish) customization of the data displayed
 # by "render :json".
