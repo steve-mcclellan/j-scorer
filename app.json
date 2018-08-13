@@ -1,5 +1,6 @@
 {
   "name": "j-scorer",
+  "stack": "heroku-18",
   "scripts": {
     "postdeploy": "bundle exec rake db:structure:load db:seed"
   },
@@ -40,6 +41,9 @@
     }
   ],
   "buildpacks": [
+    {
+      "url": "heroku/heroku-buildpack-activestorage-preview"
+    },
     {
       "url": "heroku/ruby"
     }
