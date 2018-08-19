@@ -4,7 +4,7 @@ class CategoryTopic < ApplicationRecord
 
   validates :topic_id,
             presence: true,
-            uniqueness: { scope: [:category_id, :category_type] }
+            uniqueness: { scope: %i[category_id category_type] }
 
   validates :category_id, presence: true
   validates :category_type, presence: true

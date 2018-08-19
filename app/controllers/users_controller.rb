@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :logged_in_user, only: [:show, :update_user_filters]
+  before_action :logged_in_user, only: %i(show update_user_filters)
 
   def new
     @user = User.new
@@ -40,14 +40,14 @@ class UsersController < ApplicationController
   def update_user_filters
     @user = current_user
     new_types = params[:play_types]
-    render json: {}, status: 400 and return unless new_types.is_a? Array
+    render json: {}, status: :bad_request and return unless new_types.is_a? Array
 
     new_types.select! { |type| VALID_TYPE_INPUTS.include?(type) }
 
     if @user.update(params.permit(*DATE_FILTER_FIELDS, play_types: []))
       render json: { success: true }
     else
-      render json: @user.errors, status: 500
+      render json: @user.errors, status: :bad_request
     end
   end
 

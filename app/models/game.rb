@@ -65,11 +65,13 @@ class Game < ApplicationRecord
     dd_summary = { round_one: round_one_categories.map(&:dd_result).compact,
                    round_two: round_two_categories.map(&:dd_result).compact }
 
+    # rubocop:disable SkipsModelValidations
     update_columns(
       dd1_result: dd_summary[:round_one][0] || 0,
       dd2a_result: dd_summary[:round_two][0] || 0,
       dd2b_result: dd_summary[:round_two][1] || 0
     )
+    # rubocop:enable SkipsModelValidations
   end
 
   # If the show date is unused as a game_id, use that. Otherwise, try the show

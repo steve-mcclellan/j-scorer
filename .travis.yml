@@ -4,10 +4,13 @@ dist: trusty
 sudo: false
 
 rvm:
-  - 2.3.3
+  - 2.5.1
 
 addons:
   postgresql: "9.5"
+
+before_install:
+  - gem install bundler
 
 before_script:
   - cp config/database.yml.travis config/database.yml

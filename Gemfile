@@ -1,7 +1,8 @@
+# rubocop:disable FileName
 source 'https://rubygems.org'
 
-ruby '2.3.3'
-gem 'rails', '~> 5.0.1'
+ruby '2.5.1'
+gem 'rails', '~> 5.2.0'
 
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 0.15'
@@ -64,13 +65,14 @@ gem 'bootstrap-sass', '~> 3.3.6'
 # And a date-time-picker for convienient, er, date and time picking...
 # Freezing this at 4.17.37, as 4.17.43 causes JS error "newZone() expects
 # a string parameter", crashing the Game page. TODO: Investigate this.
-gem 'momentjs-rails', '>= 2.9.0'
 gem 'bootstrap3-datetimepicker-rails', '4.17.37'
+gem 'momentjs-rails', '>= 2.9.0'
 
 # Allow for dynamic default values, like setting show_date and date_played
 # to the date/time the game is created.
-gem 'default_value_for', '~> 3.0.0'
+gem 'default_value_for', '~> 3.1.0'
 
 # Allow for convenient(-ish) customization of the data displayed
 # by "render :json".
 gem 'active_model_serializers', '~> 0.10.0'
+# rubocop:enable FileName

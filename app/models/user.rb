@@ -31,7 +31,9 @@ class User < ApplicationRecord
   # Remembers a user in the database for use in persistent sessions.
   def remember
     self.remember_token = User.new_token
+    # rubocop:disable SkipsModelValidations
     update_attribute(:remember_digest, User.digest(remember_token))
+    # rubocop:enable SkipsModelValidations
   end
 
   # Returns true if the given token matches the digest.
@@ -43,14 +45,18 @@ class User < ApplicationRecord
 
   # Forgets a user.
   def forget
+    # rubocop:disable SkipsModelValidations
     update_attribute(:remember_digest, nil)
+    # rubocop:enable SkipsModelValidations
   end
 
   # Sets the password reset attributes.
   def create_reset_digest
     self.reset_token = User.new_token
+    # rubocop:disable SkipsModelValidations
     update_columns(reset_digest:  User.digest(reset_token),
                    reset_sent_at: Time.zone.now)
+    # rubocop:enable SkipsModelValidations
   end
 
   def send_password_reset_email
@@ -65,6 +71,7 @@ class User < ApplicationRecord
     games.find_by(game_id: game_id).present?
   end
 
+  # rubocop:disable MemoizedInstanceVariableName
   def date_filter_preferences
     @dfp ||= Hash[DATE_FILTER_FIELDS.map { |field| [field, send(field)] }]
   end
@@ -92,4 +99,5 @@ class User < ApplicationRecord
   def play_type_summary
     @pts ||= PlayTypeSummary.new(self).stats
   end
+  # rubocop:enable MemoizedInstanceVariableName
 end

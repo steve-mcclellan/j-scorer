@@ -1,15 +1,14 @@
 class GamesController < ApplicationController
-  before_action :logged_in_user, except: [:game, :check]
-  before_action :parse_show_date, only: [:save]
-  before_action :parse_old_and_new_dates, only: [:redate]
-  before_action :find_game_to_redate, only: [:redate]
-  before_action :find_game_to_destroy, only: [:destroy]
-  before_action :find_or_create_game_to_save, only: [:save]
+  before_action :logged_in_user, except: %i[game check]
+  before_action :parse_show_date, only: %i[save]
+  before_action :parse_old_and_new_dates, only: %i[redate]
+  before_action :find_game_to_redate, only: %i[redate]
+  before_action :find_game_to_destroy, only: %i[destroy]
+  before_action :find_or_create_game_to_save, only: %i[save]
 
   def game
     @game_id = params[:g]
-    @existing_game = current_user &&
-                     current_user.existing_game_id?(@game_id)
+    @existing_game = current_user&.existing_game_id?(@game_id)
   rescue ArgumentError, TypeError
     # TypeError will be thrown if no date is given.
     # ArgumentError will be thrown if date cannot be parsed.
@@ -26,7 +25,7 @@ class GamesController < ApplicationController
     if (game = current_user.games.find_by(game_id: params[:game_id]))
       render json: game
     else
-      render json: {}, status: 404
+      render json: {}, status: :not_found
     end
   end
 
@@ -34,7 +33,7 @@ class GamesController < ApplicationController
     if @game.update(game_params)
       render json: { ids: category_ids(@game) }
     else
-      render json: @game.errors, status: 409
+      render json: @game.errors, status: :conflict
     end
   rescue ActiveRecord::RecordNotFound
     # This will fire if there is a mismatch between the category IDs
@@ -42,7 +41,7 @@ class GamesController < ApplicationController
     # TODO: Test this. It looks like it will require an integration test
     #       to change users mid-test.
     @game.destroy if @game.sixths.empty?
-    render json: { final_id: ['No match'] }, status: 409
+    render json: { final_id: ['No match'] }, status: :conflict
   end
 
   def redate
@@ -53,11 +52,8 @@ class GamesController < ApplicationController
   end
 
   def check
-    if logged_in? && Final.find(params[:final_id]).game.user == current_user
-      render json: { match: true }
-    else
-      render json: { match: '' }
-    end
+    is_match = (Final.find(params[:final_id]).game.user == current_user) || ''
+    render json: { match: is_match }
   rescue ActiveRecord::RecordNotFound
     render json: { match: '' }
   end
@@ -71,19 +67,19 @@ class GamesController < ApplicationController
   def parse_show_date
     @show_date = Date.parse(params[:game][:show_date])
   rescue ArgumentError
-    render json: { date: ['Could not parse show date'] }, status: 400
+    render json: { date: ['Could not parse show date'] }, status: :bad_request
   end
 
   def parse_old_and_new_dates
     @old_date = Date.parse(params[:oldDate])
     @new_date = Date.parse(params[:newDate])
   rescue ArgumentError
-    render json: { errors: ['bad_date'] }, status: 400
+    render json: { errors: ['bad_date'] }, status: :bad_request
   end
 
   def find_game_to_redate
     @game = find_game_from_final_id_and_date(params[:finalID], @old_date)
-    return render json: { errors: ['no_show'] }, status: 404 unless @game
+    return render json: { errors: ['no_show'] }, status: :not_found unless @game
   end
 
   def find_game_to_destroy
@@ -96,7 +92,9 @@ class GamesController < ApplicationController
       @game = current_user.games.create!(show_date: @show_date)
     else
       @game = find_game_from_final_id_and_date(final_id, @show_date)
-      return render json: { date: ['Invalid change'] }, status: 400 unless @game
+      unless @game
+        return render json: { date: ['Invalid change'] }, status: :bad_request
+      end
     end
   end
 
