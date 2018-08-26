@@ -38,6 +38,7 @@ var NEW_GAME_COOKIE = {
   "show_date":"",
   "date_played":"",
   "play_type":"",
+  "rerun":null,
   "round_one_score":0,
   "round_two_score":0,
   "final_result":0,
@@ -500,6 +501,13 @@ $( ".games-game" ).ready( function() {
     updateCookies( modified );
   }
 
+  function updateRerunStatus() {
+    var newValue = ( $rerunStatusSelect.val() === "true" );
+    var modified = ( currentGame["rerun"] !== newValue );
+    currentGame["rerun"] = newValue;
+    updateCookies( modified );
+  }
+
   function initializeFromCookie() {
     populateSaveAreaFromCookie( true );
     getScoresFromCookie();
@@ -523,7 +531,8 @@ $( ".games-game" ).ready( function() {
     }
     datePlayedToCurrent();
     // Set the play-type dropdown to its first option.
-    $playTypeSelect.prop( "selectedIndex", 0);
+    $playTypeSelect.prop( "selectedIndex", 0 );
+    $rerunStatusSelect.prop( "selectedIndex", 0 );
     updatePlayType();
     updateRound();
   }
@@ -534,6 +543,7 @@ $( ".games-game" ).ready( function() {
     $datePlayedPicker.data( "DateTimePicker" )
                      .date( currentGame.date_played );
     $playTypeSelect.val( currentGame.play_type );
+    $rerunStatusSelect.val( currentGame.rerun ? "true" : "false" );
 
     if ( !currentGameData.modified ) { disableSaveLink( "Game loaded!" ); }
 
@@ -845,6 +855,7 @@ $( ".games-game" ).ready( function() {
   var $datePlayedPicker = $( "#played-picker" );
   var $datePlayedValue = $( "#played-picker input" );
   var $playTypeSelect = $( "#play-type-select" );
+  var $rerunStatusSelect = $( "#rerun-status-select" );
   var $saveLink = $( "#save-link" );
   var $deleteGameLink = $( "#delete-game-link" );
 
@@ -978,6 +989,10 @@ $( ".games-game" ).ready( function() {
   $playTypeSelect.on( "change", function() {
     updatePlayType();
   });
+
+  $rerunStatusSelect.on( "change", function() {
+    updateRerunStatus();
+  })
 
   $saveLink.on( "click", function() {
     // Take action only if the save link is not disabled.
