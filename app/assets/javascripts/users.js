@@ -44,7 +44,7 @@ $( ".users-show, .users-sample" ).ready( function() {
   }
 
   function makeDateFilterObject() {
-    result = {};
+    var result = {};
     var showDateObject = getObjectFromSentences( "show-date" ),
         datePlayedObject = getObjectFromSentences( "date-played" );
     for ( var key in showDateObject ) {
@@ -152,7 +152,7 @@ $( ".users-show, .users-sample" ).ready( function() {
       storedToDates = { "show-date": undefined, "date-played": undefined };
 
   // Remove these before Tablesorter can get its grubby mitts on them.
-  $untracked = $( "tr.untracked" ).detach();
+  var $untracked = $( "tr.untracked" ).detach();
 
   // Make "Games" table sortable. Initialize default sort to
   // [ leftmost column, descending ]. Prevent meaningless attempts

@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :logged_in_user, only: %i(show update_user_filters)
+  before_action :logged_in_user, only: %i[show update_user_filters]
 
   def new
     @user = User.new
@@ -76,14 +76,22 @@ class UsersController < ApplicationController
   def date_filters_from_params
     return @dffp if @dffp
     @dffp = Hash[DATE_FILTER_FIELDS.map { |field| [field, params[field]] }]
+    booleanize_verbs
     sanitize_dates
     @dffp
   end
 
+  def booleanize_verbs
+    %i[show_date_reverse date_played_reverse].each do |field|
+      next if @dffp[field].blank?
+      @dffp[field] = (@dffp[field] == 'true')
+    end
+  end
+
   def sanitize_dates
-    [:show_date_beginning, :show_date_from, :show_date_to,
-     :date_played_beginning, :date_played_from, :date_played_to].each do |field|
-      next if @dffp[field].nil? || @dffp[field].empty?
+    %i[show_date_beginning show_date_from show_date_to
+       date_played_beginning date_played_from date_played_to].each do |field|
+      next if @dffp[field].blank?
       begin
         @dffp[field] = Date.parse(@dffp[field]).strftime('%F')
       rescue ArgumentError
