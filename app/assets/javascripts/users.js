@@ -163,9 +163,10 @@ $( ".users-show, .users-sample" ).ready( function() {
       sortList: [[0,1]],
       sortInitialOrder: "desc",
       headers: {
-        2: { sortInitialOrder: "asc" },  // Play type (text)
-        8: { sortInitialOrder: "asc" },  // Final (check or X)
-        9: { sorter: false }
+        1: { sortInitialOrder: "asc" },  // Rerun status (check or -)
+        3: { sortInitialOrder: "asc" },  // Play type (text)
+        9: { sortInitialOrder: "asc" },  // Final (check or X)
+        10: { sorter: false }            // Actions
       }
     });
   }
@@ -262,7 +263,7 @@ $( ".users-show, .users-sample" ).ready( function() {
 
   $( "#show-date-adverb, #show-date-half-life-days" ).change( function() {
     updateWeightSentence( "show-date" );
-  })
+  });
 
   $showDateFromPicker.datetimepicker({
     format: "YYYY-MM-DD",
