@@ -266,7 +266,7 @@ input {
     flex-direction: column;
     background-color: $j-blue;
     border: 0.3vw solid $gameboard-color;
-    // To match the Bootstrap default for the buttons:
+    /* To match the Bootstrap default for the buttons: */
     border-radius: 4px;
 
     p {
@@ -722,6 +722,14 @@ html.no-js #stats-loading-message {
         width: 20vw;
       }
 
+      /* TODO 37b: Get rid of the temporary span. */
+      span.aside{
+        font-size: 1.25vh;
+        font-style: italic;
+        margin-left: 1vh;
+        color: black;
+      }
+
       a.aside {
         font-size: 1.25vh;
         font-style: italic;
@@ -737,7 +745,7 @@ html.no-js #stats-loading-message {
       #rerun-status {
         width: 20vw;
       }
-    }  // sentences
+    }  /* sentences */
 
 
     #typeTable tbody td {
