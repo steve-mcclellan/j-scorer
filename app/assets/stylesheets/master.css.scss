@@ -654,7 +654,7 @@ html.no-js #stats-loading-message {
       pointer-events: none;
     }
 
-    .filter-sentence, .weight-sentence {
+    .filter-sentence, .weight-sentence, #rerun-status-sentence {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
@@ -733,7 +733,11 @@ html.no-js #stats-loading-message {
           text-decoration: none;
         }
       }
-    }
+
+      #rerun-status {
+        width: 20vw;
+      }
+    }  // sentences
 
 
     #typeTable tbody td {

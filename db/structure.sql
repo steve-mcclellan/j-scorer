@@ -261,7 +261,8 @@ CREATE TABLE public.users (
     date_played_from date,
     date_played_to date,
     date_played_weight character varying(10),
-    date_played_half_life double precision
+    date_played_half_life double precision,
+    rerun_status integer DEFAULT 0 NOT NULL
 );
 
 
@@ -564,6 +565,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170909163655'),
 ('20170909171911'),
 ('20170924191436'),
-('20171029185801');
+('20171029185801'),
+('20180902143604');
 
 

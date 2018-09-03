@@ -2,6 +2,7 @@ class User < ApplicationRecord
   has_many :games, dependent: :destroy
   has_many :topics, dependent: :destroy
   has_many :sixths, through: :games
+  enum rerun_status: { all: 0, first: 1, rerun: 2 }, _prefix: true
 
   attr_accessor :remember_token, :reset_token
   before_save { email.downcase! }
@@ -72,8 +73,8 @@ class User < ApplicationRecord
   end
 
   # rubocop:disable MemoizedInstanceVariableName
-  def date_filter_preferences
-    @dfp ||= Hash[DATE_FILTER_FIELDS.map { |field| [field, send(field)] }]
+  def filter_preferences
+    @fp ||= Hash[FILTER_FIELDS.map { |field| [field, send(field)] }]
   end
 
   def multi_game_summary(play_types)

@@ -22,7 +22,7 @@ class UsersController < ApplicationController
     @sample = false
 
     set_play_types
-    set_date_filters
+    set_filters
     set_stats_vars
   end
 
@@ -32,7 +32,7 @@ class UsersController < ApplicationController
     @sample = true
 
     set_play_types
-    set_date_filters
+    set_filters
     set_stats_vars
     render 'show'
   end
@@ -44,7 +44,7 @@ class UsersController < ApplicationController
 
     new_types.select! { |type| VALID_TYPE_INPUTS.include?(type) }
 
-    if @user.update(params.permit(*DATE_FILTER_FIELDS, play_types: []))
+    if @user.update(params.permit(*FILTER_FIELDS, play_types: []))
       render json: { success: true }
     else
       render json: @user.errors, status: :bad_request
@@ -65,37 +65,37 @@ class UsersController < ApplicationController
                   end.select { |type| VALID_TYPE_INPUTS.include?(type) }
   end
 
-  def set_date_filters
-    @date_filters = if date_filters_from_params.values.any? || @sample
-                      date_filters_from_params
-                    else
-                      current_user.date_filter_preferences
-                    end
+  def set_filters
+    @filters = if filters_from_params.values.any? || @sample
+                 filters_from_params
+               else
+                 current_user.filter_preferences
+               end
   end
 
-  def date_filters_from_params
-    return @dffp if @dffp
-    @dffp = Hash[DATE_FILTER_FIELDS.map { |field| [field, params[field]] }]
+  def filters_from_params
+    return @ffp if @ffp
+    @ffp = Hash[FILTER_FIELDS.map { |field| [field, params[field]] }]
     booleanize_verbs
     sanitize_dates
-    @dffp
+    @ffp
   end
 
   def booleanize_verbs
     %i[show_date_reverse date_played_reverse].each do |field|
-      next if @dffp[field].blank?
-      @dffp[field] = (@dffp[field] == 'true')
+      next if @ffp[field].blank?
+      @ffp[field] = (@ffp[field] == 'true')
     end
   end
 
   def sanitize_dates
     %i[show_date_beginning show_date_from show_date_to
        date_played_beginning date_played_from date_played_to].each do |field|
-      next if @dffp[field].blank?
+      next if @ffp[field].blank?
       begin
-        @dffp[field] = Date.parse(@dffp[field]).strftime('%F')
+        @ffp[field] = Date.parse(@ffp[field]).strftime('%F')
       rescue ArgumentError
-        @dffp[field] = nil
+        @ffp[field] = nil
       end
     end
   end

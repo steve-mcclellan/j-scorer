@@ -58,11 +58,13 @@ $( ".users-show, .users-sample" ).ready( function() {
 
   function makeFilterObject() {
     return $.extend( makeDateFilterObject(),
-                     { play_types: getCheckedPlayTypeBoxes() } );
+                     { rerun_status: $( "#rerun-status" ).val(),
+                       play_types: getCheckedPlayTypeBoxes() } );
   }
 
   function makeFilterQueryString() {
     return $.param( makeDateFilterObject() ) +
+           "&rerun_status=" + $( "#rerun-status" ).val() +
            "&play_types=" + getCheckedPlayTypeBoxes().join( ',' );
   }
 

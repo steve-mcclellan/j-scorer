@@ -98,6 +98,7 @@ class UserTest < ActiveSupport::TestCase
     @user.date_played_to = Date.new(9999, 12, 31)
     @user.date_played_weight = 'half-life'
     @user.date_played_half_life = '525'
+    @user.rerun_status = 'first'
     assert @user.valid?
   end
 
