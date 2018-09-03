@@ -53,7 +53,11 @@ class FilterSQLGenerator
 
   def sanitize_date(date)
     return '' if date.blank?
-    Date.parse(date).strftime('%F')
+    begin
+      date.strftime('%F')
+    rescue NoMethodError
+      Date.parse(date).strftime('%F')
+    end
   rescue ArgumentError
     ''
   end
