@@ -1,7 +1,7 @@
 # This module relies on methods from the SharedStatsMethods module.
 module MultiGameQueries
   # rubocop:disable MethodLength
-  def sixths_query(user, play_types)
+  def sixths_query(user, play_types, filters)
     validate_query_inputs(user, play_types)
     play_types_list = format_play_types_for_sql(play_types)
 
@@ -35,7 +35,7 @@ module MultiGameQueries
   end
   # rubocop:enable MethodLength
 
-  def finals_query(user, play_types)
+  def finals_query(user, play_types, filters)
     validate_query_inputs(user, play_types)
     play_types_list = format_play_types_for_sql(play_types)
 

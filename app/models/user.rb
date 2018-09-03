@@ -77,8 +77,13 @@ class User < ApplicationRecord
     @fp ||= Hash[FILTER_FIELDS.map { |field| [field, send(field)] }]
   end
 
-  def multi_game_summary(play_types)
-    @mgs ||= MultiGameSummary.new(self, play_types).stats
+  def self.filter_sql(filters)
+    # @fsql ||= FilterSQLGenerator.new(filters).sql
+    FilterSQLGenerator.new(filters).sql
+  end
+
+  def multi_game_summary(play_types, filters)
+    @mgs ||= MultiGameSummary.new(self, play_types, filters).stats
   end
 
   def percentile_report(play_types)
