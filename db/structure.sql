@@ -1,10 +1,3 @@
---
--- PostgreSQL database dump
---
-
--- Dumped from database version 9.5.12
--- Dumped by pg_dump version 9.5.12
-
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET client_encoding = 'UTF8';
@@ -18,15 +11,13 @@ SET row_security = off;
 -- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: -
 --
 
-CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+-- CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 
 
 --
 -- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: -
 --
 
--- HACK: Manually commented out to resolve Heroku issue.
--- TODO: Open support ticket with Heroku for a better resolution.
 -- COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 
@@ -252,7 +243,26 @@ CREATE TABLE public.users (
     remember_digest character varying,
     reset_digest character varying,
     reset_sent_at timestamp without time zone,
-    play_types character varying[] DEFAULT '{regular}'::character varying[]
+    play_types character varying[] DEFAULT '{regular}'::character varying[],
+    show_date_reverse boolean,
+    show_date_preposition character varying(10),
+    show_date_beginning date,
+    show_date_last_number integer,
+    show_date_last_unit character varying(1),
+    show_date_from date,
+    show_date_to date,
+    show_date_weight character varying(10),
+    show_date_half_life double precision,
+    date_played_reverse boolean,
+    date_played_preposition character varying(10),
+    date_played_beginning date,
+    date_played_last_number integer,
+    date_played_last_unit character varying(1),
+    date_played_from date,
+    date_played_to date,
+    date_played_weight character varying(10),
+    date_played_half_life double precision,
+    rerun_status integer DEFAULT 0 NOT NULL
 );
 
 
@@ -517,7 +527,7 @@ ALTER TABLE ONLY public.finals
 
 SET search_path TO "$user", public;
 
-INSERT INTO schema_migrations (version) VALUES
+INSERT INTO "schema_migrations" (version) VALUES
 ('20160507203334'),
 ('20160507212032'),
 ('20160507212809'),
@@ -553,6 +563,9 @@ INSERT INTO schema_migrations (version) VALUES
 ('20170909161948'),
 ('20170909163110'),
 ('20170909163655'),
-('20170909171911');
+('20170909171911'),
+('20170924191436'),
+('20171029185801'),
+('20180902143604');
 
 

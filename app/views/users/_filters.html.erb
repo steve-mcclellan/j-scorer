@@ -1,0 +1,339 @@
+<div id="filters" class="col-xs-12">
+
+  <div class="clearfix">
+    <h2>By show date</h2>
+    <div class="filter-sentence">
+      <%= select_tag('show-date-verb', options_for_select({
+          'Display only' => 'show',
+          'Hide all' => 'hide'
+        }, @filters[:show_date_reverse] ? 'hide' : 'show'),
+        class: 'display-or-hide') %>
+      <span>&nbsp;</span>
+      <span>stats from shows aired</span>
+      <span>&nbsp;</span>
+      <%= select_tag('show-date-preposition', options_for_select({
+          'since the beginning of' => 'sinceBeg',
+          'in the last' => 'inLast',
+          'since' => 'since',
+          'from' => 'from'
+        }, @filters[:show_date_preposition]),
+        class: 'filter-preposition') %>
+      <span>&nbsp;</span>
+      <span id="show-date-beginning-span" class="filter-object show-date-filter-object">
+        <%= select_tag('show-date-beginning-dropdown', options_for_select({
+            'time' => '',
+            'Season 35 (2018-09-10)' => '2018-09-10',
+            'Season 34 (2017-09-11)' => '2017-09-11',
+            'Season 33 (2016-09-12)' => '2016-09-12',
+            'Season 32 (2015-09-14)' => '2015-09-14',
+            'Season 31 (2014-09-15)' => '2014-09-15',
+            'Season 30 (2013-09-16)' => '2013-09-16'
+          }, @filters[:show_date_beginning]),
+          class: 'beginning-dropdown') %>
+      </span>
+      <span id="show-date-last-span" class="filter-object show-date-filter-object">
+        <input id="show-date-last-number" class="number-entry" type="number" value="<%= @filters[:show_date_last_number] || 365 %>" />
+        <%= select_tag('show-date-last-unit', options_for_select({
+            'days' => 'd',
+            'weeks' => 'w',
+            'months' => 'm',
+            'years' => 'y'
+          }, @filters[:show_date_last_unit]),
+          class: 'unit-dropdown') %>
+      </span>
+      <span id="show-date-from" class="filter-object show-date-filter-object">
+        <span class="input-group date filter-datepicker" id="show-date-from-picker">
+          <input type="text" spellcheck="false" value="<%= @filters[:show_date_from] || 1.year.ago.strftime('%F') %>" />
+          <span class="input-group-addon">
+            <span class="glyphicon glyphicon-calendar"></span>
+          </span>
+        </span>
+      </span>
+      <span id="show-date-to" class="filter-object date-to show-date-filter-object">
+        <span>&nbsp;through&nbsp;</span>
+        <span class="input-group date filter-datepicker" id="show-date-to-picker">
+          <input type="text" spellcheck="false" value="<%= @filters[:show_date_to] || Date.today.strftime('%F') %>" />
+          <span class="input-group-addon">
+            <span class="glyphicon glyphicon-calendar"></span>
+          </span>
+        </span>
+      </span>
+      <span>.</span>
+    </div>  <!-- filter-sentence -->
+    <br />
+    <!-- TODO 37b: #1 start
+    <div class="weight-sentence">
+      <span>Weight shows</span>
+      <span>&nbsp;</span>
+      <%= select_tag('show-date-adverb', options_for_select({
+          'equally' => 'equal'
+        }, @filters[:show_date_weight]),
+        class: 'weight-adverb') %>
+      <%# TODO 37b: Restore. %>
+      <%# select_tag('show-date-adverb', options_for_select({
+          'equally' => 'equal',
+          'by applying a half-life of' => 'half-life'
+        }, @filters[:show_date_weight]),
+        class: 'weight-adverb') %>
+      <!--
+      <span id="show-date-half-life-span" class="unused-half-life-span weight-object show-date-weight-object">
+        &nbsp;<input id="show-date-half-life-days" class="number-entry" type="number" value="<%= strip_float(@filters[:show_date_half_life]) || 365 %>" />
+        <span id="show-date-half-life-unit">days</span>
+      </span>
+      -->
+      <!-- TODO 37b: #1 resume
+      <span>.</span>
+      <span class="aside">(Weighting by
+        <a href="https://en.wikipedia.org/wiki/Half-life" target="_blank">half-life</a>
+        coming soon!)</span>
+      <!--
+      <a class="aside" data-toggle="modal" data-target="#weight-clarification-modal">
+        (What is this?)
+      </a>
+      -->
+      <!-- TODO 37b: #1 resume
+    </div>  <!-- weight sentence -->
+      <!-- TODO 37b: #1 resume
+    <br />
+  TODO 37b: #1 end -->
+  </div>  <!-- by-show-date clearfix -->
+  <!-- TODO 37b: #3 begin
+
+  <hr />
+
+  <div class="text-center">
+    <button type="button" class="update-filters update-<%= @sample ? 'sample' : 'user' %>-filters">
+      Apply all filters
+    </button>
+  </div>
+  TODO 37b: #3 end -->
+
+  <hr />
+
+  <div class="clearfix">
+    <h2>By date played</h2>
+    <div class="filter-sentence">
+      <%= select_tag('date-played-verb', options_for_select({
+          'Display only' => 'show',
+          'Hide all' => 'hide'
+        }, @filters[:date_played_reverse] ? 'hide' : 'show'),
+        class: 'display-or-hide') %>
+      <span>&nbsp;</span>
+      <span>stats from games played</span>
+      <span>&nbsp;</span>
+      <%= select_tag('date-played-preposition', options_for_select({
+          'since the beginning of' => 'sinceBeg',
+          'in the last' => 'inLast',
+          'since' => 'since',
+          'from' => 'from'
+        }, @filters[:date_played_preposition]),
+        class: 'filter-preposition') %>
+      <span>&nbsp;</span>
+      <span id="date-played-beginning-span" class="filter-object date-played-filter-object">
+        <%= select_tag('date-played-beginning-dropdown', options_for_select({
+            'time' => '',
+            'Season 35 (2018-09-10)' => '2018-09-10',
+            'Season 34 (2017-09-11)' => '2017-09-11',
+            'Season 33 (2016-09-12)' => '2016-09-12',
+            'Season 32 (2015-09-14)' => '2015-09-14',
+            'Season 31 (2014-09-15)' => '2014-09-15',
+            'Season 30 (2013-09-16)' => '2013-09-16'
+          }, @filters[:date_played_beginning]),
+          class: 'beginning-dropdown') %>
+      </span>
+      <span id="date-played-last-span" class="filter-object date-played-filter-object">
+        <input id="date-played-last-number" class="number-entry" type="number" value="<%= @filters[:date_played_last_number] || 365 %>" />
+        <%= select_tag('date-played-last-unit', options_for_select({
+            'days' => 'd',
+            'weeks' => 'w',
+            'months' => 'm',
+            'years' => 'y'
+          }, @filters[:date_played_last_unit]),
+          class: 'unit-dropdown') %>
+      </span>
+      <span id="date-played-from" class="filter-object date-played-filter-object">
+        <span class="input-group date filter-datepicker" id="date-played-from-picker">
+          <input type="text" spellcheck="false" value="<%= @filters[:date_played_from] || 1.year.ago.strftime('%F') %>" />
+          <span class="input-group-addon">
+            <span class="glyphicon glyphicon-calendar"></span>
+          </span>
+        </span>
+      </span>
+      <span id="date-played-to" class="filter-object date-to date-played-filter-object">
+        <span>&nbsp;to the beginning of&nbsp;</span>
+        <span class="input-group date filter-datepicker" id="date-played-to-picker">
+          <input type="text" spellcheck="false" value="<%= @filters[:date_played_to] || Date.today.strftime('%F') %>" />
+          <span class="input-group-addon">
+            <span class="glyphicon glyphicon-calendar"></span>
+          </span>
+        </span>
+      </span>
+      <span>.</span>
+    </div>  <!-- filter-sentence -->
+    <br />
+    <!-- TODO 37b: #2 start
+    <div class="weight-sentence">
+      <span>Weight games</span>
+      <span>&nbsp;</span>
+      <%= select_tag('date-played-adverb', options_for_select({
+          'equally' => 'equal'
+        }, @filters[:date_played_weight]),
+        class: 'weight-adverb') %>
+      <%# TODO 37b: Restore. %>
+      <%# select_tag('date-played-adverb', options_for_select({
+          'equally' => 'equal',
+          'by applying a half-life of' => 'half-life'
+        }, @filters[:date_played_weight]),
+        class: 'weight-adverb') %>
+      <!--
+      <span id="date-played-half-life-span" class="unused-half-life-span weight-object date-played-weight-object">
+        &nbsp;<input id="date-played-half-life-days" class="number-entry" type="number" value="<%= strip_float(@filters[:date_played_half_life]) || 365 %>" />
+        <span id="date-played-half-life-unit">days</span>
+      </span>
+      -->
+      <!-- TODO 37b: #2 resume
+      <span>.</span>
+      <span class="aside">(Weighting by
+        <a href="https://en.wikipedia.org/wiki/Half-life" target="_blank">half-life</a>
+        coming soon!)</span>
+      <!--
+      <a class="aside" data-toggle="modal" data-target="#weight-clarification-modal">
+        (What is this?)</a>
+      -->
+    <!-- TODO 37b: #2 resume
+    </div> <!-- weight-sentence -->
+    <!-- TODO 37b: #2 resume
+    <br />
+    TODO 37b: #2 end -->
+  </div>  <!-- by-date-played clearfix -->
+  <!-- TODO 37b: #4 begin
+
+  <hr />
+
+  <div class="text-center">
+    <button type="button" class="update-filters update-<%= @sample ? 'sample' : 'user' %>-filters">
+      Apply all filters
+    </button>
+  </div>
+  TODO 37b: #4 end -->
+
+  <hr />
+
+  <div class="clearfix">
+    <h2>By rerun status</h2>
+    <div id="rerun-status-sentence">
+      <span>Display</span>
+      <span>&nbsp;</span>
+      <%= select_tag('rerun-status', options_for_select({
+          'both first-run and reruns' => 'all',
+          'first-run only' => 'first',
+          'reruns only' => 'rerun'
+        }, @filters[:rerun_status])) %>
+      <span>.</span>
+    </div>
+    <br />
+  </div>
+
+  <hr />
+
+  <div class="text-center">
+    <button type="button" class="update-filters update-<%= @sample ? 'sample' : 'user' %>-filters">
+      Apply all filters
+    </button>
+  </div>
+
+  <hr />
+
+  <div class="clearfix">
+    <h2>By play type</h2>
+    <table id="typeTable"
+           class="tablesorter tablesorter-blue<%= ' empty' if no_games %>">
+      <thead>
+        <tr>
+          <th>Include in stats?</th>
+          <th>Play type</th>
+          <th>Games played</th>
+          <th>Average score</th>
+          <th>High score</th>
+          <th>Low score</th>
+          <th>Final rate</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @play_type_summary.each do |type_stats| %>
+          <% type_abbr = type_stats['play_type'] %>
+          <tr class="<%= type_abbr %>">
+            <td>
+              <input id="<%= type_abbr %>-box" type="checkbox"
+                     <%= 'checked="checked"'.html_safe if @play_types.include?(type_abbr) %>>
+            </td>
+            <td><%= PLAY_TYPES[type_abbr] %></td>
+            <td><%= type_stats['games_count'] %></td>
+            <td><%= number_to_currency(type_stats['average_score']) %></td>
+            <td><%= number_to_currency(type_stats['max'], precision: 0) %></td>
+            <td><%= number_to_currency(type_stats['min'], precision: 0) %></td>
+            <td><%= display_percentage_from_rate(type_stats['final_rate']) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <hr />
+
+  <div class="text-center">
+    <button type="button" class="update-filters update-<%= @sample ? 'sample' : 'user' %>-filters">
+      Apply all filters
+    </button>
+  </div>
+
+  <!-- end of displayed-by-default tab content -->
+
+  <%# TODO 37b: Restore.
+
+  <div class="modal fade" id="weight-clarification-modal" tabindex="-1" role="dialog" aria-labelledby="weight-clarification-label">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h4 class="modal-title" id="weight-clarification-label">
+            Weighting and Half-Lives
+          </h4>
+        </div>
+        <div class="modal-body">
+          <p>
+          The J! Scorer gives you the option to weight the games you've played so that more-recent results have a larger effect on your stats than older ones.
+          </p>
+          <br />
+          <p>
+          The default behavior is equal weighting, which gives you an ordinary average: a game from five years ago has exactly as much influence on your stats as a game from today. You also have the option to reduce the effect that older games have on your stats by applying a <a class="nowrap" href="https://en.wikipedia.org/wiki/Half-life" target="_blank">half-life</a> (by show date, date played, or both).
+          </p>
+          <br />
+          <p>
+          If you choose a half-life, a game will count fully on its airdate/the date you played it. After that, it will lose a percentage of its remaining influence each day. The exact amount is determined by the half-life: the length of time it takes a game to lose half of its influence. For example, if you choose a half-life of 365 days, each game will lose about 0.189723% of its remaining influence each day. After one half-life, the game will count one-half as much as a new game; after two half-lives, one-quarter as much; after three half-lives, one-eighth; and so on.
+          </p>
+          <br />
+          <p>
+          This has a desirable mathematical property: because each game loses the same proportion of its <em>remaining</em> influence each day, any two games will always have the same weight relative to each other. Because of this, your stats (other than sample size) will only change when you enter another game, and only based on that new game's results. Most weightings don't have this property, and your changes in stats are caused as much by what happens to older data as what you're actually doing now.
+          </p>
+          <br />
+          <p>
+          A more-conservative (i.e., longer) half-life will leave a lot of weight on old stats. If your performance is changing, this might be undesirable. However, a more-aggressive (i.e., shorter) half-life will shrink your sample size quickly, which might leave your stats saying more about how easy the show has played recently than how well you're doing. (This is especially true for on-air contestants' Final stats - keep an eye on the wagering advice's margin of error as you tinker.) In most cases, a half-life of about a year or two is probably a good compromise between these issues. If you're improving rapidly, about six months is reasonable.
+          </p>
+          <br />
+          <p>
+          NOTE: If you apply half-lives by both show date and date played, their effects will be combined, and the effective half-life of a game will be, well, halved. If you have a game that aired three half-lives ago (weight: 1/8), that you played two half-lives ago (weight: 1/4), its total weight will be 1/32, the same as a game that's five half-lives old.
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">
+            Close
+          </button>
+        </div> <!-- modal-footer -->
+      </div> <!-- modal-content -->
+    </div> <!-- modal-dialog -->
+  </div> <!-- modal -->
+     %>
+</div> <!-- filters -->

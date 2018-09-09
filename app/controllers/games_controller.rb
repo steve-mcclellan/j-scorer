@@ -110,8 +110,8 @@ class GamesController < ApplicationController
   # rubocop:disable all
   def game_params
     params.require(:game)
-          .permit(:show_date, :date_played, :play_type, :round_one_score,
-                  :round_two_score, :final_result,
+          .permit(:show_date, :date_played, :play_type, :rerun,
+                  :round_one_score, :round_two_score, :final_result,
                   { sixths_attributes: [:type, :board_position, :title,
                                         :result1, :result2, :result3, :result4,
                                         :result5, :topics_string, :id] },

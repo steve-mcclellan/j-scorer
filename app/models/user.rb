@@ -2,6 +2,7 @@ class User < ApplicationRecord
   has_many :games, dependent: :destroy
   has_many :topics, dependent: :destroy
   has_many :sixths, through: :games
+  enum rerun_status: { all: 0, first: 1, rerun: 2 }, _prefix: true
 
   attr_accessor :remember_token, :reset_token
   before_save { email.downcase! }
@@ -9,7 +10,7 @@ class User < ApplicationRecord
   validates :email, length: { maximum: 50 },
                     format: { with: VALID_EMAIL_REGEX },
                     uniqueness: { case_sensitive: false }
-  validates_with EmailDomainValidator
+  validates_with EmailDomainValidator, FilterParamValidator
   has_secure_password
   validates :password, presence: true, length: { minimum: 6 }, allow_nil: true
 
@@ -71,29 +72,37 @@ class User < ApplicationRecord
     games.find_by(game_id: game_id).present?
   end
 
+  def self.filter_sql(filters)
+    FilterSQLGenerator.new(filters).sql
+  end
+
   # rubocop:disable MemoizedInstanceVariableName
-  def multi_game_summary(play_types)
-    @mgs ||= MultiGameSummary.new(self, play_types).stats
+  def filter_preferences
+    @fp ||= Hash[FILTER_FIELDS.map { |field| [field, send(field)] }]
   end
 
-  def percentile_report(play_types)
-    @pr ||= PercentileReport.new(self, play_types).stats
+  def multi_game_summary(play_types, filters)
+    @mgs ||= MultiGameSummary.new(self, play_types, filters).stats
   end
 
-  def topics_summary(play_types)
-    @ts ||= TopicsSummary.new(self, play_types).stats
+  def percentile_report(play_types, filters)
+    @pr ||= PercentileReport.new(self, play_types, filters).stats
   end
 
-  def results_by_row(play_types)
-    @rbr ||= ResultsByRow.new(self, play_types).stats
+  def topics_summary(play_types, filters)
+    @ts ||= TopicsSummary.new(self, play_types, filters).stats
   end
 
-  def final_stats(play_types)
-    @fs ||= FinalStatsReport.new(self, play_types).stats
+  def results_by_row(play_types, filters)
+    @rbr ||= ResultsByRow.new(self, play_types, filters).stats
   end
 
-  def play_type_summary
-    @pts ||= PlayTypeSummary.new(self).stats
+  def final_stats(play_types, filters)
+    @fs ||= FinalStatsReport.new(self, play_types, filters).stats
+  end
+
+  def play_type_summary(filters)
+    @pts ||= PlayTypeSummary.new(self, filters).stats
   end
   # rubocop:enable MemoizedInstanceVariableName
 end

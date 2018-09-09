@@ -4,10 +4,9 @@ class FinalStatsReport
 
   attr_reader :stats
 
-  def initialize(user, play_types)
-    raw_data = ActiveRecord::Base.connection
-                                 .select_all(final_query(user, play_types))
-                                 .to_hash[0]
+  def initialize(user, play_types, filters)
+    query = final_query(user, play_types, filters)
+    raw_data = ActiveRecord::Base.connection.select_all(query).to_hash[0]
 
     @stats = format_data(raw_data)
     # rubocop:disable SpaceAroundOperators

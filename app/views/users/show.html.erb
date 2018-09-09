@@ -11,17 +11,18 @@
 
 <div id="stats-area">
 
-  <!-- Commented out until I have something to say again...
   <div class="k-box">
     <p>
     <%= random_full_greeting %>
-
-    I've made a few minor tweaks in response to user requests and bug reports. Expanded stats filters have been delayed a bit, but should still be ready by early October. Questions/comments/suggestions:
+      <%# TODO 37b: Update. %>
+    Check out the revamped-and-renamed Filters tab! In addition to play type, your stats can now be filtered by show date, date played, and/or the newly-added rerun status. <%# You can also apply
+    <a href="https://en.wikipedia.org/wiki/Half-life" target="_blank">half-lives</a>
+    to reduce the effect of older games. %>As always, direct any and all feedback to
 
     <a class="nowrap" href="mailto:<%= ENV['SUPPORT_ADDRESS'] %>"><%= ENV['SUPPORT_ADDRESS'] %></a>.
+    (Also, drop me an email if you'd like me to mark some of your existing games as reruns in bulk.)
     </p>
   </div>
-  -->
 
   <ul>
     <li><a href="#overview">Overview</a></li>
@@ -29,7 +30,7 @@
     <li><a href="#topics">Topics</a></li>
     <li><a href="#by-row">By row</a></li>
     <li><a href="#finals">Finals</a></li>
-    <li><a href="#types">Play types</a></li>
+    <li><a href="#filters">Filters</a></li>
   </ul>
 
   <noscript>
@@ -55,6 +56,6 @@
 
   <%= render 'finals', stats: @final_stats %>
 
-  <%= render 'types', no_games: user_games_count.zero? %>
+  <%= render 'filters', no_games: user_games_count.zero? %>
 
 </div>

@@ -3,10 +3,9 @@ class ResultsByRow
 
   attr_reader :stats
 
-  def initialize(user, play_types)
-    row_results = ActiveRecord::Base.connection
-                                    .select_all(by_row_query(user, play_types))
-                                    .to_hash
+  def initialize(user, play_types, filters)
+    query = by_row_query(user, play_types, filters)
+    row_results = ActiveRecord::Base.connection.select_all(query).to_hash
 
     @stats = { round_one: [0] + row_results[0..4],
                round_two: [0] + row_results[5..9] }
@@ -16,20 +15,21 @@ class ResultsByRow
 
   private
 
-  def by_row_query(user, play_types)
+  def by_row_query(user, play_types, other_filters)
     validate_query_inputs(user, play_types)
     play_types_list = format_play_types_for_sql(play_types)
     rows = []
     %w[RoundOneCategory RoundTwoCategory].each do |round_type|
       1.upto(5).each do |row_num|
-        rows.push(single_row_sql(row_num, round_type, user, play_types_list))
+        rows.push(single_row_sql(row_num, round_type, user,
+                                 play_types_list, other_filters))
       end
     end
     "( #{rows.join(' ) UNION ALL ( ')} )"
   end
 
   # rubocop:disable MethodLength
-  def single_row_sql(row_num, round_type, user, play_types_list)
+  def single_row_sql(row_num, round_type, user, play_types_list, other_filters)
     "
     SELECT
       q.right,
@@ -64,6 +64,7 @@ class ResultsByRow
       WHERE
         g.user_id = #{user.id}
         AND g.play_type IN (#{play_types_list})
+        #{other_filters}
         AND s.type = '#{round_type}'
     ) q
     "

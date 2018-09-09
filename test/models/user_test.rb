@@ -1,5 +1,6 @@
 require 'test_helper'
 
+# rubocop:disable ClassLength
 class UserTest < ActiveSupport::TestCase
   def setup
     @user = User.new(email: 'user@example.com', password: 'foobar',
@@ -77,4 +78,68 @@ class UserTest < ActiveSupport::TestCase
       @user.destroy
     end
   end
+
+  test 'filter validator should allow valid data' do
+    @user.show_date_reverse = true
+    @user.show_date_preposition = 'sinceBeg'
+    @user.show_date_beginning = Date.new(2017, 9, 11)
+    @user.show_date_last_number = 5
+    @user.show_date_last_unit = 'y'
+    @user.show_date_from = Date.new(1983, 7, 18)
+    @user.show_date_to = Date.new(2083, 7, 18)
+    @user.show_date_weight = 'half-life'
+    @user.show_date_half_life = '470'
+    @user.date_played_reverse = false
+    @user.date_played_preposition = 'inLast'
+    @user.date_played_beginning = Date.new(2016, 9, 12)
+    @user.date_played_last_number = 365
+    @user.date_played_last_unit = 'd'
+    @user.date_played_from = Date.new(1, 1, 1)
+    @user.date_played_to = Date.new(9999, 12, 31)
+    @user.date_played_weight = 'half-life'
+    @user.date_played_half_life = '525'
+    @user.rerun_status = 'first'
+    assert @user.valid?
+  end
+
+  test 'filter validator should fail on bad preposition' do
+    @user.show_date_preposition = 'across'
+    assert_not @user.valid?
+  end
+
+  test 'filter validator should fail on bad date' do
+    @user.date_played_beginning = 'not-a-date'
+    assert_nil @user.date_played_beginning
+    assert @user.valid?
+    @user.show_date_from = Date.new(10_000, 1, 1)
+    assert_not @user.valid?
+  end
+
+  test 'filter validator should fail on bad unit' do
+    @user.show_date_last_unit = 'millenia'
+    assert_not @user.valid?
+    @user.show_date_last_unit = nil
+    assert @user.valid?
+    @user.date_played_last_unit = 'q'
+    assert_not @user.valid?
+  end
+
+  test 'filter validator should fail on bad weighting adverb' do
+    @user.date_played_weight = 'whole-life'
+    assert_not @user.valid?
+    @user.date_played_weight = nil
+    assert @user.valid?
+    @user.show_date_weight = 'wtf'
+    assert_not @user.valid?
+  end
+
+  test 'filter validator should fail on half-life of zero' do
+    @user.show_date_half_life = 0.0
+    assert_not @user.valid?
+    @user.show_date_half_life = 470.0
+    assert @user.valid?
+    @user.date_played_half_life = 0
+    assert_not @user.valid?
+  end
 end
+# rubocop:enable ClassLength

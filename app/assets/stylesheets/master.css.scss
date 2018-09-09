@@ -266,7 +266,7 @@ input {
     flex-direction: column;
     background-color: $j-blue;
     border: 0.3vw solid $gameboard-color;
-    // To match the Bootstrap default for the buttons:
+    /* To match the Bootstrap default for the buttons: */
     border-radius: 4px;
 
     p {
@@ -402,7 +402,7 @@ html.no-js #stats-loading-message {
   font-size: 3.5vmin;
 
   ul.ui-tabs-nav {
-    font-size: 2.5vmin;
+    font-size: 2.25vmin;
 
     a, a:link, a:visited {
       color: #666;
@@ -456,7 +456,7 @@ html.no-js #stats-loading-message {
     padding-right: 20px;
   }
 
-  /* Color code non-regular play types in Games and Play types tabs */
+  /* Color code non-regular play types in Games and Filters tabs */
   table.tablesorter tbody {
     tr.teen td { background-color: #bed; }
     tr.toc td { background-color: #fbb; }
@@ -638,18 +638,132 @@ html.no-js #stats-loading-message {
     }
   }
 
-  #types button {
-    font-size: large;
-  }
+  #filters {
+    font-size: 1.25vw;
 
-  #types button.disabled {
-    pointer-events: none;
-  }
+    h2 {
+      font-size: 2vw;
+      margin-bottom: 5vh;
+    }
 
-  #typeTable tbody td {
-    vertical-align: middle;
-  }
-}
+    button {
+      font-size: large;
+    }
+
+    button.disabled {
+      pointer-events: none;
+    }
+
+    .filter-sentence, .weight-sentence, #rerun-status-sentence {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: baseline;
+
+      select {
+        height: 4vh;
+        margin: 0;
+        box-sizing: border-box;
+      }
+
+      .display-or-hide {
+        width: 10vw;
+      }
+
+      .filter-preposition {
+        width: 18vw;
+      }
+
+      .filter-object, .weight-object {
+
+        input {
+          height: 4vh;
+          margin: 0;
+          box-sizing: border-box;
+        }
+
+        .beginning-dropdown {
+          width: 18vw;
+        }
+
+        .number-entry {
+          width: 4vw;
+        }
+
+        .unit-dropdown {
+          width: 10vw;
+        }
+
+        .filter-datepicker {
+          display: flex;
+          height: 4vh;
+          width: 11vw;
+
+          input {
+            width: 9vw;
+          }
+
+          .input-group-addon {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0 1vw;
+            box-sizing: border-box;
+          }
+        }
+      }
+
+      .filter-object.date-to {
+        display: flex;
+        align-items: baseline;
+      }
+
+      .weight-adverb {
+        width: 20vw;
+      }
+
+      /* TODO 37b: Get rid of the temporary span. */
+      span.aside{
+        font-size: 1.25vh;
+        font-style: italic;
+        margin-left: 1vh;
+        color: black;
+      }
+
+      a.aside {
+        font-size: 1.25vh;
+        font-style: italic;
+        margin-left: 1vh;
+        color: black;
+
+        &:hover {
+          color: $j-light-blue;
+          text-decoration: none;
+        }
+      }
+
+      #rerun-status {
+        width: 20vw;
+      }
+    }  /* sentences */
+
+
+    #typeTable tbody td {
+      vertical-align: middle;
+    }
+
+    #weight-clarification-modal {
+
+      h4 {
+        font-size: x-large;
+      }
+
+      p {
+        font-size: medium;
+      }
+    }
+  }  /* end filters */
+}  /* end stats page */
 
 
 /* game page */
@@ -1097,6 +1211,10 @@ html.no-js #stats-loading-message {
       }
 
       #play-type-select {
+        padding: 0 1vw;
+      }
+
+      #rerun-status-select {
         padding: 0 1vw;
       }
     }

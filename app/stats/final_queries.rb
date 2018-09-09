@@ -2,7 +2,7 @@
 # rubocop:disable ModuleLength
 module FinalQueries
   # rubocop:disable MethodLength
-  def final_query(user, play_types)
+  def final_query(user, play_types, other_filters)
     validate_query_inputs(user, play_types)
     play_types_list = format_play_types_for_sql(play_types)
 
@@ -166,7 +166,10 @@ module FinalQueries
         ) AS contestants_total
       FROM finals f
       INNER JOIN games g ON g.id = f.game_id
-      WHERE g.user_id = #{user.id} AND g.play_type IN (#{play_types_list})
+      WHERE
+        g.user_id = #{user.id}
+        AND g.play_type IN (#{play_types_list})
+        #{other_filters}
         AND f.result IN (1, 3)
     ) q
     "

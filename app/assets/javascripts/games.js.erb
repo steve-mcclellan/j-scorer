@@ -38,6 +38,7 @@ var NEW_GAME_COOKIE = {
   "show_date":"",
   "date_played":"",
   "play_type":"",
+  "rerun":false,
   "round_one_score":0,
   "round_two_score":0,
   "final_result":0,
@@ -500,6 +501,13 @@ $( ".games-game" ).ready( function() {
     updateCookies( modified );
   }
 
+  function updateRerunStatus() {
+    var newValue = ( $rerunStatusSelect.val() === "true" );
+    var modified = ( currentGame["rerun"] !== newValue );
+    currentGame["rerun"] = newValue;
+    updateCookies( modified );
+  }
+
   function initializeFromCookie() {
     populateSaveAreaFromCookie( true );
     getScoresFromCookie();
@@ -523,7 +531,8 @@ $( ".games-game" ).ready( function() {
     }
     datePlayedToCurrent();
     // Set the play-type dropdown to its first option.
-    $playTypeSelect.prop( "selectedIndex", 0);
+    $playTypeSelect.prop( "selectedIndex", 0 );
+    $rerunStatusSelect.prop( "selectedIndex", 0 );
     updatePlayType();
     updateRound();
   }
@@ -534,6 +543,7 @@ $( ".games-game" ).ready( function() {
     $datePlayedPicker.data( "DateTimePicker" )
                      .date( currentGame.date_played );
     $playTypeSelect.val( currentGame.play_type );
+    $rerunStatusSelect.val( currentGame.rerun ? "true" : "false" );
 
     if ( !currentGameData.modified ) { disableSaveLink( "Game loaded!" ); }
 
@@ -845,6 +855,7 @@ $( ".games-game" ).ready( function() {
   var $datePlayedPicker = $( "#played-picker" );
   var $datePlayedValue = $( "#played-picker input" );
   var $playTypeSelect = $( "#play-type-select" );
+  var $rerunStatusSelect = $( "#rerun-status-select" );
   var $saveLink = $( "#save-link" );
   var $deleteGameLink = $( "#delete-game-link" );
 
@@ -979,6 +990,10 @@ $( ".games-game" ).ready( function() {
     updatePlayType();
   });
 
+  $rerunStatusSelect.on( "change", function() {
+    updateRerunStatus();
+  })
+
   $saveLink.on( "click", function() {
     // Take action only if the save link is not disabled.
     if ( !$saveLink.data( "disabled" ) ) {
@@ -1035,22 +1050,28 @@ $( ".games-game" ).ready( function() {
 
   $showDatePicker.datetimepicker({
     format: "YYYY-MM-DD",
+    minDate: "0001-01-01",
+    maxDate: "9999-12-31",
     focusOnShow: false
   });
-  $showDatePicker.data( "DateTimePicker" ).timeZone(undefined);
+  $showDatePicker.data( "DateTimePicker" ).timeZone( undefined );
 
   $datePlayedPicker.datetimepicker({
     format: "YYYY-MM-DD h:mma",
+    minDate: "0001-01-01 00:00",
+    maxDate: "9999-12-31 23:59",
     showClose: true,
     focusOnShow: false
   });
-  $datePlayedPicker.data( "DateTimePicker" ).timeZone(undefined);
+  $datePlayedPicker.data( "DateTimePicker" ).timeZone( undefined );
 
   $changeShowDatePicker.datetimepicker({
     format: "YYYY-MM-DD",
+    minDate: "0001-01-01",
+    maxDate: "9999-12-31",
     focusOnShow: false
   });
-  $changeShowDatePicker.data( "DateTimePicker" ).timeZone(undefined);
+  $changeShowDatePicker.data( "DateTimePicker" ).timeZone( undefined );
 
 
   // Category title and topic entry

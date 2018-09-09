@@ -77,11 +77,18 @@
         </div>
       </div>
     </div> <!-- played-at-area -->
+
     <span class="title">Play type:</span>
     <select id="play-type-select" tabindex="200">
       <% PLAY_TYPES.each do |abbr, name| %>
         <option value="<%= abbr %>"><%= name %></option>
       <% end %>
+    </select>
+
+    <span class="title">Status:</span>
+    <select id="rerun-status-select" tabindex="200">
+      <option value="false">first-run</option>
+      <option value="true">repeat</option>
     </select>
 
     <div class="text-center">

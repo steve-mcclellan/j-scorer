@@ -2,7 +2,7 @@
   "name": "j-scorer",
   "stack": "heroku-18",
   "scripts": {
-    "postdeploy": "bundle exec rake db:structure:load db:seed"
+    "postdeploy": "bundle exec rails db:structure:load db:seed"
   },
   "env": {
     "LANG": {

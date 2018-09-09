@@ -27,3 +27,12 @@ PLAY_TYPES = {
 }.freeze
 
 VALID_TYPE_INPUTS = (PLAY_TYPES.keys + ["all", "none"]).freeze
+
+FILTER_FIELDS = [
+  :show_date_reverse, :show_date_preposition, :show_date_beginning,
+  :show_date_last_number, :show_date_last_unit, :show_date_from,
+  :show_date_to, :show_date_weight, :show_date_half_life,
+  :date_played_reverse, :date_played_preposition, :date_played_beginning,
+  :date_played_last_number, :date_played_last_unit, :date_played_from,
+  :date_played_to, :date_played_weight, :date_played_half_life, :rerun_status
+].freeze
