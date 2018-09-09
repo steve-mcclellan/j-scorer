@@ -66,8 +66,10 @@ class UsersController < ApplicationController
   end
 
   def set_filters
-    @filters = if filters_from_params.values.any? || @sample
+    @filters = if filters_from_params.values.any?
                  filters_from_params
+               elsif @sample
+                 filters_from_params.update(rerun_status: 'first')
                else
                  current_user.filter_preferences
                end
