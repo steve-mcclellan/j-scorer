@@ -9,8 +9,9 @@ class MultiGameSummary
     round_info = ActiveRecord::Base.connection
                                    .select_all(round_info_query).to_hash
 
-    count_query = finals_query(user, play_types, filters)
-    count = ActiveRecord::Base.connection.select_all(count_query).to_hash[0]
+    games_and_finals_query = finals_query(user, play_types, filters)
+    count = ActiveRecord::Base.connection
+                              .select_all(games_and_finals_query).to_hash[0]
 
     initialize_stats
     reformat_data(round_info)
@@ -54,8 +55,13 @@ class MultiGameSummary
   end
 
   def add_calculated_stats(count)
-    @stats[:all][:game_count] = count['games'].to_i
+    add_all_round_stats
+    add_final_stats(count)
+    add_games_stats(count)
+    add_rate_stats
+  end
 
+  def add_all_round_stats
     %i[round_one round_two].each do |round|
       @stats[round][:dds] = @stats[round][:dd_right] + @stats[round][:dd_wrong]
     end
@@ -65,17 +71,21 @@ class MultiGameSummary
     ].each do |stat|
       @stats[:all][stat] = @stats[:round_one][stat] + @stats[:round_two][stat]
     end
-
-    add_final_and_rate_stats(count)
   end
 
-  def add_final_and_rate_stats(count)
+  def add_final_stats(count)
     @stats[:finals][:right] = count['finals_right'].to_i
     @stats[:finals][:wrong] = count['finals_wrong'].to_i
     @stats[:finals][:count] = @stats[:finals][:right] + @stats[:finals][:wrong]
     @stats[:finals][:rate] = quotient(@stats[:finals][:right],
                                       @stats[:finals][:count])
-    add_rate_stats
+  end
+
+  def add_games_stats(count)
+    @stats[:all][:game_count] = count['games'].to_i
+    @stats[:all][:game_ids] = count['game_ids'][1...-1].split(',')
+                                                       .map(&:to_i)
+                                                       .to_set
   end
 
   def add_rate_stats

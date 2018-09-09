@@ -3,52 +3,77 @@ class FilterSQLGenerator
 
   def initialize(filters)
     @filters = filters
-    @sql = show_date_filters + date_played_filters
-    @sql
+    @sql = show_date_filters + date_played_filters + rerun_filter
   end
 
   private
 
   def show_date_filters
-    case @filters[:show_date_preposition]
-    when 'sinceBeg' then range_subclause('show_date',
-                                         @filters[:show_date_beginning],
-                                         nil,
-                                         @filters[:show_date_reverse])
-    when 'inLast' then in_last_subclause('show_date',
-                                         @filters[:show_date_last_number],
-                                         @filters[:show_date_last_unit],
-                                         @filters[:show_date_reverse])
-    when 'since' then range_subclause('show_date',
-                                      @filters[:show_date_from],
-                                      nil,
-                                      @filters[:show_date_reverse])
-    when 'from' then range_subclause('show_date',
-                                     @filters[:show_date_from],
-                                     @filters[:show_date_to],
-                                     @filters[:show_date_reverse])
+    send(subclause_getter(@filters[:show_date_preposition]), 'show_date')
+  end
+
+  def date_played_filters
+    send(subclause_getter(@filters[:date_played_preposition]), 'date_played')
+  end
+
+  def rerun_filter
+    case @filters[:rerun_status]
+    when 'first' then ' AND NOT g.rerun'
+    when 'rerun' then ' AND g.rerun'
     else ''
     end
   end
 
-  def date_played_filters
-    ''
+  def subclause_getter(preposition)
+    case preposition
+    when 'sinceBeg' then :since_beginning_subclause
+    when 'inLast' then :in_last_subclause
+    when 'since' then :since_subclause
+    when 'from' then :from_subclause
+    else :default_subclause
+    end
+  end
+
+  def since_beginning_subclause(type)
+    range_subclause(type,
+                    @filters[(type + '_beginning').to_sym],
+                    nil,
+                    @filters[(type + '_reverse').to_sym])
+  end
+
+  def since_subclause(type)
+    range_subclause(type,
+                    @filters[(type + '_from').to_sym],
+                    nil,
+                    @filters[(type + '_reverse').to_sym])
+  end
+
+  def from_subclause(type)
+    range_subclause(type,
+                    @filters[(type + '_from').to_sym],
+                    @filters[(type + '_to').to_sym],
+                    @filters[(type + '_reverse').to_sym])
   end
 
   def range_subclause(type, from, to, reverse)
     d1, d2 = sanitize_dates(from, to)
     return (reverse ? ' AND FALSE' : '') if d1.blank? && d2.blank?
-    subsubclause1 = "#{type} #{reverse ? '<' : '>='} '#{d1}'"
+    subsubclause1 = "g.#{type} #{reverse ? '<' : '>='} '#{d1}'"
     return " AND #{subsubclause1}" if d2.blank?
-    subsubclause2 = " #{type} #{reverse ? '>' : '<='} '#{d2}'"
+    subsubclause2 = "g.#{type} #{reverse ? '>' : '<='} '#{d2}'"
     " AND (#{subsubclause1} #{reverse ? 'OR' : 'AND'} #{subsubclause2})"
   end
 
-  def in_last_subclause(type, number, unit, reverse)
-    n = sanitize_number(number)
-    u = sanitize_unit(unit)
-    return (reverse ? '' : ' AND FALSE') if n.blank? || u.blank?
-    " AND #{type} #{reverse ? '<' : '>='} NOW() - INTERVAL '#{n} #{u}'"
+  def in_last_subclause(type)
+    n = sanitize_number(@filters[(type + '_last_number').to_sym])
+    u = sanitize_unit(@filters[(type + '_last_unit').to_sym])
+    r = @filters[(type + '_reverse').to_sym]
+    return (r ? '' : ' AND FALSE') if n.blank? || u.blank?
+    " AND g.#{type} #{r ? '<' : '>='} NOW() - INTERVAL '#{n} #{u}'"
+  end
+
+  def default_subclause(_type)
+    ''
   end
 
   def sanitize_date(date)

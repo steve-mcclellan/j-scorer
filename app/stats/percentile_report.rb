@@ -5,10 +5,9 @@ class PercentileReport
 
   PERCENTILES_TO_SHOW = [1, 5, 10, 25, 50, 75, 90, 95, 99].freeze
 
-  def initialize(user, play_types)
-    games = ActiveRecord::Base.connection
-                              .select_all(percentile_query(user, play_types))
-                              .to_hash
+  def initialize(user, play_types, filters)
+    query = percentile_query(user, play_types, filters)
+    games = ActiveRecord::Base.connection.select_all(query).to_hash
 
     games.map! { |g| { score: g['score'].to_i, weight: g['weight'].to_f } }
 
@@ -23,7 +22,7 @@ class PercentileReport
   private
 
   # rubocop:disable MethodLength
-  def percentile_query(user, play_types)
+  def percentile_query(user, play_types, other_filters)
     validate_query_inputs(user, play_types)
     play_types_list = format_play_types_for_sql(play_types)
     "
@@ -34,7 +33,10 @@ class PercentileReport
       ) AS score,
       1.0 AS weight
     FROM games g
-    WHERE g.user_id = #{user.id} AND g.play_type IN (#{play_types_list})
+    WHERE
+      g.user_id = #{user.id}
+      AND g.play_type IN (#{play_types_list})
+      #{other_filters}
     ORDER BY score DESC
     "
   end

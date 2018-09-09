@@ -72,38 +72,37 @@ class User < ApplicationRecord
     games.find_by(game_id: game_id).present?
   end
 
+  def self.filter_sql(filters)
+    FilterSQLGenerator.new(filters).sql
+  end
+
   # rubocop:disable MemoizedInstanceVariableName
   def filter_preferences
     @fp ||= Hash[FILTER_FIELDS.map { |field| [field, send(field)] }]
-  end
-
-  def self.filter_sql(filters)
-    # @fsql ||= FilterSQLGenerator.new(filters).sql
-    FilterSQLGenerator.new(filters).sql
   end
 
   def multi_game_summary(play_types, filters)
     @mgs ||= MultiGameSummary.new(self, play_types, filters).stats
   end
 
-  def percentile_report(play_types)
-    @pr ||= PercentileReport.new(self, play_types).stats
+  def percentile_report(play_types, filters)
+    @pr ||= PercentileReport.new(self, play_types, filters).stats
   end
 
-  def topics_summary(play_types)
-    @ts ||= TopicsSummary.new(self, play_types).stats
+  def topics_summary(play_types, filters)
+    @ts ||= TopicsSummary.new(self, play_types, filters).stats
   end
 
-  def results_by_row(play_types)
-    @rbr ||= ResultsByRow.new(self, play_types).stats
+  def results_by_row(play_types, filters)
+    @rbr ||= ResultsByRow.new(self, play_types, filters).stats
   end
 
-  def final_stats(play_types)
-    @fs ||= FinalStatsReport.new(self, play_types).stats
+  def final_stats(play_types, filters)
+    @fs ||= FinalStatsReport.new(self, play_types, filters).stats
   end
 
-  def play_type_summary
-    @pts ||= PlayTypeSummary.new(self).stats
+  def play_type_summary(filters)
+    @pts ||= PlayTypeSummary.new(self, filters).stats
   end
   # rubocop:enable MemoizedInstanceVariableName
 end

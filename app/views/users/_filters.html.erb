@@ -59,8 +59,9 @@
         </span>
       </span>
       <span>.</span>
-    </div>
+    </div>  <!-- filter-sentence -->
     <br />
+    <!-- TODO 37b: #1 start
     <div class="weight-sentence">
       <span>Weight shows</span>
       <span>&nbsp;</span>
@@ -80,6 +81,7 @@
         <span id="show-date-half-life-unit">days</span>
       </span>
       -->
+      <!-- TODO 37b: #1 resume
       <span>.</span>
       <span class="aside">(Weighting by
         <a href="https://en.wikipedia.org/wiki/Half-life" target="_blank">half-life</a>
@@ -89,9 +91,13 @@
         (What is this?)
       </a>
       -->
-    </div>
+      <!-- TODO 37b: #1 resume
+    </div>  <!-- weight sentence -->
+      <!-- TODO 37b: #1 resume
     <br />
-  </div>
+  TODO 37b: #1 end -->
+  </div>  <!-- by-show-date clearfix -->
+  <!-- TODO 37b: #3 begin
 
   <hr />
 
@@ -100,7 +106,7 @@
       Apply all filters
     </button>
   </div>
-
+  TODO 37b: #3 end -->
 
   <hr />
 
@@ -154,7 +160,7 @@
         </span>
       </span>
       <span id="date-played-to" class="filter-object date-to date-played-filter-object">
-        <span>&nbsp;through&nbsp;</span>
+        <span>&nbsp;to the beginning of&nbsp;</span>
         <span class="input-group date filter-datepicker" id="date-played-to-picker">
           <input type="text" spellcheck="false" value="<%= @filters[:date_played_to] || Date.today.strftime('%F') %>" />
           <span class="input-group-addon">
@@ -163,8 +169,9 @@
         </span>
       </span>
       <span>.</span>
-    </div>
+    </div>  <!-- filter-sentence -->
     <br />
+    <!-- TODO 37b: #2 start
     <div class="weight-sentence">
       <span>Weight games</span>
       <span>&nbsp;</span>
@@ -184,6 +191,7 @@
         <span id="date-played-half-life-unit">days</span>
       </span>
       -->
+      <!-- TODO 37b: #2 resume
       <span>.</span>
       <span class="aside">(Weighting by
         <a href="https://en.wikipedia.org/wiki/Half-life" target="_blank">half-life</a>
@@ -192,9 +200,13 @@
       <a class="aside" data-toggle="modal" data-target="#weight-clarification-modal">
         (What is this?)</a>
       -->
-    </div>
+    <!-- TODO 37b: #2 resume
+    </div> <!-- weight-sentence -->
+    <!-- TODO 37b: #2 resume
     <br />
-  </div>
+    TODO 37b: #2 end -->
+  </div>  <!-- by-date-played clearfix -->
+  <!-- TODO 37b: #4 begin
 
   <hr />
 
@@ -203,7 +215,7 @@
       Apply all filters
     </button>
   </div>
-
+  TODO 37b: #4 end -->
 
   <hr />
 

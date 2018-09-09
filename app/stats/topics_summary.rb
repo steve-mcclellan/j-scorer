@@ -4,16 +4,15 @@ class TopicsSummary
 
   attr_reader :stats
 
-  def initialize(user, play_types)
-    @stats = ActiveRecord::Base.connection
-                               .select_all(topics_query(user, play_types))
-                               .to_hash
+  def initialize(user, play_types, filters)
+    query = topics_query(user, play_types, coalesce_filters(filters))
+    @stats = ActiveRecord::Base.connection.select_all(query).to_hash
   end
 
   private
 
   # rubocop:disable MethodLength
-  def topics_query(user, play_types)
+  def topics_query(user, play_types, other_filters)
     validate_query_inputs(user, play_types)
     play_types_list = format_play_types_for_sql(play_types)
     "
@@ -121,6 +120,7 @@ class TopicsSummary
           WHERE
             t.user_id = #{user.id}
             AND COALESCE(gOne.play_type, gTwo.play_type) IN (#{play_types_list})
+            #{other_filters}
         ) i
       ) q
       GROUP BY topic_name
@@ -142,5 +142,9 @@ class TopicsSummary
     "
   end
   # rubocop:enable IdenticalConditionalBranches
+
+  def coalesce_filters(filters)
+    filters.gsub(/g\.(\S*)/, 'COALESCE(gOne.\\1, gTwo.\\1)')
+  end
 end
 # rubocop:enable ClassLength

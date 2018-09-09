@@ -102,13 +102,12 @@ class UsersController < ApplicationController
 
   def set_stats_vars
     filter_sql = User.filter_sql(@filters)
-    # TODO: Knock out the below, one-by-one.
     @summary = @user.multi_game_summary(@play_types, filter_sql)
-    @percentile_stats = @user.percentile_report(@play_types)
-    @stats_by_topic = @user.topics_summary(@play_types)
-    @stats_by_row = @user.results_by_row(@play_types)
-    @final_stats = @user.final_stats(@play_types)
-    @play_type_summary = @user.play_type_summary
+    @percentile_stats = @user.percentile_report(@play_types, filter_sql)
+    @stats_by_topic = @user.topics_summary(@play_types, filter_sql)
+    @stats_by_row = @user.results_by_row(@play_types, filter_sql)
+    @final_stats = @user.final_stats(@play_types, filter_sql)
+    @play_type_summary = @user.play_type_summary(filter_sql)
   end
 
   def user_params

@@ -33,7 +33,7 @@
     </thead>
     <tbody>
       <% @user.games.each do |game| %>
-        <tr class="<%= game.play_type %><%= ' untracked' unless @play_types.include?(game.play_type) %>">
+        <tr class="<%= game.play_type %><%= ' untracked' unless @summary[:all][:game_ids].include?(game.id) %>">
           <td><%= game.date_played.in_time_zone.to_s if game.date_played.year > 0 %></td>
           <td><%= game.rerun ? '✓' : '-' %></td>
           <td><%= game.show_date %></td>
