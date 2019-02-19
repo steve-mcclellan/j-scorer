@@ -458,6 +458,7 @@ html.no-js #stats-loading-message {
 
   /* Color code non-regular play types in Games and Filters tabs */
   table.tablesorter tbody {
+    tr.all-star td { background-color: #f9a; }
     tr.teen td { background-color: #bed; }
     tr.toc td { background-color: #fbb; }
     tr.power td { background-color: #cdf; }
