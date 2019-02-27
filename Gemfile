@@ -61,7 +61,7 @@ gem 'puma'
 gem 'rack-timeout'
 
 # Use Bootstrap to make things look prettier
-gem 'bootstrap-sass', '~> 3.3.6'
+gem 'bootstrap-sass', '~> 3.4.1'
 # And a date-time-picker for convienient, er, date and time picking...
 # Freezing this at 4.17.37, as 4.17.43 causes JS error "newZone() expects
 # a string parameter", crashing the Game page. TODO: Investigate this.
