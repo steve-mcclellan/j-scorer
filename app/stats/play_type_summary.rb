@@ -37,7 +37,7 @@ class PlayTypeSummary
       ORDER BY games_count DESC, play_type DESC
     "
 
-    @stats = ActiveRecord::Base.connection.select_all(summary_query).to_hash
+    @stats = ActiveRecord::Base.connection.select_all(summary_query).to_a
 
     add_empty_play_types(user)
   end

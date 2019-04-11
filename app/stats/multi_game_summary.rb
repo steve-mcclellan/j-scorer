@@ -7,11 +7,11 @@ class MultiGameSummary
   def initialize(user, play_types, filters)
     round_info_query = sixths_query(user, play_types, filters)
     round_info = ActiveRecord::Base.connection
-                                   .select_all(round_info_query).to_hash
+                                   .select_all(round_info_query).to_a
 
     games_and_finals_query = finals_query(user, play_types, filters)
     count = ActiveRecord::Base.connection
-                              .select_all(games_and_finals_query).to_hash[0]
+                              .select_all(games_and_finals_query).to_a[0]
 
     initialize_stats
     reformat_data(round_info)

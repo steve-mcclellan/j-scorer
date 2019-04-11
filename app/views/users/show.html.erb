@@ -11,14 +11,13 @@
 
 <div id="stats-area">
 
-  <%# <div class="k-box"> %>
-    <%# <p> %>
-    <%# random_full_greeting %>
-    <%# Check out the revamped-and-renamed Filters tab! In addition to play type, your stats can now be filtered by show date, date played, and/or the newly-added rerun status. As always, direct any and all feedback to %>
-    <%# <a class="nowrap" href="mailto:<%= ENV['SUPPORT_ADDRESS'] % >"><%= ENV['SUPPORT_ADDRESS'] % ></a>. %>
-    <%# (Also, drop me an email if you'd like me to mark some of your existing games as reruns in bulk.) %>
-    <%# </p> %>
-  <%# </div> %>
+  <div class="k-box">
+    <p>
+    <%= random_full_greeting %>
+    I've just made a bunch of back-end changes in preparation for some upcoming features. Please let me know if I broke anything:
+    <a class="nowrap" href="mailto:<%= ENV['SUPPORT_ADDRESS'] %>"><%= ENV['SUPPORT_ADDRESS'] %></a>.
+    </p>
+  </div>
 
   <ul>
     <li><a href="#overview">Overview</a></li>

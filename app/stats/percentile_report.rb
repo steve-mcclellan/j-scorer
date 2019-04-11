@@ -7,7 +7,7 @@ class PercentileReport
 
   def initialize(user, play_types, filters)
     query = percentile_query(user, play_types, filters)
-    games = ActiveRecord::Base.connection.select_all(query).to_hash
+    games = ActiveRecord::Base.connection.select_all(query).to_a
 
     games.map! { |g| { score: g['score'].to_i, weight: g['weight'].to_f } }
 

@@ -6,7 +6,7 @@ class TopicsSummary
 
   def initialize(user, play_types, filters)
     query = topics_query(user, play_types, coalesce_filters(filters))
-    @stats = ActiveRecord::Base.connection.select_all(query).to_hash
+    @stats = ActiveRecord::Base.connection.select_all(query).to_a
   end
 
   private
