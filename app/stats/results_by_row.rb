@@ -5,7 +5,7 @@ class ResultsByRow
 
   def initialize(user, play_types, filters)
     query = by_row_query(user, play_types, filters)
-    row_results = ActiveRecord::Base.connection.select_all(query).to_hash
+    row_results = ActiveRecord::Base.connection.select_all(query).to_a
 
     @stats = { round_one: [0] + row_results[0..4],
                round_two: [0] + row_results[5..9] }

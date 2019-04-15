@@ -6,7 +6,7 @@ class FinalStatsReport
 
   def initialize(user, play_types, filters)
     query = final_query(user, play_types, filters)
-    raw_data = ActiveRecord::Base.connection.select_all(query).to_hash[0]
+    raw_data = ActiveRecord::Base.connection.select_all(query).to_a[0]
 
     @stats = format_data(raw_data)
     # rubocop:disable SpaceAroundOperators

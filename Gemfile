@@ -1,8 +1,8 @@
 # rubocop:disable FileName
 source 'https://rubygems.org'
 
-ruby '2.5.1'
-gem 'rails', '~> 5.2.0'
+ruby '2.6.2'
+gem 'rails', '~> 6.0.0.beta3'
 
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 0.15'
@@ -40,6 +40,9 @@ group :development do
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
+
+  # required for update task to Rails 6.0
+  gem 'listen'
 end
 
 group :test do
@@ -74,5 +77,8 @@ gem 'default_value_for', '~> 3.1.0'
 
 # Allow for convenient(-ish) customization of the data displayed
 # by "render :json".
-gem 'active_model_serializers', '~> 0.10.0'
+# TODO: A bunch of deprecation warnings are caused by (current) version 0.10.9.
+#       A fix is ready to go in the next release. Use it when they do.
+# gem 'active_model_serializers', '~> 0.10.0'
+gem 'active_model_serializers', github: 'rails-api/active_model_serializers', branch: '0-10-stable'
 # rubocop:enable FileName
