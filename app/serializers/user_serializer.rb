@@ -1,7 +1,7 @@
 class UserSerializer < ActiveModel::Serializer
-  has_many :games
+  has_many :games, key: :games_attributes
   class GameSerializer < ActiveModel::Serializer
-    has_many :sixths
+    has_many :sixths, key: :sixths_attributes
     class SixthSerializer < ActiveModel::Serializer
       attributes :type,
                  :board_position,
@@ -13,10 +13,9 @@ class UserSerializer < ActiveModel::Serializer
                  :result4,
                  :result5
     end
-    has_one :final
+    has_one :final, key: :final_attributes
     class FinalSerializer < ActiveModel::Serializer
-      attributes :id,
-                 :category_title,
+      attributes :category_title,
                  :topics_string,
                  :result,
                  :third_right,
