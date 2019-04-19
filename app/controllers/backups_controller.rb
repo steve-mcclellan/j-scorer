@@ -19,10 +19,9 @@ class BackupsController < ApplicationController
     end
 
     if current_user.update(restore_params)
-      flash[:success] = 'Victory!'
-      redirect_to root_path
+      redirect_to stats_path
     else
-      flash[:danger] = 'Failure.'
+      flash[:danger] = 'Could not restore data'
       redirect_to root_path
     end
   end

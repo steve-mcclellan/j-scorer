@@ -5,13 +5,47 @@
       Download a backup of your data by clicking <%= link_to 'here', backup_path %>.
     </div>
     <div class="isolated-sentence">
-      Add games from a previously-generated backup file.
-      <br>
-      <%= form_with(url: restore_path, multipart: true) do %>
-        <label for="file">File to Upload</label>
-        <%= file_field_tag 'file' %>
-        <%= submit_tag 'Go for it' %>
-      <% end %>
+      Add games from a previously-generated backup file
+      <a href="#" data-toggle="modal" data-target="#restore-modal">here</a>.
     </div>
   </div>
-</div>
+
+  <!-- Modal for restoring from backup -->
+  <div id="restore-modal" class="modal fade" tabindex="-1" role="dialog"
+       aria-labelledby="restore-modal-label">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <%= form_with(url: restore_path, multipart: true) do %>
+
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h3 class="modal-title" id="restore-modal-label">
+              Restore from Backup
+            </h3>
+          </div>
+
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-xs-12 col-compact">
+                <div class="input-group" id="restore-form">
+                  <label for="file">Backup file (*.jscor):</label>
+                  <%= file_field_tag 'file' %>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">
+              Close
+            </button>
+            <%= submit_tag 'Restore', class: 'btn btn-primary', id: 'restore-submit-button' %>
+          </div> <!-- modal-footer -->
+
+        <% end %>
+      </div> <!-- modal-content -->
+    </div> <!-- modal-dialog -->
+  </div> <!-- restore-modal -->
+</div> <!-- options tab -->

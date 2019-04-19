@@ -40,8 +40,8 @@ class BackupsControllerTest < ActionDispatch::IntegrationTest
     log_in_here(@user)
     assert_difference '@user.games.count', 1 do
       post '/restore', params: { file: @backup_file }
-      assert_not flash.empty?
-      assert_redirected_to root_url
+      assert flash.empty?
+      assert_redirected_to stats_url
     end
   end
 
@@ -49,11 +49,11 @@ class BackupsControllerTest < ActionDispatch::IntegrationTest
     log_in_here(@user)
     assert_difference '@user.games.count', 2 do
       post '/restore', params: { file: @backup_file }
-      assert_not flash.empty?
-      assert_redirected_to root_url
+      assert flash.empty?
+      assert_redirected_to stats_url
       post '/restore', params: { file: @backup_file_2 }
-      assert_not flash.empty?
-      assert_redirected_to root_url
+      assert flash.empty?
+      assert_redirected_to stats_url
     end
   end
 end

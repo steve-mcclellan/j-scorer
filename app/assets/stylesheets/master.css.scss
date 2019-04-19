@@ -756,6 +756,30 @@ html.no-js #stats-loading-message {
       }
     }
   }  /* end filters */
+
+  #options {
+    font-size: 1.25vw;
+
+    h2 {
+      font-size: 2vw;
+      margin-bottom: 2vh;
+    }
+
+    div.isolated-sentence {
+      text-align: center;
+      margin-bottom: 1.5vh;
+    }
+
+    #restore-modal {
+      #restore-form {
+        width: 100%;
+      }
+
+      #restore-submit-button {
+        width: auto;
+      }
+    }
+  } /* end options */
 }  /* end stats page */
 
 
