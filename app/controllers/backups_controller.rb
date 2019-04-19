@@ -1,5 +1,5 @@
 class BackupsController < ApplicationController
-  before_action :logged_in_user
+  before_action :dump_anonymous_user
 
   def new
     s = ActiveModelSerializers::SerializableResource.new(current_user,
@@ -9,11 +9,14 @@ class BackupsController < ApplicationController
   end
 
   def restore
-    @file = params[:file]
-    @data = JSON.parse(@file.read)
+    data = JSON.parse(params[:file].read)
 
-    params[:user] = @data
-    # render plain: "done with it: #{restore_params.inspect}"
+    if data.is_a? Hash
+      params[:user] = data
+    else
+      flash[:danger] = 'Invalid file format'
+      redirect_to root_path and return
+    end
 
     if current_user.update(restore_params)
       flash[:success] = 'Victory!'

@@ -25,4 +25,11 @@ class ApplicationController < ActionController::Base
     flash[:danger] = 'Please log in.'
     redirect_to login_url
   end
+
+  # The same, but without rerouting after login.
+  def dump_anonymous_user
+    return 'OK' if logged_in?
+    flash[:danger] = 'You must be logged in to perform this action.'
+    redirect_to login_url
+  end
 end
