@@ -23,6 +23,7 @@ Rails.application.routes.draw do
   delete 'delete/:game_id' => 'games#destroy', as: :delete
 
   get 'backup' => 'backups#new'
+  post 'restore' => 'backups#restore'
 
   # Allow only Ajax requests to the following routes:
   constraints(->(req) { req.xhr? }) do

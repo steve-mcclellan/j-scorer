@@ -4,6 +4,8 @@ class User < ApplicationRecord
   has_many :sixths, through: :games
   enum rerun_status: { all: 0, first: 1, rerun: 2 }, _prefix: true
 
+  accepts_nested_attributes_for :games
+
   attr_accessor :remember_token, :reset_token
   before_save { email.downcase! }
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
