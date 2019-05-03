@@ -3,9 +3,7 @@ class UserSerializer < ActiveModel::Serializer
   class GameSerializer < ActiveModel::Serializer
     has_many :sixths, key: :sixths_attributes
     class SixthSerializer < ActiveModel::Serializer
-      attributes :type,
-                 :board_position,
-                 :title,
+      attributes :title,
                  :topics_string,
                  :result1,
                  :result2,
@@ -24,7 +22,6 @@ class UserSerializer < ActiveModel::Serializer
     end
 
     attributes :show_date, :date_played, :play_type, :rerun,
-               :round_one_score, :round_two_score, :final_result,
-               :dd1_result, :dd2a_result, :dd2b_result
+               :round_one_score, :round_two_score, :final_result
   end
 end

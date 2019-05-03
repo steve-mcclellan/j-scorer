@@ -1,4 +1,6 @@
 class BackupsController < ApplicationController
+  include BackupsHelper
+
   before_action :dump_anonymous_user
 
   def new
@@ -9,12 +11,12 @@ class BackupsController < ApplicationController
   end
 
   def restore
-    data = JSON.parse(params[:file].read)
+    data = parse_file(params[:file])
 
-    if data.is_a? Hash
+    if data.present?
       params[:user] = data
     else
-      flash[:danger] = 'Invalid file format'
+      flash[:danger] = 'Could not parse file'
       redirect_to root_path and return
     end
 
@@ -38,9 +40,6 @@ class BackupsController < ApplicationController
                                        :round_one_score,
                                        :round_two_score,
                                        :final_result,
-                                       :dd1_result,
-                                       :dd2a_result,
-                                       :dd2b_result,
                                        { sixths_attributes: [:type,
                                                              :board_position,
                                                              :title,
