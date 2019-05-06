@@ -11,7 +11,7 @@ SET row_security = off;
 -- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: -
 --
 
-CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+-- CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 
 
 --
@@ -252,8 +252,6 @@ CREATE TABLE public.users (
     show_date_last_unit character varying(1),
     show_date_from date,
     show_date_to date,
-    show_date_weight character varying(10),
-    show_date_half_life double precision,
     date_played_reverse boolean,
     date_played_preposition character varying(10),
     date_played_beginning date,
@@ -261,9 +259,8 @@ CREATE TABLE public.users (
     date_played_last_unit character varying(1),
     date_played_from date,
     date_played_to date,
-    date_played_weight character varying(10),
-    date_played_half_life double precision,
-    rerun_status integer DEFAULT 0 NOT NULL
+    rerun_status integer DEFAULT 0 NOT NULL,
+    shared_stats_name character varying
 );
 
 
@@ -491,6 +488,13 @@ CREATE UNIQUE INDEX index_users_on_email ON public.users USING btree (email);
 
 
 --
+-- Name: index_users_on_lower_shared_stats_name; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_users_on_lower_shared_stats_name ON public.users USING btree (lower((shared_stats_name)::text));
+
+
+--
 -- Name: fk_rails_064f1dadb9; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -567,6 +571,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170909171911'),
 ('20170924191436'),
 ('20171029185801'),
-('20180902143604');
+('20180902143604'),
+('20190506215349'),
+('20190506215644');
 
 

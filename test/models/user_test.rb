@@ -3,8 +3,10 @@ require 'test_helper'
 # rubocop:disable ClassLength
 class UserTest < ActiveSupport::TestCase
   def setup
-    @user = User.new(email: 'user@example.com', password: 'foobar',
-                     password_confirmation: 'foobar')
+    @user = User.new(email: 'user@example.com',
+                     password: 'foobar',
+                     password_confirmation: 'foobar',
+                     shared_stats_name: 'new_user')
   end
 
   test 'should be valid' do
@@ -87,8 +89,6 @@ class UserTest < ActiveSupport::TestCase
     @user.show_date_last_unit = 'y'
     @user.show_date_from = Date.new(1983, 7, 18)
     @user.show_date_to = Date.new(2083, 7, 18)
-    @user.show_date_weight = 'half-life'
-    @user.show_date_half_life = '470'
     @user.date_played_reverse = false
     @user.date_played_preposition = 'inLast'
     @user.date_played_beginning = Date.new(2016, 9, 12)
@@ -96,8 +96,6 @@ class UserTest < ActiveSupport::TestCase
     @user.date_played_last_unit = 'd'
     @user.date_played_from = Date.new(1, 1, 1)
     @user.date_played_to = Date.new(9999, 12, 31)
-    @user.date_played_weight = 'half-life'
-    @user.date_played_half_life = '525'
     @user.rerun_status = 'first'
     assert @user.valid?
   end
@@ -124,22 +122,28 @@ class UserTest < ActiveSupport::TestCase
     assert_not @user.valid?
   end
 
-  test 'filter validator should fail on bad weighting adverb' do
-    @user.date_played_weight = 'whole-life'
-    assert_not @user.valid?
-    @user.date_played_weight = nil
-    assert @user.valid?
-    @user.show_date_weight = 'wtf'
-    assert_not @user.valid?
+  test 'shared stats name should be unique' do
+    duplicate_user = @user.dup
+    duplicate_user.email = 'someotheremail@example.com'
+    duplicate_user.shared_stats_name = @user.shared_stats_name.upcase
+    @user.save
+    assert_not duplicate_user.valid?
   end
 
-  test 'filter validator should fail on half-life of zero' do
-    @user.show_date_half_life = 0.0
-    assert_not @user.valid?
-    @user.show_date_half_life = 470.0
-    assert @user.valid?
-    @user.date_played_half_life = 0
-    assert_not @user.valid?
+  test 'shared stats name should be saved as entered' do
+    mixed_case_name = 'aWeSoMeStAtSgUy'
+    @user.shared_stats_name = mixed_case_name
+    @user.save
+    assert_equal mixed_case_name, @user.reload.shared_stats_name
+  end
+
+  test 'multiple nils should be allowed for shared stats name' do
+    duplicate_user = @user.dup
+    duplicate_user.email = 'someotheremail@example.com'
+    @user.shared_stats_name = nil
+    @user.save
+    duplicate_user.shared_stats_name = nil
+    assert duplicate_user.valid?
   end
 end
 # rubocop:enable ClassLength
