@@ -766,6 +766,21 @@ html.no-js #stats-loading-message {
       margin-bottom: 1.5vh;
     }
 
+    #sharing-modal {
+      .spacer {
+        height: 1vw;
+        margin: 0;
+      }
+
+      #detailed-stats-checkbox {
+        width: auto;
+      }
+
+      .sidebar {
+        font-size: 0.9vw;
+      }
+    }
+
     #restore-modal {
       #restore-form {
         width: 100%;
