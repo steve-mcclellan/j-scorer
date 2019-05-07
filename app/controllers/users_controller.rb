@@ -18,7 +18,7 @@ class UsersController < ApplicationController
 
   def show
     @user = current_user
-    @email = @user.email
+    @name = @user.email
     @sample = false
 
     set_play_types
@@ -28,7 +28,7 @@ class UsersController < ApplicationController
 
   def sample
     @user = ENV['SAMPLE_USER'] ? User.find(ENV['SAMPLE_USER']) : User.first
-    @email = ENV['SAMPLE_USER_EMAIL'] || @user.email
+    @name = ENV['SAMPLE_USER_NAME'] || @user.email
     @sample = true
 
     set_play_types

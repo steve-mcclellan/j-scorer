@@ -7,15 +7,17 @@ class User < ApplicationRecord
   accepts_nested_attributes_for :games
 
   attr_accessor :remember_token, :reset_token
-  before_save { email.downcase! }
 
+  before_save { email.downcase! }
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
   validates :email, length: { maximum: 50 },
                     format: { with: VALID_EMAIL_REGEX },
                     uniqueness: { case_sensitive: false }
   validates_with EmailDomainValidator, FilterParamValidator
+
   has_secure_password
   validates :password, presence: true, length: { minimum: 6 }, allow_nil: true
+
   validates :shared_stats_name, uniqueness: { case_sensitive: false },
                                 allow_nil: true
 
