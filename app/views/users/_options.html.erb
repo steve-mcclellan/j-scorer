@@ -2,22 +2,9 @@
   <br />
   <div class="clearfix">
     <h2>Stat Sharing</h2>
-    <% if @user.shared_stats_name.nil? %>
-      <div class="isolated-sentence">
-        Your stats are currently visible only to you.
-      </div>
-    <% else %>
-      <div class="isolated-sentence">
-        <% shared_url = request.base_url + '/shared/' + @user.shared_stats_name %>
-        Your stats are currently viewable at
-      </div>
-      <div class="isolated-sentence">
-        <a href="<%= shared_url %>"><%= shared_url %></a>.
-      </div>
-      <% end %>
-    <div class="isolated-sentence">
-      (If you'd like to change this, click <a href="#" data-toggle="modal" data-target="#sharing-modal">here</a>.)
-    </div>
+    <div id="stat-sharing-section">
+      <%= render 'options_sharing' %>
+    </div> <!-- stat-sharing-section -->
   </div> <!-- Stat Sharing clearfix -->
   <br />
   <hr />
@@ -54,39 +41,33 @@
           </h3>
         </div>
 
-        <div class="modal-body">
-          <div class="row">
-            <div class="col-xs-12 col-compact">
-              <div class="form-group">
-                <p>
-                  To share your stats, enter a public username. For private stats, leave this box blank.
-                </p>
-                <div class="spacer">&nbsp;</div>
-                <input type="text"
-                       class="form-control"
-                       tabindex="0"
-                       spellcheck="false"
-                       value="<%= @user.shared_stats_name %>" />
-                <div id="detailed-stats-checkbox-container">
-                  <input type="checkbox" id="detailed-stats-checkbox" />
-                  <label for="detailed-stats-checkbox">Share detailed stats?</label>
+        <%= form_with(model: @user, url: '/sharing', method: 'patch') do |f| %>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-xs-12 col-compact">
+                <div class="form-group">
+                  <p>
+                    To share your stats, enter a public username. For private stats, leave this box blank.
+                  </p>
+                  <div class="spacer">&nbsp;</div>
+                  <%= f.text_field(:shared_stats_name) %>
+                  <%= f.check_box(:share_detailed_stats) %>
+                  <%= f.label(:share_detailed_stats, 'Share detailed stats?') %>
                   <p class="sidebar">
                     COMING SOON: You'll be able to drill down into a topic or a game and see clue-by-clue results. Check this box to make these detailed stats shareable. Leave it unchecked to share summary stats only.
                   </p>
-                </div> <!-- checkbox-container -->
-              </div> <!-- form-group -->
-            </div> <!-- col-xs-12 -->
-          </div> <!-- row -->
-        </div> <!-- modal-body -->
+                </div> <!-- form-group -->
+              </div> <!-- col-xs-12 -->
+            </div> <!-- row -->
+          </div> <!-- modal-body -->
 
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">
-            Close
-          </button>
-          <button id="sharing-button" type="button" class="btn btn-primary">
-            Save settings
-          </button>
-        </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">
+              Close
+            </button>
+            <%= f.submit('Save settings', id: 'sharing-submit-button', class: 'btn btn-primary') %>
+          </div>
+        <% end %>
 
       </div> <!-- modal-content -->
     </div> <!-- modal-dialog -->

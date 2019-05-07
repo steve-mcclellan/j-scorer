@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
-  before_action :logged_in_user, only: %i[show update_user_filters]
+  before_action :logged_in_user,
+                only: %i[show update_user_filters update_sharing_status]
 
   def new
     @user = User.new
@@ -48,6 +49,22 @@ class UsersController < ApplicationController
       render json: { success: true }
     else
       render json: @user.errors, status: :bad_request
+    end
+  end
+
+  def update_sharing_status
+    @user = current_user
+    if params[:user][:shared_stats_name].blank?
+      params[:user][:shared_stats_name] = nil
+    end
+
+    respond_to do |format|
+      if @user.update(sharing_params)
+        format.js { render 'users/update_sharing_status' }
+      else
+        # TODO: Provide a useful error message.
+        format.js { head :bad_request }
+      end
     end
   end
 
@@ -114,5 +131,9 @@ class UsersController < ApplicationController
 
   def user_params
     params.require(:user).permit(:email, :password, :password_confirmation)
+  end
+
+  def sharing_params
+    params.require(:user).permit(:shared_stats_name, :share_detailed_stats)
   end
 end

@@ -772,12 +772,16 @@ html.no-js #stats-loading-message {
         margin: 0;
       }
 
-      #detailed-stats-checkbox {
+      #user_share_detailed_stats {
         width: auto;
       }
 
       .sidebar {
         font-size: 0.9vw;
+      }
+
+      #sharing-submit-button {
+        width: auto;
       }
     }
 
