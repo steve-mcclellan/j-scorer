@@ -260,7 +260,8 @@ CREATE TABLE public.users (
     date_played_from date,
     date_played_to date,
     rerun_status integer DEFAULT 0 NOT NULL,
-    shared_stats_name character varying
+    shared_stats_name character varying,
+    share_detailed_stats boolean DEFAULT false NOT NULL
 );
 
 
@@ -573,6 +574,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171029185801'),
 ('20180902143604'),
 ('20190506215349'),
-('20190506215644');
+('20190506215644'),
+('20190507164435');
 
 
