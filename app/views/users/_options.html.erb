@@ -41,7 +41,10 @@
           </h3>
         </div>
 
-        <%= form_with(model: @user, url: '/sharing', method: 'patch') do |f| %>
+        <%= form_with(model: @user,
+                      url: sharing_path,
+                      method: 'patch',
+                      id: 'sharing-form') do |f| %>
           <div class="modal-body">
             <div class="row">
               <div class="col-xs-12 col-compact">
@@ -50,7 +53,8 @@
                     To share your stats, enter a public username. For private stats, leave this box blank.
                   </p>
                   <div class="spacer">&nbsp;</div>
-                  <%= f.text_field(:shared_stats_name) %>
+                  <div id="sharing-settings-error"></div>
+                  <%= f.text_field(:shared_stats_name, spellcheck: 'false') %>
                   <%= f.check_box(:share_detailed_stats) %>
                   <%= f.label(:share_detailed_stats, 'Share detailed stats?') %>
                   <p class="sidebar">
@@ -65,7 +69,10 @@
             <button type="button" class="btn btn-default" data-dismiss="modal">
               Close
             </button>
-            <%= f.submit('Save settings', id: 'sharing-submit-button', class: 'btn btn-primary') %>
+            <%= f.submit('Save settings',
+                         id: 'sharing-submit-button',
+                         class: 'btn btn-primary',
+                         data: { disable_with: 'Saving...' }) %>
           </div>
         <% end %>
 

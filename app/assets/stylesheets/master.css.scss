@@ -772,6 +772,14 @@ html.no-js #stats-loading-message {
         margin: 0;
       }
 
+      #sharing-settings-error {
+        color: $x-red;
+
+        ul li {
+          list-style-position: inside;
+        }
+      }
+
       #user_share_detailed_stats {
         width: auto;
       }

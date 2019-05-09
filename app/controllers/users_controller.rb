@@ -62,8 +62,8 @@ class UsersController < ApplicationController
       if @user.update(sharing_params)
         format.js { render 'users/update_sharing_status' }
       else
-        # TODO: Provide a useful error message.
-        format.js { head :bad_request }
+        format.js { render 'users/update_sharing_error',
+                    status: @user.errors.any? ? :conflict : :bad_request }
       end
     end
   end

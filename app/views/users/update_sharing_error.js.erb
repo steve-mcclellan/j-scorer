@@ -1,0 +1,10 @@
+<%# Other errors are handled in users.js %>
+<% if response.status == 409 %>
+  $( "#sharing-settings-error" ).html(
+    "<ul>" +
+    <% @user.errors.each do |attr, error| %>
+    "<li><%= attr == :shared_stats_name ? 'Name' : attr.to_s.humanize  %> <%= error %>.</li>" +
+    <% end %>
+    "</ul>"
+  );
+<% end %>
