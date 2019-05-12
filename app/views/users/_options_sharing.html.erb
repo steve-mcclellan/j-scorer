@@ -4,7 +4,7 @@
   </div>
 <% else %>
   <div class="isolated-sentence">
-    <% shared_url = request.base_url + '/shared/' + @user.shared_stats_name %>
+    <% shared_url = request.base_url + '/shared/' + url_encode(@user.shared_stats_name) %>
     Your <u><%= @user.share_detailed_stats ? 'detailed' : 'summary' %></u> stats are currently viewable at
   </div>
   <div class="isolated-sentence">

@@ -780,6 +780,11 @@ html.no-js #stats-loading-message {
         }
       }
 
+      .field_with_errors {
+        color: $state-danger-text;
+        border-color: $state-danger-text;
+      }
+
       #user_share_detailed_stats {
         width: auto;
       }
