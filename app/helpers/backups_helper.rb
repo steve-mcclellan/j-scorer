@@ -2,6 +2,7 @@ module BackupsHelper
   include ERB::Util
 
   def parse_file(file)
+    return nil if file.nil?
     verified_backup_input(JSON.parse(file.read, symbolize_names: true))
   rescue JSON::ParserError
     nil

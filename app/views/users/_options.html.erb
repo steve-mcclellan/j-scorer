@@ -157,11 +157,11 @@
               <div class="col-xs-12 col-compact">
                 <div class="input-group" id="restore-form">
                   <label for="file">Backup file (*.jscor):</label>
-                  <%= file_field_tag 'file' %>
+                  <%= file_field_tag 'file', required: true %>
                 </div>
               </div>
               <div class="col-xs-12 col-compact">
-                <strong>Note</strong>: This will add all of the games in the backup file to your user account. If you're not restarting from scratch, this may result in duplicates.
+                <strong>Note:</strong> This will add all of the games in the backup file to your user account. If you're not restarting from scratch, this may result in duplicates.
               </div>
             </div>
           </div>
