@@ -1,0 +1,11 @@
+<div class="text-center">
+  <% if @shared %>
+    <button type="button" class="update-filters update-shared-filters" data-username= "<%= url_encode(@user.shared_stats_name) %>">
+  <% elsif @sample %>
+    <button type="button" class="update-filters update-sample-filters">
+  <% else %>
+    <button type="button" class="update-filters update-user-filters">
+  <% end %>
+      Apply all filters
+    </button>
+</div>

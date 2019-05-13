@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
   before_action :logged_in_user,
                 only: %i[show update_user_filters update_sharing_status]
+  before_action :find_shared_stats_user, only: %i[shared]
 
   def new
     @user = User.new
@@ -20,7 +21,6 @@ class UsersController < ApplicationController
   def show
     @user = current_user
     @name = @user.email
-    @sample = false
 
     set_play_types
     set_filters
@@ -31,6 +31,16 @@ class UsersController < ApplicationController
     @user = ENV['SAMPLE_USER'] ? User.find(ENV['SAMPLE_USER']) : User.first
     @name = ENV['SAMPLE_USER_NAME'] || @user.email
     @sample = true
+
+    set_play_types
+    set_filters
+    set_stats_vars
+    render 'show'
+  end
+
+  def shared
+    @name = @user.shared_stats_name
+    @shared = true
 
     set_play_types
     set_filters
@@ -70,12 +80,17 @@ class UsersController < ApplicationController
 
   private
 
+  def find_shared_stats_user
+    @user = User.find_by('LOWER(shared_stats_name) = ?', params[:name].downcase)
+    render plain: 'User not found', status: :not_found if @user.nil?
+  end
+
   def set_play_types
     @play_types = if params[:play_types] == 'all'
                     PLAY_TYPES.keys
                   elsif params[:play_types]
                     params[:play_types].split(',')
-                  elsif !@sample
+                  elsif !(@shared || @sample)
                     current_user.play_types
                   else
                     ['regular']
@@ -85,7 +100,7 @@ class UsersController < ApplicationController
   def set_filters
     @filters = if filters_from_params.values.any?
                  filters_from_params
-               elsif @sample
+               elsif @shared || @sample
                  filters_from_params.update(rerun_status: 'first')
                else
                  current_user.filter_preferences

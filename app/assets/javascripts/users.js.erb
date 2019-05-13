@@ -1,7 +1,7 @@
 // NOTE: The shared function that produces a disabled-cookies warning on
 //       the signup and login pages is located in the sessions.js file.
 
-$( ".users-show, .users-sample" ).ready( function() {
+$( ".users-show, .users-shared, .users-sample" ).ready( function() {
 
   // Returns an array of play type abbreviations corresponding
   // to the checked boxes on the play types tab, or ['none']
@@ -225,6 +225,15 @@ $( ".users-show, .users-sample" ).ready( function() {
       $( ".update-sample-filters" ).addClass( "disabled" )
                                    .html( "Updating..." );
       var url = "/sample?" + makeFilterQueryString();
+      window.location.replace( url );
+    }
+  });
+
+  $( ".update-shared-filters" ).on( "click", function () {
+    if ( !$( this ).hasClass( "disabled" ) ) {
+      $( ".update-shared-filters" ).addClass( "disabled" )
+                                   .html( "Updating..." );
+      var url = "/shared/" + $( this ).data( 'username' ) + "?" + makeFilterQueryString();
       window.location.replace( url );
     }
   });

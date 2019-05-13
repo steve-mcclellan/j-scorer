@@ -1,7 +1,11 @@
-<% provide(:title, @sample ? 'Sample stats' : 'Stats') %>
 <% if @sample %>
+  <% provide(:title, 'Sample stats') %>
   <% provide(:tags, "description: A sample stats page (with the developer's real stats), to give you a taste of what the J! Scorer can do.".html_safe) %>
+<% elsif @shared %>
+  <% provide(:title, "Shared stats for #{@name}") %>
+  <% provide(:tags, "description: The up-to-the-minute stats for J! Scorer user #{@name}.") %>
 <% else %>
+  <% provide(:title, 'Stats') %>
   <% provide(:tags, 'description: Your up-to-the-minute stats, broken down by game, topic, row, play type, and more.') %>
 <% end %>
 

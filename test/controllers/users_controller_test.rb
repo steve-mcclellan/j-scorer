@@ -3,6 +3,7 @@ require 'test_helper'
 class UsersControllerTest < ActionController::TestCase
   def setup
     @user = users(:dave)
+    @other_user = users(:steve)
   end
 
   test 'should get new' do
@@ -32,6 +33,28 @@ class UsersControllerTest < ActionController::TestCase
     log_in_here(@user)
     get :sample
     assert_response :success
+  end
+
+  test 'should get valid shared page when not logged in' do
+    get :shared, params: { name: @other_user.shared_stats_name }
+    assert_response :success
+  end
+
+  test 'should get valid shared page when logged in' do
+    log_in_here(@user)
+    get :shared, params: { name: @other_user.shared_stats_name }
+    assert_response :success
+  end
+
+  test 'should 404 invalid shared page when not logged in' do
+    get :shared, params: { name: 'BadName' }
+    assert_response :not_found
+  end
+
+  test 'should 404 invalid shared page when logged in' do
+    log_in_here(@user)
+    get :shared, params: { name: 'BadName' }
+    assert_response :not_found
   end
 
   test 'should redirect update_user_filters when not logged in' do
