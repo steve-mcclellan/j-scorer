@@ -15,11 +15,20 @@
       (<a href="#" data-toggle="modal" data-target="#why-backup-modal">Why back up?</a>)
     </div>
     <div class="isolated-sentence">
-      Download a backup file of your games by clicking <%= link_to 'here', backup_path %>.
+      Download a backup file of your games by clicking
+      <% if current_user?(@user) %>
+        <%= link_to 'here', backup_path %>.
+      <% else %>
+        <span class="disabled">here</span>.
+      <% end %>
     </div>
     <div class="isolated-sentence">
       Add games from a previously-generated backup file
-      <a href="#" data-toggle="modal" data-target="#restore-modal">here</a>.
+      <% if current_user?(@user) %>
+        <a href="#" data-toggle="modal" data-target="#restore-modal">here</a>.
+      <% else %>
+        <span class="disabled">here</span>.
+      <% end %>
     </div>
   </div> <!-- Back up/Restore clearfix -->
   <br />

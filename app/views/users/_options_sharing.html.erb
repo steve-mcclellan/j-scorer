@@ -12,5 +12,10 @@
   </div>
 <% end %>
 <div class="isolated-sentence">
-  (If you'd like to change this, click <a href="#" data-toggle="modal" data-target="#sharing-modal">here</a>.)
+  (If you'd like to change this, click
+  <% if current_user?(@user) %>
+    <a href="#" data-toggle="modal" data-target="#sharing-modal">here</a>.)
+  <% else %>
+    <span class="disabled">here</span>.)
+  <% end %>
 </div>
