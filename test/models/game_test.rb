@@ -40,6 +40,7 @@ class GameTest < ActiveSupport::TestCase
                                  date_played: Time.zone.today)
     assert_nil new_game.game_id
     assert new_game.valid?
+    new_game.save!
     assert_equal '1984-09-12-1', new_game.game_id
 
     # A different user should be able to have an independent game_id.
@@ -47,6 +48,7 @@ class GameTest < ActiveSupport::TestCase
                                            date_played: Time.zone.today)
     assert_nil other_game.game_id
     assert other_game.valid?
+    other_game.save!
     assert_equal '1984-09-12', other_game.game_id
   end
 

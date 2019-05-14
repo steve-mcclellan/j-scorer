@@ -9,13 +9,17 @@ class Game < ApplicationRecord
 
   default_scope { order(date_played: :desc) }
 
-  before_validation :set_game_id, :add_default_date_played
+  before_validation :add_default_date_played
+  before_validation :set_game_id, on: :update
 
   validates :user, presence: true
   validates :show_date, presence: true
   validates :date_played, presence: true
-  validates :game_id, presence: true, uniqueness: { scope: :user_id }
+  validates :game_id, presence: true, uniqueness: { scope: :user_id },
+                                      on: :update
   validates :play_type, presence: true, inclusion: { in: PLAY_TYPES.keys }
+
+  before_create :set_game_id
 
   after_save :set_dd_results
 
