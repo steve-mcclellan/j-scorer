@@ -11,15 +11,13 @@
 
 <div id="stats-area">
 
-  <!--
   <div class="k-box">
     <p>
     <%= random_full_greeting %>
-    I've just made a bunch of back-end changes in preparation for some upcoming features. Please let me know if I broke anything:
+    You can now download a backup of your data, and you now have the option of generating a publicly-available version of your stats page. (The latter is&mdash;and always will be&mdash;disabled by default.) Check out the new "Options" tab below. As always, let me know if anything's broken:
     <a class="nowrap" href="mailto:<%= ENV['SUPPORT_ADDRESS'] %>"><%= ENV['SUPPORT_ADDRESS'] %></a>.
     </p>
   </div>
-  -->
 
   <ul>
     <li><a href="#overview">Overview</a></li>
@@ -28,6 +26,7 @@
     <li><a href="#by-row">By row</a></li>
     <li><a href="#finals">Finals</a></li>
     <li><a href="#filters">Filters</a></li>
+    <li><a href="#options">Options</a></li>
   </ul>
 
   <noscript>
@@ -54,5 +53,7 @@
   <%= render 'finals', stats: @final_stats %>
 
   <%= render 'filters', no_games: user_games_count.zero? %>
+
+  <%= render 'options' %>
 
 </div>

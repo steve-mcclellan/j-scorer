@@ -21,6 +21,7 @@ module Topicable
   end
 
   def topic_names_array
+    return [] if topics_string.nil?
     topics_string.strip                 # Remove leading/trailing whitespace.
                  .squeeze(' ')          # Compress any consecutive spaces.
                  .gsub(/\s?,\s?/, ',')  # Remove any whitespace around commas.

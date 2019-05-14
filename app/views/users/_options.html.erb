@@ -1,0 +1,104 @@
+<div id="options" class="col-xs-12">
+  <div class="clearfix">
+    <h2>Back up/Restore</h2>
+    <div class="isolated-sentence">
+      (<a href="#" data-toggle="modal" data-target="#why-backup-modal">Why back up?</a>)
+    </div>
+    <div class="isolated-sentence">
+      Download a backup file of your games by clicking <%= link_to 'here', backup_path %>.
+    </div>
+    <div class="isolated-sentence">
+      Add games from a previously-generated backup file
+      <a href="#" data-toggle="modal" data-target="#restore-modal">here</a>.
+    </div>
+  </div>
+
+  <!-- Why-backup modal -->
+  <div id="why-backup-modal" class="modal fade" tabindex="-1" role="dialog"
+       aria-labelledby="why-backup-modal-label">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h3 class="modal-title" id="why-backup-modal-label">
+              Why Back up?
+            </h3>
+          </div>
+
+          <div class="modal-body">
+            <p>
+              As the J! Scorer is <a href="https://github.com/steve-mcclellan/j-scorer" target="_blank">open source</a>, anyone is free to create their own instance of it for any reason. (Someone might want their own customized version, or simply a version where they control everything, including the database.)
+            </p>
+            <br />
+            <p>
+              Each instance will have its own separate database, and the only way to move games from one instance to another is through this back-up-and-restore feature.
+            </p>
+            <br />
+            <p>
+              It's a good idea to always keep a recent backup file on hand, just in case this instance or its database should vanish unexpectedly.
+            </p>
+            <br />
+            <p>
+              I intend to leave this instance up and running for as long as anyone is actively using it. That said, sometimes plans change, sometimes people become unable to execute their plans despite their best efforts, and sometimes service providers lose databases.
+            </p>
+            <br />
+            <p>
+              If any of these things happens, anyone who can set up a Ruby on Rails application can create a new J! Scorer instance. Create an account there, add the games from your recent backup file, and continue your training without major interruption.
+            </p>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">
+              Close
+            </button>
+          </div> <!-- modal-footer -->
+
+      </div> <!-- modal-content -->
+    </div> <!-- modal-dialog -->
+  </div> <!-- why-backup-modal -->
+
+  <!-- Modal for restoring from backup -->
+  <div id="restore-modal" class="modal fade" tabindex="-1" role="dialog"
+       aria-labelledby="restore-modal-label">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <%= form_with(url: restore_path, multipart: true) do %>
+
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h3 class="modal-title" id="restore-modal-label">
+              Restore from Backup
+            </h3>
+          </div>
+
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-xs-12 col-compact">
+                <div class="input-group" id="restore-form">
+                  <label for="file">Backup file (*.jscor):</label>
+                  <%= file_field_tag 'file', required: true %>
+                </div>
+              </div>
+              <div class="col-xs-12 col-compact">
+                <strong>Note:</strong> This will add all of the games in the backup file to your user account. If you're not restarting from scratch, this may result in duplicates.
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">
+              Close
+            </button>
+            <%= submit_tag 'Restore', class: 'btn btn-primary', id: 'restore-submit-button' %>
+          </div> <!-- modal-footer -->
+
+        <% end %>
+      </div> <!-- modal-content -->
+    </div> <!-- modal-dialog -->
+  </div> <!-- restore-modal -->
+</div> <!-- options tab -->
