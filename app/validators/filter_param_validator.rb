@@ -1,7 +1,6 @@
 class FilterParamValidator < ActiveModel::Validator
   VALID_PREPOSITIONS = %w(sinceBeg inLast since from).freeze
   VALID_TIME_UNITS = %w(d w m y).freeze
-  VALID_WEIGHTINGS = %w(equal half-life).freeze
 
   # rubocop:disable AbcSize, CyclomaticComplexity, MethodLength
   # rubocop:disable PerceivedComplexity, GuardClause
@@ -26,14 +25,6 @@ class FilterParamValidator < ActiveModel::Validator
       record.errors[:show_date_to] << 'Invalid show date to date'
     end
 
-    unless valid_weighting?(record.show_date_weight)
-      record.errors[:show_date_weight] << 'Invalid show date weighting'
-    end
-
-    unless valid_half_life?(record.show_date_half_life)
-      record.errors[:show_date_half_life] << 'Invalid show date half-life'
-    end
-
     unless valid_preposition?(record.date_played_preposition)
       record.errors[:date_played_preposition] << 'Invalid date played prepos.'
     end
@@ -52,14 +43,6 @@ class FilterParamValidator < ActiveModel::Validator
 
     unless valid_date?(record.date_played_to)
       record.errors[:date_played_to] << 'Invalid date played to date'
-    end
-
-    unless valid_weighting?(record.date_played_weight)
-      record.errors[:date_played_weight] << 'Invalid date played weighting'
-    end
-
-    unless valid_half_life?(record.date_played_half_life)
-      record.errors[:date_played_half_life] << 'Invalid date played half-life'
     end
   end
   # rubocop:enable AbcSize, CyclomaticComplexity, MethodLength
@@ -81,13 +64,5 @@ class FilterParamValidator < ActiveModel::Validator
 
   def valid_unit?(unit)
     unit.nil? || VALID_TIME_UNITS.include?(unit)
-  end
-
-  def valid_weighting?(weighting)
-    weighting.nil? || VALID_WEIGHTINGS.include?(weighting)
-  end
-
-  def valid_half_life?(half_life)
-    half_life != 0
   end
 end

@@ -7,8 +7,10 @@ Rails.application.routes.draw do
 
   get 'signup' => 'users#new'
   post 'users' => 'users#create'
+
   get 'stats' => 'users#show'
   get 'sample' => 'users#sample'
+  get 'shared/:name' => 'users#shared', as: :shared
 
   get 'login' => 'sessions#new'
   post 'login' => 'sessions#create'
@@ -33,5 +35,6 @@ Rails.application.routes.draw do
     get 'check/:final_id' => 'games#check', as: :check
 
     patch 'filters' => 'users#update_user_filters'
+    patch 'sharing' => 'users#update_sharing_status'
   end
 end

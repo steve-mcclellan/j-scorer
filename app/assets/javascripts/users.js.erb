@@ -1,7 +1,7 @@
 // NOTE: The shared function that produces a disabled-cookies warning on
 //       the signup and login pages is located in the sessions.js file.
 
-$( ".users-show, .users-sample" ).ready( function() {
+$( ".users-show, .users-shared, .users-sample" ).ready( function() {
 
   // Returns an array of play type abbreviations corresponding
   // to the checked boxes on the play types tab, or ['none']
@@ -36,10 +36,6 @@ $( ".users-show, .users-sample" ).ready( function() {
         result.to = $( "#" + dateType + "-to input" ).val();
         break;
     }
-    result.weight = $( "#" + dateType + "-adverb" ).val();
-    if ( result.weight === "half-life" ) {
-      result.half_life = $( "#" + dateType + "-half-life-days" ).val();
-    }
     return result;
   }
 
@@ -66,20 +62,6 @@ $( ".users-show, .users-sample" ).ready( function() {
     return $.param( makeDateFilterObject() ) +
            "&rerun_status=" + $( "#rerun-status" ).val() +
            "&play_types=" + getCheckedPlayTypeBoxes().join( ',' );
-  }
-
-  function illegalValue() {
-    if ( $( "#show-date-adverb" ).val() === "half-life" &&
-          parseFloat( $( "#show-date-half-life-days" ).val() ) === 0 ) {
-      alert( "Half-life cannot be zero." );
-      return true;
-    }
-    if ( $( "#date-played-adverb" ).val() === "half-life" &&
-        parseFloat( $( "#date-played-half-life-days" ).val() ) === 0 ) {
-      alert( "Half-life cannot be zero." );
-      return true;
-    }
-    return false;
   }
 
   function laterDate( date1, date2 ) {
@@ -129,19 +111,6 @@ $( ".users-show, .users-sample" ).ready( function() {
     }
   }
 
-  function updateWeightSentence( dateType ) {
-    var adverb = $( "#" + dateType + "-adverb" ).val();
-    $( "." + dateType + "-weight-object" ).hide();
-    switch (adverb) {
-      case "half-life":
-        var num = parseFloat( $( "#" + dateType + "-half-life-days" ).val() ),
-            pluralizedDay = ( num === 1 ? "day" : "days" );
-        $( "#" + dateType + "-half-life-unit" ).text( pluralizedDay );
-        $( "#" + dateType + "-half-life-span" ).show();
-        break;
-    }
-  }
-
   $( "#stats-area" ).tabs();
 
   var $gameTable = $( "#gameTable" ),
@@ -151,7 +120,10 @@ $( ".users-show, .users-sample" ).ready( function() {
       $showDateToPicker = $( "#show-date-to-picker" ),
       $datePlayedFromPicker = $( "#date-played-from-picker" ),
       $datePlayedToPicker = $( "#date-played-to-picker" ),
-      storedToDates = { "show-date": undefined, "date-played": undefined };
+      storedToDates = { "show-date": undefined, "date-played": undefined },
+      $sharingForm = $( "#sharing-form" ),
+      $sharingSettingsError = $( "#sharing-settings-error" ),
+      $sharedStatsNameField = $( "#user_shared_stats_name" );
 
   // Remove these before Tablesorter can get its grubby mitts on them.
   var $untracked = $( "tr.untracked" ).detach();
@@ -228,7 +200,6 @@ $( ".users-show, .users-sample" ).ready( function() {
 
   $( ".update-user-filters" ).on( "click", function() {
     if ( !$( this ).hasClass( "disabled" ) ) {
-      if ( illegalValue() ) { return; }
       $( ".update-user-filters" ).addClass( "disabled" )
                                  .html( "Updating..." );
       $.ajax({
@@ -251,7 +222,6 @@ $( ".users-show, .users-sample" ).ready( function() {
 
   $( ".update-sample-filters" ).on( "click", function() {
     if ( !$( this ).hasClass( "disabled" ) ) {
-      if ( illegalValue() ) { return; }
       $( ".update-sample-filters" ).addClass( "disabled" )
                                    .html( "Updating..." );
       var url = "/sample?" + makeFilterQueryString();
@@ -259,12 +229,17 @@ $( ".users-show, .users-sample" ).ready( function() {
     }
   });
 
-  $( "#show-date-preposition, #show-date-last-number" ).change( function() {
-    updateFilterSentence( "show-date" );
+  $( ".update-shared-filters" ).on( "click", function () {
+    if ( !$( this ).hasClass( "disabled" ) ) {
+      $( ".update-shared-filters" ).addClass( "disabled" )
+                                   .html( "Updating..." );
+      var url = "/shared/" + $( this ).data( 'username' ) + "?" + makeFilterQueryString();
+      window.location.replace( url );
+    }
   });
 
-  $( "#show-date-adverb, #show-date-half-life-days" ).change( function() {
-    updateWeightSentence( "show-date" );
+  $( "#show-date-preposition, #show-date-last-number" ).change( function() {
+    updateFilterSentence( "show-date" );
   });
 
   $showDateFromPicker.datetimepicker({
@@ -293,10 +268,6 @@ $( ".users-show, .users-sample" ).ready( function() {
     updateFilterSentence( "date-played" );
   });
 
-  $( "#date-played-adverb, #date-played-half-life-days" ).change( function() {
-    updateWeightSentence( "date-played" );
-  });
-
   $datePlayedFromPicker.datetimepicker({
     format: "YYYY-MM-DD",
     minDate: "0001-01-01",
@@ -319,10 +290,41 @@ $( ".users-show, .users-sample" ).ready( function() {
     $datePlayedFromPicker.data( "DateTimePicker" ).maxDate( e.date );
   });
 
+  $sharingForm.on( "input", function() {
+    $sharingSettingsError.html( "" );
+    $sharedStatsNameField.removeClass( "field_with_errors" );
+  });
+
+  $sharingForm.on( "ajax:error", function( xhr, status ) {
+    if ( status.status >= 400 && status.status < 500 ) {
+      $sharedStatsNameField.addClass( "field_with_errors" );
+    }
+    if ( status.status === 0 ) {
+      $sharingSettingsError.html(
+        "<p>Oops! It looks like the request was not sent successfully</p>" +
+        "<p>Please check your Internet connection and try again.</p>"
+      );
+    } else if ( status.status === 503 ) {
+      $sharingSettingsError.html(
+        "<p>Oops! The database is currently unavailable.</p>" +
+        "<p>This usually means that a new version of the J! Scorer is in the " +
+        "process of going live. This rarely lasts more than a minute or " +
+        "two. Please try again shortly.</p>"
+      );
+    } else if ( status.status !== 409 ) {
+      // 409 is handled in the update_sharing_error view.
+      $sharingSettingsError.html(
+        "<p>Oops! Something unexpected went wrong.</p>" +
+        "<p>If this persists, please contact me at " +
+        "<a href='mailto:<%= ENV['SUPPORT_ADDRESS'] %>'>" +
+        "<%= ENV['SUPPORT_ADDRESS'] %></a></p>"
+      )
+    }
+  });
+
+
   updateFilterSentence( "show-date" );
-  updateWeightSentence( "show-date" );
   updateFilterSentence( "date-played" );
-  updateWeightSentence( "date-played" );
 
   $( "#stats-loading-message" ).remove();
   $( "#stats-area" ).show();

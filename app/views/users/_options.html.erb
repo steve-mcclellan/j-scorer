@@ -1,17 +1,93 @@
 <div id="options" class="col-xs-12">
+  <br />
+  <div class="clearfix">
+    <h2>Stat Sharing</h2>
+    <div id="stat-sharing-section">
+      <%= render 'options_sharing' %>
+    </div> <!-- stat-sharing-section -->
+  </div> <!-- Stat Sharing clearfix -->
+  <br />
+  <hr />
+  <br />
   <div class="clearfix">
     <h2>Back up/Restore</h2>
     <div class="isolated-sentence">
       (<a href="#" data-toggle="modal" data-target="#why-backup-modal">Why back up?</a>)
     </div>
     <div class="isolated-sentence">
-      Download a backup file of your games by clicking <%= link_to 'here', backup_path %>.
+      Download a backup file of your games by clicking
+      <% if current_user?(@user) %>
+        <%= link_to 'here', backup_path %>.
+      <% else %>
+        <span class="disabled">here</span>.
+      <% end %>
     </div>
     <div class="isolated-sentence">
       Add games from a previously-generated backup file
-      <a href="#" data-toggle="modal" data-target="#restore-modal">here</a>.
+      <% if current_user?(@user) %>
+        <a href="#" data-toggle="modal" data-target="#restore-modal">here</a>.
+      <% else %>
+        <span class="disabled">here</span>.
+      <% end %>
     </div>
-  </div>
+  </div> <!-- Back up/Restore clearfix -->
+  <br />
+
+  <!-- above: main tab content; below: modals -->
+
+  <!-- Stat-sharing modal -->
+  <div id="sharing-modal" class="modal fade" tabindex="-1" role="dialog"
+       aria-labelledby="sharing-modal-label">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h3 class="modal-title" id="sharing-modal-label">
+            Sharing settings
+          </h3>
+        </div>
+
+        <%= form_with(model: @user,
+                      url: sharing_path,
+                      method: 'patch',
+                      id: 'sharing-form') do |f| %>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-xs-12 col-compact">
+                <div class="form-group">
+                  <p>
+                    To share your stats, enter a public username. For private stats, leave this box blank.
+                  </p>
+                  <div class="spacer">&nbsp;</div>
+                  <div id="sharing-settings-error"></div>
+                  <%= f.text_field(:shared_stats_name, spellcheck: 'false') %>
+                  <%= f.check_box(:share_detailed_stats) %>
+                  <%= f.label(:share_detailed_stats, 'Share detailed stats?') %>
+                  <p class="sidebar">
+                    COMING SOON: You'll be able to drill down into a topic or a game and see clue-by-clue results. Check this box to make these detailed stats shareable. Leave it unchecked to share summary stats only.
+                  </p>
+                </div> <!-- form-group -->
+              </div> <!-- col-xs-12 -->
+            </div> <!-- row -->
+          </div> <!-- modal-body -->
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">
+              Close
+            </button>
+            <%= f.submit('Save settings',
+                         id: 'sharing-submit-button',
+                         class: 'btn btn-primary',
+                         data: { disable_with: 'Saving...' }) %>
+          </div>
+        <% end %>
+
+      </div> <!-- modal-content -->
+    </div> <!-- modal-dialog -->
+  </div> <!-- Stat-sharing modal -->
 
   <!-- Why-backup modal -->
   <div id="why-backup-modal" class="modal fade" tabindex="-1" role="dialog"
@@ -24,7 +100,7 @@
               <span aria-hidden="true">&times;</span>
             </button>
             <h3 class="modal-title" id="why-backup-modal-label">
-              Why Back up?
+              Why back up?
             </h3>
           </div>
 
@@ -72,7 +148,7 @@
               <span aria-hidden="true">&times;</span>
             </button>
             <h3 class="modal-title" id="restore-modal-label">
-              Restore from Backup
+              Restore from backup
             </h3>
           </div>
 

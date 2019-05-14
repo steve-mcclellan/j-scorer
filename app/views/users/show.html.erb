@@ -1,7 +1,11 @@
-<% provide(:title, @sample ? 'Sample stats' : 'Stats') %>
 <% if @sample %>
+  <% provide(:title, 'Sample stats') %>
   <% provide(:tags, "description: A sample stats page (with the developer's real stats), to give you a taste of what the J! Scorer can do.".html_safe) %>
+<% elsif @shared %>
+  <% provide(:title, "Shared stats for #{@name}") %>
+  <% provide(:tags, "description: The up-to-the-minute stats for J! Scorer user #{@name}.") %>
 <% else %>
+  <% provide(:title, 'Stats') %>
   <% provide(:tags, 'description: Your up-to-the-minute stats, broken down by game, topic, row, play type, and more.') %>
 <% end %>
 
@@ -13,9 +17,9 @@
 
   <div class="k-box">
     <p>
-    <%= random_full_greeting %>
-    You can now download a backup of your data, and you now have the option of generating a publicly-available version of your stats page. (The latter is&mdash;and always will be&mdash;disabled by default.) Check out the new "Options" tab below. As always, let me know if anything's broken:
-    <a class="nowrap" href="mailto:<%= ENV['SUPPORT_ADDRESS'] %>"><%= ENV['SUPPORT_ADDRESS'] %></a>.
+      <%= random_full_greeting %>
+      You can now download a backup of your data, and you now have the option of generating a publicly-available version of your stats page. (The latter is&mdash;and always will be&mdash;disabled by default.) Check out the new "Options" tab below, and click <%= link_to 'here', shared_path('JamesOnTV'), target: :_blank %> for a sample shared stats page (updated weekly). As always, let me know if anything's broken:
+      <a class="nowrap" href="mailto:<%= ENV['SUPPORT_ADDRESS'] %>"><%= ENV['SUPPORT_ADDRESS'] %></a>.
     </p>
   </div>
 

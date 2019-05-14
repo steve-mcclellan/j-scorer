@@ -1,0 +1,21 @@
+<% if @user.shared_stats_name.nil? %>
+  <div class="isolated-sentence">
+    Your stats are currently visible only to you.
+  </div>
+<% else %>
+  <div class="isolated-sentence">
+    <% shared_url = request.base_url + '/shared/' + url_encode(@user.shared_stats_name) %>
+    Your <u><%= @user.share_detailed_stats ? 'detailed' : 'summary' %></u> stats are currently viewable at
+  </div>
+  <div class="isolated-sentence">
+    <a href="<%= shared_url %>"><%= shared_url %></a>.
+  </div>
+<% end %>
+<div class="isolated-sentence">
+  (If you'd like to change this, click
+  <% if current_user?(@user) %>
+    <a href="#" data-toggle="modal" data-target="#sharing-modal">here</a>.)
+  <% else %>
+    <span class="disabled">here</span>.)
+  <% end %>
+</div>

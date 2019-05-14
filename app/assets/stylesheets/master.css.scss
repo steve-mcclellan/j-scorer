@@ -9,6 +9,7 @@ $dark-background-color:   #222;
 
 $gameboard-color:  black;
 $disclaimer-color: #777;
+$drab-gray: #999;
 
 $j-blue:         #151e8c;
 $j-light-blue:   #353eac;
@@ -446,7 +447,7 @@ html.no-js #stats-loading-message {
   }
 
   .disabled {
-    color: #999;
+    color: $drab-gray;
     cursor: default;
   }
 
@@ -719,10 +720,6 @@ html.no-js #stats-loading-message {
         align-items: baseline;
       }
 
-      .weight-adverb {
-        width: 20vw;
-      }
-
       a.aside {
         font-size: 1.25vh;
         font-style: italic;
@@ -768,6 +765,47 @@ html.no-js #stats-loading-message {
     div.isolated-sentence {
       text-align: center;
       margin-bottom: 1.5vh;
+    }
+
+    .disabled {
+      color: $drab-gray;
+      cursor: default;
+
+      &:hover {
+        text-decoration: none;
+      }
+    }
+
+    #sharing-modal {
+      .spacer {
+        height: 1vw;
+        margin: 0;
+      }
+
+      #sharing-settings-error {
+        color: $x-red;
+
+        ul li {
+          list-style-position: inside;
+        }
+      }
+
+      .field_with_errors {
+        color: $state-danger-text;
+        border-color: $state-danger-text;
+      }
+
+      #user_share_detailed_stats {
+        width: auto;
+      }
+
+      .sidebar {
+        font-size: 0.9vw;
+      }
+
+      #sharing-submit-button {
+        width: auto;
+      }
     }
 
     #restore-modal {
@@ -1142,7 +1180,7 @@ html.no-js #stats-loading-message {
     background-color: $light-background-color;
 
     .disabled {
-      color: #999;
+      color: $drab-gray;
       cursor: default;
       &:hover {
         text-decoration: none;
@@ -1196,7 +1234,7 @@ html.no-js #stats-loading-message {
         height: 1.5vw;
 
         &.disabled {
-          color: #999;
+          color: $drab-gray;
         }
       }
 
