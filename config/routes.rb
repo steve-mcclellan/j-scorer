@@ -8,9 +8,9 @@ Rails.application.routes.draw do
   get 'signup' => 'users#new'
   post 'users' => 'users#create'
 
-  get 'stats' => 'users#show'
-  get 'sample' => 'users#sample'
-  get 'shared/:name' => 'users#shared', as: :shared
+  get 'stats' => 'stats#show'
+  get 'sample' => 'stats#sample'
+  get 'shared/:name' => 'stats#shared', as: :shared
 
   get 'login' => 'sessions#new'
   post 'login' => 'sessions#create'
