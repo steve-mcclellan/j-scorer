@@ -1,8 +1,8 @@
 CURRENT_TOP_ROW_VALUES = [200, 400].freeze
 
 PLAY_TYPES = {
-  "teen"         => "Teen Tournament",
   "regular"      => "regular play",
+  "teen"         => "Teen Tournament",
   "teachers"     => "Teachers Tournament",
   "all-star"     => "Jeopardy! All-Star Games",
   "college"      => "College Championship",
