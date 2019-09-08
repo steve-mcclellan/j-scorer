@@ -12,6 +12,8 @@ Rails.application.routes.draw do
   get 'sample' => 'stats#sample'
   get 'shared/:name' => 'stats#shared', as: :shared
 
+  get 'stats/topic/:name' => 'stats#topic', as: :topic
+
   get 'login' => 'sessions#new'
   post 'login' => 'sessions#create'
   delete 'logout' => 'sessions#destroy'

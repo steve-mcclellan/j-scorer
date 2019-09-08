@@ -32,6 +32,12 @@ class StatsController < ApplicationController
     render 'show'
   end
 
+  def topic
+    @user = current_user
+    @user_name = @user.email
+    @topic_name = params[:name]
+  end
+
   private
 
   def find_shared_stats_user
