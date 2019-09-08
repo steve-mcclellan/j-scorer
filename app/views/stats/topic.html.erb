@@ -1,3 +1,14 @@
+<% if @sample %>
+  <% provide(:title, 'Sample topic stats') %>
+  <% provide(:tags, "description: The developer's personal stats for the selected topic.".html_safe) %>
+<% elsif @shared %>
+  <% provide(:title, 'Shared topic stats') %>
+  <% provide(:tags, "description: The up-to-the-minute topic stats for J! Scorer user #{@user_name}.") %>
+<% else %>
+  <% provide(:title, 'Topic stats') %>
+  <% provide(:tags, 'description: Your up-to-the-minute stats for this topic.') %>
+<% end %>
+
 <div id="topic_stats">
   <h2><%= @topic_name %> topic stats for <%= @user_name %>:</h2>
 </div>

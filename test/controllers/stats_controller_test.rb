@@ -22,12 +22,14 @@ class StatsControllerTest < ActionController::TestCase
   test 'should get sample when not logged in' do
     get :sample
     assert_response :success
+    assert_includes response.body, @other_user.email
   end
 
   test 'should get sample when logged in' do
     log_in_here(@user)
     get :sample
     assert_response :success
+    assert_includes response.body, @other_user.email
   end
 
   test 'should get valid shared page when not logged in' do
@@ -71,8 +73,8 @@ class StatsControllerTest < ActionController::TestCase
     assert flash.empty?
     assert_response :success
     assert_select 'title', 'J! Scorer - Topic stats'
-    assert_includes response.body, 'Potpourri'
-    assert_includes response.body, @user.shared_stats_name # should be email
+    assert_includes response.body, 'InQuotes'
+    assert_includes response.body, @user.email
   end
 
   test 'should 404 topic when given a non-existent topic' do
@@ -85,8 +87,9 @@ class StatsControllerTest < ActionController::TestCase
     get :sample_topic, params: { name: 'Lowbrow' }
     assert flash.empty?
     assert_response :success
+    assert_select 'title', 'J! Scorer - Sample topic stats'
     assert_includes response.body, 'Lowbrow'
-    assert_includes response.body, @user.password_digest # should be email
+    assert_includes response.body, @other_user.email
   end
 
   test 'should get valid sample topic when logged in' do
@@ -94,8 +97,9 @@ class StatsControllerTest < ActionController::TestCase
     get :sample_topic, params: { name: 'Lowbrow' }
     assert flash.empty?
     assert_response :success
+    assert_select 'title', 'J! Scorer - Sample topic stats'
     assert_includes response.body, 'Lowbrow'
-    assert_includes response.body, @user.password_digest # should be email
+    assert_includes response.body, @other_user.email
   end
 
   test 'should 404 non-existent sample topic' do
@@ -114,18 +118,19 @@ class StatsControllerTest < ActionController::TestCase
     assert_response :not_found
   end
 
-  test 'shared topic should 404 for summary-stats-only user' do
+  test 'shared topic should 403 for summary-stats-only user' do
     get :shared_topic, params: { user: @other_user.shared_stats_name,
                                  topic: 'General' }
-    assert_response :not_found
+    assert_response :forbidden
     log_in_here(@user)
     get :shared_topic, params: { user: @other_user.shared_stats_name,
                                  topic: 'General' }
-    assert_response :not_found
+    assert_response :forbidden
   end
 
   test 'shared topic should 404 on non-existent topic' do
     @other_user.share_detailed_stats = true
+    @other_user.save
     get :shared_topic, params: { user: @other_user.shared_stats_name,
                                  topic: 'NotATopic' }
     assert_response :not_found
@@ -137,20 +142,21 @@ class StatsControllerTest < ActionController::TestCase
 
   test 'shared topic should actually work if request is good' do
     @other_user.share_detailed_stats = true
+    @other_user.save
     get :shared_topic, params: { user: @other_user.shared_stats_name,
                                  topic: 'Highbrow' }
     assert flash.empty?
     assert_response :success
     assert_select 'title', 'J! Scorer - Shared topic stats'
-    assert_includes response.body, 'Potpourri'
-    assert_includes response.body, @user.email # should be shared_stats_name
+    assert_includes response.body, 'Highbrow'
+    assert_includes response.body, @other_user.shared_stats_name
     log_in_here(@user)
     get :shared_topic, params: { user: @other_user.shared_stats_name,
                                  topic: 'Highbrow' }
     assert flash.empty?
     assert_response :success
     assert_select 'title', 'J! Scorer - Shared topic stats'
-    assert_includes response.body, 'Potpourri'
-    assert_includes response.body, @user.email # should be shared_stats_name
+    assert_includes response.body, 'Highbrow'
+    assert_includes response.body, @other_user.shared_stats_name
   end
 end

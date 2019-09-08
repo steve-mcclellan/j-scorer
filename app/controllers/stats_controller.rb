@@ -43,7 +43,13 @@ class StatsController < ApplicationController
   end
 
   def shared_topic
+    unless @user.share_detailed_stats
+      render plain: 'Detailed stats not available for this user',
+             status: :forbidden
+      return
+    end
     @topic_name = params[:topic]
+    @shared = true
     render 'topic'
   end
 
