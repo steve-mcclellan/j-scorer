@@ -18,18 +18,18 @@ class TopicDetails
     "
     SELECT
       *,
-      #{count_results('i', 3)} AS right,
-      #{count_results('i', 1)} AS wrong,
-      #{count_results('i', 2)} AS pass,
+      #{result_count('i', 3)} AS right,
+      #{result_count('i', 1)} AS wrong,
+      #{result_count('i', 2)} AS pass,
       (
-        (#{count_results('i', [3, 7], true)}) -
-        (#{count_results('i', 1, true)})
+        (#{result_count('i', [3, 7], true)}) -
+        (#{result_count('i', 1, true)})
       ) * i.top_row_value AS score,
       (
-        #{count_results('i', [1, 2, 3, 5, 6, 7], true)}
+        #{result_count('i', [1, 2, 3, 5, 6, 7], true)}
       ) * i.top_row_value AS possible_score,
-      #{count_results('i', 7)} AS dd_right,
-      #{count_results('i', [5, 6])} AS dd_wrong,
+      #{result_count('i', 7)} AS dd_right,
+      #{result_count('i', [5, 6])} AS dd_wrong,
       CASE WHEN i.final_result = 3 THEN 1 ELSE 0 END AS final_right,
       CASE WHEN i.final_result = 1 THEN 1 ELSE 0 END AS final_wrong
     FROM (

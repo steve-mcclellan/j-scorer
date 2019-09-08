@@ -23,7 +23,7 @@ module SharedStatsMethods
   end
 
   # rubocop:disable IdenticalConditionalBranches
-  def count_results(table, value, weight = false)
+  def result_count(table, value, weight = false)
     cond = value.is_a?(Array) ? "IN (#{value.join(', ')})" : "= #{value}"
     "
     (CASE WHEN #{table}.result1 #{cond} THEN #{weight ? 1 : 1} ELSE 0 END) +
