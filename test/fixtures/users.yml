@@ -6,3 +6,4 @@ steve:
   email: steve@example.com
   password_digest: <%= User.digest('password') %>
   shared_stats_name: steve
+  share_detailed_stats: false
