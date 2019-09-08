@@ -31,24 +31,24 @@ class StatsControllerTest < ActionController::TestCase
   end
 
   test 'should get valid shared page when not logged in' do
-    get :shared, params: { name: @other_user.shared_stats_name }
+    get :shared, params: { user: @other_user.shared_stats_name }
     assert_response :success
   end
 
   test 'should get valid shared page when logged in' do
     log_in_here(@user)
-    get :shared, params: { name: @other_user.shared_stats_name }
+    get :shared, params: { user: @other_user.shared_stats_name }
     assert_response :success
   end
 
   test 'should 404 invalid shared page when not logged in' do
-    get :shared, params: { name: 'BadName' }
+    get :shared, params: { user: 'BadName' }
     assert_response :not_found
   end
 
   test 'should 404 invalid shared page when logged in' do
     log_in_here(@user)
-    get :shared, params: { name: 'BadName' }
+    get :shared, params: { user: 'BadName' }
     assert_response :not_found
   end
 
@@ -86,7 +86,7 @@ class StatsControllerTest < ActionController::TestCase
     assert flash.empty?
     assert_response :success
     assert_includes response.body, 'Lowbrow'
-    assert_includes response.body, @user.shared_stats_name # should be email
+    assert_includes response.body, @user.password_digest # should be email
   end
 
   test 'should get valid sample topic when logged in' do
@@ -95,7 +95,7 @@ class StatsControllerTest < ActionController::TestCase
     assert flash.empty?
     assert_response :success
     assert_includes response.body, 'Lowbrow'
-    assert_includes response.body, @user.shared_stats_name # should be email
+    assert_includes response.body, @user.password_digest # should be email
   end
 
   test 'should 404 non-existent sample topic' do
@@ -107,44 +107,46 @@ class StatsControllerTest < ActionController::TestCase
   end
 
   test 'shared topic should 404 bad user name' do
-    get :shared_topic, params: { name: 'NotAUser', topic: 'General' }
+    get :shared_topic, params: { user: 'NotAUser', topic: 'General' }
     assert_response :not_found
     log_in_here(@user)
-    get :shared_topic, params: { name: 'NotAUser', topic: 'General' }
+    get :shared_topic, params: { user: 'NotAUser', topic: 'General' }
     assert_response :not_found
   end
 
   test 'shared topic should 404 for summary-stats-only user' do
-    get :shared_topic, params: { name: @other_user.shared_stats_name,
+    get :shared_topic, params: { user: @other_user.shared_stats_name,
                                  topic: 'General' }
     assert_response :not_found
     log_in_here(@user)
-    get :shared_topic, params: { name: @other_user.shared_stats_name,
+    get :shared_topic, params: { user: @other_user.shared_stats_name,
                                  topic: 'General' }
     assert_response :not_found
   end
 
   test 'shared topic should 404 on non-existent topic' do
     @other_user.share_detailed_stats = true
-    get :shared_topic, params: { name: @other_user.shared_stats_name,
+    get :shared_topic, params: { user: @other_user.shared_stats_name,
                                  topic: 'NotATopic' }
     assert_response :not_found
     log_in_here(@user)
-    get :shared_topic, params: { name: @other_user.shared_stats_name,
+    get :shared_topic, params: { user: @other_user.shared_stats_name,
                                  topic: 'NotATopic' }
     assert_response :not_found
   end
 
   test 'shared topic should actually work if request is good' do
     @other_user.share_detailed_stats = true
-    get :shared_topic, params: { name: 'Highbrow' }
+    get :shared_topic, params: { user: @other_user.shared_stats_name,
+                                 topic: 'Highbrow' }
     assert flash.empty?
     assert_response :success
     assert_select 'title', 'J! Scorer - Shared topic stats'
     assert_includes response.body, 'Potpourri'
     assert_includes response.body, @user.email # should be shared_stats_name
     log_in_here(@user)
-    get :shared_topic, params: { name: 'Highbrow' }
+    get :shared_topic, params: { user: @other_user.shared_stats_name,
+                                 topic: 'Highbrow' }
     assert flash.empty?
     assert_response :success
     assert_select 'title', 'J! Scorer - Shared topic stats'

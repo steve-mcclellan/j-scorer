@@ -1,10 +1,11 @@
 class StatsController < ApplicationController
   before_action :logged_in_user, only: %i[show topic]
-  before_action :find_shared_stats_user, only: %i[shared]
+  before_action :find_shared_stats_user, only: %i[shared shared_topic]
+  before_action :set_sample_user, only: %i[sample sample_topic]
 
   def show
     @user = current_user
-    @name = @user.email
+    @user_name = @user.email
 
     set_play_types
     set_filters
@@ -12,8 +13,6 @@ class StatsController < ApplicationController
   end
 
   def sample
-    @user = ENV['SAMPLE_USER'] ? User.find(ENV['SAMPLE_USER']) : User.first
-    @name = ENV['SAMPLE_USER_NAME'] || @user.email
     @sample = true
 
     set_play_types
@@ -23,7 +22,6 @@ class StatsController < ApplicationController
   end
 
   def shared
-    @name = @user.shared_stats_name
     @shared = true
 
     set_play_types
@@ -38,11 +36,28 @@ class StatsController < ApplicationController
     @topic_name = params[:name]
   end
 
+  def sample_topic
+    @topic_name = params[:name]
+    @sample = true
+    render 'topic'
+  end
+
+  def shared_topic
+    @topic_name = params[:topic]
+    render 'topic'
+  end
+
   private
 
+  def set_sample_user
+    @user = ENV['SAMPLE_USER'] ? User.find(ENV['SAMPLE_USER']) : User.first
+    @user_name = ENV['SAMPLE_USER_NAME'] || @user.email
+  end
+
   def find_shared_stats_user
-    @user = User.find_by('LOWER(shared_stats_name) = ?', params[:name].downcase)
-    render plain: 'User not found', status: :not_found if @user.nil?
+    @user = User.find_by('LOWER(shared_stats_name) = ?', params[:user].downcase)
+    render plain: 'User not found', status: :not_found and return if @user.nil?
+    @user_name = @user.shared_stats_name
   end
 
   def set_play_types

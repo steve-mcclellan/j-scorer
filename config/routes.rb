@@ -10,9 +10,11 @@ Rails.application.routes.draw do
 
   get 'stats' => 'stats#show'
   get 'sample' => 'stats#sample'
-  get 'shared/:name' => 'stats#shared', as: :shared
+  get 'shared/:user' => 'stats#shared', as: :shared
 
   get 'stats/topic/:name' => 'stats#topic', as: :topic
+  get 'sample/topic/:name' => 'stats#sample_topic', as: :sample_topic
+  get 'shared/:user/topic/:topic' => 'stats#shared_topic', as: :shared_topic
 
   get 'login' => 'sessions#new'
   post 'login' => 'sessions#create'
