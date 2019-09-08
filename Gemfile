@@ -2,7 +2,7 @@
 source 'https://rubygems.org'
 
 ruby '2.6.2'
-gem 'rails', '~> 6.0.0.beta3'
+gem 'rails', '~> 6.0.0'
 
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 0.15'
@@ -73,12 +73,9 @@ gem 'momentjs-rails', '>= 2.9.0'
 
 # Allow for dynamic default values, like setting show_date and date_played
 # to the date/time the game is created.
-gem 'default_value_for', '~> 3.1.0'
+gem 'default_value_for', '~> 3.3.0'
 
 # Allow for convenient(-ish) customization of the data displayed
 # by "render :json".
-# TODO: A bunch of deprecation warnings are caused by (current) version 0.10.9.
-#       A fix is ready to go in the next release. Use it when they do.
-# gem 'active_model_serializers', '~> 0.10.0'
-gem 'active_model_serializers', github: 'rails-api/active_model_serializers', branch: '0-10-stable'
+gem 'active_model_serializers', '~> 0.10.10'
 # rubocop:enable FileName
