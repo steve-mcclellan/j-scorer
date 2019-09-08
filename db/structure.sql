@@ -4,6 +4,7 @@ SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
 SET check_function_bodies = false;
+SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
@@ -468,17 +469,17 @@ CREATE INDEX index_sixths_on_game_id ON public.sixths USING btree (game_id);
 
 
 --
+-- Name: index_topics_on_lower_name_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_topics_on_lower_name_user_id ON public.topics USING btree (lower((name)::text), user_id);
+
+
+--
 -- Name: index_topics_on_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_topics_on_user_id ON public.topics USING btree (user_id);
-
-
---
--- Name: index_topics_on_user_id_and_name; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_topics_on_user_id_and_name ON public.topics USING btree (user_id, name);
 
 
 --
@@ -575,6 +576,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180902143604'),
 ('20190506215349'),
 ('20190506215644'),
-('20190507164435');
+('20190507164435'),
+('20190908193809');
 
 
