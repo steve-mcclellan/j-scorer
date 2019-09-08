@@ -1,5 +1,5 @@
 class StatsController < ApplicationController
-  before_action :logged_in_user, only: %i[show]
+  before_action :logged_in_user, only: %i[show topic]
   before_action :find_shared_stats_user, only: %i[shared]
 
   def show
