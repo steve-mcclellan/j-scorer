@@ -33,13 +33,12 @@ class StatsController < ApplicationController
   def topic
     @user = current_user
     @user_name = @user.email
-    @topic_name = params[:name]
+    find_and_render_topic
   end
 
   def sample_topic
-    @topic_name = params[:name]
     @sample = true
-    render 'topic'
+    find_and_render_topic
   end
 
   def shared_topic
@@ -48,12 +47,21 @@ class StatsController < ApplicationController
              status: :forbidden
       return
     end
-    @topic_name = params[:topic]
     @shared = true
-    render 'topic'
+    find_and_render_topic
   end
 
   private
+
+  def find_and_render_topic
+    @topic = Topic.find_by('LOWER(name) = ? AND user_id = ?',
+                           params[:topic].downcase, @user.id)
+    if @topic.nil?
+      render plain: 'Topic not found', status: :not_found
+    else
+      render 'topic'
+    end
+  end
 
   def set_sample_user
     @user = ENV['SAMPLE_USER'] ? User.find(ENV['SAMPLE_USER']) : User.first
