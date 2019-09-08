@@ -56,11 +56,12 @@ class StatsController < ApplicationController
   def find_and_render_topic
     @topic = Topic.find_by('LOWER(name) = ? AND user_id = ?',
                            params[:topic].downcase, @user.id)
-    if @topic.nil?
-      render plain: 'Topic not found', status: :not_found
-    else
-      render 'topic'
-    end
+    render plain: 'Topic not found', status: :not_found and return if @topic.nil?
+
+    set_play_types
+    set_filters
+    set_topics
+    render 'topic'
   end
 
   def set_sample_user
@@ -131,5 +132,10 @@ class StatsController < ApplicationController
     @stats_by_row = @user.results_by_row(@play_types, filter_sql)
     @final_stats = @user.final_stats(@play_types, filter_sql)
     @play_type_summary = @user.play_type_summary(filter_sql)
+  end
+
+  def set_topics
+    filter_sql = User.filter_sql(@filters)
+    @categories = @user.topic_details(@topic, @play_types, filter_sql)
   end
 end

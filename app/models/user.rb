@@ -111,5 +111,9 @@ class User < ApplicationRecord
   def play_type_summary(filters)
     @pts ||= PlayTypeSummary.new(self, filters).stats
   end
+
+  def topic_details(topic, play_types, filters)
+    TopicDetails.new(topic, play_types, filters).stats
+  end
   # rubocop:enable MemoizedInstanceVariableName
 end
