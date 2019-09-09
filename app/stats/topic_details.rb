@@ -38,7 +38,7 @@ class TopicDetails
         COALESCE(gOne.game_id, gTwo.game_id) AS game_id,
         COALESCE(gOne.date_played, gTwo.date_played) AS date_played,
         s.board_position,
-        s.title,
+        COALESCE(s.title, f.category_title) AS title,
         s.result1,
         s.result2,
         s.result3,
