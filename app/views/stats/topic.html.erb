@@ -11,6 +11,128 @@
 
 <div id="topic_stats">
   <h2><%= @topic.name %> topic stats for <%= @user_name %>:</h2>
-
-  <%= @categories %>
+  <br />
+  <h2><b>Round One:</b></h2>
+  <table id="roundOneTopicTable" class="tablesorter tablesorter-blue">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th><abbr title="Position on the board.">Pos</abbr></th>
+        <th>Show date</th>
+        <th>Date played</th>
+        <th>$<%= CURRENT_TOP_ROW_VALUES[0] * 1 %></th>
+        <th>$<%= CURRENT_TOP_ROW_VALUES[0] * 2 %></th>
+        <th>$<%= CURRENT_TOP_ROW_VALUES[0] * 3 %></th>
+        <th>$<%= CURRENT_TOP_ROW_VALUES[0] * 4 %></th>
+        <th>$<%= CURRENT_TOP_ROW_VALUES[0] * 5 %></th>
+        <th>Score</th>
+        <th>Possible</th>
+        <th>Efficiency</th>
+        <th>Game</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @categories[:RoundOneCategory].each do |cat| %>
+        <% game = @user.games.find_by(game_id: cat['game_id']) %>
+        <tr>
+          <td><%= cat['title'] %></td>
+          <td><%= cat['board_position'] %></td>
+          <td><%= cat['show_date'] %></td>
+          <td><%= game.date_played.in_time_zone.to_s if game.date_played.year > 0 %></td>
+          <td><%= result_code_to_symbol(cat['result1']) %><%= ' (DD)' if cat['result1'] > 4 %></td>
+          <td><%= result_code_to_symbol(cat['result2']) %><%= ' (DD)' if cat['result2'] > 4 %></td>
+          <td><%= result_code_to_symbol(cat['result3']) %><%= ' (DD)' if cat['result3'] > 4 %></td>
+          <td><%= result_code_to_symbol(cat['result4']) %><%= ' (DD)' if cat['result4'] > 4 %></td>
+          <td><%= result_code_to_symbol(cat['result5']) %><%= ' (DD)' if cat['result5'] > 4 %></td>
+          <td><%= number_to_currency(cat['score'], precision: 0) %></td>
+          <td><%= number_to_currency(cat['possible_score'], precision: 0) %></td>
+          <td><%= cat['possible_score'].zero? ? '' : number_with_precision(cat['score'].fdiv(cat['possible_score']), precision: 5) %></td>
+          <% if current_user?(game.user) %>
+            <td><%= link_to 'edit', game_path(g: game.game_id) %></td>
+          <% else %>
+            <td class="disabled">edit</td>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <br />
+  <h2><b>Round Two:</b></h2>
+  <table id="roundTwoTopicTable" class="tablesorter tablesorter-blue">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th><abbr title="Position on the board.">Pos</abbr></th>
+        <th>Show date</th>
+        <th>Date played</th>
+        <th>$<%= CURRENT_TOP_ROW_VALUES[1] * 1 %></th>
+        <th>$<%= CURRENT_TOP_ROW_VALUES[1] * 2 %></th>
+        <th>$<%= CURRENT_TOP_ROW_VALUES[1] * 3 %></th>
+        <th>$<%= CURRENT_TOP_ROW_VALUES[1] * 4 %></th>
+        <th>$<%= CURRENT_TOP_ROW_VALUES[1] * 5 %></th>
+        <th>Score</th>
+        <th>Possible</th>
+        <th>Efficiency</th>
+        <th>Game</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @categories[:RoundTwoCategory].each do |cat| %>
+        <% game = @user.games.find_by(game_id: cat['game_id']) %>
+        <tr>
+          <td><%= cat['title'] %></td>
+          <td><%= cat['board_position'] %></td>
+          <td><%= cat['show_date'] %></td>
+          <td><%= game.date_played.in_time_zone.to_s if game.date_played.year > 0 %></td>
+          <td><%= result_code_to_symbol(cat['result1']) %><%= ' (DD)' if cat['result1'] > 4 %></td>
+          <td><%= result_code_to_symbol(cat['result2']) %><%= ' (DD)' if cat['result2'] > 4 %></td>
+          <td><%= result_code_to_symbol(cat['result3']) %><%= ' (DD)' if cat['result3'] > 4 %></td>
+          <td><%= result_code_to_symbol(cat['result4']) %><%= ' (DD)' if cat['result4'] > 4 %></td>
+          <td><%= result_code_to_symbol(cat['result5']) %><%= ' (DD)' if cat['result5'] > 4 %></td>
+          <td><%= number_to_currency(cat['score'], precision: 0) %></td>
+          <td><%= number_to_currency(cat['possible_score'], precision: 0) %></td>
+          <td><%= cat['possible_score'].zero? ? '' : number_with_precision(cat['score'].fdiv(cat['possible_score']), precision: 5) %></td>
+          <% if current_user?(game.user) %>
+            <td><%= link_to 'edit', game_path(g: game.game_id) %></td>
+          <% else %>
+            <td class="disabled">edit</td>
+          <% end %>
+        </tr>
+        <% end %>
+    </tbody>
+  </table>
+  <br />
+  <h2><b>Finals:</b></h2>
+  <table id="finalTopicTable" class="tablesorter tablesorter-blue">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Show date</th>
+        <th>Date Played</th>
+        <th>Result</th>
+        <th>On-air right</th>
+        <th>On-air wrong</th>
+        <th>Game</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @categories[:Final].each do |fin| %>
+        <% game = @user.games.find_by(game_id: fin['game_id']) %>
+        <tr>
+          <td><%= fin['title'] %></td>
+          <td><%= fin['show_date'] %></td>
+          <td><%= game.date_played.in_time_zone.to_s if game.date_played.year > 0 %></td>
+          <td><%= result_code_to_symbol(fin['final_result']) %></td>
+          <td><%= fin['final_onair_right'] %></td>
+          <td><%= fin['final_onair_wrong'] %></td>
+          <% if current_user?(game.user) %>
+            <td><%= link_to 'edit', game_path(g: game.game_id) %></td>
+          <% else %>
+            <td class="disabled">edit</td>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <br />
 </div>

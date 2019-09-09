@@ -371,6 +371,18 @@ input {
   .end-of-group {
     border-right: 1px solid black;
   }
+
+  a {
+    color: black;
+    &:hover {
+      color: $j-lighter-blue;
+    }
+  }
+
+  .disabled {
+    color: $drab-gray;
+    cursor: default;
+  }
 }
 
 /* topic-stats page (e.g., /stats/topic/PotentPotables) */
