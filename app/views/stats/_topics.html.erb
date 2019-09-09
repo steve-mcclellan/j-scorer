@@ -1,6 +1,6 @@
 <div id="topics">
   <h2>
-    Topics for <%= @name %>
+    Topics for <%= @user_name %>
     <% if stats.size == (user_topics_count = @user.topics.count) %>
       (<%= user_topics_count %>):
     <% else %>
@@ -68,7 +68,15 @@
       <!-- Individual Topics -->
       <% stats.each do |topic| %>
         <tr>
-          <td><%= topic['topic_name'] %></td>
+          <% if @sample %>
+            <td><%= link_to topic['topic_name'], sample_topic_path(topic['topic_name'], request.query_parameters), target: '_blank' %></td>
+          <% elsif @shared && @user.share_detailed_stats %>
+            <td><%= link_to topic['topic_name'], shared_topic_path(@user.shared_stats_name, topic['topic_name'], request.query_parameters), target: '_blank' %></td>
+          <% elsif @shared %>
+            <td><%= topic['topic_name'] %></td>
+          <% else %>
+            <td><%= link_to topic['topic_name'], topic_path(topic['topic_name'], request.query_parameters), target: '_blank' %></td>
+          <% end %>
           <td><%= topic['sixths_count'] %></td>
           <td><%= topic['right'] %></td>
           <td><%= topic['wrong'] %></td>

@@ -31,4 +31,14 @@ module UsersHelper
   rescue
     nil
   end
+
+  def result_code_to_symbol(rc)
+    case rc
+    when 0, 4 then ''
+    when 1 then '✘'
+    when 2, 5, 6 then '•'
+    when 3, 7 then '✓'
+    else '?'
+    end
+  end
 end

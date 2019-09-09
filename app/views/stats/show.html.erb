@@ -2,8 +2,8 @@
   <% provide(:title, 'Sample stats') %>
   <% provide(:tags, "description: A sample stats page (with the developer's real stats), to give you a taste of what the J! Scorer can do.".html_safe) %>
 <% elsif @shared %>
-  <% provide(:title, "Shared stats for #{@name}") %>
-  <% provide(:tags, "description: The up-to-the-minute stats for J! Scorer user #{@name}.") %>
+  <% provide(:title, "Shared stats for #{@user_name}") %>
+  <% provide(:tags, "description: The up-to-the-minute stats for J! Scorer user #{@user_name}.") %>
 <% else %>
   <% provide(:title, 'Stats') %>
   <% provide(:tags, 'description: Your up-to-the-minute stats, broken down by game, topic, row, play type, and more.') %>
@@ -15,15 +15,13 @@
 
 <div id="stats-area">
   
-  <!--
   <div class="k-box">
     <p>
       <%= random_full_greeting %>
-      You can now download a backup of your data, and you now have the option of generating a publicly-available version of your stats page. (The latter is&mdash;and always will be&mdash;disabled by default.) Check out the new "Options" tab below, and click <%= link_to 'here', shared_path('JamesOnTV'), target: :_blank %> for a sample shared stats page (updated weekly). As always, let me know if anything's broken:
+      New season, new feature! You can now click a topic name on the Topics tab, which will take you to a new page with details about each category that you've assigned that topic to. This feature is still in its early stages - I'll be expanding on it (slowly) over the next several months. Any feedback about its direction is appreciated:
       <a class="nowrap" href="mailto:<%= ENV['SUPPORT_ADDRESS'] %>"><%= ENV['SUPPORT_ADDRESS'] %></a>.
     </p>
   </div>
-  -->
 
   <ul>
     <li><a href="#overview">Overview</a></li>

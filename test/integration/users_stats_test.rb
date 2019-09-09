@@ -8,7 +8,7 @@ class UsersStatsTest < ActionDispatch::IntegrationTest
   test 'stats page display' do
     log_in_here @user
     get stats_path
-    assert_template 'users/show'
+    assert_template 'stats/show'
     assert_select 'title', 'J! Scorer - Stats'
     assert_select 'h2'
     assert_match @user.games.count.to_s, response.body

@@ -358,9 +358,47 @@ input {
   }
 }
 
-/* stats page */
+/* tablesorter stuff */
+/* (shared between stats, topic-stats, game-stats pages) */
 
-.k-box {
+#stats-area, #topic_stats {
+  /* Force some padding onto the table headings to keep
+   * text and arrows from overlapping. */
+  table.tablesorter thead tr th, table.tablesorter tfoot tr th {
+    padding-right: 20px;
+  }
+
+  .end-of-group {
+    border-right: 1px solid black;
+  }
+
+  a {
+    color: black;
+    &:hover {
+      color: $j-lighter-blue;
+    }
+  }
+
+  .disabled {
+    color: $drab-gray;
+    cursor: default;
+  }
+}
+
+/* topic-stats page (e.g., /stats/topic/PotentPotables) */
+
+#topic_stats {
+  /* Echo the overall feel of the stats-page Topics tab */
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: white;
+  padding: 1em 1.4em;
+}
+
+/* main stats page (including sample and shared) */
+
+#stats-area .k-box {
   color: white;
   background-color: $j-blue;
   margin-bottom: 10px;
@@ -451,12 +489,6 @@ html.no-js #stats-loading-message {
     cursor: default;
   }
 
-  /* Force some padding onto the table headings to keep
-   * text and arrows from overlapping. */
-  table.tablesorter thead tr th, table.tablesorter tfoot tr th {
-    padding-right: 20px;
-  }
-
   /* Color code non-regular play types in Games and Filters tabs */
   table.tablesorter tbody {
     tr.all-star td { background-color: #f9a; }
@@ -486,10 +518,6 @@ html.no-js #stats-loading-message {
     a {
       color: black;
     }
-  }
-
-  .end-of-group {
-    border-right: 1px solid black;
   }
 
   #topics-notes {

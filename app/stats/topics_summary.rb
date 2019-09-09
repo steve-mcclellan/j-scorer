@@ -63,18 +63,18 @@ class TopicsSummary
         SELECT
           i.topic_name,
           i.sixth_type,
-          #{count_results('i', 3)} AS right,
-          #{count_results('i', 1)} AS wrong,
-          #{count_results('i', 2)} AS pass,
+          #{result_count('i', 3)} AS right,
+          #{result_count('i', 1)} AS wrong,
+          #{result_count('i', 2)} AS pass,
           (
-            (#{count_results('i', [3, 7], true)}) -
-            (#{count_results('i', 1, true)})
+            (#{result_count('i', [3, 7], true)}) -
+            (#{result_count('i', 1, true)})
           ) * i.top_row_value AS score,
           (
-            #{count_results('i', [1, 2, 3, 5, 6, 7], true)}
+            #{result_count('i', [1, 2, 3, 5, 6, 7], true)}
           ) * i.top_row_value AS possible_score,
-          #{count_results('i', 7)} AS dd_right,
-          #{count_results('i', [5, 6])} AS dd_wrong,
+          #{result_count('i', 7)} AS dd_right,
+          #{result_count('i', [5, 6])} AS dd_wrong,
           CASE WHEN i.final_result = 3 THEN 1 ELSE 0 END AS final_right,
           CASE WHEN i.final_result = 1 THEN 1 ELSE 0 END AS final_wrong,
           i.final_onair_right,
@@ -129,22 +129,5 @@ class TopicsSummary
     "
   end
   # rubocop:enable MethodLength
-
-  # rubocop:disable IdenticalConditionalBranches
-  def count_results(table, value, weight = false)
-    cond = value.is_a?(Array) ? "IN (#{value.join(', ')})" : "= #{value}"
-    "
-    (CASE WHEN #{table}.result1 #{cond} THEN #{weight ? 1 : 1} ELSE 0 END) +
-    (CASE WHEN #{table}.result2 #{cond} THEN #{weight ? 2 : 1} ELSE 0 END) +
-    (CASE WHEN #{table}.result3 #{cond} THEN #{weight ? 3 : 1} ELSE 0 END) +
-    (CASE WHEN #{table}.result4 #{cond} THEN #{weight ? 4 : 1} ELSE 0 END) +
-    (CASE WHEN #{table}.result5 #{cond} THEN #{weight ? 5 : 1} ELSE 0 END)
-    "
-  end
-  # rubocop:enable IdenticalConditionalBranches
-
-  def coalesce_filters(filters)
-    filters.gsub(/g\.(\S*)/, 'COALESCE(gOne.\\1, gTwo.\\1)')
-  end
 end
 # rubocop:enable ClassLength
