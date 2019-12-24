@@ -11,10 +11,7 @@ AllCops:
     - !ruby/regexp /old_and_unused\.rb$/
   TargetRubyVersion: 2.3
 
-Rails:
-  Enabled: true
-
-Metrics/LineLength:
+Layout/LineLength:
   Enabled: false
 
 Metrics/BlockLength:
