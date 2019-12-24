@@ -18,5 +18,6 @@ before_script:
   - psql -d travis_ci_test < db/structure.sql
 
 script:
+  - bundle exec rails db:environment:set RAILS_ENV=test
   - bundle exec rails test
   - bundle exec rubocop
