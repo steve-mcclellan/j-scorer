@@ -1,6 +1,6 @@
 language: ruby
 
-dist: trusty
+dist: bionic
 sudo: false
 
 rvm:
@@ -9,11 +9,14 @@ rvm:
 addons:
   postgresql: "9.5"
 
+before_install:
+  - gem install bundler
+
 before_script:
   - cp config/database.yml.travis config/database.yml
   - psql -c 'create database travis_ci_test;' -U postgres
   - psql -d travis_ci_test < db/structure.sql
 
 script:
-  - bundle exec rake
+  - rails test
   - bundle exec rubocop
