@@ -18,5 +18,5 @@ before_script:
   - psql -d travis_ci_test < db/structure.sql
 
 script:
-  - rails test
+  - bundle exec rails test
   - bundle exec rubocop
