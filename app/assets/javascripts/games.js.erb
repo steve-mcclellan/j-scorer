@@ -106,11 +106,11 @@ $( ".games-game" ).ready( function() {
                      ( scores[1] * topRowValues[1] );
     var scoreString = Math.abs( totalScore ).toLocaleString( "en-US" );
     if ( totalScore < 0 ) {
-      $scoreboard.html( "-$" + scoreString );
+      $scoreboard.html( "-" + currencySymbol + scoreString );
       $scoreboard.toggleClass( "score-positive", false );
       $scoreboard.toggleClass( "score-negative", true );
     } else {
-      $scoreboard.html( "$" + scoreString );
+      $scoreboard.html( currencySymbol + scoreString );
       $scoreboard.toggleClass( "score-negative", false );
       $scoreboard.toggleClass( "score-positive", true );
     }
@@ -162,7 +162,7 @@ $( ".games-game" ).ready( function() {
       catName = escapedStringSlice( catName, 0, 15 ) + "&hellip;";
     }
     $overlayCat.html( catName );
-    $overlayValue.html( "$" + clueValue);
+    $overlayValue.html( currencySymbol + clueValue);
 
     setOverlayData();
   }
@@ -278,6 +278,7 @@ $( ".games-game" ).ready( function() {
     var unadjustedScores = [scores[0], scores[1]];
     currentRound = currentGameData["activeRound"];
     setCurrentRoundIndex();
+    updateCurrencySymbol();
     if ( currentRound === "final" ) {
       populateFinal( forceFinalDisplay );
     } else {
@@ -495,10 +496,26 @@ $( ".games-game" ).ready( function() {
     updateCookies( modified );
   }
 
+  function updateCurrencySymbol() {
+    switch ( currentGame['play_type'] ) {
+      case "goat":
+      case "sports":
+      case "super":
+        currencySymbol = "";
+        break;
+      default:
+        currencySymbol = "$";
+    }
+    console.log( 'Currency symbol is now ' + currencySymbol);
+  }
+
   function updatePlayType() {
-    var modified = ( currentGame["play_type"] !== $playTypeSelect.val() );
-    currentGame["play_type"] = $playTypeSelect.val();
-    updateCookies( modified );
+    var newPlayType = $playTypeSelect.val();
+    if ( currentGame["play_type"] !== newPlayType ) {
+      currentGame["play_type"] = newPlayType;
+      updateCookies( true );
+      populateBoard();
+    }
   }
 
   function updateRerunStatus() {
@@ -813,6 +830,7 @@ $( ".games-game" ).ready( function() {
 
   var currentRound;
   var currentRoundIndex;
+  var currencySymbol = "?";
   var topRowValue;
   var $currentClue;
   var clueValue;
@@ -918,7 +936,7 @@ $( ".games-game" ).ready( function() {
   $resetLink.on( "click", function() {
     scores = [scoresWithoutClue[0], scoresWithoutClue[1]];
     $ddCheckbox.prop( "checked", false );
-    resolveClue( "$" + clueValue, "active", true, 0, false );
+    resolveClue( currencySymbol + clueValue, "active", true, 0, false );
   });
 
   $cancelLink.on( "click", function() {
