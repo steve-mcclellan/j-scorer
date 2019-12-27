@@ -1,5 +1,3 @@
-var topRowValues = <%= CURRENT_TOP_ROW_VALUES %>;
-
 function setCookie( name, value ) {
   Cookies.set( name, value, { expires: 7305, path: '/game',
                               secure: <%= Rails.env.production? %> } );
@@ -101,6 +99,7 @@ $( ".games-game" ).ready( function() {
     currentGame.round_one_score = scores[0];
     currentGame.round_two_score = scores[1];
     setCookie( "game", currentGame );
+    updateClueValues();
 
     var totalScore = ( scores[0] * topRowValues[0] ) +
                      ( scores[1] * topRowValues[1] );
@@ -244,7 +243,6 @@ $( ".games-game" ).ready( function() {
     var rounds = [ "round_one_categories", "round_two_categories" ];
     for ( var i = 0; i < 2; i++ ) {
       var roundArray = currentGame[rounds[i]];
-      setTopRowValue( i + 1 );
 
       for ( var cat = 0; cat < 6; cat++ ) {
         for ( var row = 1; row <= 5; row++ ) {
@@ -278,17 +276,16 @@ $( ".games-game" ).ready( function() {
     var unadjustedScores = [scores[0], scores[1]];
     currentRound = currentGameData["activeRound"];
     setCurrentRoundIndex();
-    updateCurrencySymbol();
-    if ( currentRound === "final" ) {
-      populateFinal( forceFinalDisplay );
-    } else {
-      populateMainGameBoard( unadjustedScores );
-    }
 
     scores = [unadjustedScores[0], unadjustedScores[1]];
     updateScoreboard();
     updateFinalSymbol();
     updateRoundLinks( currentRound );
+    if ( currentRound === "final" ) {
+      populateFinal( forceFinalDisplay );
+    } else {
+      populateMainGameBoard( unadjustedScores );
+    }
   }
 
   function updateRoundLinks( currentRound ) {
@@ -353,6 +350,7 @@ $( ".games-game" ).ready( function() {
   function populateMainGameBoard( unadjustedScores ) {
     setTopRowValue( currentRound );
     var roundArray = currentGame[currentRound];
+    var boardHeight = ( currentGame["play_type"] === "sports" ? 4 : 5 );
 
     for ( var col = 1; col <= 6; col++ ) {
       var catTitleText = roundArray[col - 1]["title"];
@@ -384,6 +382,11 @@ $( ".games-game" ).ready( function() {
           $ddCheckbox.prop( "checked", false );
         }
         triggerAppropriateClick( boxStatus );
+
+        // Blank the bottom row for Sports Jeopardy!.
+        if ( row > boardHeight ) {
+          $currentClue.html( "<span></span>" );
+        }
       }
     }
   }
@@ -488,6 +491,7 @@ $( ".games-game" ).ready( function() {
     var modified = ( currentGame["show_date"] !== $showDateValue.val() );
     currentGame["show_date"] = $showDateValue.val();
     updateCookies( modified );
+    populateBoard();
   }
 
   function updateDatePlayed() {
@@ -496,17 +500,44 @@ $( ".games-game" ).ready( function() {
     updateCookies( modified );
   }
 
-  function updateCurrencySymbol() {
+  function updateClueValues() {
+    // TODO: Also add the current value equivalent, if different from displayed?
     switch ( currentGame['play_type'] ) {
       case "goat":
-      case "sports":
+        currencySymbol = "";
+        topRowValues = [200, 400];
+        break;
       case "super":
         currencySymbol = "";
+        topRowValues = [200, 500];
+        break;
+      case "rock":
+        currencySymbol = (
+            ( currentGame['show_date'] < '2000-07-18' ) ? "" : "$"
+        );
+        topRowValues = [100, 200];
+        break;
+      case "sports":
+        currencySymbol = "";
+        topRowValues = [250, 500];
         break;
       default:
         currencySymbol = "$";
+        var showDate = currentGame['show_date'];
+        if ( showDate >= '2001-11-26' ) {
+          topRowValues = <%= CURRENT_TOP_ROW_VALUES %>;
+        } else if ( showDate >= '1984-09-10' ) {
+          topRowValues = [100, 200];
+        } else if ( showDate >= '1984-01-01' ) {
+          topRowValues = [50, 100];
+        } else if ( showDate >= '1978-10-02' ) {
+          topRowValues = [25, 50];
+        } else if ( showDate >= '1964-03-30' ) {
+          topRowValues = [10, 20];
+        } else {
+          topRowValues = <%= CURRENT_TOP_ROW_VALUES %>;
+        }
     }
-    console.log( 'Currency symbol is now ' + currencySymbol);
   }
 
   function updatePlayType() {
@@ -770,6 +801,7 @@ $( ".games-game" ).ready( function() {
     $showDateValue.val( newDate );
     updateCookies( false );
     enableChangeShowDateLink();
+    populateBoard();
   }
 
   function dateChangeErrorHandler( data ) {
@@ -825,6 +857,7 @@ $( ".games-game" ).ready( function() {
   // is worth 1 to 5 points. Multiplying by the round's topRowValue will yield
   // the round's actual contribution to the Coryat score.
   var scores = [0, 0];
+  var topRowValues;
   var currentGame = getCookie( "game" );
   var currentGameData = getCookie( "gameData" );
 
