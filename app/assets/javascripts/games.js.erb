@@ -99,7 +99,6 @@ $( ".games-game" ).ready( function() {
     currentGame.round_one_score = scores[0];
     currentGame.round_two_score = scores[1];
     setCookie( "game", currentGame );
-    updateClueValues();
 
     var totalScore = ( scores[0] * topRowValues[0] ) +
                      ( scores[1] * topRowValues[1] );
@@ -112,6 +111,26 @@ $( ".games-game" ).ready( function() {
       $scoreboard.html( currencySymbol + scoreString );
       $scoreboard.toggleClass( "score-negative", false );
       $scoreboard.toggleClass( "score-positive", true );
+    }
+
+    if ( topRowValues[0] !== <%= CURRENT_TOP_ROW_VALUES[0] %> ||
+         topRowValues[1] !== <%= CURRENT_TOP_ROW_VALUES[1] %>) {
+      var adjustedScore = ( scores[0] * <%= CURRENT_TOP_ROW_VALUES[0] %> ) +
+                          ( scores[1] * <%= CURRENT_TOP_ROW_VALUES[1] %> );
+      var adjustedScoreString = Math.abs( adjustedScore )
+                                    .toLocaleString( "en-US" );
+      if ( adjustedScore < 0 ) {
+        $adjustedScore.html( "-$" + adjustedScoreString );
+        $adjustedScore.toggleClass( "score-positive", false );
+        $adjustedScore.toggleClass( "score-negative", true );
+      } else {
+        $adjustedScore.html( "$" + adjustedScoreString );
+        $adjustedScore.toggleClass( "score-negative", false );
+        $adjustedScore.toggleClass( "score-positive", true );
+      }
+      $adjustedScoreLine.show();
+    } else {
+      $adjustedScoreLine.hide();
     }
   }
 
@@ -273,19 +292,17 @@ $( ".games-game" ).ready( function() {
   }
 
   function populateBoard( forceFinalDisplay ) {
-    var unadjustedScores = [scores[0], scores[1]];
     currentRound = currentGameData["activeRound"];
     setCurrentRoundIndex();
-
-    scores = [unadjustedScores[0], unadjustedScores[1]];
-    updateScoreboard();
-    updateFinalSymbol();
-    updateRoundLinks( currentRound );
+    updateClueValues();
     if ( currentRound === "final" ) {
       populateFinal( forceFinalDisplay );
     } else {
-      populateMainGameBoard( unadjustedScores );
+      populateMainGameBoard( scores );
     }
+    updateScoreboard();
+    updateFinalSymbol();
+    updateRoundLinks( currentRound );
   }
 
   function updateRoundLinks( currentRound ) {
@@ -367,7 +384,6 @@ $( ".games-game" ).ready( function() {
         setClueValue();
 
         var boxStatus = roundArray[col - 1]["result" + row];
-        scoresWithoutClue = [unadjustedScores[0], unadjustedScores[1]];
 
         if ( boxStatus < 0 || boxStatus > 7 ) {
           alert( "Error reading game - invalid box status" );
@@ -389,6 +405,9 @@ $( ".games-game" ).ready( function() {
         }
       }
     }
+    // Correct the scores, which may have been altered by
+    // the triggered clicks.
+    scores = [unadjustedScores[0], unadjustedScores[1]];
   }
 
   function triggerAppropriateClick( boxStatus ) {
@@ -501,7 +520,6 @@ $( ".games-game" ).ready( function() {
   }
 
   function updateClueValues() {
-    // TODO: Also add the current value equivalent, if different from displayed?
     switch ( currentGame['play_type'] ) {
       case "goat":
         currencySymbol = "";
@@ -867,7 +885,7 @@ $( ".games-game" ).ready( function() {
   var topRowValue;
   var $currentClue;
   var clueValue;
-  var scoresWithoutClue;
+  var scoresWithoutClue = [0, 0];
 
   var $clue = $( "#clue-over-board" );
   var vanishPoint;  // Where overlay comes from/goes to.
@@ -876,6 +894,8 @@ $( ".games-game" ).ready( function() {
 
   var $scoreboard = $( "#score" );
   var $finalSymbol = $( "#final-symbol" );
+  var $adjustedScoreLine = $( "#adjusted-score-line" );
+  var $adjustedScore = $( "#adjusted-score" );
 
   var $buttonRight = $( "#button-right" );
   var $buttonPass = $( "#button-pass" );

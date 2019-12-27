@@ -1238,6 +1238,16 @@ html.no-js #stats-loading-message {
       #final-symbol {
         font-size: 3.5vw;
       }
+
+      #adjusted-score-line {
+        font-size: 1vw;
+        margin-top: 0.5vh;
+        display: none;
+
+        #adjusted-score {
+          font-size: 1.5vw;
+        }
+      }
     }
 
     #round-links {
