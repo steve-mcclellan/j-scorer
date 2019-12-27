@@ -79,7 +79,7 @@ p.padded-graf {
 
 /* typography */
 
-h1, h2 {
+h1, h2, h3, h4, h5, h6 {
   margin: 0;
   text-align: center;
 }
@@ -469,6 +469,10 @@ html.no-js #stats-loading-message {
   .spacer {
     margin-top: 5vh;
     margin-bottom: 5vh;
+  }
+
+  .footnote {
+    margin-top: 5vh;
   }
 
   #games-headline a {

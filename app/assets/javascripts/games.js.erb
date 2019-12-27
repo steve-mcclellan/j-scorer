@@ -113,9 +113,8 @@ $( ".games-game" ).ready( function() {
       $scoreboard.toggleClass( "score-positive", true );
     }
 
-    if ( ( topRowValues[0] !== <%= CURRENT_TOP_ROW_VALUES[0] %> ||
-           topRowValues[1] !== <%= CURRENT_TOP_ROW_VALUES[1] %> )
-         && currentGame["play_type"] !== 'sports' ) {
+    if ( topRowValues[0] !== <%= CURRENT_TOP_ROW_VALUES[0] %> ||
+         topRowValues[1] !== <%= CURRENT_TOP_ROW_VALUES[1] %> ) {
       var adjustedScore = ( scores[0] * <%= CURRENT_TOP_ROW_VALUES[0] %> ) +
                           ( scores[1] * <%= CURRENT_TOP_ROW_VALUES[1] %> );
       var adjustedScoreString = Math.abs( adjustedScore )

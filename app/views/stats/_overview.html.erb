@@ -74,4 +74,11 @@
     <div class="col-xs-6 text-right">Minimum:</div>
     <div class="col-xs-6"><%= number_to_currency(pctile[:min], precision: 0) %></div>
   </div>
+
+  <div class="footnote col-xs-12">
+    <h6>
+      <strong>Note:</strong> All stats are adjusted to current regular-play values
+      ($<%= CURRENT_TOP_ROW_VALUES[0] %>-$<%= CURRENT_TOP_ROW_VALUES[1] * 5 %>).
+    </h6>
+  </div>
 </div>
