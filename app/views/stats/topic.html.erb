@@ -13,7 +13,7 @@
   <h2><%= @topic.name %> topic stats for <%= @user_name %>:</h2>
   <br />
   <h2><b>Round One:</b></h2>
-  <table id="roundOneTopicTable" class="tablesorter tablesorter-blue">
+  <table id="roundOneTopicTable" class="tablesorter tablesorter-blue<%= ' empty' if @categories[:RoundOneCategory].empty? %>">
     <thead>
       <tr>
         <th>Title</th>
@@ -60,7 +60,7 @@
   </table>
   <br />
   <h2><b>Round Two:</b></h2>
-  <table id="roundTwoTopicTable" class="tablesorter tablesorter-blue">
+  <table id="roundTwoTopicTable" class="tablesorter tablesorter-blue<%= ' empty' if @categories[:RoundTwoCategory].empty? %>">
     <thead>
       <tr>
         <th>Title</th>
@@ -107,7 +107,7 @@
   </table>
   <br />
   <h2><b>Finals:</b></h2>
-  <table id="finalTopicTable" class="tablesorter tablesorter-blue">
+  <table id="finalTopicTable" class="tablesorter tablesorter-blue<%= ' empty' if @categories[:Final].empty? %>">
     <thead>
       <tr>
         <th>Title</th>
