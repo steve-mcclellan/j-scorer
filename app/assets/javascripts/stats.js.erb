@@ -3,7 +3,8 @@
 
 // NOTE: The main/shared/sample stats pages are below.
 
-$( ".stats-topic" ).ready( function() {
+$( ".stats-topic, .stats-sample_topic, .stats-shared_topic" )
+    .ready( function() {
 
   // (check dd) > (check) > (dot) > (dot dd) > (x) > (empty) > (anything else)
   function sortSymbols( a, b ) {
