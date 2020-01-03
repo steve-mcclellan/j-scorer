@@ -6,10 +6,24 @@ class TopicsSummary
 
   def initialize(user, play_types, filters)
     query = topics_query(user, play_types, coalesce_filters(filters))
+    delete_orphaned_topics(user)
     @stats = ActiveRecord::Base.connection.select_all(query).to_a
   end
 
   private
+
+  def delete_orphaned_topics(user)
+    deletion_sql = "
+    DELETE FROM topics WHERE id IN (
+      SELECT t.id
+      FROM topics t
+      LEFT JOIN category_topics ct ON ct.topic_id = t.id
+      WHERE user_id = #{user.id}
+      GROUP BY t.id
+      HAVING count(ct.id) = 0
+    )"
+    ActiveRecord::Base.connection.execute(deletion_sql)
+  end
 
   # rubocop:disable MethodLength
   def topics_query(user, play_types, other_filters)
