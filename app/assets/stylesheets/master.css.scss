@@ -96,20 +96,6 @@ main {
   white-space: nowrap;
 }
 
-/* override tablesorter styles */
-
-.tablesorter {
-  font-size: 8pt;
-
-  tbody tr:nth-child(odd) td {
-    background-color: #f0f0f6;
-  }
-
-  tbody tr:hover td {
-    background-color: #ccc;
-  }
-}
-
 /* header */
 
 header {
@@ -361,6 +347,18 @@ input {
 /* tablesorter stuff */
 /* (shared between stats, topic-stats, game-stats pages) */
 
+.tablesorter {
+  font-size: 8pt;
+
+  tbody tr:nth-child(odd) td {
+    background-color: #f0f0f6;
+  }
+
+  tbody tr:hover td {
+    background-color: #ccc;
+  }
+}
+
 #stats-area, #topic_stats {
   /* Force some padding onto the table headings to keep
    * text and arrows from overlapping. */
@@ -382,6 +380,38 @@ input {
   .disabled {
     color: $drab-gray;
     cursor: default;
+  }
+
+  /* Color code non-regular play types in Games and Filters tabs */
+  table.tablesorter tbody {
+    tr.goat td { background-color: #f89; }
+    tr.utoc td { background-color: #f99; }
+    tr.all-star td { background-color: #f9a; }
+    tr.super td { background-color: #fa9; }
+    tr.decades td { background-color: #faa; }
+    tr.mdm td { background-color: #fab; }
+    tr.tenth td { background-color: #fba; }
+    tr.toc td { background-color: #fbb; }
+    tr.ibm td { background-color: #fbf; }
+    tr.mdci td { background-color: #ebf; }
+    tr.intl td { background-color: #eba; }
+    tr.armed td { background-color: #fdc; }
+    tr.college td { background-color: #fec; }
+    tr.teachers td { background-color: #ffd; }
+    tr.senior td { background-color: #cdc; }
+    tr.power td { background-color: #cdf; }
+    tr.teen td { background-color: #bed; }
+    tr.teen-reunion td { background-color: #cfe; }
+    tr.kids-reunion td { background-color: #cfd; }
+    tr.kids td { background-color: #bfb; }
+    tr.celebrity td { background-color: #cbf; }
+    tr.rock td { background-color: #99f; }
+    tr.sports td { background-color: #bb8; }
+    tr.other td { background-color: #bbc; }
+
+    a {
+      color: black;
+    }
   }
 }
 
@@ -491,38 +521,6 @@ html.no-js #stats-loading-message {
   .disabled {
     color: $drab-gray;
     cursor: default;
-  }
-
-  /* Color code non-regular play types in Games and Filters tabs */
-  table.tablesorter tbody {
-    tr.goat td { background-color: #f89; }
-    tr.utoc td { background-color: #f99; }
-    tr.all-star td { background-color: #f9a; }
-    tr.super td { background-color: #fa9; }
-    tr.decades td { background-color: #faa; }
-    tr.mdm td { background-color: #fab; }
-    tr.tenth td { background-color: #fba; }
-    tr.toc td { background-color: #fbb; }
-    tr.ibm td { background-color: #fbf; }
-    tr.mdci td { background-color: #ebf; }
-    tr.intl td { background-color: #eba; }
-    tr.armed td { background-color: #fdc; }
-    tr.college td { background-color: #fec; }
-    tr.teachers td { background-color: #ffd; }
-    tr.senior td { background-color: #cdc; }
-    tr.power td { background-color: #cdf; }
-    tr.teen td { background-color: #bed; }
-    tr.teen-reunion td { background-color: #cfe; }
-    tr.kids-reunion td { background-color: #cfd; }
-    tr.kids td { background-color: #bfb; }
-    tr.celebrity td { background-color: #cbf; }
-    tr.rock td { background-color: #99f; }
-    tr.sports td { background-color: #bb8; }
-    tr.other td { background-color: #bbc; }
-
-    a {
-      color: black;
-    }
   }
 
   #topics-notes {

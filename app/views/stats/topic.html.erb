@@ -13,13 +13,14 @@
   <h2><%= @topic.name %> topic stats for <%= @user_name %>:</h2>
   <br />
   <h2><b>Round One:</b></h2>
-  <table id="roundOneTopicTable" class="tablesorter tablesorter-blue">
+  <table id="roundOneTopicTable" class="tablesorter tablesorter-blue<%= ' empty' if @categories[:RoundOneCategory].empty? %>">
     <thead>
       <tr>
         <th>Title</th>
-        <th><abbr title="Position on the board.">Pos</abbr></th>
+        <th><abbr title="column on the game board">Col.</abbr></th>
         <th>Show date</th>
         <th>Date played</th>
+        <th>Play type</th>
         <th>$<%= CURRENT_TOP_ROW_VALUES[0] * 1 %></th>
         <th>$<%= CURRENT_TOP_ROW_VALUES[0] * 2 %></th>
         <th>$<%= CURRENT_TOP_ROW_VALUES[0] * 3 %></th>
@@ -34,11 +35,12 @@
     <tbody>
       <% @categories[:RoundOneCategory].each do |cat| %>
         <% game = @user.games.find_by(game_id: cat['game_id']) %>
-        <tr>
+        <tr class="<%= game.play_type %>">
           <td><%= cat['title'] %></td>
           <td><%= cat['board_position'] %></td>
           <td><%= cat['show_date'] %></td>
           <td><%= game.date_played.in_time_zone.to_s if game.date_played.year > 0 %></td>
+          <td><%= PLAY_TYPES[game.play_type] %></td>
           <td><%= result_code_to_symbol(cat['result1']) %><%= ' (DD)' if cat['result1'] > 4 %></td>
           <td><%= result_code_to_symbol(cat['result2']) %><%= ' (DD)' if cat['result2'] > 4 %></td>
           <td><%= result_code_to_symbol(cat['result3']) %><%= ' (DD)' if cat['result3'] > 4 %></td>
@@ -58,13 +60,14 @@
   </table>
   <br />
   <h2><b>Round Two:</b></h2>
-  <table id="roundTwoTopicTable" class="tablesorter tablesorter-blue">
+  <table id="roundTwoTopicTable" class="tablesorter tablesorter-blue<%= ' empty' if @categories[:RoundTwoCategory].empty? %>">
     <thead>
       <tr>
         <th>Title</th>
-        <th><abbr title="Position on the board.">Pos</abbr></th>
+        <th><abbr title="column on the game board">Col.</abbr></th>
         <th>Show date</th>
         <th>Date played</th>
+        <th>Play type</th>
         <th>$<%= CURRENT_TOP_ROW_VALUES[1] * 1 %></th>
         <th>$<%= CURRENT_TOP_ROW_VALUES[1] * 2 %></th>
         <th>$<%= CURRENT_TOP_ROW_VALUES[1] * 3 %></th>
@@ -79,11 +82,12 @@
     <tbody>
       <% @categories[:RoundTwoCategory].each do |cat| %>
         <% game = @user.games.find_by(game_id: cat['game_id']) %>
-        <tr>
+        <tr class="<%= game.play_type %>">
           <td><%= cat['title'] %></td>
           <td><%= cat['board_position'] %></td>
           <td><%= cat['show_date'] %></td>
           <td><%= game.date_played.in_time_zone.to_s if game.date_played.year > 0 %></td>
+          <td><%= PLAY_TYPES[game.play_type] %></td>
           <td><%= result_code_to_symbol(cat['result1']) %><%= ' (DD)' if cat['result1'] > 4 %></td>
           <td><%= result_code_to_symbol(cat['result2']) %><%= ' (DD)' if cat['result2'] > 4 %></td>
           <td><%= result_code_to_symbol(cat['result3']) %><%= ' (DD)' if cat['result3'] > 4 %></td>
@@ -103,12 +107,13 @@
   </table>
   <br />
   <h2><b>Finals:</b></h2>
-  <table id="finalTopicTable" class="tablesorter tablesorter-blue">
+  <table id="finalTopicTable" class="tablesorter tablesorter-blue<%= ' empty' if @categories[:Final].empty? %>">
     <thead>
       <tr>
         <th>Title</th>
         <th>Show date</th>
-        <th>Date Played</th>
+        <th>Date played</th>
+        <th>Play type</th>
         <th>Result</th>
         <th>On-air right</th>
         <th>On-air wrong</th>
@@ -118,10 +123,11 @@
     <tbody>
       <% @categories[:Final].each do |fin| %>
         <% game = @user.games.find_by(game_id: fin['game_id']) %>
-        <tr>
+        <tr class="<%= game.play_type %>">
           <td><%= fin['title'] %></td>
           <td><%= fin['show_date'] %></td>
           <td><%= game.date_played.in_time_zone.to_s if game.date_played.year > 0 %></td>
+          <td><%= PLAY_TYPES[game.play_type] %></td>
           <td><%= result_code_to_symbol(fin['final_result']) %></td>
           <td><%= fin['final_onair_right'] %></td>
           <td><%= fin['final_onair_wrong'] %></td>
