@@ -1,6 +1,90 @@
 // NOTE: The shared function that produces a disabled-cookies warning on
 //       the signup and login pages is located in the sessions.js file.
 
+// NOTE: The main/shared/sample stats pages are below.
+
+$( ".stats-topic, .stats-sample_topic, .stats-shared_topic" )
+    .ready( function() {
+
+  // (check dd) > (check) > (dot) > (dot dd) > (x) > (empty) > (anything else)
+  function sortSymbols( a, b ) {
+    var sortOrder = ["", "✘", "• (dd)", "•", "✓", "✓ (dd)"];
+    var indexA = sortOrder.indexOf( a );
+    var indexB = sortOrder.indexOf( b );
+    if ( indexB < indexA ) {
+      return 1;
+    } else if (indexB > indexA ) {
+      return -1;
+    } else {
+      return 0;
+    }
+  }
+
+  var $roundOneTable = $( "#roundOneTopicTable" );
+  var $roundTwoTable = $( "#roundTwoTopicTable" );
+  var $finalTable = $( "#finalTopicTable" );
+
+  // Make the three tables on the topic-stats page sortable.
+  // Initialize default sorts to [ date-played column, descending ].
+  // Prevent meaningless attempts to sort by "Game" (edit) column.
+  // To prevent a JS error, skip this if the table is empty.
+  if ( !$roundOneTable.hasClass( "empty" ) ) {
+    $roundOneTable.tablesorter({
+      sortList: [[3,1]],
+      sortInitialOrder: "desc",
+      headers: {
+        0: { sortInitialOrder: "asc" },   // Category title
+        1: { sortInitialOrder: "asc" },   // Column number
+        4: { sortInitialOrder: "asc" },   // Play type
+        13: { sorter: false }             // Game (edit link)
+      },
+      textSorter: {
+        5: sortSymbols,  // The clue-value columns
+        6: sortSymbols,
+        7: sortSymbols,
+        8: sortSymbols,
+        9: sortSymbols
+      }
+    })
+  }
+
+  if ( !$roundTwoTable.hasClass( "empty" ) ) {
+    $roundTwoTable.tablesorter({
+      sortList: [[3,1]],
+      sortInitialOrder: "desc",
+      headers: {
+        0: { sortInitialOrder: "asc" },   // Category title
+        1: { sortInitialOrder: "asc" },   // Column number
+        4: { sortInitialOrder: "asc" },   // Play type
+        13: { sorter: false }             // Game (edit link)
+      },
+      textSorter: {
+        5: sortSymbols,  // The clue-value columns
+        6: sortSymbols,
+        7: sortSymbols,
+        8: sortSymbols,
+        9: sortSymbols
+      }
+    })
+
+    if ( !$finalTable.hasClass( "empty" ) ) {
+      $finalTable.tablesorter({
+        sortList: [[2,1]],
+        sortInitialOrder: "desc",
+        headers: {
+          0: { sortInitialOrder: "asc" },  // Category title
+          3: { sortInitialOrder: "asc" },  // Play type
+          7: { sorter: false }             // Game (edit link)
+        },
+        textSorter: {
+          4: sortSymbols  // Result column
+        }
+      })
+    }
+  }
+});
+
+
 $( ".stats-show, .stats-shared, .stats-sample" ).ready( function() {
 
   // Returns an array of play type abbreviations corresponding

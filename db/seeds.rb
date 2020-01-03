@@ -8,13 +8,14 @@
 
 steve = User.create!(email: 'steve@example.com',
                      password: 'foobar',
-                     password_confirmation: 'foobar')
+                     password_confirmation: 'foobar',
+                     shared_stats_name: 'steve')
 
 User.create!(email: 'david@example.com',
              password: 'barfoo',
              password_confirmation: 'barfoo')
 
-25.times do |n|
+3.times do |n|
   show_date = n.days.ago
   date_played = n.days.ago
   game = steve.games.create!(show_date: show_date,
