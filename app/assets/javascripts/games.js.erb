@@ -1,5 +1,3 @@
-var topRowValues = <%= CURRENT_TOP_ROW_VALUES %>;
-
 function setCookie( name, value ) {
   Cookies.set( name, value, { expires: 7305, path: '/game',
                               secure: <%= Rails.env.production? %> } );
@@ -106,13 +104,33 @@ $( ".games-game" ).ready( function() {
                      ( scores[1] * topRowValues[1] );
     var scoreString = Math.abs( totalScore ).toLocaleString( "en-US" );
     if ( totalScore < 0 ) {
-      $scoreboard.html( "-$" + scoreString );
+      $scoreboard.html( "-" + currencySymbol + scoreString );
       $scoreboard.toggleClass( "score-positive", false );
       $scoreboard.toggleClass( "score-negative", true );
     } else {
-      $scoreboard.html( "$" + scoreString );
+      $scoreboard.html( currencySymbol + scoreString );
       $scoreboard.toggleClass( "score-negative", false );
       $scoreboard.toggleClass( "score-positive", true );
+    }
+
+    if ( topRowValues[0] !== <%= CURRENT_TOP_ROW_VALUES[0] %> ||
+         topRowValues[1] !== <%= CURRENT_TOP_ROW_VALUES[1] %> ) {
+      var adjustedScore = ( scores[0] * <%= CURRENT_TOP_ROW_VALUES[0] %> ) +
+                          ( scores[1] * <%= CURRENT_TOP_ROW_VALUES[1] %> );
+      var adjustedScoreString = Math.abs( adjustedScore )
+                                    .toLocaleString( "en-US" );
+      if ( adjustedScore < 0 ) {
+        $adjustedScore.html( "-$" + adjustedScoreString );
+        $adjustedScore.toggleClass( "score-positive", false );
+        $adjustedScore.toggleClass( "score-negative", true );
+      } else {
+        $adjustedScore.html( "$" + adjustedScoreString );
+        $adjustedScore.toggleClass( "score-negative", false );
+        $adjustedScore.toggleClass( "score-positive", true );
+      }
+      $adjustedScoreLine.show();
+    } else {
+      $adjustedScoreLine.hide();
     }
   }
 
@@ -162,7 +180,7 @@ $( ".games-game" ).ready( function() {
       catName = escapedStringSlice( catName, 0, 15 ) + "&hellip;";
     }
     $overlayCat.html( catName );
-    $overlayValue.html( "$" + clueValue);
+    $overlayValue.html( currencySymbol + clueValue);
 
     setOverlayData();
   }
@@ -244,7 +262,6 @@ $( ".games-game" ).ready( function() {
     var rounds = [ "round_one_categories", "round_two_categories" ];
     for ( var i = 0; i < 2; i++ ) {
       var roundArray = currentGame[rounds[i]];
-      setTopRowValue( i + 1 );
 
       for ( var cat = 0; cat < 6; cat++ ) {
         for ( var row = 1; row <= 5; row++ ) {
@@ -275,16 +292,14 @@ $( ".games-game" ).ready( function() {
   }
 
   function populateBoard( forceFinalDisplay ) {
-    var unadjustedScores = [scores[0], scores[1]];
     currentRound = currentGameData["activeRound"];
     setCurrentRoundIndex();
+    updateClueValues();
     if ( currentRound === "final" ) {
       populateFinal( forceFinalDisplay );
     } else {
-      populateMainGameBoard( unadjustedScores );
+      populateMainGameBoard( scores );
     }
-
-    scores = [unadjustedScores[0], unadjustedScores[1]];
     updateScoreboard();
     updateFinalSymbol();
     updateRoundLinks( currentRound );
@@ -352,6 +367,7 @@ $( ".games-game" ).ready( function() {
   function populateMainGameBoard( unadjustedScores ) {
     setTopRowValue( currentRound );
     var roundArray = currentGame[currentRound];
+    var boardHeight = ( currentGame["play_type"] === "sports" ? 4 : 5 );
 
     for ( var col = 1; col <= 6; col++ ) {
       var catTitleText = roundArray[col - 1]["title"];
@@ -368,7 +384,6 @@ $( ".games-game" ).ready( function() {
         setClueValue();
 
         var boxStatus = roundArray[col - 1]["result" + row];
-        scoresWithoutClue = [unadjustedScores[0], unadjustedScores[1]];
 
         if ( boxStatus < 0 || boxStatus > 7 ) {
           alert( "Error reading game - invalid box status" );
@@ -383,8 +398,16 @@ $( ".games-game" ).ready( function() {
           $ddCheckbox.prop( "checked", false );
         }
         triggerAppropriateClick( boxStatus );
+
+        // Blank the bottom row for Sports Jeopardy!.
+        if ( row > boardHeight ) {
+          $currentClue.html( "<span></span>" );
+        }
       }
     }
+    // Correct the scores, which may have been altered by
+    // the triggered clicks.
+    scores = [unadjustedScores[0], unadjustedScores[1]];
   }
 
   function triggerAppropriateClick( boxStatus ) {
@@ -487,6 +510,7 @@ $( ".games-game" ).ready( function() {
     var modified = ( currentGame["show_date"] !== $showDateValue.val() );
     currentGame["show_date"] = $showDateValue.val();
     updateCookies( modified );
+    populateBoard();
   }
 
   function updateDatePlayed() {
@@ -495,10 +519,52 @@ $( ".games-game" ).ready( function() {
     updateCookies( modified );
   }
 
+  function updateClueValues() {
+    switch ( currentGame['play_type'] ) {
+      case "goat":
+        currencySymbol = "";
+        topRowValues = [200, 400];
+        break;
+      case "super":
+        currencySymbol = "";
+        topRowValues = [200, 500];
+        break;
+      case "rock":
+        currencySymbol = (
+            ( currentGame['show_date'] < '2000-07-18' ) ? "" : "$"
+        );
+        topRowValues = [100, 200];
+        break;
+      case "sports":
+        currencySymbol = "";
+        topRowValues = [250, 500];
+        break;
+      default:
+        currencySymbol = "$";
+        var showDate = currentGame['show_date'];
+        if ( showDate >= '2001-11-26' ) {
+          topRowValues = <%= CURRENT_TOP_ROW_VALUES %>;
+        } else if ( showDate >= '1984-09-10' ) {
+          topRowValues = [100, 200];
+        } else if ( showDate >= '1984-01-01' ) {
+          topRowValues = [50, 100];
+        } else if ( showDate >= '1978-10-02' ) {
+          topRowValues = [25, 50];
+        } else if ( showDate >= '1964-03-30' ) {
+          topRowValues = [10, 20];
+        } else {
+          topRowValues = <%= CURRENT_TOP_ROW_VALUES %>;
+        }
+    }
+  }
+
   function updatePlayType() {
-    var modified = ( currentGame["play_type"] !== $playTypeSelect.val() );
-    currentGame["play_type"] = $playTypeSelect.val();
-    updateCookies( modified );
+    var newPlayType = $playTypeSelect.val();
+    if ( currentGame["play_type"] !== newPlayType ) {
+      currentGame["play_type"] = newPlayType;
+      updateCookies( true );
+      populateBoard();
+    }
   }
 
   function updateRerunStatus() {
@@ -753,6 +819,7 @@ $( ".games-game" ).ready( function() {
     $showDateValue.val( newDate );
     updateCookies( false );
     enableChangeShowDateLink();
+    populateBoard();
   }
 
   function dateChangeErrorHandler( data ) {
@@ -808,15 +875,17 @@ $( ".games-game" ).ready( function() {
   // is worth 1 to 5 points. Multiplying by the round's topRowValue will yield
   // the round's actual contribution to the Coryat score.
   var scores = [0, 0];
+  var topRowValues;
   var currentGame = getCookie( "game" );
   var currentGameData = getCookie( "gameData" );
 
   var currentRound;
   var currentRoundIndex;
+  var currencySymbol = "?";
   var topRowValue;
   var $currentClue;
   var clueValue;
-  var scoresWithoutClue;
+  var scoresWithoutClue = [0, 0];
 
   var $clue = $( "#clue-over-board" );
   var vanishPoint;  // Where overlay comes from/goes to.
@@ -825,6 +894,8 @@ $( ".games-game" ).ready( function() {
 
   var $scoreboard = $( "#score" );
   var $finalSymbol = $( "#final-symbol" );
+  var $adjustedScoreLine = $( "#adjusted-score-line" );
+  var $adjustedScore = $( "#adjusted-score" );
 
   var $buttonRight = $( "#button-right" );
   var $buttonPass = $( "#button-pass" );
@@ -918,7 +989,7 @@ $( ".games-game" ).ready( function() {
   $resetLink.on( "click", function() {
     scores = [scoresWithoutClue[0], scoresWithoutClue[1]];
     $ddCheckbox.prop( "checked", false );
-    resolveClue( "$" + clueValue, "active", true, 0, false );
+    resolveClue( currencySymbol + clueValue, "active", true, 0, false );
   });
 
   $cancelLink.on( "click", function() {
