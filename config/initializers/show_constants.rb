@@ -1,13 +1,13 @@
 CURRENT_TOP_ROW_VALUES = [200, 400].freeze
 
 PLAY_TYPES = {
+  "college"      => "College Championship",
   "regular"      => "regular play",
   "goat"         => "Greatest of All Time",
   "toc"          => "Tournament of Champions",
   "teen"         => "Teen Tournament",
   "teachers"     => "Teachers Tournament",
   "all-star"     => "Jeopardy! All-Star Games",
-  "college"      => "College Championship",
   "power"        => "Power Players Week",
   "celebrity"    => "Celebrity",
   "kids"         => "Kids Week / Back to School Week",
