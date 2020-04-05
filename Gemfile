@@ -60,7 +60,8 @@ end
 
 # Use better webserver than Rails 4.2's default
 gem 'puma'
-# Without an initializer file, use default timeout of 15 seconds
+# By default, this will create a 15-second timeout.
+# On j-scorer.com, it is set to 25 seconds via an environment variable
 gem 'rack-timeout'
 
 # Use Bootstrap to make things look prettier
