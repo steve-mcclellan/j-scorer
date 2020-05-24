@@ -1,7 +1,7 @@
 # rubocop:disable FileName
 source 'https://rubygems.org'
 
-ruby '2.6.5'
+ruby '2.7.1'
 gem 'rails', '~> 6.0.0'
 
 # Use postgresql as the database for Active Record
@@ -58,7 +58,6 @@ group :test do
   gem 'rails-controller-testing'
 end
 
-# Use better webserver than Rails 4.2's default
 gem 'puma'
 # By default, this will create a 15-second timeout.
 # On j-scorer.com, it is set to 25 seconds via an environment variable
