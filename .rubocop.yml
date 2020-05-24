@@ -9,7 +9,7 @@ AllCops:
     - 'script/**/*'
     - 'vendor/**/*'
     - !ruby/regexp /old_and_unused\.rb$/
-  TargetRubyVersion: 2.3
+  TargetRubyVersion: 2.7
 
 Layout/LineLength:
   Enabled: false
