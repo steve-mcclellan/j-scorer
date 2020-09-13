@@ -1,13 +1,13 @@
 AllCops:
   Include:
     - '**/Rakefile'
-    - '**/config.ru'
   Exclude:
     - 'bin/**/*'
     - 'db/**/*'
     - 'config/**/*'
     - 'script/**/*'
     - 'vendor/**/*'
+    - '**/config.ru'
     - !ruby/regexp /old_and_unused\.rb$/
   TargetRubyVersion: 2.7
 
