@@ -38,12 +38,21 @@
           <td><%= game.rerun ? '✓' : '-' %></td>
           <td><%= game.show_date %></td>
           <td><%= PLAY_TYPES[game.play_type] %></td>
-          <td><%= number_to_currency(game.adjusted_game_score, precision: 0) %></td>
-          <td><%= number_to_currency(game.adjusted_round_one_score, precision: 0) %></td>
-          <td><%= number_to_currency(game.adjusted_round_two_score, precision: 0) %></td>
-          <td><%= game.dds_right %></td>
-          <td><%= game.dds_wrong %></td>
-          <td><%= game.final_symbol %></td>
+          <% if game.round_one_score.present? && game.final.present? %>
+            <td><%= number_to_currency(game.adjusted_game_score, precision: 0) %></td>
+            <td><%= number_to_currency(game.adjusted_round_one_score, precision: 0) %></td>
+            <td><%= number_to_currency(game.adjusted_round_two_score, precision: 0) %></td>
+            <td><%= game.dds_right %></td>
+            <td><%= game.dds_wrong %></td>
+            <td><%= game.final_symbol %></td>
+          <% else %>
+            <td colspan="6" style="text-align: center;">
+              Missing data -
+              <a href="#" data-toggle="modal" data-target="#bad-data-modal">
+                more information here
+              </a>
+            </td>
+          <% end %>
           <% if current_user?(game.user) %>
             <td><%= link_to 'edit', game_path(g: game.game_id) %></td>
             <td><%= link_to 'delete',
@@ -61,4 +70,58 @@
       <% end %>
     </tbody>
   </table>
+
+  <!-- Invalid-game-data modal -->
+  <div id="bad-data-modal" class="modal fade" tabindex="-1" role="dialog"
+       aria-labelledby="bad-data-modal-label">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h3 class="modal-title" id="bad-data-modal-label">
+             Missing data information
+          </h3>
+        </div>
+
+        <div class="modal-body" style="font-size: large;">
+          <div class="row">
+            <div class="col-xs-12 col-compact">
+              <div class="form-group">
+                <p>
+                  Sorry for the inconvenience. It looks like the app tried to read some game data that wasn't in the database. Here's what might be going on, in order from most to least common:
+                </p>
+                <br />
+                <p>
+                  1. If the stats page was loaded immediately after saving this game, it may have looked for data about the game before that data had been fully written to the database. If that's the case, refreshing the stats page should fix the problem.
+                </p>
+                <br />
+                <p>
+                  Otherwise, something weird happened to the game's data. This happens occasionally, and I don't know what's causing it. If you noticed anything strange during when you created or saved the game, please let me know so I can do some detective work: <a class="nowrap" href="mailto:<%= ENV['SUPPORT_ADDRESS'] %>"><%= ENV['SUPPORT_ADDRESS'] %></a>.
+                </p>
+                <br />
+                <p>
+                  2. Often, a game with missing data will be a duplicate of a game that is present and valid. Check the Games list to see if there's another copy of this game that does have its data present. If so, all of your information is still there, and this missing-data duplicate game can be safely deleted.
+                </p>
+                <br />
+                <p>
+                  3. If it does look like you've lost data, send me an email at the address above. I'll look at the database directly and see if there's anything that can be salvaged.
+                </p>
+              </div> <!-- form-group -->
+            </div> <!-- col-xs-12 -->
+          </div> <!-- row -->
+        </div> <!-- modal-body -->
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal" style="font-size: large;">
+            Close
+          </button>
+        </div>
+
+      </div> <!-- modal-content -->
+    </div> <!-- modal-dialog -->
+  </div> <!-- Invalid-game-data modal -->
+
 </div> <!-- Games tab -->
