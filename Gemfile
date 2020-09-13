@@ -55,7 +55,7 @@ group :test do
   gem 'rubocop', require: false
 
   # The assigns and assert_template methods have been moved here
-  gem 'rails-controller-testing'
+  gem 'rails-controller-testing', '1.0.4'
 end
 
 gem 'puma'
