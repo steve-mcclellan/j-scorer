@@ -1,7 +1,9 @@
 class StatsController < ApplicationController
+  include Pagy::Backend
+
   before_action :logged_in_user, only: %i[show topic]
-  before_action :find_shared_stats_user, only: %i[shared shared_topic]
-  before_action :set_sample_user, only: %i[sample sample_topic]
+  before_action :find_shared_stats_user, only: %i[shared shared_topic shared_games]
+  before_action :set_sample_user, only: %i[sample sample_topic sample_games]
 
   def show
     @user = current_user
@@ -28,6 +30,30 @@ class StatsController < ApplicationController
     set_filters
     set_stats_vars
     render 'show'
+  end
+
+  # TODO: Have: user, user_name, sample, shared, play_types, filters
+  # TODO: Need: conversion to SQL
+  def games
+    @user = current_user
+    @user_name = @user.email
+
+    set_play_types
+    set_filters
+  end
+
+  def sample_games
+    @sample = true
+
+    set_play_types
+    set_filters
+  end
+
+  def shared_games
+    @shared = true
+
+    set_play_types
+    set_filters
   end
 
   def topic
