@@ -210,24 +210,24 @@ $( ".stats-show, .stats-shared, .stats-sample" ).ready( function() {
       $sharedStatsNameField = $( "#user_shared_stats_name" );
 
   // Remove these before Tablesorter can get its grubby mitts on them.
-  var $untracked = $( "tr.untracked" ).detach();
+//  var $untracked = $( "tr.untracked" ).detach();
 
   // Make "Games" table sortable. Initialize default sort to
   // [ leftmost column, descending ]. Prevent meaningless attempts
   // to sort by "Actions" column (currently in position 9).
   // To prevent a JS error, skip this if the table is empty.
-  if ( !$gameTable.hasClass( 'empty' ) ) {
-    $gameTable.tablesorter({
-      sortList: [[0,1]],
-      sortInitialOrder: "desc",
-      headers: {
-        1: { sortInitialOrder: "asc" },  // Rerun status (check or -)
-        3: { sortInitialOrder: "asc" },  // Play type (text)
-        9: { sortInitialOrder: "asc" },  // Final (check or X)
-        10: { sorter: false }            // Actions
-      }
-    });
-  }
+//  if ( !$gameTable.hasClass( 'empty' ) ) {
+//    $gameTable.tablesorter({
+//      sortList: [[0,1]],
+//      sortInitialOrder: "desc",
+//      headers: {
+//        1: { sortInitialOrder: "asc" },  // Rerun status (check or -)
+//        3: { sortInitialOrder: "asc" },  // Play type (text)
+//        9: { sortInitialOrder: "asc" },  // Final (check or X)
+//        10: { sorter: false }            // Actions
+//      }
+//    });
+//  }
 
   $gameTable.stickyTableHeaders({
     scrollableArea: $( '#stats-area' )
@@ -412,4 +412,10 @@ $( ".stats-show, .stats-shared, .stats-sample" ).ready( function() {
 
   $( "#stats-loading-message" ).remove();
   $( "#stats-area" ).show();
+
+  $.ajax({
+    url: "/stats/games",
+    method: "GET",
+    success: function( data ) { $( "#games-container" ).html( data ); }
+  });
 });

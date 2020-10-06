@@ -40,6 +40,9 @@ class StatsController < ApplicationController
 
     set_play_types
     set_filters
+    set_games
+
+    render layout: false
   end
 
   def sample_games
@@ -47,6 +50,7 @@ class StatsController < ApplicationController
 
     set_play_types
     set_filters
+    set_games
   end
 
   def shared_games
@@ -54,6 +58,7 @@ class StatsController < ApplicationController
 
     set_play_types
     set_filters
+    set_games
   end
 
   def topic
@@ -163,5 +168,9 @@ class StatsController < ApplicationController
   def set_topics
     filter_sql = User.filter_sql(@filters)
     @categories = @user.topic_details(@topic, @play_types, filter_sql)
+  end
+
+  def set_games
+    @games = @user.games
   end
 end
