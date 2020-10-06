@@ -195,6 +195,24 @@ $( ".stats-show, .stats-shared, .stats-sample" ).ready( function() {
     }
   }
 
+  function makeGamesRequest( page ) {
+    $.ajax({
+      url: "/stats/games?page=" + page,
+      method: "GET",
+      success: function( data ) {
+        $( "#games-container" ).html( data );
+        pagyLinkSetup();
+      }
+    });
+  }
+
+  function pagyLinkSetup() {
+    $( ".pagy-link " ).on( "click", function() {
+      makeGamesRequest(this.href.split("#games_").slice(-1)[0]);
+      return false;
+    });
+  }
+
   $( "#stats-area" ).tabs();
 
   var $gameTable = $( "#gameTable" ),
@@ -413,9 +431,5 @@ $( ".stats-show, .stats-shared, .stats-sample" ).ready( function() {
   $( "#stats-loading-message" ).remove();
   $( "#stats-area" ).show();
 
-  $.ajax({
-    url: "/stats/games",
-    method: "GET",
-    success: function( data ) { $( "#games-container" ).html( data ); }
-  });
+  makeGamesRequest( 1 );
 });

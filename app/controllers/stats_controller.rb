@@ -171,6 +171,6 @@ class StatsController < ApplicationController
   end
 
   def set_games
-    @games = @user.games
+    @pagy, @games = pagy(@user.games)
   end
 end

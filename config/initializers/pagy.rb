@@ -101,7 +101,7 @@ Pagy::VARS[:overflow] = :last_page
 
 # Trim extra: Remove the page=1 param from links
 # See https://ddnexus.github.io/pagy/extras/trim
-require 'pagy/extras/trim'
+# require 'pagy/extras/trim'
 
 
 
@@ -114,7 +114,7 @@ require 'pagy/extras/trim'
 # Instance variables
 # See https://ddnexus.github.io/pagy/api/pagy#instance-variables
 # Pagy::VARS[:items] = 20                                   # default
-Pagy::VARS[:items] = 25
+Pagy::VARS[:items] = 2#5
 
 
 # Other Variables
@@ -124,6 +124,7 @@ Pagy::VARS[:items] = 25
 # Pagy::VARS[:params]     = {}                              # default
 # Pagy::VARS[:anchor]     = '#anchor'                       # example
 # Pagy::VARS[:link_extra] = 'data-remote="true"'            # example
+Pagy::VARS[:link_extra] = 'class="pagy-link"'
 
 
 # Rails
