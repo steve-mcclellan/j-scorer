@@ -78,4 +78,6 @@ gem 'default_value_for', '~> 3.3.0'
 # Allow for convenient(-ish) customization of the data displayed
 # by "render :json".
 gem 'active_model_serializers', '~> 0.10.10'
+
+gem 'pagy', '~> 3.8'
 # rubocop:enable FileName
