@@ -40,7 +40,7 @@ class StatsController < ApplicationController
 
     set_play_types
     set_filters
-    set_games
+    set_games('stats')
 
     render layout: false
   end
@@ -50,7 +50,9 @@ class StatsController < ApplicationController
 
     set_play_types
     set_filters
-    set_games
+    set_games('sample')
+
+    render 'games', layout: false
   end
 
   def shared_games
@@ -58,7 +60,9 @@ class StatsController < ApplicationController
 
     set_play_types
     set_filters
-    set_games
+    set_games('shared')
+
+    render 'games', layout: false
   end
 
   def topic
@@ -170,7 +174,17 @@ class StatsController < ApplicationController
     @categories = @user.topic_details(@topic, @play_types, filter_sql)
   end
 
-  def set_games
-    @pagy, @games = pagy(@user.games)
+  def set_games(stats_page_type)
+    dataset = if params[:allgames] == 'true'
+                @user.games
+              else
+                filter_sql = User.filter_sql(@filters, '')
+                play_type_sql = ' AND play_type IN '\
+                    "(#{@play_types.map { |x| "'#{x}'" }.join(', ')})"
+                @user.games.where("TRUE#{play_type_sql}#{filter_sql}")
+              end
+    page_link_html = "class=\"page-link\" data-pagetype=\"#{stats_page_type}\""
+
+    @pagy, @games = pagy(dataset, link_extra: page_link_html)
   end
 end

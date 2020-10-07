@@ -114,7 +114,7 @@ Pagy::VARS[:overflow] = :last_page
 # Instance variables
 # See https://ddnexus.github.io/pagy/api/pagy#instance-variables
 # Pagy::VARS[:items] = 20                                   # default
-Pagy::VARS[:items] = 2#5
+Pagy::VARS[:items] = 25
 
 
 # Other Variables

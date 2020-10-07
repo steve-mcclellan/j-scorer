@@ -1,8 +1,9 @@
 class FilterSQLGenerator
   attr_reader :sql
 
-  def initialize(filters)
+  def initialize(filters, table_prefix)
     @filters = filters
+    @prefix = table_prefix
     @sql = show_date_filters + date_played_filters + rerun_filter
   end
 
@@ -18,8 +19,8 @@ class FilterSQLGenerator
 
   def rerun_filter
     case @filters[:rerun_status]
-    when 'first' then ' AND NOT g.rerun'
-    when 'rerun' then ' AND g.rerun'
+    when 'first' then " AND NOT #{@prefix}rerun"
+    when 'rerun' then " AND #{@prefix}rerun"
     else ''
     end
   end
@@ -58,9 +59,9 @@ class FilterSQLGenerator
   def range_subclause(type, from, to, reverse)
     d1, d2 = sanitize_dates(from, to)
     return (reverse ? ' AND FALSE' : '') if d1.blank? && d2.blank?
-    subsubclause1 = "g.#{type} #{reverse ? '<' : '>='} '#{d1}'"
+    subsubclause1 = "#{@prefix}#{type} #{reverse ? '<' : '>='} '#{d1}'"
     return " AND #{subsubclause1}" if d2.blank?
-    subsubclause2 = "g.#{type} #{reverse ? '>' : '<='} '#{d2}'"
+    subsubclause2 = "#{@prefix}#{type} #{reverse ? '>' : '<='} '#{d2}'"
     " AND (#{subsubclause1} #{reverse ? 'OR' : 'AND'} #{subsubclause2})"
   end
 
@@ -69,7 +70,7 @@ class FilterSQLGenerator
     u = sanitize_unit(@filters[(type + '_last_unit').to_sym])
     r = @filters[(type + '_reverse').to_sym]
     return (r ? '' : ' AND FALSE') if n.blank? || u.blank?
-    " AND g.#{type} #{r ? '<' : '>='} NOW() - INTERVAL '#{n} #{u}'"
+    " AND #{@prefix}#{type} #{r ? '<' : '>='} NOW() - INTERVAL '#{n} #{u}'"
   end
 
   def default_subclause(_type)

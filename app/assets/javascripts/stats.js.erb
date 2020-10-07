@@ -87,6 +87,17 @@ $( ".stats-topic, .stats-sample_topic, .stats-shared_topic" )
 
 $( ".stats-show, .stats-shared, .stats-sample" ).ready( function() {
 
+  var statsPageType;
+  if ( $( this ).hasClass( "stats-show" ) ) {
+    statsPageType = "stats";
+  } else if ( $( this ).hasClass ( "stats-sample" ) ) {
+    statsPageType = "sample";
+  } else if ( $( this ).hasClass ( "stats-shared" ) ) {
+    statsPageType = "shared";
+  } else {
+    alert ( "Invalid request" );
+  }
+
   // Returns an array of play type abbreviations corresponding
   // to the checked boxes on the play types tab, or ['none']
   // if no boxes are checked.
@@ -196,8 +207,21 @@ $( ".stats-show, .stats-shared, .stats-sample" ).ready( function() {
   }
 
   function makeGamesRequest( page ) {
+    var sharedName = "";
+    var allGames = "";
+    if ( statsPageType === "shared" ) {
+      sharedName = "/" + document.getElementById( "games" ).dataset.name;
+    } else if ( statsPageType !== "stats" && statsPageType !== "sample" ) {
+      alert( "Error: malformed link" );
+      return false;
+    }
+    if ( document.getElementById( "games" ).dataset.showingall === "true" ) {
+      allGames = "&allgames=true";
+    }
+    var url = "/" + statsPageType + sharedName + "/games?page=" + page + allGames;
+
     $.ajax({
-      url: "/stats/games?page=" + page,
+      url: url,
       method: "GET",
       success: function( data ) {
         $( "#games-container" ).html( data );
@@ -207,8 +231,9 @@ $( ".stats-show, .stats-shared, .stats-sample" ).ready( function() {
   }
 
   function pagyLinkSetup() {
-    $( ".pagy-link " ).on( "click", function() {
-      makeGamesRequest(this.href.split("#games_").slice(-1)[0]);
+    $( ".page-link " ).on( "click", function() {
+      var pagyPageNumber = this.href.split( "#games_" ).slice(-1)[0];
+      makeGamesRequest( pagyPageNumber );
       return false;
     });
   }
@@ -286,18 +311,22 @@ $( ".stats-show, .stats-shared, .stats-sample" ).ready( function() {
   });
 
   $( "#show-all-games" ).on( "click", function() {
-    $untracked.appendTo( "#gameTable tbody" );
-    $untracked = null;
+//    $untracked.appendTo( "#gameTable tbody" );
+//    $untracked = null;
     $( "#some-hidden" ).hide();
     $( "#all-shown" ).show();
-    $gameTable.trigger( "update", true );
+    document.getElementById( "games" ).dataset.showingall = "true";
+    makeGamesRequest( 1 );
+//    $gameTable.trigger( "update", true );
   });
 
   $( "#hide-untracked-games" ).on( "click", function() {
-    $untracked = $( "tr.untracked" ).detach();
+//    $untracked = $( "tr.untracked" ).detach();
     $( "#all-shown" ).hide();
     $( "#some-hidden" ).show();
-    $gameTable.trigger( "update", true );
+    document.getElementById( "games" ).dataset.showingall = "false";
+    makeGamesRequest( 1 );
+//    $gameTable.trigger( "update", true );
   });
 
   $( ".update-user-filters" ).on( "click", function() {

@@ -79,8 +79,8 @@ class User < ApplicationRecord
     games.find_by(game_id: game_id).present?
   end
 
-  def self.filter_sql(filters)
-    FilterSQLGenerator.new(filters).sql
+  def self.filter_sql(filters, table_prefix = 'g.')
+    FilterSQLGenerator.new(filters, table_prefix).sql
   end
 
   # rubocop:disable MemoizedInstanceVariableName
