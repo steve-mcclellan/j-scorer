@@ -182,7 +182,8 @@ class StatsController < ApplicationController
                 play_type_sql = ' AND play_type IN '\
                     "(#{@play_types.map { |x| "'#{x}'" }.join(', ')})"
                 @user.games.where("TRUE#{play_type_sql}#{filter_sql}")
-              end
+              end.select('*, round_one_score + 2 * round_two_score AS score')
+              .unscope(:order).order('score DESC')
     page_link_html = "class=\"page-link\" data-pagetype=\"#{stats_page_type}\""
 
     @pagy, @games = pagy(dataset, link_extra: page_link_html)
