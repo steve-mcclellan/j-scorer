@@ -24,6 +24,8 @@ $check-light-green: #88ff88;
 $x-red: #ff0000;
 $x-light-red: #ff8888;
 
+$checkmark: '\2713';
+
 /* universal */
 
 *{
@@ -1038,13 +1040,37 @@ html.no-js #stats-loading-message {
             margin: 0;
           }
 
-          input {
+          // DD checkbox using a span (to fix Firefox checkbox sizing issue)
+          label.dd-checkbox input {
+              display: none;
+          }
+          label.dd-checkbox span {
+            display: inline-block;
             width: 5vh;
             height: 5vh;
+            background: $medium-background-color;
+            border: 0.3vw solid $dd-border;
             cursor: pointer;
-            /* TODO: Find a better fix for the tiny checkbox in Firefox */
-            /* -moz-appearance: none; */
-            margin: 0;
+            margin: 1.5vh;
+            position: relative;
+          }
+          label.dd-checkbox span:hover {
+            background: $j-light-blue;
+            border: 0.3vw solid $j-yellow;
+            width: 5vh;
+            height: 5vh;
+          }
+          label.dd-checkbox :checked + span {
+            background: $light-background-color;
+          }
+          label.dd-checkbox :checked + span:after {
+            content: $checkmark;
+            font-size: 4.5vh;
+            font-weight: bold;
+            color: $dark-background-color;
+            margin-left: 5px;
+            margin-top: -5px;
+            position: absolute;
           }
 
           button {
