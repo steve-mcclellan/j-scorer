@@ -1051,7 +1051,8 @@ html.no-js #stats-loading-message {
             background: $medium-background-color;
             border: 0.3vw solid $dd-border;
             cursor: pointer;
-            margin: 1.5vh;
+            margin-left: -1vh;
+            margin-bottom: 1vh;
             position: relative;
           }
           label.dd-checkbox span:hover {
