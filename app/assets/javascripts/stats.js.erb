@@ -209,16 +209,18 @@ $( ".stats-show, .stats-shared, .stats-sample" ).ready( function() {
   function makeGamesRequest( page ) {
     var sharedName = "";
     var allGames = "";
+    var data = document.getElementById( "games" ).dataset;
     if ( statsPageType === "shared" ) {
-      sharedName = "/" + document.getElementById( "games" ).dataset.name;
+      sharedName = "/" + data.name;
     } else if ( statsPageType !== "stats" && statsPageType !== "sample" ) {
       alert( "Error: malformed link" );
       return false;
     }
-    if ( document.getElementById( "games" ).dataset.showingall === "true" ) {
+    if ( data.showingall === "true" ) {
       allGames = "&allgames=true";
     }
-    var url = "/" + statsPageType + sharedName + "/games?page=" + page + allGames;
+    var url = "/" + statsPageType + sharedName + "/games?page=" + page
+        + "&" + data.querystring + allGames;
 
     $.ajax({
       url: url,

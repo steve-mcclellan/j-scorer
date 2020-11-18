@@ -1,4 +1,5 @@
-<div id="games" data-name=<%= @user.shared_stats_name %>>
+<div id="games" data-name=<%= @user.shared_stats_name %>
+                data-querystring=<%= URI.parse(request.original_url).query %>>
   <h2 id="games-headline">
     Games played by <%= @user_name %>
     <% if tracked == user_games_count %>
