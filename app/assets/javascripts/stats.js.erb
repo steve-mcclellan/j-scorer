@@ -209,6 +209,7 @@ $( ".stats-show, .stats-shared, .stats-sample" ).ready( function() {
   function makeGamesRequest( page ) {
     var sharedName = "";
     var allGames = "";
+    var queryString = "";
     var data = document.getElementById( "games" ).dataset;
     if ( statsPageType === "shared" ) {
       sharedName = "/" + data.name;
@@ -219,8 +220,11 @@ $( ".stats-show, .stats-shared, .stats-sample" ).ready( function() {
     if ( data.showingall === "true" ) {
       allGames = "&allgames=true";
     }
+    if ( data.querystring ) {
+      queryString = "&" + data.querystring;
+    }
     var url = "/" + statsPageType + sharedName + "/games?page=" + page
-        + "&" + data.querystring + allGames;
+        + queryString + allGames;
 
     $.ajax({
       url: url,
