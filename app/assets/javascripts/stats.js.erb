@@ -246,13 +246,27 @@ $( ".stats-show, .stats-shared, .stats-sample" ).ready( function() {
   }
 
   function gamesTableHeaderSetup() {
-    $( "#played-at-col, #rerun-col, #show-date-col, #play-type-col, #coryat-col, " +
-        "#round-one-col, #round-two-col, #dds-right-col, #dds-wrong-col, #final-col" ).on(
-            "click", function() {
-                alert( "Clicked on " + $( this ).data( "abbr" ) );
-        }
-    );
+    $( "#played-at-col, #rerun-col, #show-date-col, #play-type-col, " +
+       "#coryat-col, #round-one-col, #round-two-col, #dds-right-col, " +
+       "#dds-wrong-col, #final-col" ).on( "click", function() {
+         var abbr = $( this ).data( "abbr" );
+          alert( "Clicked on " + abbr + ". " +
+              "Its default sort is " + defaultSortDirections[abbr] + "." );
+        });
   }
+
+  var defaultSortDirections =  {
+    "pa": 1,
+    "rr": 1,
+    "sd": 1,
+    "pt": 0,
+    "cs": 1,
+    "ro": 1,
+    "rt": 1,
+    "dr": 1,
+    "dw": 1,
+    "fi": 0
+  };
 
 
   $( "#stats-area" ).tabs();
