@@ -206,7 +206,60 @@ $( ".stats-show, .stats-shared, .stats-sample" ).ready( function() {
     }
   }
 
-  function makeGamesRequest( page ) {
+  var defaultSortDirections =  {
+    "pa": 1,  // "Played at", descending
+    "rr": 1,  // "Rerun?", descending
+    "sd": 1,  // "Show date", descending
+    "pt": 0,  // "Play type", ascending
+    "cs": 1,  // "Coryat score", descending
+    "ro": 1,  // "Round one", descending
+    "rt": 1,  // "Round two", descending
+    "dr": 1,  // "DDs right", descending
+    "dw": 1,  // "DDs wrong", descending
+    "fi": 0   // "Final", ascending
+  };
+  var sortOrder = new Map();
+  function sortOrderString() {
+    var result = "&sort_order=";
+    sortOrder.forEach( function( dir, abbr, _map ) {
+      result += ( abbr + dir + "," );
+    });
+    return ( result.length > 12 ? result.slice( 0, -1 ) : "" );
+  }
+  var currentPage = 1;
+
+  function gamesTableHeaderSetup() {
+    $( "#played-at-col, #rerun-col, #show-date-col, #play-type-col, " +
+        "#coryat-col, #round-one-col, #round-two-col, #dds-right-col, " +
+        "#dds-wrong-col, #final-col" ).on( "click", function( event ) {
+      var abbr = $( this ).data( "abbr" );
+      if ( event.shiftKey ) {
+        // Shift-click: create a compound sort.
+        // If the order exists in the list, reverse its direction.
+        // (This will maintain its position in the ordering.)
+        // Otherwise, add it to the end with its default direction.
+        if ( sortOrder.has( abbr ) ) {
+          sortOrder.set( abbr, 1 - sortOrder.get( abbr ) );
+        } else {
+          sortOrder.set( abbr, defaultSortDirections[abbr] );
+        }
+      } else {
+        // Standard click: replace the existing sort.
+        // If the column is currently sorted, reverse its direction.
+        var sortDirection;
+        if ( sortOrder.has ( abbr ) ) {
+          sortDirection = 1 - sortOrder.get( abbr );
+        } else {
+          sortDirection = defaultSortDirections[abbr];
+        }
+        sortOrder.clear();
+        sortOrder.set( abbr, sortDirection );
+      }
+      makeGamesRequest();
+    });
+  }
+
+  function makeGamesRequest() {
     var sharedName = "";
     var allGames = "";
     var queryString = "";
@@ -223,8 +276,9 @@ $( ".stats-show, .stats-shared, .stats-sample" ).ready( function() {
     if ( data.querystring ) {
       queryString = "&" + data.querystring;
     }
-    var url = "/" + statsPageType + sharedName + "/games?page=" + page
-        + queryString + allGames;
+    var url = "/" + statsPageType + sharedName + "/games?page=" + currentPage
+        + queryString + allGames + sortOrderString();
+    console.log( "Making request to " + url );
 
     $.ajax({
       url: url,
@@ -239,34 +293,11 @@ $( ".stats-show, .stats-shared, .stats-sample" ).ready( function() {
 
   function pagyLinkSetup() {
     $( ".page-link " ).on( "click", function() {
-      var pagyPageNumber = this.href.split( "#games_" ).slice(-1)[0];
-      makeGamesRequest( pagyPageNumber );
+      currentPage = this.href.split( "#games_" ).slice(-1)[0];
+      makeGamesRequest();
       return false;
     });
   }
-
-  function gamesTableHeaderSetup() {
-    $( "#played-at-col, #rerun-col, #show-date-col, #play-type-col, " +
-       "#coryat-col, #round-one-col, #round-two-col, #dds-right-col, " +
-       "#dds-wrong-col, #final-col" ).on( "click", function() {
-         var abbr = $( this ).data( "abbr" );
-          alert( "Clicked on " + abbr + ". " +
-              "Its default sort is " + defaultSortDirections[abbr] + "." );
-        });
-  }
-
-  var defaultSortDirections =  {
-    "pa": 1,
-    "rr": 1,
-    "sd": 1,
-    "pt": 0,
-    "cs": 1,
-    "ro": 1,
-    "rt": 1,
-    "dr": 1,
-    "dw": 1,
-    "fi": 0
-  };
 
 
   $( "#stats-area" ).tabs();
@@ -347,7 +378,8 @@ $( ".stats-show, .stats-shared, .stats-sample" ).ready( function() {
     $( "#some-hidden" ).hide();
     $( "#all-shown" ).show();
     document.getElementById( "games" ).dataset.showingall = "true";
-    makeGamesRequest( 1 );
+    currentPage = 1;
+    makeGamesRequest();
 //    $gameTable.trigger( "update", true );
   });
 
@@ -356,7 +388,8 @@ $( ".stats-show, .stats-shared, .stats-sample" ).ready( function() {
     $( "#all-shown" ).hide();
     $( "#some-hidden" ).show();
     document.getElementById( "games" ).dataset.showingall = "false";
-    makeGamesRequest( 1 );
+    currentPage = 1;
+    makeGamesRequest();
 //    $gameTable.trigger( "update", true );
   });
 
@@ -491,5 +524,5 @@ $( ".stats-show, .stats-shared, .stats-sample" ).ready( function() {
   $( "#stats-loading-message" ).remove();
   $( "#stats-area" ).show();
 
-  makeGamesRequest( 1 );
+  makeGamesRequest();
 });
