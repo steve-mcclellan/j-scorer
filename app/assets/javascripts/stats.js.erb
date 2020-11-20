@@ -232,6 +232,7 @@ $( ".stats-show, .stats-shared, .stats-sample" ).ready( function() {
       success: function( data ) {
         $( "#games-container" ).html( data );
         pagyLinkSetup();
+        gamesTableHeaderSetup();
       }
     });
   }
@@ -243,6 +244,16 @@ $( ".stats-show, .stats-shared, .stats-sample" ).ready( function() {
       return false;
     });
   }
+
+  function gamesTableHeaderSetup() {
+    $( "#played-at-col, #rerun-col, #show-date-col, #play-type-col, #coryat-col, " +
+        "#round-one-col, #round-two-col, #dds-right-col, #dds-wrong-col, #final-col" ).on(
+            "click", function() {
+                alert( "Clicked on " + $( this ).data( "abbr" ) );
+        }
+    );
+  }
+
 
   $( "#stats-area" ).tabs();
 
