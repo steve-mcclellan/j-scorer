@@ -206,7 +206,7 @@ $( ".stats-show, .stats-shared, .stats-sample" ).ready( function() {
     }
   }
 
-  var sortOrder = new Map();
+  var sortOrder = new Map( [["pa", 1]] );
   var defaultSortDirections =  {
     "pa": 1,  // "Played at", descending
     "rr": 1,  // "Rerun?", descending (check then dash)
@@ -222,9 +222,6 @@ $( ".stats-show, .stats-shared, .stats-sample" ).ready( function() {
 
   function sortOrderString() {
     var result = "&sort_order=";
-    if ( sortOrder.size === 0 ) {
-      return result + "pa1";
-    }
     sortOrder.forEach(function (dir, abbr, _map) {
       result += (abbr + dir + ",");
     });
@@ -235,7 +232,18 @@ $( ".stats-show, .stats-shared, .stats-sample" ).ready( function() {
   function gamesTableHeaderSetup() {
     $( "#played-at-col, #rerun-col, #show-date-col, #play-type-col, " +
         "#coryat-col, #round-one-col, #round-two-col, #dds-right-col, " +
-        "#dds-wrong-col, #final-col" ).on( "click", function( event ) {
+        "#dds-wrong-col, #final-col" ).each( function() {
+      switch ( sortOrder.get($( this ).data( "abbr" ))) {
+        case 0:
+          $( this ).addClass( "tablesorter-header tablesorter-headerAsc");
+          break;
+        case 1:
+          $( this ).addClass( "tablesorter-header tablesorter-headerDesc");
+          break;
+        default:
+          $( this ).addClass( "tablesorter-header tablesorter-headerUnSorted");
+      }
+    }).on( "click", function( event ) {
       var abbr = $( this ).data( "abbr" );
       if ( event.shiftKey ) {
         // Shift-click: create a compound sort.
