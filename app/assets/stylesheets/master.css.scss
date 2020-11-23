@@ -504,6 +504,11 @@ html.no-js #stats-loading-message {
     }
   }
 
+  .pagination .page.active {
+    background-color: $j-blue;
+    color: $j-yellow;
+  }
+
   .spacer {
     margin-top: 5vh;
     margin-bottom: 5vh;
