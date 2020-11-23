@@ -222,10 +222,13 @@ $( ".stats-show, .stats-shared, .stats-sample" ).ready( function() {
 
   function sortOrderString() {
     var result = "&sort_order=";
-    sortOrder.forEach( function( dir, abbr, _map ) {
-      result += ( abbr + dir + "," );
+    if ( sortOrder.size === 0 ) {
+      return result + "pa1";
+    }
+    sortOrder.forEach(function (dir, abbr, _map) {
+      result += (abbr + dir + ",");
     });
-    return ( result.length > 12 ? result.slice( 0, -1 ) : "" );
+    return result.slice( 0, -1 );
   }
   var currentPage = 1;
 
