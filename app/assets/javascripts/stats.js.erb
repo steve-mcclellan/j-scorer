@@ -211,7 +211,7 @@ $( ".stats-show, .stats-shared, .stats-sample" ).ready( function() {
     "pa": 1,  // "Played at", descending
     "rr": 1,  // "Rerun?", descending (check then dash)
     "sd": 1,  // "Show date", descending
-    "pt": 0,  // "Play type", ascending
+    "pt": 0,  // "Play type", ascending (alphabetical)
     "cs": 1,  // "Coryat score", descending
     "ro": 1,  // "Round one", descending
     "rt": 1,  // "Round two", descending
@@ -290,7 +290,6 @@ $( ".stats-show, .stats-shared, .stats-sample" ).ready( function() {
     }
     var url = "/" + statsPageType + sharedName + "/games?page=" + currentPage
         + queryString + allGames + sortOrderString();
-    console.log( "Making request to " + url );
 
     $.ajax({
       url: url,
@@ -325,26 +324,6 @@ $( ".stats-show, .stats-shared, .stats-sample" ).ready( function() {
       $sharingForm = $( "#sharing-form" ),
       $sharingSettingsError = $( "#sharing-settings-error" ),
       $sharedStatsNameField = $( "#user_shared_stats_name" );
-
-  // Remove these before Tablesorter can get its grubby mitts on them.
-//  var $untracked = $( "tr.untracked" ).detach();
-
-  // Make "Games" table sortable. Initialize default sort to
-  // [ leftmost column, descending ]. Prevent meaningless attempts
-  // to sort by "Actions" column (currently in position 9).
-  // To prevent a JS error, skip this if the table is empty.
-//  if ( !$gameTable.hasClass( 'empty' ) ) {
-//    $gameTable.tablesorter({
-//      sortList: [[0,1]],
-//      sortInitialOrder: "desc",
-//      headers: {
-//        1: { sortInitialOrder: "asc" },  // Rerun status (check or -)
-//        3: { sortInitialOrder: "asc" },  // Play type (text)
-//        9: { sortInitialOrder: "asc" },  // Final (check or X)
-//        10: { sorter: false }            // Actions
-//      }
-//    });
-//  }
 
   $gameTable.stickyTableHeaders({
     scrollableArea: $( '#stats-area' )
@@ -385,24 +364,19 @@ $( ".stats-show, .stats-shared, .stats-sample" ).ready( function() {
   });
 
   $( "#show-all-games" ).on( "click", function() {
-//    $untracked.appendTo( "#gameTable tbody" );
-//    $untracked = null;
     $( "#some-hidden" ).hide();
     $( "#all-shown" ).show();
     document.getElementById( "games" ).dataset.showingall = "true";
     currentPage = 1;
     makeGamesRequest();
-//    $gameTable.trigger( "update", true );
   });
 
   $( "#hide-untracked-games" ).on( "click", function() {
-//    $untracked = $( "tr.untracked" ).detach();
     $( "#all-shown" ).hide();
     $( "#some-hidden" ).show();
     document.getElementById( "games" ).dataset.showingall = "false";
     currentPage = 1;
     makeGamesRequest();
-//    $gameTable.trigger( "update", true );
   });
 
   $( ".update-user-filters" ).on( "click", function() {

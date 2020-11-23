@@ -421,6 +421,11 @@ input {
     justify-content: center;
     align-items: center;
   }
+
+  .pagination .page.active {
+    background-color: $j-blue;
+    color: $j-yellow;
+  }
 }
 
 /* topic-stats page (e.g., /stats/topic/PotentPotables) */
@@ -502,11 +507,6 @@ html.no-js #stats-loading-message {
     &:hover {
       color: $j-lighter-blue;
     }
-  }
-
-  .pagination .page.active {
-    background-color: $j-blue;
-    color: $j-yellow;
   }
 
   .spacer {

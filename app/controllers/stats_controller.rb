@@ -32,8 +32,6 @@ class StatsController < ApplicationController
     render 'show'
   end
 
-  # TODO: Have: user, user_name, sample, shared, play_types, filters
-  # TODO: Need: conversion to SQL
   def games
     @user = current_user
     @user_name = @user.email
