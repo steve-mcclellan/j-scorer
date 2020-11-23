@@ -206,9 +206,10 @@ $( ".stats-show, .stats-shared, .stats-sample" ).ready( function() {
     }
   }
 
+  var sortOrder = new Map();
   var defaultSortDirections =  {
     "pa": 1,  // "Played at", descending
-    "rr": 1,  // "Rerun?", descending
+    "rr": 1,  // "Rerun?", descending (check then dash)
     "sd": 1,  // "Show date", descending
     "pt": 0,  // "Play type", ascending
     "cs": 1,  // "Coryat score", descending
@@ -216,9 +217,9 @@ $( ".stats-show, .stats-shared, .stats-sample" ).ready( function() {
     "rt": 1,  // "Round two", descending
     "dr": 1,  // "DDs right", descending
     "dw": 1,  // "DDs wrong", descending
-    "fi": 0   // "Final", ascending
+    "fi": 1   // "Final", descending (check then X)
   };
-  var sortOrder = new Map();
+
   function sortOrderString() {
     var result = "&sort_order=";
     sortOrder.forEach( function( dir, abbr, _map ) {

@@ -14,19 +14,21 @@ class FilteredUserGames
     'fi' => 'final_result'
   }.freeze
 
-  def dd_counter(condition, column_name)
-    "
-    CASE WHEN dd1_result #{condition} THEN 1 ELSE 0 END +
-    CASE WHEN dd2a_result #{condition} THEN 1 ELSE 0 END +
-    CASE WHEN dd2b_result #{condition} THEN 1 ELSE 0 END AS #{column_name}
-    "
-  end
-
   NONCE_COLUMNS = {
     'cs' => 'round_one_score + 2 * round_two_score AS coryat',
-    'dr' => dd_counter('= 7', 'dd_right'),
-    'dw' => dd_counter('IN (5, 6)', 'dd_wrong')
+    'dr' => "
+      CASE WHEN dd1_result = 7 THEN 1 ELSE 0 END +
+      CASE WHEN dd2a_result = 7 THEN 1 ELSE 0 END +
+      CASE WHEN dd2b_result = 7 THEN 1 ELSE 0 END AS dd_right
+    ",
+    'dw' => "
+      CASE WHEN dd1_result IN (5, 6) THEN 1 ELSE 0 END +
+      CASE WHEN dd2a_result IN (5, 6) THEN 1 ELSE 0 END +
+      CASE WHEN dd2b_result IN (5, 6) THEN 1 ELSE 0 END AS dd_wrong
+    "
   }.freeze
+
+  DIRECTIONS = { '0' => 'ASC', '1' => 'DESC' }.freeze
 
   def initialize(user, params, filters, play_types)
     @filters = filters
@@ -34,7 +36,7 @@ class FilteredUserGames
 
     @games = user.games
     filter_games unless params[:allgames] == 'true'
-    order_games
+    order_games(params[:sort_order])
   end
 
   private
@@ -46,8 +48,26 @@ class FilteredUserGames
     @games = @games.where("#{play_type_sql}#{filter_sql}")
   end
 
-  def order_games
-    @games = @games.select('*, round_one_score + 2 * round_two_score AS score')
-                   .unscope(:order).order('score DESC')
+  def order_games(sort_order_string)
+    return if sort_order_string.blank?
+
+    @select_extras = ''
+    @order_clause = ''
+
+    sort_order_string.split(',').each { |ordering| process_ordering(ordering) }
+
+    @games = @games.select("*#{@select_extras}") if @select_extras
+    @games = @games.unscope(:order).order(@order_clause[0..-2]) if @order_clause
+  end
+
+  def process_ordering(ordering_string)
+    column_abbr = ordering_string[0..-2]
+    column_name = COLUMN_NAMES[column_abbr]
+    direction = DIRECTIONS[ordering_string[-1]]
+    return if column_name.nil? || direction.nil?
+
+    select_extra = NONCE_COLUMNS[column_abbr]
+    @select_extras += ", #{select_extra}" if select_extra
+    @order_clause += "#{column_name} #{direction},"
   end
 end
