@@ -1,0 +1,59 @@
+<table id="gameTable" class="tablesorter tablesorter-blue">
+  <thead>
+  <tr>
+    <th id="played-at-col" data-abbr="pa">Played at</th>
+    <th id="rerun-col" data-abbr="rr">Rerun?</th>
+    <th id="show-date-col" data-abbr="sd">Show date</th>
+    <th id="play-type-col" data-abbr="pt">Play type</th>
+    <th id="coryat-col" data-abbr="cs">Coryat score</th>
+    <th id="round-one-col" data-abbr="ro">Round one</th>
+    <th id="round-two-col" data-abbr="rt">Round two</th>
+    <th id="dds-right-col" data-abbr="dr">DDs right</th>
+    <th id="dds-wrong-col" data-abbr="dw">DDs wrong</th>
+    <th id="final-col" data-abbr="fi">Final</th>
+    <th colspan=2>Actions</th>
+  </tr>
+  </thead>
+  <tbody>
+  <% @games.each do |game| %>
+    <tr class="<%= game.play_type %>">
+      <td><%= game.date_played.in_time_zone.to_s if game.date_played.year > 0 %></td>
+      <td><%= game.rerun ? '✓' : '-' %></td>
+      <td><%= game.show_date %></td>
+      <td><%= PLAY_TYPES[game.play_type] %></td>
+      <% if game.round_one_score.present? && game.final.present? %>
+        <td><%= number_to_currency(game.adjusted_game_score, precision: 0) %></td>
+        <td><%= number_to_currency(game.adjusted_round_one_score, precision: 0) %></td>
+        <td><%= number_to_currency(game.adjusted_round_two_score, precision: 0) %></td>
+        <td><%= game.dds_right %></td>
+        <td><%= game.dds_wrong %></td>
+        <td><%= game.final_symbol %></td>
+      <% else %>
+        <td colspan="6" style="text-align: center;">
+          Missing data -
+          <a href="#" data-toggle="modal" data-target="#bad-data-modal">
+            more information here
+          </a>
+        </td>
+      <% end %>
+      <% if current_user?(game.user) %>
+        <td><%= link_to 'edit', game_path(g: game.game_id) %></td>
+        <td><%= link_to 'delete',
+                        delete_path(game),
+                        method: :delete,
+                        data: { confirm: 'Are you sure you want to ' +
+                            'delete game ' +
+                            game.game_id.to_s +
+                            '?' } %></td>
+      <% else %>
+        <td class="disabled">edit</td>
+        <td class="disabled">delete</td>
+      <% end %>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<div class="pagy-selector">
+  <%== pagy_nav(@pagy) if @pagy.pages > 1 %>
+</div>

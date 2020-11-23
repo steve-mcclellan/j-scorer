@@ -40,5 +40,9 @@ Rails.application.routes.draw do
 
     patch 'filters' => 'users#update_user_filters'
     patch 'sharing' => 'users#update_sharing_status'
+
+    get 'stats/games' => 'stats#games', as: :games
+    get 'sample/games' => 'stats#sample_games', as: :sample_games
+    get 'shared/:user/games' => 'stats#shared_games', as: :shared_games
   end
 end

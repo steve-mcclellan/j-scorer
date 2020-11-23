@@ -124,6 +124,7 @@ GEM
     nio4r (2.5.3)
     nokogiri (1.10.10)
       mini_portile2 (~> 2.4.0)
+    pagy (3.8.3)
     parallel (1.19.2)
     parser (2.7.1.4)
       ast (~> 2.4.1)
@@ -242,6 +243,7 @@ DEPENDENCIES
   mini_backtrace
   minitest-reporters
   momentjs-rails (>= 2.9.0)
+  pagy (~> 3.8)
   pg (~> 0.15)
   puma
   rack-timeout

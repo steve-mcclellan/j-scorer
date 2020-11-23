@@ -1,4 +1,5 @@
-<div id="games">
+<div id="games" data-name=<%= @user.shared_stats_name %>
+                data-querystring=<%= URI.parse(request.original_url).query %>>
   <h2 id="games-headline">
     Games played by <%= @user_name %>
     <% if tracked == user_games_count %>
@@ -15,61 +16,11 @@
     <% end %>
   </h2>
 
-  <table id="gameTable" class="tablesorter tablesorter-blue<%= ' empty' if user_games_count.zero? %>">
-    <thead>
-      <tr>
-        <th>Played at</th>
-        <th>Rerun?</th>
-        <th>Show date</th>
-        <th>Play type</th>
-        <th>Coryat score</th>
-        <th>Round one</th>
-        <th>Round two</th>
-        <th>DDs right</th>
-        <th>DDs wrong</th>
-        <th>Final</th>
-        <th colspan=2>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @user.games.each do |game| %>
-        <tr class="<%= game.play_type %><%= ' untracked' unless @summary[:all][:game_ids].include?(game.id) %>">
-          <td><%= game.date_played.in_time_zone.to_s if game.date_played.year > 0 %></td>
-          <td><%= game.rerun ? '✓' : '-' %></td>
-          <td><%= game.show_date %></td>
-          <td><%= PLAY_TYPES[game.play_type] %></td>
-          <% if game.round_one_score.present? && game.final.present? %>
-            <td><%= number_to_currency(game.adjusted_game_score, precision: 0) %></td>
-            <td><%= number_to_currency(game.adjusted_round_one_score, precision: 0) %></td>
-            <td><%= number_to_currency(game.adjusted_round_two_score, precision: 0) %></td>
-            <td><%= game.dds_right %></td>
-            <td><%= game.dds_wrong %></td>
-            <td><%= game.final_symbol %></td>
-          <% else %>
-            <td colspan="6" style="text-align: center;">
-              Missing data -
-              <a href="#" data-toggle="modal" data-target="#bad-data-modal">
-                more information here
-              </a>
-            </td>
-          <% end %>
-          <% if current_user?(game.user) %>
-            <td><%= link_to 'edit', game_path(g: game.game_id) %></td>
-            <td><%= link_to 'delete',
-                            delete_path(game),
-                            method: :delete,
-                            data: { confirm: 'Are you sure you want to ' +
-                                             'delete game ' +
-                                             game.game_id.to_s +
-                                             '?' } %></td>
-          <% else %>
-            <td class="disabled">edit</td>
-            <td class="disabled">delete</td>
-          <% end %>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
+  <%# This is filled with the games table via a request that uses
+      games.html.erb (without the underscore). %>
+  <div id="games-container">
+  </div>
+
 
   <!-- Invalid-game-data modal -->
   <div id="bad-data-modal" class="modal fade" tabindex="-1" role="dialog"

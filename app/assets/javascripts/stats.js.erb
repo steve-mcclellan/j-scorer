@@ -87,6 +87,17 @@ $( ".stats-topic, .stats-sample_topic, .stats-shared_topic" )
 
 $( ".stats-show, .stats-shared, .stats-sample" ).ready( function() {
 
+  var statsPageType;
+  if ( $( this ).hasClass( "stats-show" ) ) {
+    statsPageType = "stats";
+  } else if ( $( this ).hasClass ( "stats-sample" ) ) {
+    statsPageType = "sample";
+  } else if ( $( this ).hasClass ( "stats-shared" ) ) {
+    statsPageType = "shared";
+  } else {
+    alert ( "Invalid request" );
+  }
+
   // Returns an array of play type abbreviations corresponding
   // to the checked boxes on the play types tab, or ['none']
   // if no boxes are checked.
@@ -195,6 +206,111 @@ $( ".stats-show, .stats-shared, .stats-sample" ).ready( function() {
     }
   }
 
+  var sortOrder = new Map( [["pa", 1]] );
+  var defaultSortDirections =  {
+    "pa": 1,  // "Played at", descending
+    "rr": 1,  // "Rerun?", descending (check then dash)
+    "sd": 1,  // "Show date", descending
+    "pt": 0,  // "Play type", ascending (alphabetical)
+    "cs": 1,  // "Coryat score", descending
+    "ro": 1,  // "Round one", descending
+    "rt": 1,  // "Round two", descending
+    "dr": 1,  // "DDs right", descending
+    "dw": 1,  // "DDs wrong", descending
+    "fi": 1   // "Final", descending (check then X)
+  };
+
+  function sortOrderString() {
+    var result = "&sort_order=";
+    sortOrder.forEach(function (dir, abbr, _map) {
+      result += (abbr + dir + ",");
+    });
+    return result.slice( 0, -1 );
+  }
+  var currentPage = 1;
+
+  function gamesTableHeaderSetup() {
+    $( "#played-at-col, #rerun-col, #show-date-col, #play-type-col, " +
+        "#coryat-col, #round-one-col, #round-two-col, #dds-right-col, " +
+        "#dds-wrong-col, #final-col" ).each( function() {
+      switch ( sortOrder.get($( this ).data( "abbr" ))) {
+        case 0:
+          $( this ).addClass( "tablesorter-header tablesorter-headerAsc");
+          break;
+        case 1:
+          $( this ).addClass( "tablesorter-header tablesorter-headerDesc");
+          break;
+        default:
+          $( this ).addClass( "tablesorter-header tablesorter-headerUnSorted");
+      }
+    }).on( "click", function( event ) {
+      var abbr = $( this ).data( "abbr" );
+      if ( event.shiftKey ) {
+        // Shift-click: create a compound sort.
+        // If the order exists in the list, reverse its direction.
+        // (This will maintain its position in the ordering.)
+        // Otherwise, add it to the end with its default direction.
+        if ( sortOrder.has( abbr ) ) {
+          sortOrder.set( abbr, 1 - sortOrder.get( abbr ) );
+        } else {
+          sortOrder.set( abbr, defaultSortDirections[abbr] );
+        }
+      } else {
+        // Standard click: replace the existing sort.
+        // If the column is currently sorted, reverse its direction.
+        var sortDirection;
+        if ( sortOrder.has ( abbr ) ) {
+          sortDirection = 1 - sortOrder.get( abbr );
+        } else {
+          sortDirection = defaultSortDirections[abbr];
+        }
+        sortOrder.clear();
+        sortOrder.set( abbr, sortDirection );
+      }
+      makeGamesRequest();
+    });
+  }
+
+  function makeGamesRequest() {
+    var sharedName = "";
+    var allGames = "";
+    var queryString = "";
+    var data = document.getElementById( "games" ).dataset;
+    if ( statsPageType === "shared" ) {
+      sharedName = "/" + data.name;
+    } else if ( statsPageType !== "stats" && statsPageType !== "sample" ) {
+      alert( "Error: malformed link" );
+      return false;
+    }
+    if ( data.showingall === "true" ) {
+      allGames = "&allgames=true";
+    }
+    if ( data.querystring ) {
+      queryString = "&" + data.querystring;
+    }
+    var url = "/" + statsPageType + sharedName + "/games?page=" + currentPage
+        + queryString + allGames + sortOrderString();
+
+    $.ajax({
+      url: url,
+      method: "GET",
+      success: function( data ) {
+        $( "#games-container" ).html( data );
+        pagyLinkSetup();
+        gamesTableHeaderSetup();
+      }
+    });
+  }
+
+  function pagyLinkSetup() {
+    $( ".page-link " ).on( "click", function() {
+      currentPage = this.href.split( "#games_" ).slice(-1)[0];
+      makeGamesRequest();
+      return false;
+    });
+  }
+
+
   $( "#stats-area" ).tabs();
 
   var $gameTable = $( "#gameTable" ),
@@ -208,26 +324,6 @@ $( ".stats-show, .stats-shared, .stats-sample" ).ready( function() {
       $sharingForm = $( "#sharing-form" ),
       $sharingSettingsError = $( "#sharing-settings-error" ),
       $sharedStatsNameField = $( "#user_shared_stats_name" );
-
-  // Remove these before Tablesorter can get its grubby mitts on them.
-  var $untracked = $( "tr.untracked" ).detach();
-
-  // Make "Games" table sortable. Initialize default sort to
-  // [ leftmost column, descending ]. Prevent meaningless attempts
-  // to sort by "Actions" column (currently in position 9).
-  // To prevent a JS error, skip this if the table is empty.
-  if ( !$gameTable.hasClass( 'empty' ) ) {
-    $gameTable.tablesorter({
-      sortList: [[0,1]],
-      sortInitialOrder: "desc",
-      headers: {
-        1: { sortInitialOrder: "asc" },  // Rerun status (check or -)
-        3: { sortInitialOrder: "asc" },  // Play type (text)
-        9: { sortInitialOrder: "asc" },  // Final (check or X)
-        10: { sorter: false }            // Actions
-      }
-    });
-  }
 
   $gameTable.stickyTableHeaders({
     scrollableArea: $( '#stats-area' )
@@ -268,18 +364,19 @@ $( ".stats-show, .stats-shared, .stats-sample" ).ready( function() {
   });
 
   $( "#show-all-games" ).on( "click", function() {
-    $untracked.appendTo( "#gameTable tbody" );
-    $untracked = null;
     $( "#some-hidden" ).hide();
     $( "#all-shown" ).show();
-    $gameTable.trigger( "update", true );
+    document.getElementById( "games" ).dataset.showingall = "true";
+    currentPage = 1;
+    makeGamesRequest();
   });
 
   $( "#hide-untracked-games" ).on( "click", function() {
-    $untracked = $( "tr.untracked" ).detach();
     $( "#all-shown" ).hide();
     $( "#some-hidden" ).show();
-    $gameTable.trigger( "update", true );
+    document.getElementById( "games" ).dataset.showingall = "false";
+    currentPage = 1;
+    makeGamesRequest();
   });
 
   $( ".update-user-filters" ).on( "click", function() {
@@ -412,4 +509,6 @@ $( ".stats-show, .stats-shared, .stats-sample" ).ready( function() {
 
   $( "#stats-loading-message" ).remove();
   $( "#stats-area" ).show();
+
+  makeGamesRequest();
 });

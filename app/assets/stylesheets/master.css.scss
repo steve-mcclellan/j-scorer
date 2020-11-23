@@ -415,6 +415,19 @@ input {
       color: black;
     }
   }
+
+  .pagy-selector {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .pagination .page.active {
+    background-color: $j-blue;
+    color: $j-yellow;
+  }
 }
 
 /* topic-stats page (e.g., /stats/topic/PotentPotables) */

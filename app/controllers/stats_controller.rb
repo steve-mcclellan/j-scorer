@@ -1,7 +1,9 @@
 class StatsController < ApplicationController
+  include Pagy::Backend
+
   before_action :logged_in_user, only: %i[show topic]
-  before_action :find_shared_stats_user, only: %i[shared shared_topic]
-  before_action :set_sample_user, only: %i[sample sample_topic]
+  before_action :find_shared_stats_user, only: %i[shared shared_topic shared_games]
+  before_action :set_sample_user, only: %i[sample sample_topic sample_games]
 
   def show
     @user = current_user
@@ -28,6 +30,37 @@ class StatsController < ApplicationController
     set_filters
     set_stats_vars
     render 'show'
+  end
+
+  def games
+    @user = current_user
+    @user_name = @user.email
+
+    set_play_types
+    set_filters
+    set_games('stats')
+
+    render layout: false
+  end
+
+  def sample_games
+    @sample = true
+
+    set_play_types
+    set_filters
+    set_games('sample')
+
+    render 'games', layout: false
+  end
+
+  def shared_games
+    @shared = true
+
+    set_play_types
+    set_filters
+    set_games('shared')
+
+    render 'games', layout: false
   end
 
   def topic
@@ -137,5 +170,12 @@ class StatsController < ApplicationController
   def set_topics
     filter_sql = User.filter_sql(@filters)
     @categories = @user.topic_details(@topic, @play_types, filter_sql)
+  end
+
+  def set_games(stats_page_type)
+    dataset = @user.games_for(params, @filters, @play_types)
+    page_link_html = "class=\"page-link\" data-pagetype=\"#{stats_page_type}\""
+
+    @pagy, @games = pagy(dataset, link_extra: page_link_html)
   end
 end
