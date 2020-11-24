@@ -37,8 +37,8 @@ The J! Scorer uses the following custom environment variables:
 | `SAMPLE_USER` | (_optional_) The id of the user whose stats should appear on the sample stats page. (`User.first`'s stats are used if this is absent.) |
 | `SAMPLE_USER_NAME` | (_optional_) A string to display on the sample stats page instead of the sample user account's email. |
 | `PROPER_DOMAIN` | (_production only, optional_) (e.g., `j-scorer.com`) If a request gets to the app from any other domain (or subdomain), redirect it to this one. |
-| `MAILER_DOMAIN` | (_production only_) The value of `ActionMailer::Base.smtp_settings[:domain]`. (From the docs: "If you need to specify a HELO domain, you can do it here.") |
-| `MAILER_HOST` | (_production only_) The value of `config.action_mailer.default_url_options[:host]`. This is the base url for generated links in emails. |
+| `MAILER_DOMAIN` | (_production only_) (e.g., `j-scorer.com`) The value of `ActionMailer::Base.smtp_settings[:domain]`. (From the docs: "If you need to specify a HELO domain, you can do it here.") |
+| `MAILER_HOST` | (_production only_) (e.g., `j-scorer.com`) The value of `config.action_mailer.default_url_options[:host]`. This is the base url for generated links in emails. |
 
 ### Contributing
 
