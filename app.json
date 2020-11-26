@@ -29,14 +29,14 @@
       "quantity": 1
     },
     "worker": {
-      "quantity": 1
+      "quantity": 0
     }
   },
   "addons": [
     {
       "plan": "heroku-postgresql",
       "options": {
-        "version": "9.5"
+        "version": "9.6"
       }
     }
   ],
