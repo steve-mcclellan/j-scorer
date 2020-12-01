@@ -310,6 +310,60 @@ $( ".stats-show, .stats-shared, .stats-sample" ).ready( function() {
     });
   }
 
+  function backupLinkSetup() {
+    $( "#backup-link" ).on( "click", function() {
+      // The makeBackupRequest function can't be passed directly because an
+      // unwanted argument would be passed to it.
+      makeBackupRequest();
+      return false;
+    } );
+  }
+
+  function makeBackupRequest( backupId ) {
+    $.ajax({
+      url: backupId ? "/backup/" + backupId : "/backup",
+      method: "GET",
+      cache: false,
+      success: function ( data, _textStatus, jqXHR ) {
+        var contentType = jqXHR.getResponseHeader("Content-Type");
+        var disposition = jqXHR.getResponseHeader("Content-Disposition");
+        if ( contentType.indexOf( "json" ) >= 0 ) {
+          // It's a JSON response. Grab the job ID and try again.
+          if ( data.games ) {
+            var timeEstimate = Math.ceil( data.games / 300 ) * 5;
+            $backupSentence.html(
+              "<strong>Generating backup file. This should take about " +
+              timeEstimate.toString() + " seconds.</strong>"
+            );
+          }
+          if ( data.status === "failed" ) {
+            alert( "Oops. Something went wrong. If this persists, please " +
+                "email <%= ENV['SUPPORT_ADDRESS'] %>." );
+          } else {
+            window.setTimeout( makeBackupRequest, 4500, backupId || data.job_id )
+          }
+        } else if ( disposition && disposition.indexOf( "attachment" ) >= 0 ) {
+          // It's the backup file. Download it.
+          var startIndex = disposition.indexOf( 'filename="' ) + 10;
+          var endIndex = disposition.indexOf( ".jscor", startIndex ) + 6;
+          var fileName = disposition.slice( startIndex, endIndex );
+          var link = document.getElementById( "invisible-download-link" );
+          var blob = new Blob( [data], { type: contentType } );
+          var blobUrl = window.URL.createObjectURL( blob );
+          link.href = blobUrl;
+          link.download = fileName;
+          link.click();
+          URL.revokeObjectURL( blobUrl );
+          $backupSentence.html( originalBackupSentenceHtml );
+          backupLinkSetup();
+        } else {
+          alert( "Oops. Something went wrong. If this persists, please " +
+                 "email <%= ENV['SUPPORT_ADDRESS'] %>." );
+        }
+      }
+    });
+  }
+
 
   $( "#stats-area" ).tabs();
 
@@ -323,7 +377,9 @@ $( ".stats-show, .stats-shared, .stats-sample" ).ready( function() {
       storedToDates = { "show-date": undefined, "date-played": undefined },
       $sharingForm = $( "#sharing-form" ),
       $sharingSettingsError = $( "#sharing-settings-error" ),
-      $sharedStatsNameField = $( "#user_shared_stats_name" );
+      $sharedStatsNameField = $( "#user_shared_stats_name" ),
+      $backupSentence = $( "#backup-sentence" ),
+      originalBackupSentenceHtml = $backupSentence.html();
 
   $gameTable.stickyTableHeaders({
     scrollableArea: $( '#stats-area' )
@@ -506,6 +562,8 @@ $( ".stats-show, .stats-shared, .stats-sample" ).ready( function() {
 
   updateFilterSentence( "show-date" );
   updateFilterSentence( "date-played" );
+
+  backupLinkSetup();
 
   $( "#stats-loading-message" ).remove();
   $( "#stats-area" ).show();

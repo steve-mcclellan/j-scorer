@@ -3,11 +3,29 @@ class BackupsController < ApplicationController
 
   before_action :dump_anonymous_user
 
+  # def new
+  #   s = ActiveModelSerializers::SerializableResource.new(current_user,
+  #                                                        include: '**')
+  #   send_data s.to_json,
+  #             filename: "backup#{Time.zone.now.strftime('%Y%m%d%H%M%S')}.jscor"
+  # end
+
   def new
-    s = ActiveModelSerializers::SerializableResource.new(current_user,
-                                                         include: '**')
-    send_data s.to_json,
-              filename: "backup#{Time.zone.now.strftime('%Y%m%d%H%M%S')}.jscor"
+    user = current_user
+    job = CreateBackupJob.perform_later(user)
+    render json: { status: 'new', job_id: job.job_id, games: user.games.count }
+  end
+
+  def status
+    job_status = ActiveJob::Status.get(params[:backup_id])
+    render json: job_status and return unless job_status.completed?
+
+    timestamp = Time.zone.now.strftime('%Y%m%d%H%M%S')
+    server_filename = "/tmp/#{params[:backup_id]}"
+    send_file server_filename,
+              filename: "backup#{timestamp}.jscor",
+              type: 'application/octet-stream'
+    # File.delete server_filename
   end
 
   def restore

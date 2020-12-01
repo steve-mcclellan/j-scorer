@@ -45,6 +45,9 @@ GEM
     activejob (6.0.3.3)
       activesupport (= 6.0.3.3)
       globalid (>= 0.3.6)
+    activejob-status (0.1.6)
+      activejob (>= 4.2)
+      activesupport (>= 4.2)
     activemodel (6.0.3.3)
       activesupport (= 6.0.3.3)
     activerecord (6.0.3.3)
@@ -231,6 +234,7 @@ PLATFORMS
 
 DEPENDENCIES
   active_model_serializers (~> 0.10.10)
+  activejob-status (~> 0.1.6)
   bcrypt (~> 3.1.7)
   bootstrap-sass (~> 3.4.1)
   bootstrap3-datetimepicker-rails (= 4.17.37)

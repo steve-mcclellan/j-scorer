@@ -57,6 +57,10 @@ Rails.application.configure do
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
 
+  # WARNING: This in an in-process adapter, and the queue will be emptied on
+  #          each restart. Since it's only used for backup and restore (two
+  #          very rarely used features), this should be acceptable.
+  config.active_job.queue_adapter = :async
   # Use a real queuing backend for Active Job (and separate queues per environment).
   # config.active_job.queue_adapter     = :resque
   # config.active_job.queue_name_prefix = "j_scorer_production"

@@ -14,14 +14,16 @@
     <div class="isolated-sentence">
       (<a href="#" data-toggle="modal" data-target="#why-backup-modal">Why back up?</a>)
     </div>
-    <div class="isolated-sentence">
+    <div id="backup-sentence" class="isolated-sentence">
       Download a backup file of your games by clicking
       <% if current_user?(@user) %>
-        <%= link_to 'here', backup_path %>.
+        <%# link_to 'here', backup_path %>.
+        <a href="#" id="backup-link">here</a>.
       <% else %>
         <span class="disabled">here</span>.
       <% end %>
     </div>
+    <a href="#" id="invisible-download-link" style="display: none;"></a>
     <div class="isolated-sentence">
       Add games from a previously-generated backup file
       <% if current_user?(@user) %>
