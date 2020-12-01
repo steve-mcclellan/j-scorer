@@ -9,14 +9,14 @@ class BackupsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should redirect new when not logged in' do
-    get '/backup'
+    get '/backup', xhr: true
     assert_not flash.empty?
     assert_redirected_to login_url
   end
 
   test 'should generate backup when logged in' do
     log_in_here(@user)
-    get '/backup'
+    get '/backup', xhr: true
     assert flash.empty?
     assert_response :success
   end
