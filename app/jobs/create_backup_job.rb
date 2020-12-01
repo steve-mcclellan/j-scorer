@@ -7,6 +7,6 @@ class CreateBackupJob < ApplicationJob
     filename = "/tmp/#{job_id}"
     File.open(filename, 'w') { |f| f.write s.to_json }
 
-    DeleteBackupJob.set(wait: 10.minutes).perform_later(filename)
+    DeleteBackupJob.set(wait: 5.minutes).perform_later(filename)
   end
 end

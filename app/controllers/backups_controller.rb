@@ -18,14 +18,15 @@ class BackupsController < ApplicationController
 
   def status
     job_status = ActiveJob::Status.get(params[:backup_id])
-    render json: job_status and return unless job_status.completed?
+    render json: job_status  # and return unless job_status.completed?
+  end
 
+  def download
     timestamp = Time.zone.now.strftime('%Y%m%d%H%M%S')
     server_filename = "/tmp/#{params[:backup_id]}"
     send_file server_filename,
               filename: "backup#{timestamp}.jscor",
               type: 'application/octet-stream'
-    # File.delete server_filename
   end
 
   def restore
