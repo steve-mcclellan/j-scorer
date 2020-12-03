@@ -1,0 +1,34 @@
+var $modalContent = $( "#restore-modal-content" );
+
+function updateModalContent( completed, total ) {
+  $modalContent.html(
+    '<div class="col-xs-12 col-compact">' +
+    '  Restore in progress: ' + completed + ' of ' + total + ' games saved.' +
+    '</div>'
+  );
+}
+
+function makeRestoreStatusRequest() {
+  $.ajax({
+    url: "/restore/<%= @job_id %>",
+    method: "GET",
+    cache: false,
+    timeout: 5000,  // milliseconds
+    success: function ( data ) {
+      if ( data.status === "failed" ) {
+        alert( "Oops. Something went wrong. If this persists, please " +
+               "email <%= ENV['SUPPORT_ADDRESS'] %>." );
+      } else if ( data.status !== "completed" ) {
+        updateModalContent( data.progress, data.total );
+        window.setTimeout( makeRestoreStatusRequest, 1000 );
+      }
+    },
+    failure: function () {
+      alert( "Oops. Something went wrong. If this persists, please " +
+             "email <%= ENV['SUPPORT_ADDRESS'] %>." );
+    }
+  });
+}
+
+updateModalContent( 0, <%= @games_count %> )
+makeRestoreStatusRequest();

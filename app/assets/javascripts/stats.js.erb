@@ -343,7 +343,7 @@ $( ".stats-show, .stats-shared, .stats-sample" ).ready( function() {
             backupLinkSetup();
           } else if ( data.status === "failed" ) {
             alert( "Oops. Something went wrong. If this persists, please " +
-                "email <%= ENV['SUPPORT_ADDRESS'] %>." );
+                   "email <%= ENV['SUPPORT_ADDRESS'] %>." );
           } else {
             window.setTimeout( makeBackupRequest, 2000, backupId || data.job_id )
           }
@@ -368,7 +368,7 @@ $( ".stats-show, .stats-shared, .stats-sample" ).ready( function() {
       },
       failure: function () {
         alert( "Oops. Something went wrong. If this persists, please " +
-            "email <%= ENV['SUPPORT_ADDRESS'] %>." );
+               "email <%= ENV['SUPPORT_ADDRESS'] %>." );
       }
     });
   }
@@ -388,7 +388,20 @@ $( ".stats-show, .stats-shared, .stats-sample" ).ready( function() {
       $sharingSettingsError = $( "#sharing-settings-error" ),
       $sharedStatsNameField = $( "#user_shared_stats_name" ),
       $backupSentence = $( "#backup-sentence" ),
-      originalBackupSentenceHtml = $backupSentence.html();
+      originalBackupSentenceHtml = $backupSentence.html(),
+      $restoreForm = $( "#restore-form" );
+
+//  $( "#restore-submit-button" ).on( "click", function() {
+//    if ( !$( this ).hasClass( "disabled" ) ) {
+//      console.log("Successed with ajax!");
+//      $(this).addClass("disabled");
+//    }
+//    return false;
+//  });
+
+  $restoreForm.on( "ajax:success", function() {
+    console.log("successed out teh AJAX!");
+  });
 
   $gameTable.stickyTableHeaders({
     scrollableArea: $( '#stats-area' )

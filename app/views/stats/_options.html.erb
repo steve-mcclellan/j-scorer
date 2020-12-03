@@ -143,7 +143,10 @@
        aria-labelledby="restore-modal-label">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
-        <%= form_with(url: restore_path, multipart: true) do %>
+        <%= form_with(url: restore_path,
+                      method: 'post',
+                      multipart: true,
+                      id: 'restore-form') do %>
 
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -155,11 +158,12 @@
           </div>
 
           <div class="modal-body">
-            <div class="row">
+            <div class="row" id="restore-modal-content">
               <div class="col-xs-12 col-compact">
-                <div class="input-group" id="restore-form">
+                <div class="input-group" id="restore-form-group">
                   <label for="file">Backup file (*.jscor):</label>
                   <%= file_field_tag 'file', required: true %>
+                  <%#= text_field 'test_field', required: true %>
                 </div>
               </div>
               <div class="col-xs-12 col-compact">
@@ -176,7 +180,10 @@
             <button type="button" class="btn btn-default" data-dismiss="modal">
               Close
             </button>
-            <%= submit_tag 'Restore', class: 'btn btn-primary', id: 'restore-submit-button' %>
+            <%= submit_tag('Restore',
+                           id: 'restore-submit-button',
+                           class: 'btn btn-primary',
+                           data: { disable_with: 'Restoring...' }) %>
           </div> <!-- modal-footer -->
 
         <% end %>
