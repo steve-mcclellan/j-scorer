@@ -1,10 +1,15 @@
 var $modalContent = $( "#restore-modal-content" );
 
 function updateModalContent( completed, total ) {
+  var statusMessage;
+  if (completed === total) {
+    statusMessage = "Complete! " + completed + " games restored.";
+  } else {
+    statusMessage = "Restore in progress: " + completed + " of " +
+                    total + " games saved.";
+  }
   $modalContent.html(
-    '<div class="col-xs-12 col-compact">' +
-    '  Restore in progress: ' + completed + ' of ' + total + ' games saved.' +
-    '</div>'
+    '<div class="col-xs-12 col-compact">' + statusMessage + '</div>'
   );
 }
 
@@ -16,11 +21,13 @@ function makeRestoreStatusRequest() {
     timeout: 5000,  // milliseconds
     success: function ( data ) {
       if ( data.status === "failed" ) {
-        alert( "Oops. Something went wrong. If this persists, please " +
-               "email <%= ENV['SUPPORT_ADDRESS'] %>." );
-      } else if ( data.status !== "completed" ) {
+        alert("Oops. Something went wrong. If this persists, please " +
+            "email <%= ENV['SUPPORT_ADDRESS'] %>.");
+      } else {
         updateModalContent( data.progress, data.total );
-        window.setTimeout( makeRestoreStatusRequest, 1000 );
+        if ( data.status !== "completed" ) {
+          window.setTimeout(makeRestoreStatusRequest, 1000);
+        }
       }
     },
     failure: function () {

@@ -175,6 +175,7 @@ GEM
       ffi (~> 1.0)
     rdoc (6.2.1)
     regexp_parser (1.7.1)
+    remotipart (1.4.4)
     rexml (3.2.4)
     rubocop (0.90.0)
       parallel (~> 1.10)
@@ -254,6 +255,7 @@ DEPENDENCIES
   rails (~> 6.0.0)
   rails-controller-testing
   rake
+  remotipart (~> 1.4.4)
   rubocop
   sass-rails (~> 5.0)
   sdoc

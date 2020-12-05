@@ -79,6 +79,9 @@ gem 'default_value_for', '~> 3.3.0'
 # by "render :json".
 gem 'active_model_serializers', '~> 0.10.10'
 
-gem 'activejob-status', '~> 0.1.6'
 gem 'pagy', '~> 3.8'
+
+# Enable backup and restore operations to be backgrounded.
+gem 'activejob-status', '~> 0.1.6'
+gem 'remotipart', '~> 1.4.4'
 # rubocop:enable FileName

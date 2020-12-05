@@ -30,7 +30,7 @@ class BackupsController < ApplicationController
   end
 
   def restore
-    games = parse_file(params[:file])
+    games = parse_file(params[:backup_file])
 
     unless games.present?
       flash[:danger] = 'Could not parse file'
@@ -46,7 +46,7 @@ class BackupsController < ApplicationController
   end
 
   def restore_progress
-    job_status = ActiveJob::Status.get(params[:restrore_id])
+    job_status = ActiveJob::Status.get(params[:restore_id])
     render json: job_status
   end
 
