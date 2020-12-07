@@ -26,7 +26,9 @@ function makeRestoreStatusRequest() {
         alert("Oops. Something went wrong. If this persists, please " +
             "email <%= ENV['SUPPORT_ADDRESS'] %>.");
       } else {
-        updateModalContent( data.progress, data.total );
+        if ( data.progress && data.total ) {
+          updateModalContent( data.progress, data.total );
+        }
         if ( data.status === "completed" ) {
           $modal.on( "hide.bs.modal", function () {
             window.location.reload();

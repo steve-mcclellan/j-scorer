@@ -15,7 +15,6 @@ module BackupsHelper
     games = i[:games_attributes]
     return nil unless games.is_a?(Array)
     games.each { |game| return nil unless validate_game(game) }
-    # i
     games
   end
 

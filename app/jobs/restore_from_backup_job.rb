@@ -1,8 +1,6 @@
 class RestoreFromBackupJob < ApplicationJob
   include ActiveJob::Status
 
-  @params = ActionController::Parameters.new
-
   def perform(user, games)
     progress.total = games.count
     games.each do |game|

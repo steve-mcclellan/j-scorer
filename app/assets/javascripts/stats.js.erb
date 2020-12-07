@@ -323,48 +323,26 @@ $( ".stats-show, .stats-shared, .stats-sample" ).ready( function() {
       method: "GET",
       cache: false,
       timeout: 5000,  // milliseconds
-      success: function ( data, textStatus, jqXHR ) {
-//        var contentType = jqXHR.getResponseHeader("Content-Type");
-//        var disposition = jqXHR.getResponseHeader("Content-Disposition");
-//        if ( contentType.indexOf( "json" ) >= 0 ) {
-//          // It's a JSON response. Grab the job ID and try again.
-          if ( data.games ) {
-            var timeEstimate = Math.ceil( data.games / 300 ) * 5;
-            $backupSentence.html(
-              "<strong>Generating backup file. This should take about " +
-              timeEstimate.toString() + " seconds.</strong>"
-            );
-          }
-          if ( data.status === "completed" ) {
-            var link = document.getElementById( "invisible-download-link" );
-            link.href = "/backup/" + backupId + "/download";
-            link.click();
-            $backupSentence.html( originalBackupSentenceHtml );
-            backupLinkSetup();
-          } else if ( data.status === "failed" ) {
-            alert( "Oops. Something went wrong. If this persists, please " +
-                   "email <%= ENV['SUPPORT_ADDRESS'] %>." );
-          } else {
-            window.setTimeout( makeBackupRequest, 2000, backupId || data.job_id )
-          }
-//        } else if ( disposition && disposition.indexOf( "attachment" ) >= 0 ) {
-//          // It's the backup file. Download it.
-//          var startIndex = disposition.indexOf( 'filename="' ) + 10;
-//          var endIndex = disposition.indexOf( ".jscor", startIndex ) + 6;
-//          var fileName = disposition.slice( startIndex, endIndex );
-//          var link = document.getElementById( "invisible-download-link" );
-//          var blob = new Blob( [data], { type: contentType } );
-//          var blobUrl = window.URL.createObjectURL( blob );
-//          link.href = blobUrl;
-//          link.download = fileName;
-//          link.click();
-//          URL.revokeObjectURL( blobUrl );
-//          $backupSentence.html( originalBackupSentenceHtml );
-//          backupLinkSetup();
-//        } else {
-//          alert( "Oops. Something went wrong. If this persists, please " +
-//                 "email <%= ENV['SUPPORT_ADDRESS'] %>." );
-//        }
+      success: function ( data ) {
+        if ( data.games ) {
+          var timeEstimate = Math.ceil( data.games / 300 ) * 5;
+          $backupSentence.html(
+            "<strong>Generating backup file. This should take about " +
+            timeEstimate.toString() + " seconds.</strong>"
+          );
+        }
+        if ( data.status === "completed" ) {
+          var link = document.getElementById( "invisible-download-link" );
+          link.href = "/backup/" + backupId + "/download";
+          link.click();
+          $backupSentence.html( originalBackupSentenceHtml );
+          backupLinkSetup();
+        } else if ( data.status === "failed" ) {
+          alert( "Oops. Something went wrong. If this persists, please " +
+                 "email <%= ENV['SUPPORT_ADDRESS'] %>." );
+        } else {
+          window.setTimeout( makeBackupRequest, 2000, backupId || data.job_id )
+        }
       },
       failure: function () {
         alert( "Oops. Something went wrong. If this persists, please " +
@@ -391,23 +369,12 @@ $( ".stats-show, .stats-shared, .stats-sample" ).ready( function() {
       originalBackupSentenceHtml = $backupSentence.html(),
       $restoreForm = $( "#restore-form" );
 
-//  $( "#restore-submit-button" ).on( "click", function() {
-//    if ( !$( this ).hasClass( "disabled" ) ) {
-//      console.log("Successed with ajax!");
-//      $(this).addClass("disabled");
-//    }
-//    return false;
-//  });
-
-  $restoreForm.on( "ajax:success", function() {
-    console.log("successed out teh AJAX!");
-  });
 
   $gameTable.stickyTableHeaders({
     scrollableArea: $( '#stats-area' )
   });
 
-  // Similar for the "Topics" table.
+  // Sort the "Topics" table.
   // Default sort: [ topic name, ascending ].
   // Make everything else sort descending on first click.
   $topicTable.tablesorter({
@@ -422,7 +389,7 @@ $( ".stats-show, .stats-shared, .stats-sample" ).ready( function() {
     scrollableArea: $( '#stats-area' )
   });
 
-  // And similar for "Play types" table. Initialize default sort to
+  // Similar for "Play types" table. Initialize default sort to
   // [ Games played, descending ]. Prevent meaningless attempts
   // to sort by checkbox column (currently in position 0).
   // To prevent a JS error, skip this if the table is empty.
