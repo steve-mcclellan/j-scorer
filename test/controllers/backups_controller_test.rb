@@ -4,7 +4,6 @@ class BackupsControllerTest < ActionDispatch::IntegrationTest
   def setup
     @user = users(:dave)
     @backup_file = fixture_file_upload('files/utoc_backup.jscor', 'application/octet-stream')
-    @backup_file_2 = fixture_file_upload('files/utoc_backup.jscor', 'application/octet-stream')
     @bad_backup = fixture_file_upload('files/bad_backup.jscor', 'application/octet-stream')
   end
 
@@ -16,7 +15,9 @@ class BackupsControllerTest < ActionDispatch::IntegrationTest
 
   test 'should generate backup when logged in' do
     log_in_here(@user)
-    get '/backup', xhr: true
+    assert_enqueued_with(job: CreateBackupJob) do
+      get '/backup', xhr: true
+    end
     assert flash.empty?
     assert_response :success
   end
@@ -30,32 +31,18 @@ class BackupsControllerTest < ActionDispatch::IntegrationTest
   test 'restore should fail when given a bad file' do
     log_in_here(@user)
     assert_no_difference '@user.games.count' do
-      post '/restore', xhr: true, params: { file: @bad_backup }
+      post '/restore', xhr: true, params: { backup_file: @bad_backup }
       assert_not flash.empty?
       assert_redirected_to root_url
     end
   end
 
-  # TODO: These are temporarily disabled until new implementation
-  #       details are determined.
-  # test 'restore should succeed when given a good file' do
-  #   log_in_here(@user)
-  #   assert_difference '@user.games.count', 1 do
-  #     post '/restore', xhr: true, params: { file: @backup_file }
-  #     assert flash.empty?
-  #     assert_redirected_to stats_url
-  #   end
-  # end
-  #
-  # test 'restore should add duplicate games' do
-  #   log_in_here(@user)
-  #   assert_difference '@user.games.count', 2 do
-  #     post '/restore', xhr: true, params: { file: @backup_file }
-  #     assert flash.empty?
-  #     assert_redirected_to stats_url
-  #     post '/restore', xhr: true, params: { file: @backup_file_2 }
-  #     assert flash.empty?
-  #     assert_redirected_to stats_url
-  #   end
-  # end
+  test 'restore should succeed when given a good file' do
+    log_in_here(@user)
+    assert_enqueued_with(job: RestoreFromBackupJob) do
+      post '/restore', xhr: true, params: { backup_file: @backup_file }
+    end
+    assert flash.empty?
+    assert_response :success
+  end
 end
