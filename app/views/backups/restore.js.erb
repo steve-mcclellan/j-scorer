@@ -1,4 +1,6 @@
-var $modalContent = $( "#restore-modal-content" );
+var $modal = $( "#restore-modal" ),
+    $modalContent = $( "#restore-modal-body" ),
+    $submitButton = $( "#restore-submit-button" );
 
 function updateModalContent( completed, total ) {
   var statusMessage;
@@ -25,8 +27,12 @@ function makeRestoreStatusRequest() {
             "email <%= ENV['SUPPORT_ADDRESS'] %>.");
       } else {
         updateModalContent( data.progress, data.total );
-        if ( data.status !== "completed" ) {
-          window.setTimeout(makeRestoreStatusRequest, 1000);
+        if ( data.status === "completed" ) {
+          $modal.on( "hide.bs.modal", function () {
+            window.location.reload();
+          });
+        } else {
+            window.setTimeout(makeRestoreStatusRequest, 1000);
         }
       }
     },
@@ -37,5 +43,6 @@ function makeRestoreStatusRequest() {
   });
 }
 
+$submitButton.hide();
 updateModalContent( 0, <%= @games_count %> )
 makeRestoreStatusRequest();
