@@ -11,7 +11,7 @@ class BackupsController < ApplicationController
 
   def status
     job_status = ActiveJob::Status.get(params[:backup_id])
-    logger.warn { "About to return backup job status: #{job_status}" }
+    logger.info { "About to return backup job status: #{job_status}" }
     render json: job_status
   end
 
@@ -38,7 +38,7 @@ class BackupsController < ApplicationController
 
   def restore_progress
     job_status = ActiveJob::Status.get(params[:restore_id])
-    logger.warn { "About to return restore job status: #{job_status}" }
+    logger.info { "About to return restore job status: #{job_status}" }
     render json: job_status
   end
 end

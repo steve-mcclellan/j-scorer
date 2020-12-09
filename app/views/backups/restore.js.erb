@@ -35,12 +35,12 @@ function makeRestoreStatusRequest() {
           emptyResponses = 0;
         } else {
           emptyResponses++;
-          if ( emptyResponses === 2 ) {
+          if ( emptyResponses === 4 ) {
             $modalContent.html(
                 $modalContent.html() +
                 '<div id="progress-update" class="col-xs-12 col-compact">Please wait...</div>'
             );
-          } else if ( emptyResponses === 4 ) {
+          } else if ( emptyResponses === 12 ) {
             $( "#progress-update" ).html( "Still working..." );
           }
         }

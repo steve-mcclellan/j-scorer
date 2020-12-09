@@ -341,7 +341,7 @@ $( ".stats-show, .stats-shared, .stats-sample" ).ready( function() {
           alert( "Oops. Something went wrong. If this persists, please " +
                  "email <%= ENV['SUPPORT_ADDRESS'] %>." );
         } else {
-          window.setTimeout( makeBackupRequest, 2000, backupId || data.job_id )
+          window.setTimeout( makeBackupRequest, 1000, backupId || data.job_id )
         }
       },
       failure: function () {
