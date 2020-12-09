@@ -1,6 +1,10 @@
 var $modal = $( "#restore-modal" ),
     $modalContent = $( "#restore-modal-body" ),
-    $submitButton = $( "#restore-submit-button" );
+    $submitButton = $( "#restore-submit-button" ),
+    // Sometimes Heroku dynos don't find the job and return an empty JSON
+    // response. If this happens repeatedly, display a message to manage
+    // the user's (understandable) impatience/confusion.
+    emptyResponses = 0;
 
 function updateModalContent( completed, total ) {
   var statusMessage;
@@ -16,11 +20,6 @@ function updateModalContent( completed, total ) {
 }
 
 function makeRestoreStatusRequest() {
-  // Sometimes Heroku dynos don't find the job and return an empty JSON
-  // response. If this happens repeatedly, display a message to manage
-  // the user's (understandable) impatience/confusion.
-  var emptyResponses = 0;
-
   $.ajax({
     url: "/restore/<%= @job_id %>",
     method: "GET",
@@ -40,7 +39,7 @@ function makeRestoreStatusRequest() {
             $modalContent.html(
                 $modalContent.html() +
                 '<div id="progress-update" class="col-xs-12 col-compact">Please wait...</div>'
-            )
+            );
           } else if ( emptyResponses === 4 ) {
             $( "#progress-update" ).html( "Still working..." );
           }
