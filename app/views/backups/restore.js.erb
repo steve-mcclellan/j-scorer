@@ -16,6 +16,11 @@ function updateModalContent( completed, total ) {
 }
 
 function makeRestoreStatusRequest() {
+  // Sometimes Heroku dynos don't find the job and return an empty JSON
+  // response. If this happens repeatedly, display a message to manage
+  // the user's (understandable) impatience/confusion.
+  var emptyResponses = 0;
+
   $.ajax({
     url: "/restore/<%= @job_id %>",
     method: "GET",
@@ -28,6 +33,17 @@ function makeRestoreStatusRequest() {
       } else {
         if ( data.progress && data.total ) {
           updateModalContent( data.progress, data.total );
+          emptyResponses = 0;
+        } else {
+          emptyResponses++;
+          if ( emptyResponses === 2 ) {
+            $modalContent.html(
+                $modalContent.html() +
+                '<div id="progress-update" class="col-xs-12 col-compact">Please wait...</div>'
+            )
+          } else if ( emptyResponses === 4 ) {
+            $( "#progress-update" ).html( "Still working..." );
+          }
         }
         if ( data.status === "completed" ) {
           $modal.on( "hide.bs.modal", function () {
