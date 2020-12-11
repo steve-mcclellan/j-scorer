@@ -28,8 +28,7 @@ Rails.application.routes.draw do
   get 'game' => 'games#game', as: :game
   delete 'delete/:game_id' => 'games#destroy', as: :delete
 
-  get 'backup' => 'backups#new'
-  post 'restore' => 'backups#restore'
+  get 'backup/:backup_id/download' => 'backups#download'
 
   # Allow only Ajax requests to the following routes:
   constraints(->(req) { req.xhr? }) do
@@ -44,5 +43,10 @@ Rails.application.routes.draw do
     get 'stats/games' => 'stats#games', as: :games
     get 'sample/games' => 'stats#sample_games', as: :sample_games
     get 'shared/:user/games' => 'stats#shared_games', as: :shared_games
+
+    get 'backup' => 'backups#new'
+    get 'backup/:backup_id' => 'backups#status'
+    post 'restore' => 'backups#restore'
+    get 'restore/:restore_id' => 'backups#restore_progress'
   end
 end

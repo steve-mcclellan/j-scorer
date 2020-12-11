@@ -10,18 +10,19 @@
   <hr />
   <br />
   <div class="clearfix">
-    <h2>Back up/Restore</h2>
+    <h2>Backup/Restore</h2>
     <div class="isolated-sentence">
       (<a href="#" data-toggle="modal" data-target="#why-backup-modal">Why back up?</a>)
     </div>
-    <div class="isolated-sentence">
+    <div id="backup-sentence" class="isolated-sentence">
       Download a backup file of your games by clicking
       <% if current_user?(@user) %>
-        <%= link_to 'here', backup_path %>.
+        <a href="#" id="backup-link">here</a>.
       <% else %>
         <span class="disabled">here</span>.
       <% end %>
     </div>
+    <a href="#" id="invisible-download-link" style="display: none;"></a>
     <div class="isolated-sentence">
       Add games from a previously-generated backup file
       <% if current_user?(@user) %>
@@ -141,7 +142,10 @@
        aria-labelledby="restore-modal-label">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
-        <%= form_with(url: restore_path, multipart: true) do %>
+        <%= form_with(url: restore_path,
+                      method: 'post',
+                      multipart: true,
+                      id: 'restore-form') do %>
 
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -153,11 +157,11 @@
           </div>
 
           <div class="modal-body">
-            <div class="row">
+            <div class="row" id="restore-modal-body">
               <div class="col-xs-12 col-compact">
-                <div class="input-group" id="restore-form">
+                <div class="input-group" id="restore-form-group">
                   <label for="file">Backup file (*.jscor):</label>
-                  <%= file_field_tag 'file', required: true %>
+                  <%= file_field_tag 'backup_file', required: true %>
                 </div>
               </div>
               <div class="col-xs-12 col-compact">
@@ -174,7 +178,10 @@
             <button type="button" class="btn btn-default" data-dismiss="modal">
               Close
             </button>
-            <%= submit_tag 'Restore', class: 'btn btn-primary', id: 'restore-submit-button' %>
+            <%= submit_tag('Restore',
+                           id: 'restore-submit-button',
+                           class: 'btn btn-primary',
+                           data: { disable_with: 'Restoring...' }) %>
           </div> <!-- modal-footer -->
 
         <% end %>

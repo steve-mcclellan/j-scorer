@@ -310,6 +310,47 @@ $( ".stats-show, .stats-shared, .stats-sample" ).ready( function() {
     });
   }
 
+  function backupLinkSetup() {
+    $( "#backup-link" ).on( "click", function() {
+      makeBackupRequest();
+      return false;
+    } );
+  }
+
+  function makeBackupRequest( backupId ) {
+    $.ajax({
+      url: backupId ? "/backup/" + backupId : "/backup",
+      method: "GET",
+      cache: false,
+      timeout: 5000,  // milliseconds
+      success: function ( data ) {
+        if ( data.games ) {
+          var timeEstimate = Math.ceil( data.games / 300 ) * 5;
+          $backupSentence.html(
+            "<strong>Generating backup file. This should take about " +
+            timeEstimate.toString() + " seconds.</strong>"
+          );
+        }
+        if ( data.status === "completed" ) {
+          var link = document.getElementById( "invisible-download-link" );
+          link.href = "/backup/" + backupId + "/download";
+          link.click();
+          $backupSentence.html( originalBackupSentenceHtml );
+          backupLinkSetup();
+        } else if ( data.status === "failed" ) {
+          alert( "Oops. Something went wrong. If this persists, please " +
+                 "email <%= ENV['SUPPORT_ADDRESS'] %>." );
+        } else {
+          window.setTimeout( makeBackupRequest, 1000, backupId || data.job_id )
+        }
+      },
+      failure: function () {
+        alert( "Oops. Something went wrong. If this persists, please " +
+               "email <%= ENV['SUPPORT_ADDRESS'] %>." );
+      }
+    });
+  }
+
 
   $( "#stats-area" ).tabs();
 
@@ -323,13 +364,17 @@ $( ".stats-show, .stats-shared, .stats-sample" ).ready( function() {
       storedToDates = { "show-date": undefined, "date-played": undefined },
       $sharingForm = $( "#sharing-form" ),
       $sharingSettingsError = $( "#sharing-settings-error" ),
-      $sharedStatsNameField = $( "#user_shared_stats_name" );
+      $sharedStatsNameField = $( "#user_shared_stats_name" ),
+      $backupSentence = $( "#backup-sentence" ),
+      originalBackupSentenceHtml = $backupSentence.html(),
+      $restoreForm = $( "#restore-form" );
+
 
   $gameTable.stickyTableHeaders({
     scrollableArea: $( '#stats-area' )
   });
 
-  // Similar for the "Topics" table.
+  // Sort the "Topics" table.
   // Default sort: [ topic name, ascending ].
   // Make everything else sort descending on first click.
   $topicTable.tablesorter({
@@ -344,7 +389,7 @@ $( ".stats-show, .stats-shared, .stats-sample" ).ready( function() {
     scrollableArea: $( '#stats-area' )
   });
 
-  // And similar for "Play types" table. Initialize default sort to
+  // Similar for "Play types" table. Initialize default sort to
   // [ Games played, descending ]. Prevent meaningless attempts
   // to sort by checkbox column (currently in position 0).
   // To prevent a JS error, skip this if the table is empty.
@@ -506,6 +551,8 @@ $( ".stats-show, .stats-shared, .stats-sample" ).ready( function() {
 
   updateFilterSentence( "show-date" );
   updateFilterSentence( "date-played" );
+
+  backupLinkSetup();
 
   $( "#stats-loading-message" ).remove();
   $( "#stats-area" ).show();

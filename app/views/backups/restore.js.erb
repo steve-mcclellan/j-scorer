@@ -1,0 +1,65 @@
+var $modal = $( "#restore-modal" ),
+    $modalContent = $( "#restore-modal-body" ),
+    $submitButton = $( "#restore-submit-button" ),
+    // Sometimes Heroku dynos don't find the job and return an empty JSON
+    // response. If this happens repeatedly, display a message to manage
+    // the user's (understandable) impatience/confusion.
+    emptyResponses = 0;
+
+function updateModalContent( completed, total ) {
+  var statusMessage;
+  if (completed === total) {
+    statusMessage = "Complete! " + completed + " games restored.";
+  } else {
+    statusMessage = "Restore in progress: " + completed + " of " +
+                    total + " games saved.";
+  }
+  $modalContent.html(
+    '<div class="col-xs-12 col-compact">' + statusMessage + '</div>'
+  );
+}
+
+function makeRestoreStatusRequest() {
+  $.ajax({
+    url: "/restore/<%= @job_id %>",
+    method: "GET",
+    cache: false,
+    timeout: 5000,  // milliseconds
+    success: function ( data ) {
+      if ( data.status === "failed" ) {
+        alert("Oops. Something went wrong. If this persists, please " +
+            "email <%= ENV['SUPPORT_ADDRESS'] %>.");
+      } else {
+        if ( data.progress && data.total ) {
+          updateModalContent( data.progress, data.total );
+          emptyResponses = 0;
+        } else {
+          emptyResponses++;
+          if ( emptyResponses === 4 ) {
+            $modalContent.html(
+                $modalContent.html() +
+                '<div id="progress-update" class="col-xs-12 col-compact">Please wait...</div>'
+            );
+          } else if ( emptyResponses === 12 ) {
+            $( "#progress-update" ).html( "Still working..." );
+          }
+        }
+        if ( data.status === "completed" ) {
+          $modal.on( "hide.bs.modal", function () {
+            window.location.reload();
+          });
+        } else {
+            window.setTimeout(makeRestoreStatusRequest, 1000);
+        }
+      }
+    },
+    failure: function () {
+      alert( "Oops. Something went wrong. If this persists, please " +
+             "email <%= ENV['SUPPORT_ADDRESS'] %>." );
+    }
+  });
+}
+
+$submitButton.hide();
+updateModalContent( 0, <%= @games_count %> )
+makeRestoreStatusRequest();
