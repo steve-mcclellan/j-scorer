@@ -1,0 +1,14 @@
+var $errorMessage = $( "#restore-error-message" ),
+    $errorMessageSpacer = $( "#restore-error-message-spacer" );
+
+$errorMessage.html( "<strong>Error:</strong> Could not parse file." );
+$errorMessageSpacer.html( "&nbsp;" );
+
+function clearErrorMessage() {
+  $errorMessage.html( "" );
+  $errorMessageSpacer.html( "" );
+}
+
+$( "#backup_file" ).on( "change", clearErrorMessage );
+
+$( "#restore-modal" ).on( "hide.bs.modal", clearErrorMessage );

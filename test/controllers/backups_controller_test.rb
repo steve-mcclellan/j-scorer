@@ -32,8 +32,9 @@ class BackupsControllerTest < ActionDispatch::IntegrationTest
     log_in_here(@user)
     assert_no_difference '@user.games.count' do
       post '/restore', xhr: true, params: { backup_file: @bad_backup }
-      assert_not flash.empty?
-      assert_redirected_to root_url
+      assert flash.empty?
+      assert_response :success
+      assert_template 'backups/failed_restore'
     end
   end
 
@@ -44,5 +45,6 @@ class BackupsControllerTest < ActionDispatch::IntegrationTest
     end
     assert flash.empty?
     assert_response :success
+    assert_template 'backups/restore'
   end
 end

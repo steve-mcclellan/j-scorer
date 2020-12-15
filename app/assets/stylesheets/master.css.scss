@@ -855,6 +855,12 @@ html.no-js #stats-loading-message {
     }
 
     #restore-modal {
+      #restore-error-message {
+        display: flex;
+        align-content: center;
+        justify-content: center;
+        color: $x-red;
+      }
       #restore-form-group {
         width: 100%;
       }

@@ -25,11 +25,7 @@ class BackupsController < ApplicationController
 
   def restore
     games = parse_file(params[:backup_file])
-
-    unless games.present?
-      flash[:danger] = 'Could not parse file'
-      redirect_to root_path and return
-    end
+    render 'failed_restore' and return unless games.present?
 
     job = RestoreFromBackupJob.perform_later(current_user, games)
     @games_count = games.count
