@@ -42,14 +42,21 @@ function makeRestoreStatusRequest() {
             );
           } else if ( emptyResponses === 12 ) {
             $( "#progress-update" ).html( "Still working..." );
+          } else if ( emptyResponses === 40 ) {
+            $( "#progress-update" ).html( "Give it another minute..." );
+          } else if ( emptyResponses === 80 ) {
+            $( "#progress-update" ).html(
+                "Hm, status updates aren't coming through. I'll keep trying. " +
+                "If you don't want to wait, refresh the page. If only some of " +
+                "the games are there, refresh again in a minute and see if " +
+                "they're still being added. If you encounter problems, email " +
+                'me: <a class="nowrap" href="mailto: <%= ENV['SUPPORT_ADDRESS'] %>">' +
+                "<%= ENV['SUPPORT_ADDRESS'] %></a>"
+            );
           }
         }
-        if ( data.status === "completed" ) {
-          $modal.on( "hide.bs.modal", function () {
-            window.location.reload();
-          });
-        } else {
-            window.setTimeout(makeRestoreStatusRequest, 1000);
+        if ( data.status !== "completed" ) {
+          window.setTimeout(makeRestoreStatusRequest, 1000);
         }
       }
     },
@@ -61,5 +68,6 @@ function makeRestoreStatusRequest() {
 }
 
 $submitButton.hide();
+$modal.on( "hide.bs.modal", function () { window.location.reload(); } );
 updateModalContent( 0, <%= @games_count %> )
 makeRestoreStatusRequest();
