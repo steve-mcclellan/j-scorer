@@ -14,14 +14,27 @@
       <p>Average score: <%= number_to_currency(@summary[:all][:average_score]) %></p>
     <% end %>
 
+    <% total_clues = @summary[:all][:right] + @summary[:all][:wrong] + @summary[:all][:pass] %>
     <p><abbr title="Not including Daily Doubles or Finals." rel="tooltip">
-      Clues right: <%= @summary[:all][:right] %>
+      <% clues_right = @summary[:all][:right] %>
+      Clues right: <%= number_with_delimiter(clues_right) %>
+      <% unless total_clues.zero? %>
+        (<%= number_to_percentage(100 * clues_right / total_clues, precision: 2) %>)
+      <% end %>
     </abbr></p>
     <p><abbr title="Not including Daily Doubles or Finals." rel="tooltip">
-      Clues wrong: <%= @summary[:all][:wrong] %>
+      <% clues_wrong = @summary[:all][:wrong] %>
+      Clues wrong: <%= number_with_delimiter(clues_wrong) %>
+      <% unless total_clues.zero? %>
+        (<%= number_to_percentage(100 * clues_wrong / total_clues, precision: 2) %>)
+      <% end %>
     </abbr></p>
     <p><abbr title="Not including Daily Doubles or Finals." rel="tooltip">
-      Clues passed: <%= @summary[:all][:pass] %>
+      <% clues_passed = @summary[:all][:pass] %>
+      Clues passed: <%= number_with_delimiter(clues_passed)  %>
+      <% unless total_clues.zero? %>
+        (<%= number_to_percentage(100 * clues_passed / total_clues, precision: 2) %>)
+      <% end %>
     </abbr></p>
 
     <p>
