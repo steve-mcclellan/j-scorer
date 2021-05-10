@@ -93,7 +93,9 @@ class GamesController < ApplicationController
     else
       @game = find_game_from_final_id_and_date(final_id, @show_date)
       unless @game
-        return render json: { date: ['Invalid change'] }, status: :bad_request
+        date = Final.find(final_id)&.game&.show_date
+        return render json: { date: ['Invalid change', date] },
+                      status: :bad_request
       end
     end
   end

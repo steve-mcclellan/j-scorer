@@ -776,17 +776,34 @@ $( ".games-game" ).ready( function() {
 
       } else if ( errors["date"] &&
                   errors["date"][0] === "Invalid change" ) {
-        alert( "Cannot save. The game information has been changed in an " +
-               "unsupported manner. Please undo any changes and try again. " +
-               "To change a saved game's show date, use the \"change\" link " +
-               "above the date field." );
+        var saveAsNewGame = window.confirm(
+            "Something strange happened, and I'm not sure how to save the " +
+            "game.\n\nIf this is a new game that you're saving, click OK." +
+            "\n\nIf you're editing an existing game, click Cancel."
+        );
+        if ( saveAsNewGame ) {
+          updateCategoryIds( { ids: [ null, null, null, null, null, null, null,
+                                      null, null, null, null, null, null ] } );
+          makeSaveRequest();
+        } else {
+          var gameDate = errors["date"][1];
+          if ( gameDate && gameDate.length === 10 ) {
+            afterDateChangeHandler( { newDate: gameDate } );
+            if ( window.confirm( "The show date has been reset. Use the " +
+                '"change" link to change it if needed. Saving...' ) ) {
+              makeSaveRequest();
+            }
+          } else {
+            alert( "Unfortunately, I can't find that game." );
+          }
+        }
 
       } else if ( errors["date"] &&
                   errors["date"][0] === "Could not parse show date" ) {
         alert( "Cannot save. The show date could not be parsed. Please enter " +
                "a valid date in the show date field. (If you don't know the " +
                "game's show date, take your best guess. If you don't care " +
-               "about sorting games or filtering/weighting stats by show " +
+               "about sorting games or filtering stats by show " +
                "date, enter any date.)" );
 
       } else if ( errors["final_id"] &&
@@ -868,6 +885,17 @@ $( ".games-game" ).ready( function() {
     }
     currentGame["final"]["id"] = idArray.shift();
     setCookie( "game", currentGame );
+  }
+
+  function makeSaveRequest() {
+    $.ajax({
+      method: "POST",
+      url: "/save",
+      data: { "game":attributize() },
+      success: function( data ) { afterSaveHandler( data ); },
+      error: function( data ) { saveErrorHandler( data ); },
+      dataType: "json"
+    });
   }
 
 
@@ -1077,14 +1105,7 @@ $( ".games-game" ).ready( function() {
                                     null, null, null, null, null, null ] } );
       }
 
-      $.ajax({
-        method: "POST",
-        url: "/save",
-        data: { "game":attributize() },
-        success: function( data ) { afterSaveHandler( data ); },
-        error: function( data ) { saveErrorHandler( data ); },
-        dataType: "json"
-      });
+      makeSaveRequest();
 
       currentGameData["conflict"] = false;
       setCookie( "gameData", currentGameData );
