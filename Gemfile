@@ -1,7 +1,7 @@
 # rubocop:disable FileName
 source 'https://rubygems.org'
 
-ruby '2.7.2'
+ruby '2.7.3'
 gem 'rails', '~> 6.0.0'
 
 # Use postgresql as the database for Active Record
