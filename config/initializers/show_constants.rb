@@ -2,6 +2,7 @@ CURRENT_TOP_ROW_VALUES = [200, 400].freeze
 
 PLAY_TYPES = {
   "regular"      => "regular play",
+  "ncc"          => "National College Championship",
   "profs"        => "Professors Tournament",
   "toc"          => "Tournament of Champions",
   "teachers"     => "Teachers Tournament",
