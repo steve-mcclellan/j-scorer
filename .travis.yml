@@ -7,8 +7,8 @@ sudo: false
 rvm:
   - 2.7.5
 
-addons:
-  postgresql: "13.5"
+services:
+  - postgresql
 
 before_install:
   - gem install bundler
