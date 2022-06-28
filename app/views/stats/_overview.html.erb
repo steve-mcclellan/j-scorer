@@ -2,7 +2,7 @@
   <h2>Stats overview for <%= @user_name %>:</h2>
   <br />
 
-  <div id="overall-stats" class="col-xs-12 col-lg-6 text-center">
+  <div id="overall-stats" class="col-xs-12 col-lg-4 text-center">
     <% if tracked == user_games_count %>
       <div class="col-xs-6 text-right">Games played:</div>
       <div class="col-xs-6 text-left"><%= tracked %></div>
@@ -84,7 +84,102 @@
     &nbsp;
   </div>
 
-  <div id="percentile-stats" class="col-xs-12 col-lg-6">
+  <div id="box-score-stats" class="col-xs-12 col-lg-4 text-center">
+    <p>Box Score Stats</p>
+    <p class="aside">(per game)<br /><br /></p>
+
+    <% cor_with_dds = @summary[:all][:right] + @summary[:all][:dd_right] %>
+    <% inc_with_dds = @summary[:all][:wrong] + @summary[:all][:dd_wrong] %>
+
+    <div class="col-xs-6 text-right">
+      <abbr title="Attempts: Clues right + Clues wrong (not including Daily Doubles or Finals)."
+            rel="tooltip">
+        ATT:
+      </abbr>
+    </div>
+    <div class="col-xs-6 text-left">
+      <% if tracked.zero? %>
+        -
+      <% else %>
+        <%= number_with_precision((@summary[:all][:right] + @summary[:all][:wrong]).to_f / tracked,
+                                  precision: 2) %>
+      <% end %>
+    </div>
+
+    <div class="col-xs-6 text-right">
+      <abbr title="How many buzzer battles you would have won."
+            rel="tooltip">
+        BUZ:
+      </abbr>
+    </div>
+    <div class="col-xs-6 text-left">
+      <abbr title="Alas, I have no way of knowing this."
+            rel="tooltip">
+        ?
+      </abbr>
+    </div>
+
+    <div class="col-xs-6 text-right">
+      <abbr title="Your buzzer battle success rate."
+            rel="tooltip">
+        BUZ %:
+      </abbr>
+    </div>
+    <div class="col-xs-6 text-left">
+      <abbr title="<insert shrug here> The stats below assume 100%. Adjust as you see fit."
+            rel="tooltip">
+        ?
+      </abbr>
+    </div>
+
+    <div class="col-xs-6 text-right">
+      <abbr title="Correct: Clues right (including Daily Doubles but not Finals)."
+            rel="tooltip">
+        COR:
+      </abbr>
+    </div>
+    <div class="col-xs-6 text-left">
+      <% if tracked.zero? %>
+        -
+      <% else %>
+        <%= number_with_precision(cor_with_dds.to_f / tracked, precision: 2) %>
+      <% end %>
+    </div>
+
+    <div class="col-xs-6 text-right">
+      <abbr title="Incorrect: Clues wrong (including Daily Doubles but not Finals)."
+            rel="tooltip">
+        INC:
+      </abbr>
+    </div>
+    <div class="col-xs-6 text-left">
+      <% if tracked.zero? %>
+        -
+      <% else %>
+        <%= number_with_precision(inc_with_dds.to_f / tracked, precision: 2) %>
+      <% end %>
+    </div>
+
+    <div class="col-xs-6 text-right">
+      <abbr title="Correct %: Clues right / (Clues right + Clues wrong) (including Daily Doubles but not Finals)."
+            rel="tooltip">
+        COR %:
+      </abbr>
+    </div>
+    <div class="col-xs-6 text-left">
+      <% if cor_with_dds.zero? && inc_with_dds.zero? %>
+        -
+      <% else %>
+        <%= number_to_percentage(100 * cor_with_dds.to_f / (cor_with_dds + inc_with_dds), precision: 2) %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="spacer hidden-lg">
+    &nbsp;
+  </div>
+
+  <div id="percentile-stats" class="col-xs-12 col-lg-4">
     <div class="col-xs-6 text-right">Maximum:</div>
     <div class="col-xs-6"><%= number_to_currency(pctile[:max], precision: 0) %></div>
     <div class="col-xs-6 text-right">99th percentile:</div>
