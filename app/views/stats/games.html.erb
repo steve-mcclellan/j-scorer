@@ -8,6 +8,18 @@
     <th id="coryat-col" data-abbr="cs">Coryat score</th>
     <th id="round-one-col" data-abbr="ro">Round one</th>
     <th id="round-two-col" data-abbr="rt">Round two</th>
+    <th id="att-col" data-abbr="at">
+      <abbr title="Clues right + Clues wrong (not including Daily Doubles or Final)">Attempts</abbr>
+    </th>
+    <th id="cor-col" data-abbr="co">
+      <abbr title="Clues right (including Daily Doubles but not Final)">Correct</abbr>
+    </th>
+    <th id="inc-col" data-abbr="in">
+      <abbr title="Clues wrong (including Daily Doubles but not Final)">Incorrect</abbr>
+    </th>
+    <th id="cor-pct-col" data-abbr="cp">
+      <abbr title="Clues right / Clues attempted (including Daily Doubles but not Final)">Correct %</abbr>
+    </th>
     <th id="dds-right-col" data-abbr="dr">DDs right</th>
     <th id="dds-wrong-col" data-abbr="dw">DDs wrong</th>
     <th id="final-col" data-abbr="fi">Final</th>
@@ -22,9 +34,19 @@
       <td><%= game.show_date %></td>
       <td><%= PLAY_TYPES[game.play_type] %></td>
       <% if game.round_one_score.present? && game.final.present? %>
+        <% right_with_dds = game.clues_right + game.dds_right %>
+        <% wrong_with_dds = game.clues_wrong + game.dds_wrong %>
         <td><%= number_to_currency(game.adjusted_game_score, precision: 0) %></td>
         <td><%= number_to_currency(game.adjusted_round_one_score, precision: 0) %></td>
         <td><%= number_to_currency(game.adjusted_round_two_score, precision: 0) %></td>
+        <td><%= game.clues_right + game.clues_wrong %></td>
+        <td><%= right_with_dds %></td>
+        <td><%= wrong_with_dds %></td>
+        <% if right_with_dds.zero? && wrong_with_dds.zero? %>
+          <td>-</td>
+        <% else %>
+          <td><%= number_to_percentage(100 * right_with_dds.to_f / (right_with_dds + wrong_with_dds), precision: 0) %></td>
+        <% end %>
         <td><%= game.dds_right %></td>
         <td><%= game.dds_wrong %></td>
         <td><%= game.final_symbol %></td>

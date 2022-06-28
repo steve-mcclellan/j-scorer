@@ -52,6 +52,28 @@ class GameTest < ActiveSupport::TestCase
     assert_equal '1984-09-12', other_game.game_id
   end
 
+  test 'clues right and wrong should be auto-set correctly' do
+    new_game = @user.games.build(show_date: Date.new(1984, 9, 13),
+                                 date_played: Time.zone.today)
+    assert_nil new_game.clues_right
+    assert_nil new_game.clues_wrong
+    new_game.save!
+    assert_equal 0, new_game.clues_right
+    assert_equal 0, new_game.clues_wrong
+
+    new_game.round_one_categories.create!(board_position: 2, result3: 3)
+    new_game.round_one_categories.create!(board_position: 3, result2: 3)
+    # DD hit shouldn't count
+    new_game.round_one_categories.create!(board_position: 4, result2: 7)
+    new_game.round_two_categories.create!(board_position: 5, result4: 1)
+    # DD miss shouldn't count
+    new_game.round_two_categories.create!(board_position: 6, result4: 6)
+
+    new_game.save!
+    assert_equal 2, new_game.clues_right
+    assert_equal 1, new_game.clues_wrong
+  end
+
   test 'default order should be most-recently-played first' do
     assert_equal games(:most_recent), Game.first
   end

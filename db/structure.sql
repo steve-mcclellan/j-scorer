@@ -1,5 +1,6 @@
 SET statement_timeout = 0;
 SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
@@ -8,24 +9,9 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
---
--- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: -
---
-
--- CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
-
-
---
--- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: -
---
-
--- commented out due to Heroku shenanigans:
--- COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
-
-
 SET default_tablespace = '';
 
-SET default_with_oids = false;
+SET default_table_access_method = heap;
 
 --
 -- Name: ar_internal_metadata; Type: TABLE; Schema: public; Owner: -
@@ -128,7 +114,9 @@ CREATE TABLE public.games (
     dd2a_result integer,
     dd2b_result integer,
     rerun boolean DEFAULT false NOT NULL,
-    game_id character varying NOT NULL
+    game_id character varying NOT NULL,
+    clues_right integer,
+    clues_wrong integer
 );
 
 
@@ -286,49 +274,49 @@ ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: category_topics id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.category_topics ALTER COLUMN id SET DEFAULT nextval('public.category_topics_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: finals id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.finals ALTER COLUMN id SET DEFAULT nextval('public.finals_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: games id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.games ALTER COLUMN id SET DEFAULT nextval('public.games_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: sixths id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.sixths ALTER COLUMN id SET DEFAULT nextval('public.sixths_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: topics id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.topics ALTER COLUMN id SET DEFAULT nextval('public.topics_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: users id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_id_seq'::regclass);
 
 
 --
--- Name: ar_internal_metadata_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: ar_internal_metadata ar_internal_metadata_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.ar_internal_metadata
@@ -336,7 +324,7 @@ ALTER TABLE ONLY public.ar_internal_metadata
 
 
 --
--- Name: category_topics_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: category_topics category_topics_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.category_topics
@@ -344,7 +332,7 @@ ALTER TABLE ONLY public.category_topics
 
 
 --
--- Name: finals_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: finals finals_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.finals
@@ -352,7 +340,7 @@ ALTER TABLE ONLY public.finals
 
 
 --
--- Name: games_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: games games_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.games
@@ -360,7 +348,7 @@ ALTER TABLE ONLY public.games
 
 
 --
--- Name: schema_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: schema_migrations schema_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.schema_migrations
@@ -368,7 +356,7 @@ ALTER TABLE ONLY public.schema_migrations
 
 
 --
--- Name: sixths_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: sixths sixths_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.sixths
@@ -376,7 +364,7 @@ ALTER TABLE ONLY public.sixths
 
 
 --
--- Name: topics_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: topics topics_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.topics
@@ -384,7 +372,7 @@ ALTER TABLE ONLY public.topics
 
 
 --
--- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.users
@@ -497,7 +485,7 @@ CREATE UNIQUE INDEX index_users_on_lower_shared_stats_name ON public.users USING
 
 
 --
--- Name: fk_rails_064f1dadb9; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: category_topics fk_rails_064f1dadb9; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.category_topics
@@ -505,7 +493,7 @@ ALTER TABLE ONLY public.category_topics
 
 
 --
--- Name: fk_rails_7b812cfb44; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: topics fk_rails_7b812cfb44; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.topics
@@ -513,7 +501,7 @@ ALTER TABLE ONLY public.topics
 
 
 --
--- Name: fk_rails_de9e6ea7f7; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: games fk_rails_de9e6ea7f7; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.games
@@ -521,7 +509,7 @@ ALTER TABLE ONLY public.games
 
 
 --
--- Name: fk_rails_debebe87e0; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: finals fk_rails_debebe87e0; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.finals
@@ -577,6 +565,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190506215349'),
 ('20190506215644'),
 ('20190507164435'),
-('20190908193809');
+('20190908193809'),
+('20220628174945');
 
 

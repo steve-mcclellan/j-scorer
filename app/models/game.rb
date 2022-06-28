@@ -22,6 +22,7 @@ class Game < ApplicationRecord
   before_create :set_game_id
 
   after_save :set_dd_results
+  after_save :set_clues_right_and_wrong
 
   default_values show_date:   -> { Time.zone.today },
                  date_played: -> { Time.zone.now }
@@ -87,6 +88,31 @@ class Game < ApplicationRecord
       g_id = (num.zero? ? show_date.to_s : "#{show_date}-#{num}")
       self.game_id = g_id and break if user.games.find_by(game_id: g_id).nil?
     end
+  end
+
+  def set_clues_right_and_wrong
+    sql = "
+    SELECT
+      COUNT(*) FILTER (WHERE result1 = 3) +
+      COUNT(*) FILTER (WHERE result2 = 3) +
+      COUNT(*) FILTER (WHERE result3 = 3) +
+      COUNT(*) FILTER (WHERE result4 = 3) +
+      COUNT(*) FILTER (WHERE result5 = 3) AS clues_right,
+      COUNT(*) FILTER (WHERE result1 = 1) +
+      COUNT(*) FILTER (WHERE result2 = 1) +
+      COUNT(*) FILTER (WHERE result3 = 1) +
+      COUNT(*) FILTER (WHERE result4 = 1) +
+      COUNT(*) FILTER (WHERE result5 = 1) AS clues_wrong
+    FROM sixths
+    where game_id = #{id}
+    "
+    result = ActiveRecord::Base.connection.select_all(sql).to_a[0]
+    # rubocop:disable SkipsModelValidations
+    update_columns(
+      clues_right: result['clues_right'],
+      clues_wrong: result['clues_wrong']
+    )
+    # rubocop:enable SkipsModelValidations
   end
 
   def add_default_date_played
