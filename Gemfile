@@ -84,7 +84,7 @@ gem 'default_value_for', '~> 3.4.0'
 # by "render :json".
 gem 'active_model_serializers', '~> 0.10.10'
 
-gem 'pagy', '~> 5.10'
+gem 'pagy', '~> 4.11'
 
 # Enable backup and restore operations to be backgrounded.
 gem 'activejob-status', '~> 0.1.6'
