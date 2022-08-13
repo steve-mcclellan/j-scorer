@@ -34,7 +34,7 @@
     </thead>
     <tbody>
       <% @categories[:RoundOneCategory].each do |cat| %>
-        <% date_played = (cat['date_played'] + ' UTC').in_time_zone %>
+        <% date_played = (cat['date_played'].to_s + ' UTC').in_time_zone %>
         <tr class="<%= cat['play_type'] %>">
           <td><%= cat['title'] %></td>
           <td><%= cat['board_position'] %></td>
@@ -81,7 +81,7 @@
     </thead>
     <tbody>
       <% @categories[:RoundTwoCategory].each do |cat| %>
-        <% date_played = (cat['date_played'] + ' UTC').in_time_zone %>
+        <% date_played = (cat['date_played'].to_s + ' UTC').in_time_zone %>
         <tr class="<%= cat['play_type'] %>">
           <td><%= cat['title'] %></td>
           <td><%= cat['board_position'] %></td>
@@ -122,7 +122,7 @@
     </thead>
     <tbody>
       <% @categories[:Final].each do |fin| %>
-        <% date_played = (fin['date_played'] + ' UTC').in_time_zone %>
+        <% date_played = (fin['date_played'].to_s + ' UTC').in_time_zone %>
         <tr class="<%= fin['play_type'] %>">
           <td><%= fin['title'] %></td>
           <td><%= fin['show_date'] %></td>
