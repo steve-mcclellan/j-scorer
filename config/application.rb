@@ -11,6 +11,9 @@ module JScorer
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 5.2
 
+    # This can be updated to 7.0 after Rails 7.0 is fully up and running:
+    config.active_support.cache_format_version = 6.1
+
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded after loading

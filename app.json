@@ -1,27 +1,27 @@
 {
   "name": "j-scorer",
-  "stack": "heroku-18",
+  "stack": "heroku-22",
   "scripts": {
     "postdeploy": "bundle exec rails db:structure:load db:seed"
   },
   "env": {
     "LANG": {
-      "required": true
+      "value": "en_US.UTF-8"
     },
     "RACK_ENV": {
-      "required": true
+      "value": "production"
     },
     "RAILS_ENV": {
-      "required": true
+      "value": "production"
     },
     "RAILS_SERVE_STATIC_FILES": {
-      "required": true
+      "value": "enabled"
     },
     "SECRET_KEY_BASE": {
-      "required": true
+      "generator": "secret"
     },
     "SUPPORT_ADDRESS": {
-      "required": true
+      "value": "staging-support@j-scorer.com"
     }
   },
   "formation": {
