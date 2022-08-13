@@ -5,7 +5,9 @@ ruby '3.1.2'
 gem 'rails', '~> 6.1.0'
 
 # Temporary fix until Rails >= 7.0.1:
-gem 'net-smtp', require: false
+gem 'net-smtp'
+gem 'net-imap'
+gem 'net-pop'
 
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 1.4'
