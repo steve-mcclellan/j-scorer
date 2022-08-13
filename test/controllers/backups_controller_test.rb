@@ -3,8 +3,8 @@ require 'test_helper'
 class BackupsControllerTest < ActionDispatch::IntegrationTest
   def setup
     @user = users(:dave)
-    @backup_file = fixture_file_upload('files/utoc_backup.jscor', 'application/octet-stream')
-    @bad_backup = fixture_file_upload('files/bad_backup.jscor', 'application/octet-stream')
+    @backup_file = fixture_file_upload('utoc_backup.jscor', 'application/octet-stream')
+    @bad_backup = fixture_file_upload('bad_backup.jscor', 'application/octet-stream')
   end
 
   test 'should redirect new when not logged in' do

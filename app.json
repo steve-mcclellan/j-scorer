@@ -1,6 +1,6 @@
 {
   "name": "j-scorer",
-  "stack": "heroku-18",
+  "stack": "heroku-22",
   "scripts": {
     "postdeploy": "bundle exec rails db:structure:load db:seed"
   },
