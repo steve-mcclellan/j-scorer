@@ -10,10 +10,6 @@ rvm:
 services:
   - postgresql
 
-env:
-  global:
-    -PGPORT=5433
-
 before_install:
   - gem install bundler
 
