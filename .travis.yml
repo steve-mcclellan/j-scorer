@@ -1,7 +1,7 @@
 language: ruby
 cache: bundler
 
-dist: bionic
+dist: jammy
 sudo: false
 
 rvm:

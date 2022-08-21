@@ -215,6 +215,10 @@ $( ".stats-show, .stats-shared, .stats-sample" ).ready( function() {
     "cs": 1,  // "Coryat score", descending
     "ro": 1,  // "Round one", descending
     "rt": 1,  // "Round two", descending
+    "at": 1,  // "Attempts", descending
+    "co": 1,  // "Correct", descending
+    "in": 1,  // "Incorrect", descending
+    "cp": 1,  // "Correct %", descending
     "dr": 1,  // "DDs right", descending
     "dw": 1,  // "DDs wrong", descending
     "fi": 1   // "Final", descending (check then X)
@@ -231,7 +235,8 @@ $( ".stats-show, .stats-shared, .stats-sample" ).ready( function() {
 
   function gamesTableHeaderSetup() {
     $( "#played-at-col, #rerun-col, #show-date-col, #play-type-col, " +
-        "#coryat-col, #round-one-col, #round-two-col, #dds-right-col, " +
+        "#coryat-col, #round-one-col, #round-two-col, #att-col, #cor-col, " +
+        "#inc-col, #cor-pct-col, #dds-right-col, " +
         "#dds-wrong-col, #final-col" ).each( function() {
       switch ( sortOrder.get($( this ).data( "abbr" ))) {
         case 0:
