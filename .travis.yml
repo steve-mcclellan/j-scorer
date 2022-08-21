@@ -20,7 +20,6 @@ addons:
 env:
   global:
     -PGPORT=5433
-    -PGUSER=travis
 
 before_install:
   - gem install bundler
