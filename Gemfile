@@ -1,11 +1,16 @@
 # rubocop:disable FileName
 source 'https://rubygems.org'
 
-ruby '2.7.5'
-gem 'rails', '~> 6.0.0'
+ruby '3.1.2'
+gem 'rails', '~> 6.1.0'
+
+# Temporary fix until Rails >= 7.0.1:
+gem 'net-smtp'
+gem 'net-imap'
+gem 'net-pop'
 
 # Use postgresql as the database for Active Record
-gem 'pg', '~> 0.15'
+gem 'pg', '~> 1.4'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
@@ -24,7 +29,7 @@ gem 'jquery-ui-rails'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
-gem 'sdoc', group: :doc
+# gem 'sdoc', group: :doc
 
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
@@ -73,13 +78,13 @@ gem 'momentjs-rails', '>= 2.9.0'
 
 # Allow for dynamic default values, like setting show_date and date_played
 # to the date/time the game is created.
-gem 'default_value_for', '~> 3.3.0'
+gem 'default_value_for', '~> 3.4.0'
 
 # Allow for convenient(-ish) customization of the data displayed
 # by "render :json".
 gem 'active_model_serializers', '~> 0.10.10'
 
-gem 'pagy', '~> 3.8'
+gem 'pagy', '~> 4.11'
 
 # Enable backup and restore operations to be backgrounded.
 gem 'activejob-status', '~> 0.1.6'

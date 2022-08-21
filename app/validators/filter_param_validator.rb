@@ -6,43 +6,43 @@ class FilterParamValidator < ActiveModel::Validator
   # rubocop:disable PerceivedComplexity, GuardClause
   def validate(record)
     unless valid_preposition?(record.show_date_preposition)
-      record.errors[:show_date_preposition] << 'Invalid show date preposition'
+      record.errors.add(:show_date_preposition, 'Invalid show date preposition')
     end
 
     unless valid_date?(record.show_date_beginning)
-      record.errors[:show_date_beginning] << 'Invalid show date beginning'
+      record.errors.add(:show_date_beginning, 'Invalid show date beginning')
     end
 
     unless valid_unit?(record.show_date_last_unit)
-      record.errors[:show_date_last_unit] << 'Invalid show date unit'
+      record.errors.add(:show_date_last_unit, 'Invalid show date unit')
     end
 
     unless valid_date?(record.show_date_from)
-      record.errors[:show_date_from] << 'Invalid show date from date'
+      record.errors.add(:show_date_from, 'Invalid show date from date')
     end
 
     unless valid_date?(record.show_date_to)
-      record.errors[:show_date_to] << 'Invalid show date to date'
+      record.errors.add(:show_date_to, 'Invalid show date to date')
     end
 
     unless valid_preposition?(record.date_played_preposition)
-      record.errors[:date_played_preposition] << 'Invalid date played prepos.'
+      record.errors.add(:date_played_preposition, 'Invalid date played prepos.')
     end
 
     unless valid_date?(record.date_played_beginning)
-      record.errors[:date_played_beginning] << 'Invalid date played beginning'
+      record.errors.add(:date_played_beginning, 'Invalid date played beginning')
     end
 
     unless valid_unit?(record.date_played_last_unit)
-      record.errors[:date_played_last_unit] << 'Invalid date played unit'
+      record.errors.add(:date_played_last_unit, 'Invalid date played unit')
     end
 
     unless valid_date?(record.date_played_from)
-      record.errors[:date_played_from] << 'Invalid date played from date'
+      record.errors.add(:date_played_from, 'Invalid date played from date')
     end
 
     unless valid_date?(record.date_played_to)
-      record.errors[:date_played_to] << 'Invalid date played to date'
+      record.errors.add(:date_played_to, 'Invalid date played to date')
     end
   end
   # rubocop:enable AbcSize, CyclomaticComplexity, MethodLength

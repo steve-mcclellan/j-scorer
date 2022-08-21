@@ -122,7 +122,7 @@ Pagy::VARS[:items] = 25
 # Pagy::VARS[:size]       = [1,4,4,1]                       # default
 # Pagy::VARS[:page_param] = :page                           # default
 # Pagy::VARS[:params]     = {}                              # default
-# Pagy::VARS[:anchor]     = '#anchor'                       # example
+# Pagy::VARS[:fragment]     = '#anchor'                       # example
 # Pagy::VARS[:link_extra] = 'data-remote="true"'            # example
 Pagy::VARS[:link_extra] = 'class="pagy-link"'
 

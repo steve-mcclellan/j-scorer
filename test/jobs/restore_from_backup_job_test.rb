@@ -5,7 +5,7 @@ require 'test_helper'
 class RestoreFromBackupJobTest < ActionDispatch::IntegrationTest
   def setup
     @user = users(:dave)
-    backup_file = fixture_file_upload('files/utoc_backup.jscor', 'application/octet-stream')
+    backup_file = fixture_file_upload('utoc_backup.jscor', 'application/octet-stream')
     @games = BackupsController.new.parse_file(backup_file)
   end
 
