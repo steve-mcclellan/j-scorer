@@ -487,6 +487,15 @@ html.no-js #stats-loading-message {
   overflow: auto;
   font-size: 3.5vmin;
 
+  .bigstats {
+    font-size: 2.8vmin;
+    margin-top: 0.7vmin;
+  }
+
+  .nopad {
+    padding: 0;
+  }
+
   ul.ui-tabs-nav {
     font-size: 2.25vmin;
 
