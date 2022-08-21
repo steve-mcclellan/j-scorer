@@ -23,44 +23,51 @@
     <% clues_wrong = @summary[:all][:wrong] %>
     <% clues_passed = @summary[:all][:pass] %>
     <% total_clues = clues_right + clues_wrong + clues_passed %>
-    <div class="col-xs-6 text-right">
-      <abbr title="Not including Daily Doubles or Finals." rel="tooltip">
-        Clues right:
-      </abbr>
+    <% big_clue_stats = [clues_right, clues_wrong, clues_passed].max > 99_999 %>
+    <div class="col-xs-12 nopad">
+      <div class="col-xs-6 text-right">
+        <abbr title="Not including Daily Doubles or Finals." rel="tooltip">
+          Clues right:
+        </abbr>
+      </div>
+      <div class="col-xs-6 text-left <%= 'bigstats' if big_clue_stats %>">
+        <%= number_with_delimiter(clues_right) %>
+        <% unless total_clues.zero? %>
+          (<%= number_to_percentage(100.0 * clues_right / total_clues, precision: 2) %>)
+        <% end %>
+      </div>
     </div>
-    <div class="col-xs-6 text-left">
-      <%= number_with_delimiter(clues_right) %>
-      <% unless total_clues.zero? %>
-        (<%= number_to_percentage(100.0 * clues_right / total_clues, precision: 2) %>)
-      <% end %>
+    <div class="col-xs-12 nopad">
+      <div class="col-xs-6 text-right">
+        <abbr title="Not including Daily Doubles or Finals." rel="tooltip">
+          Clues wrong:
+        </abbr>
+      </div>
+      <div class="col-xs-6 text-left <%= 'bigstats' if big_clue_stats %>">
+        <%= number_with_delimiter(clues_wrong) %>
+        <% unless total_clues.zero? %>
+          (<%= number_to_percentage(100.0 * clues_wrong / total_clues, precision: 2) %>)
+        <% end %>
+      </div>
     </div>
-    <div class="col-xs-6 text-right">
-      <abbr title="Not including Daily Doubles or Finals." rel="tooltip">
-        Clues wrong:
-      </abbr>
-    </div>
-    <div class="col-xs-6 text-left">
-      <%= number_with_delimiter(clues_wrong) %>
-      <% unless total_clues.zero? %>
-        (<%= number_to_percentage(100.0 * clues_wrong / total_clues, precision: 2) %>)
-      <% end %>
-    </div>
-    <div class="col-xs-6 text-right">
-      <abbr title="Not including Daily Doubles or Finals." rel="tooltip">
-        Clues passed:
-      </abbr>
-    </div>
-    <div class="col-xs-6 text-left">
-      <%= number_with_delimiter(clues_passed)  %>
-      <% unless total_clues.zero? %>
-        (<%= number_to_percentage(100.0 * clues_passed / total_clues, precision: 2) %>)
-      <% end %>
+    <div class="col-xs-12 nopad">
+      <div class="col-xs-6 text-right">
+        <abbr title="Not including Daily Doubles or Finals." rel="tooltip">
+          Clues passed:
+        </abbr>
+      </div>
+      <div class="col-xs-6 text-left <%= 'bigstats' if big_clue_stats %>">
+        <%= number_with_delimiter(clues_passed)  %>
+        <% unless total_clues.zero? %>
+          (<%= number_to_percentage(100.0 * clues_passed / total_clues, precision: 2) %>)
+        <% end %>
+      </div>
     </div>
 
-    <% bigstats = @summary[:round_two][:dds].to_i > 999 %>
+    <% big_rate_stats = @summary[:round_two][:dds].to_i > 99 %>
     <div class="col-xs-12 nopad">
       <div class="col-xs-6 text-right">Round One DDs:</div>
-      <div class="col-xs-6 text-left <%= 'bigstats' if bigstats %>">
+      <div class="col-xs-6 text-left <%= 'bigstats' if big_rate_stats %>">
         <%= @summary[:round_one][:dd_right] %>/<%= @summary[:round_one][:dds] %>
         <% unless @summary[:round_one][:dds].zero? %>
           (<%= number_to_percentage(100 * @summary[:round_one][:dd_rate], precision: 2) %>)
@@ -69,7 +76,7 @@
     </div>
     <div class="col-xs-12 nopad">
       <div class="col-xs-6 text-right">Round Two DDs:</div>
-      <div class="col-xs-6 text-left <%= 'bigstats' if bigstats %>">
+      <div class="col-xs-6 text-left <%= 'bigstats' if big_rate_stats %>">
         <%= @summary[:round_two][:dd_right] %>/<%= @summary[:round_two][:dds] %>
         <% unless @summary[:round_two][:dds].zero? %>
           (<%= number_to_percentage(100 * @summary[:round_two][:dd_rate], precision: 2) %>)
@@ -78,7 +85,7 @@
     </div>
     <div class="col-xs-12 nopad">
       <div class="col-xs-6 text-right">Finals:</div>
-      <div class="col-xs-6 text-left <%= 'bigstats' if bigstats %>">
+      <div class="col-xs-6 text-left <%= 'bigstats' if big_rate_stats %>">
         <%= @summary[:finals][:right] %>/<%= @summary[:finals][:count] %>
         <% unless @summary[:finals][:count].zero? %>
           (<%= number_to_percentage(100 * @summary[:finals][:rate], precision: 2) %>)
