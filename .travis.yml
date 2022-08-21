@@ -1,7 +1,7 @@
 language: ruby
 cache: bundler
 
-dist: bionic
+dist: jammy
 sudo: false
 
 rvm:
@@ -9,13 +9,6 @@ rvm:
 
 services:
   - postgresql
-
-addons:
-  postgresql: "13"
-  apt:
-    packages:
-      - postgresql-13
-      - postgresql-client-13
 
 env:
   global:
