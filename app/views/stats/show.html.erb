@@ -19,8 +19,10 @@
   <div class="k-box">
     <p>
       <%= random_full_greeting %>
-      As you've probably (at least partially) noticed, I've added box-score stats (calculated the same way as the show's <a href="https://www.jeopardy.com/jbuzz/news-events/jeopardy-daily-box-scores" target="_blank">official box scores</a>) to the Overview and Games tabs. Of course, I have no idea what your buzzer percentage would be, but the attempts and the correct percentage should give you some idea how you stack up against the on-air contestants. As always, please let me know if I broke anything:
+      Due to the large amount of work that would be required, the hour-long celebrity episodes are not supported. See the <%= link_to 'help page', help_path %> for more details.
+      <!--
       <a class="nowrap" href="mailto:<%= ENV['SUPPORT_ADDRESS'] %>"><%= ENV['SUPPORT_ADDRESS'] %></a>.
+      -->
     </p>
   </div>
   <% end %>

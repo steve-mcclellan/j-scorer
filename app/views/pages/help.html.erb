@@ -15,6 +15,30 @@
     The J! Scorer makes it easy for prospective <em>Jeopardy!</em> contestants to play along with the show and keep track of their training progress.
     </p>
     <br />
+    <div style="background-color: yellow; padding-left: 10px; padding-right: 10px;">
+        <br />
+        <h2>NOTE ON PRIME-TIME CELEBRITY GAMES</h2>
+        <br />
+        <p>
+          It would require a huge amount of effort to properly handle the extra round present in the hour-long celebrity episodes. As long as it's only celebrity games, I will not be expending that effort, and these games will be officially unsupported. (If you find this unacceptable, feel free to <a href="https://github.com/steve-mcclellan/j-scorer">make the changes yourself.</a>)
+        </p>
+        <br />
+        <p>
+          I strongly recommend skipping play-along with these games. But if you really, <strong>really</strong> want to play along with them, note:
+        </p>
+        <ol>
+          <li>If you choose the "Celebrity" play type with an appropriate show date (i.e., 2022-09-25 or later), it will give you the correct values for the first two rounds.</li>
+          <li>There is a new "Triple round" play type that will give you $300-$1500 values.</li>
+          <li>There is no way to join those into a single game, and no way to properly handle stats for three DDs in a round.</li>
+          <li>If you save these games, the stats page will adjust all displayed values to the $200-$2000 values that the syndicated show currently uses.</li>
+        </ol>
+        <br />
+        <p>
+          Again, these games are not supported, and I strongly recommend skipping play-along with them, but if there's anything <strong>simple</strong> that you'd like to suggest, drop me a line at the address below.
+        </p>
+        <br />
+    </div>
+    <br />
     <p>
     Both guests and registered users can use the J! Scorer to calculate their <a class="nowrap" href="http://www.pisspoor.com/jep.html" target="_blank">Coryat score</a> while playing along with the show in real time. Registered users can also save their games and track their stats over time. (See an interactive sample stats page <%= link_to 'here', sample_path %>.)
     </p>
@@ -68,7 +92,7 @@
     </p>
     <br />
     <p>
-    Happy playing! If you have any questions that aren't answered here (including the notes below), please email <a class="nowrap" href="mailto:<%= ENV['SUPPORT_ADDRESS'] %>"><%= ENV['SUPPORT_ADDRESS'] %></a>.
+    Happy playing! If you have any questions that aren't answered here (including the notes below and tacky yellow box above), please email <a class="nowrap" href="mailto:<%= ENV['SUPPORT_ADDRESS'] %>"><%= ENV['SUPPORT_ADDRESS'] %></a>.
     </p>
     <br />
     <p>

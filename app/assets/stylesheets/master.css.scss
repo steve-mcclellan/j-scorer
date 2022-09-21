@@ -304,6 +304,12 @@ input {
   p {
     font-size: medium;
   }
+
+  ol {
+    font-size: medium;
+    margin-left: 50px;
+    margin-right: 50px;
+  }
 }
 
 .j-box {
@@ -409,6 +415,7 @@ input {
     tr.kids-reunion td { background-color: #cfd; }
     tr.kids td { background-color: #bfb; }
     tr.celebrity td { background-color: #cbf; }
+    tr.celebtriple td { background-color: #cbf; }
     tr.rock td { background-color: #99f; }
     tr.sports td { background-color: #bb8; }
     tr.other td { background-color: #bbc; }

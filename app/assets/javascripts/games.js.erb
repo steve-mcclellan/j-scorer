@@ -520,6 +520,7 @@ $( ".games-game" ).ready( function() {
   }
 
   function updateClueValues() {
+    var showDate = currentGame['show_date'];
     switch ( currentGame['play_type'] ) {
       case "goat":
         currencySymbol = "";
@@ -539,9 +540,32 @@ $( ".games-game" ).ready( function() {
         currencySymbol = "";
         topRowValues = [250, 500];
         break;
+      case "celebrity":
+        currencySymbol = "$";
+        showDate = currentGame['show_date'];
+        if ( showDate >= '2022-09-25' ) {
+          topRowValues = [100, 200];
+        } else if ( showDate >= '2001-11-26' ) {
+          topRowValues = [200, 400];
+        } else if ( showDate >= '1984-09-10' ) {
+          topRowValues = [100, 200];
+        } else if ( showDate >= '1984-01-01' ) {
+          topRowValues = [50, 100];
+        } else if ( showDate >= '1978-10-02' ) {
+          topRowValues = [25, 50];
+        } else if ( showDate >= '1964-03-30') {
+          topRowValues = [10, 20];
+        } else {
+          topRowValues = <%= CURRENT_TOP_ROW_VALUES %>;
+        }
+        break;
+      case "celebtriple":
+        currencySymbol = "$";
+        topRowValues = [300, 300];
+        break;
       default:
         currencySymbol = "$";
-        var showDate = currentGame['show_date'];
+        showDate = currentGame['show_date'];
         if ( showDate >= '2001-11-26' ) {
           topRowValues = <%= CURRENT_TOP_ROW_VALUES %>;
         } else if ( showDate >= '1984-09-10' ) {

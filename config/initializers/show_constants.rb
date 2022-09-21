@@ -2,6 +2,8 @@ CURRENT_TOP_ROW_VALUES = [200, 400].freeze
 
 PLAY_TYPES = {
   "regular"      => "regular play",
+  "celebrity"    => "Celebrity (**SEE HELP PAGE)",
+  "celebtriple"  => "Celebrity (Triple round**)",
   "ncc"          => "National College Championship",
   "profs"        => "Professors Tournament",
   "toc"          => "Tournament of Champions",
@@ -11,7 +13,6 @@ PLAY_TYPES = {
   "teen"         => "Teen Tournament",
   "all-star"     => "Jeopardy! All-Star Games",
   "power"        => "Power Players Week",
-  "celebrity"    => "Celebrity",
   "kids"         => "Kids Week / Back to School Week",
   "decades"      => "Battle of the Decades",
   "ibm"          => "The IBM Challenge",
