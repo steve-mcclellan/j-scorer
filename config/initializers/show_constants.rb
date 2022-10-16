@@ -1,6 +1,7 @@
 CURRENT_TOP_ROW_VALUES = [200, 400].freeze
 
 PLAY_TYPES = {
+  "second"       => "Second Chance",
   "regular"      => "regular play",
   "celebrity"    => "Celebrity (**SEE HELP PAGE)",
   "celebtriple"  => "Celebrity (Triple round**)",
