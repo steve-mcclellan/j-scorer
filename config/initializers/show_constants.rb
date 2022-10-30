@@ -1,13 +1,13 @@
 CURRENT_TOP_ROW_VALUES = [200, 400].freeze
 
 PLAY_TYPES = {
-  "second"       => "Second Chance",
+  "toc"          => "Tournament of Champions",
   "regular"      => "regular play",
+  "second"       => "Second Chance",
   "celebrity"    => "Celebrity (**SEE HELP PAGE)",
   "celebtriple"  => "Celebrity (Triple round**)",
   "ncc"          => "National College Championship",
   "profs"        => "Professors Tournament",
-  "toc"          => "Tournament of Champions",
   "teachers"     => "Teachers Tournament",
   "college"      => "College Championship",
   "goat"         => "Greatest of All Time",
