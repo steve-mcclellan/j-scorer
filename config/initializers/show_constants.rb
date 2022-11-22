@@ -1,8 +1,8 @@
 CURRENT_TOP_ROW_VALUES = [200, 400].freeze
 
 PLAY_TYPES = {
-  "toc"          => "Tournament of Champions",
   "regular"      => "regular play",
+  "toc"          => "Tournament of Champions",
   "second"       => "Second Chance",
   "celebrity"    => "Celebrity (**SEE HELP PAGE)",
   "celebtriple"  => "Celebrity (Triple round**)",
