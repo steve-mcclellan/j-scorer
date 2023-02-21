@@ -2,6 +2,7 @@ CURRENT_TOP_ROW_VALUES = [200, 400].freeze
 
 PLAY_TYPES = {
   "regular"      => "regular play",
+  "hs-reunion"   => "High School Reunion",
   "toc"          => "Tournament of Champions",
   "second"       => "Second Chance",
   "celebrity"    => "Celebrity (**SEE HELP PAGE)",
