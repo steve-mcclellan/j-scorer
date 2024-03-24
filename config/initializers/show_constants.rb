@@ -2,6 +2,7 @@ CURRENT_TOP_ROW_VALUES = [200, 400].freeze
 
 PLAY_TYPES = {
   "regular"      => "regular play",
+  "invite"       => "Invitational Tournament",
   "cwc"          => "Champions Wildcard",
   "masters"      => "Jeopardy! Masters",
   "hs-reunion"   => "High School Reunion",
