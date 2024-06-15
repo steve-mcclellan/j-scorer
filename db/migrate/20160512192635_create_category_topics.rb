@@ -1,4 +1,4 @@
-class CreateCategoryTopics < ActiveRecord::Migration
+class CreateCategoryTopics < ActiveRecord::Migration[4.2]
   def change
     create_table :category_topics do |t|
       t.references :category, polymorphic: true, index: true

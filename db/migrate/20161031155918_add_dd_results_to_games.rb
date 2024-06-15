@@ -1,4 +1,4 @@
-class AddDdResultsToGames < ActiveRecord::Migration
+class AddDdResultsToGames < ActiveRecord::Migration[4.2]
   def change
     add_column :games, :dd1_result, :integer
     add_column :games, :dd2a_result, :integer
