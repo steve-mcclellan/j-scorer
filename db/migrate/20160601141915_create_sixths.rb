@@ -1,4 +1,4 @@
-class CreateSixths < ActiveRecord::Migration
+class CreateSixths < ActiveRecord::Migration[4.2]
   def change
     create_table :sixths do |t|
       t.integer :game_id

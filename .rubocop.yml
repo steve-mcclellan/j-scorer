@@ -9,7 +9,7 @@ AllCops:
     - 'vendor/**/*'
     - '**/config.ru'
     - !ruby/regexp /old_and_unused\.rb$/
-  TargetRubyVersion: 2.7
+  TargetRubyVersion: 3.1
 
 Layout/LineLength:
   Enabled: false

@@ -1,4 +1,4 @@
-class AddTopicsStringToSixths < ActiveRecord::Migration
+class AddTopicsStringToSixths < ActiveRecord::Migration[4.2]
   def change
     add_column :sixths, :topics_string, :string
 

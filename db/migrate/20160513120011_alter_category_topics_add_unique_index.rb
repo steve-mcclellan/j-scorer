@@ -1,4 +1,4 @@
-class AlterCategoryTopicsAddUniqueIndex < ActiveRecord::Migration
+class AlterCategoryTopicsAddUniqueIndex < ActiveRecord::Migration[4.2]
   def change
     add_index :category_topics,
               [:topic_id, :category_id, :category_type],

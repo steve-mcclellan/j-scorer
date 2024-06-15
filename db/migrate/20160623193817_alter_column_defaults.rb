@@ -1,4 +1,4 @@
-class AlterColumnDefaults < ActiveRecord::Migration
+class AlterColumnDefaults < ActiveRecord::Migration[4.2]
   def change
     change_column_default(:games, :play_type, "regular")
     change_column_default(:sixths, :result1, 0)

@@ -1,4 +1,4 @@
-class AddTopicsStringToFinals < ActiveRecord::Migration
+class AddTopicsStringToFinals < ActiveRecord::Migration[4.2]
   def change
     add_column :finals, :topics_string, :string
 

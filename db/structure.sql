@@ -20,8 +20,8 @@ SET default_table_access_method = heap;
 CREATE TABLE public.ar_internal_metadata (
     key character varying NOT NULL,
     value character varying,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
 );
 
 
@@ -44,6 +44,7 @@ CREATE TABLE public.category_topics (
 --
 
 CREATE SEQUENCE public.category_topics_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -81,6 +82,7 @@ CREATE TABLE public.finals (
 --
 
 CREATE SEQUENCE public.finals_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -125,6 +127,7 @@ CREATE TABLE public.games (
 --
 
 CREATE SEQUENCE public.games_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -174,6 +177,7 @@ CREATE TABLE public.sixths (
 --
 
 CREATE SEQUENCE public.sixths_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -206,6 +210,7 @@ CREATE TABLE public.topics (
 --
 
 CREATE SEQUENCE public.topics_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -259,6 +264,7 @@ CREATE TABLE public.users (
 --
 
 CREATE SEQUENCE public.users_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE

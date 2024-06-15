@@ -1,4 +1,4 @@
-class CreateRoundOneCategories < ActiveRecord::Migration
+class CreateRoundOneCategories < ActiveRecord::Migration[4.2]
   def change
     create_table :round_one_categories do |t|
       t.references :game, index: true, foreign_key: true
