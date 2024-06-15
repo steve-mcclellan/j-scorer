@@ -19,7 +19,7 @@ class ResultsByRow
     validate_query_inputs(user, play_types)
     play_types_list = format_play_types_for_sql(play_types)
     rows = []
-    %w[RoundOneCategory RoundTwoCategory].each do |round_type|
+    CATEGORY_ROUNDS.each do |round_type|
       1.upto(5).each do |row_num|
         rows.push(single_row_sql(row_num, round_type, user,
                                  play_types_list, other_filters))
@@ -28,7 +28,7 @@ class ResultsByRow
     "( #{rows.join(' ) UNION ALL ( ')} )"
   end
 
-  # rubocop:disable MethodLength
+  # rubocop:disable Metrics/MethodLength
   def single_row_sql(row_num, round_type, user, play_types_list, other_filters)
     "
     SELECT
@@ -69,7 +69,7 @@ class ResultsByRow
     ) q
     "
   end
-  # rubocop:enable MethodLength
+  # rubocop:enable Metrics/MethodLength
 
   def assign_colors
     %i[round_one round_two].each do |round|

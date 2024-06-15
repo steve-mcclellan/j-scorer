@@ -39,7 +39,7 @@ module BackupsHelper
     sixths.each_with_index do |sixth, idx|
       return false unless sixth.is_a?(Hash)
       sixth[:title] = html_escape_once(sixth[:title])
-      sixth[:type] = (idx < 6 ? 'RoundOneCategory' : 'RoundTwoCategory')
+      sixth[:type] = (idx < 6 ? CATEGORY_ROUNDS[0] : CATEGORY_ROUNDS[1])
       sixth[:board_position] = (idx % 6) + 1
     end
 

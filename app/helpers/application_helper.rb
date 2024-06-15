@@ -5,7 +5,6 @@ module ApplicationHelper
     page_title.blank? ? base_title : base_title + ' - ' + page_title
   end
 
-  # rubocop:disable Rails/OutputSafety
   # These three methods never encounter user input. Repeatedly invoking Rails
   # helpers like content_tag, just to avoid calling html_safe, would
   # obfuscate the code with no obvious benefit.
@@ -31,5 +30,4 @@ module ApplicationHelper
      '<i>Salut!</i>', '<i>Ciao!</i>', '<i>Γεια!</i>', '<i>Konnichiwa!</i>',
      '<i>Salve!</i>', '<i>Saluton!</i>'].sample.html_safe
   end
-  # rubocop:enable Rails/OutputSafety
 end

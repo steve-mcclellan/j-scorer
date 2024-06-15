@@ -3,11 +3,9 @@ class Sixth < ApplicationRecord
 
   validates :game, presence: true
 
-  # TODO: Determine whether this type validation is redundant.
-  #       Does self.types, below, do the same thing?
   validates :type,
             presence: true,
-            inclusion: { in: %w[RoundOneCategory RoundTwoCategory] }
+            inclusion: { in: CATEGORY_ROUNDS }
 
   validates :board_position,
             presence: true,
@@ -19,16 +17,13 @@ class Sixth < ApplicationRecord
 
   include Topicable
 
-  def self.types
-    %w[RoundOneCategory RoundTwoCategory]
-  end
-
-  scope :round_one_categories, -> { where(type: 'RoundOneCategory') }
-  scope :round_two_categories, -> { where(type: 'RoundTwoCategory') }
+  scope :round_one_categories, -> { where(type: CATEGORY_ROUNDS[0]) }
+  scope :round_two_categories, -> { where(type: CATEGORY_ROUNDS[1]) }
 
   def top_row_value
-    return CURRENT_TOP_ROW_VALUES[0] if type == 'RoundOneCategory'
-    return CURRENT_TOP_ROW_VALUES[1] if type == 'RoundTwoCategory'
+    return CURRENT_TOP_ROW_VALUES[0] if type == CATEGORY_ROUNDS[0]
+    return CURRENT_TOP_ROW_VALUES[1] if type == CATEGORY_ROUNDS[1]
+
     nil
   end
 
